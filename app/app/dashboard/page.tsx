@@ -1,72 +1,49 @@
 export const dynamic = 'force-dynamic';
 import { currentUser } from "@clerk/nextjs/server";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
-const stats = [
-  {
-    label: "Posts This Week",
-    value: "0",
-    delta: "Get started →",
-    href: "/dashboard/posts",
-    icon: "📍",
-  },
-  {
-    label: "Pages Created",
-    value: "0",
-    delta: "Create your first page →",
-    href: "/dashboard/pages",
-    icon: "🌐",
-  },
-  {
-    label: "Reviews Pending",
-    value: "0",
-    delta: "Connect your GBP →",
-    href: "/dashboard/reviews",
-    icon: "⭐",
-  },
-  {
-    label: "Avg. Rank Position",
-    value: "—",
-    delta: "Set up tracking →",
-    href: "/dashboard/reviews",
-    icon: "📊",
-  },
-];
-
-const quickActions = [
-  {
-    title: "Create GBP Post",
-    description: "AI-generate a post for your Google Business Profile",
-    icon: "📍",
-    href: "/dashboard/posts",
-    cta: "Create Post",
-  },
-  {
-    title: "Build a Landing Page",
-    description: "Add a hyper-local page for a neighborhood or service",
-    icon: "🌐",
-    href: "/dashboard/pages",
-    cta: "Build Page",
-  },
-  {
-    title: "Reply to Reviews",
-    description: "See pending reviews and send AI-drafted replies",
-    icon: "⭐",
-    href: "/dashboard/reviews",
-    cta: "View Reviews",
-  },
-];
 
 export default async function DashboardPage() {
   const user = await currentUser();
   const firstName = user?.firstName ?? "there";
 
+  // TODO: Fetch real data from Supabase once business is created
+  const hasBusiness = false; // Will be true after onboarding
+  const businessName = "Your Business";
+
+  // Activity feed — never empty. Shows what's happening or what to do next.
+  const activity = hasBusiness
+    ? [
+        { icon: "✅", text: "4 Google posts generated for this week", time: "Just now", action: "/dashboard/posts" },
+        { icon: "📄", text: "3 local city pages ready to review", time: "Today", action: "/dashboard/pages" },
+        { icon: "⭐", text: "2 reviews waiting for your response", time: "Today", action: "/dashboard/reviews" },
+      ]
+    : [
+        { icon: "🔗", text: "Connect your Google listing to get started", time: "First step", action: "/onboarding" },
+        { icon: "📝", text: "We'll generate your first Google posts automatically", time: "After setup", action: null },
+        { icon: "🌐", text: "Local city pages will be built for areas you serve", time: "After setup", action: null },
+        { icon: "⭐", text: "Review replies will be drafted as new reviews come in", time: "After setup", action: null },
+      ];
+
+  const stats = hasBusiness
+    ? [
+        { label: "Google Posts", value: "4", sub: "scheduled this week", icon: "📍", href: "/dashboard/posts" },
+        { label: "City Pages", value: "3", sub: "cities covered", icon: "🌐", href: "/dashboard/pages" },
+        { label: "Reviews", value: "2", sub: "need your response", icon: "⭐", href: "/dashboard/reviews" },
+        { label: "Visibility", value: "—", sub: "first report in 30 days", icon: "📊", href: "/dashboard/reviews" },
+      ]
+    : [
+        { label: "Google Posts", value: "—", sub: "connect listing to start", icon: "📍", href: "/onboarding" },
+        { label: "City Pages", value: "—", sub: "set up your service areas", icon: "🌐", href: "/onboarding" },
+        { label: "Reviews", value: "—", sub: "we'll draft replies for you", icon: "⭐", href: "/onboarding" },
+        { label: "Visibility", value: "—", sub: "first report in 30 days", icon: "📊", href: "/onboarding" },
+      ];
+
   return (
     <div className="flex-1 px-6 py-8 max-w-6xl">
-      {/* Header */}
+      {/* Welcome banner */}
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-1">
           <span className="text-2xl">🔦</span>
@@ -74,64 +51,132 @@ export default async function DashboardPage() {
             Free Plan
           </Badge>
         </div>
-        <h1 className="text-3xl font-bold text-white">
-          Welcome back, {firstName}!
-        </h1>
-        <p className="text-white/50 mt-1">
-          Here&apos;s your LocalBeacon.ai overview for today.
-        </p>
+        {hasBusiness ? (
+          <>
+            <h1 className="text-3xl font-bold text-white">
+              Welcome back, {firstName}!
+            </h1>
+            <p className="text-white/50 mt-1">
+              Here&apos;s what LocalBeacon is doing for <strong className="text-white">{businessName}</strong> this week.
+            </p>
+          </>
+        ) : (
+          <>
+            <h1 className="text-3xl font-bold text-white">
+              Welcome, {firstName}! Let&apos;s get you set up.
+            </h1>
+            <p className="text-white/50 mt-1">
+              Connect your Google listing and we&apos;ll start generating posts, pages, and review replies automatically.
+            </p>
+          </>
+        )}
       </div>
+
+      {/* Setup CTA — only show if no business */}
+      {!hasBusiness && (
+        <Card className="bg-[#FFD700]/5 border-[#FFD700]/30 mb-8">
+          <CardContent className="p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+              <h3 className="text-white font-bold text-lg mb-1">Connect your Google listing</h3>
+              <p className="text-white/50 text-sm">
+                It takes 2 minutes. We&apos;ll auto-detect your business info and generate your first posts immediately.
+              </p>
+            </div>
+            <Link href="/onboarding">
+              <Button className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold whitespace-nowrap px-6">
+                Connect Now →
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
         {stats.map((stat) => (
-          <Card
-            key={stat.label}
-            className="bg-white/5 border-white/10 hover:border-[#FFD700]/30 transition-colors"
-          >
-            <CardHeader className="pb-2">
-              <div className="text-2xl mb-1">{stat.icon}</div>
-              <p className="text-xs text-white/50 uppercase tracking-wider font-medium">
-                {stat.label}
-              </p>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-bold text-white">{stat.value}</p>
-              <Link
-                href={stat.href}
-                className="text-xs text-[#FFD700] hover:underline mt-1 block"
-              >
-                {stat.delta}
-              </Link>
-            </CardContent>
-          </Card>
+          <Link key={stat.label} href={stat.href}>
+            <Card className="bg-white/5 border-white/10 hover:border-[#FFD700]/30 transition-colors cursor-pointer h-full">
+              <CardContent className="p-5">
+                <div className="text-2xl mb-2">{stat.icon}</div>
+                <p className="text-xs text-white/50 uppercase tracking-wider font-medium mb-1">
+                  {stat.label}
+                </p>
+                <p className="text-3xl font-bold text-white">{stat.value}</p>
+                <p className="text-xs text-white/40 mt-1">{stat.sub}</p>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
 
-      {/* Quick Actions */}
+      {/* Activity Feed */}
       <div className="mb-10">
+        <h2 className="text-lg font-semibold text-white mb-4">
+          {hasBusiness ? "This Week" : "What happens after setup"}
+        </h2>
+        <div className="space-y-3">
+          {activity.map((item, i) => (
+            <div
+              key={i}
+              className={`flex items-center gap-4 p-4 rounded-lg border transition-colors ${
+                item.action
+                  ? "bg-white/5 border-white/10 hover:border-[#FFD700]/30 cursor-pointer"
+                  : "bg-white/[0.02] border-white/5"
+              }`}
+            >
+              <span className="text-xl">{item.icon}</span>
+              <div className="flex-1">
+                <p className={`text-sm ${item.action ? 'text-white' : 'text-white/50'}`}>{item.text}</p>
+              </div>
+              <span className="text-xs text-white/30">{item.time}</span>
+              {item.action && (
+                <Link href={item.action}>
+                  <Button size="sm" variant="ghost" className="text-[#FFD700] hover:text-[#FFD700]/80 text-xs">
+                    →
+                  </Button>
+                </Link>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div>
         <h2 className="text-lg font-semibold text-white mb-4">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {quickActions.map((action) => (
-            <Card
-              key={action.title}
-              className="bg-white/5 border-white/10 flex flex-col"
-            >
-              <CardHeader className="pb-2">
-                <div className="text-2xl mb-1">{action.icon}</div>
-                <CardTitle className="text-white text-base">
-                  {action.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="flex-1 flex flex-col">
-                <p className="text-white/50 text-sm mb-4 flex-1">
-                  {action.description}
-                </p>
+          {[
+            {
+              title: hasBusiness ? "Review This Week's Posts" : "Generate Your First Posts",
+              description: hasBusiness
+                ? "4 posts are ready — review, edit, or let them auto-publish."
+                : "Connect your Google listing and we'll create 4 posts instantly.",
+              icon: "📝",
+              href: hasBusiness ? "/dashboard/posts" : "/onboarding",
+              cta: hasBusiness ? "View Posts" : "Get Started",
+            },
+            {
+              title: "Add a City Page",
+              description: "Create a local page to rank for searches in a specific city or neighborhood.",
+              icon: "🌐",
+              href: "/dashboard/pages",
+              cta: "Add City",
+            },
+            {
+              title: "Respond to Reviews",
+              description: "Draft professional, thoughtful replies to your Google reviews with AI.",
+              icon: "⭐",
+              href: "/dashboard/reviews",
+              cta: "View Reviews",
+            },
+          ].map((action) => (
+            <Card key={action.title} className="bg-white/5 border-white/10 flex flex-col">
+              <CardContent className="p-5 flex-1 flex flex-col">
+                <div className="text-2xl mb-2">{action.icon}</div>
+                <h3 className="text-white font-semibold text-sm mb-1">{action.title}</h3>
+                <p className="text-white/40 text-xs mb-4 flex-1">{action.description}</p>
                 <Link href={action.href}>
-                  <Button
-                    size="sm"
-                    className="w-full bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold"
-                  >
+                  <Button size="sm" className="w-full bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold text-xs">
                     {action.cta}
                   </Button>
                 </Link>
@@ -139,59 +184,6 @@ export default async function DashboardPage() {
             </Card>
           ))}
         </div>
-      </div>
-
-      {/* Getting Started Checklist */}
-      <div>
-        <h2 className="text-lg font-semibold text-white mb-4">
-          Getting Started
-        </h2>
-        <Card className="bg-white/5 border-white/10">
-          <CardContent className="pt-6">
-            <ul className="space-y-4">
-              {[
-                {
-                  done: false,
-                  text: "Connect your Google Business Profile",
-                  sub: "Link your GBP to start automating posts and tracking reviews.",
-                },
-                {
-                  done: false,
-                  text: "Create your first landing page",
-                  sub: "Build a hyper-local page to rank for a specific neighborhood or service.",
-                },
-                {
-                  done: false,
-                  text: "Set up rank tracking",
-                  sub: "Add keywords to track and watch your local rankings improve.",
-                },
-                {
-                  done: false,
-                  text: "Invite a team member",
-                  sub: "Collaborate with your team on posts and pages.",
-                },
-              ].map((item) => (
-                <li key={item.text} className="flex items-start gap-3">
-                  <div
-                    className={`mt-0.5 w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center ${
-                      item.done
-                        ? "bg-[#FFD700] border-[#FFD700]"
-                        : "border-white/20"
-                    }`}
-                  >
-                    {item.done && (
-                      <span className="text-black text-xs font-bold">✓</span>
-                    )}
-                  </div>
-                  <div>
-                    <p className="text-sm text-white font-medium">{item.text}</p>
-                    <p className="text-xs text-white/40 mt-0.5">{item.sub}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );
