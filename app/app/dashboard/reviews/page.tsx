@@ -1,45 +1,216 @@
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+'use client'
+export const dynamic = 'force-dynamic'
+import { useState } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+
+const STAR_RATINGS = [1, 2, 3, 4, 5]
+
+interface DraftedResponse {
+  id: string
+  author: string
+  rating: number
+  comment: string
+  response: string
+  timestamp: string
+}
 
 export default function ReviewsPage() {
+  const [author, setAuthor] = useState('')
+  const [rating, setRating] = useState(5)
+  const [comment, setComment] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [response, setResponse] = useState('')
+  const [copied, setCopied] = useState(false)
+  const [history, setHistory] = useState<DraftedResponse[]>([])
+
+  const draft = async () => {
+    if (!comment.trim()) return
+    setLoading(true)
+    setResponse('')
+    try {
+      const res = await fetch('/api/generate/review-response', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          reviewer_name: author || 'Customer',
+          rating,
+          review_text: comment,
+          business_name: 'Your Business',
+        }),
+      })
+      const data = await res.json()
+      setResponse(data.response || '')
+      setHistory(prev => [{
+        id: Date.now().toString(),
+        author: author || 'Customer',
+        rating,
+        comment,
+        response: data.response || '',
+        timestamp: new Date().toLocaleDateString(),
+      }, ...prev])
+    } catch {
+      // handle silently
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const copy = () => {
+    navigator.clipboard.writeText(response)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  const resetForm = () => {
+    setAuthor('')
+    setRating(5)
+    setComment('')
+    setResponse('')
+  }
+
   return (
     <div className="flex-1 px-6 py-8 max-w-5xl">
-      <div className="mb-8 flex items-center justify-between">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-white">Reviews</h1>
-          <p className="text-white/50 mt-1 text-sm">
-            Monitor and reply to reviews with AI-powered responses.
-          </p>
+          <h1 className="text-2xl font-bold text-white">Review Responses</h1>
+          <p className="text-white/50 text-sm mt-1">Draft AI-powered responses to your Google reviews</p>
         </div>
-        <Badge className="bg-white/5 border-white/20 text-white/60 text-xs">
-          0 pending
+        <Badge className="bg-amber-500/10 text-amber-400 border-amber-500/30 text-xs">
+          Manual mode · GBP sync coming soon
         </Badge>
       </div>
 
-      <Card className="bg-white/5 border-white/10 border-dashed">
-        <CardHeader>
-          <CardTitle className="text-white text-base flex items-center gap-2">
-            <span>⭐</span> AI Review Replies
-            <Badge className="bg-[#FFD700]/10 text-[#FFD700] border-[#FFD700]/30 text-xs ml-2">
-              Coming in Sprint 2
-            </Badge>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-white/50 text-sm leading-relaxed">
-            Connect your Google Business Profile to automatically monitor new
-            reviews. LocalBeacon.ai will draft personalized, on-brand replies
-            for every review — you just approve and send.
-          </p>
-          <Button
-            variant="outline"
-            className="mt-4 border-white/20 text-white hover:bg-white/10 text-sm"
-          >
-            Connect Google Business Profile
-          </Button>
-        </CardContent>
-      </Card>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Input form */}
+        <Card className="bg-white/5 border-white/10 h-fit">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-white text-base">Paste a Review</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-5">
+            <div>
+              <Label className="text-white/70 mb-2 block text-sm">Reviewer Name <span className="text-white/30">(optional)</span></Label>
+              <Input
+                placeholder="e.g. John D."
+                value={author}
+                onChange={e => setAuthor(e.target.value)}
+                className="bg-white/5 border-white/10 text-white placeholder:text-white/30"
+              />
+            </div>
+            <div>
+              <Label className="text-white/70 mb-2 block text-sm">Star Rating</Label>
+              <div className="flex gap-2">
+                {STAR_RATINGS.map(star => (
+                  <button
+                    key={star}
+                    onClick={() => setRating(star)}
+                    className={`text-2xl transition-transform hover:scale-110 ${
+                      star <= rating ? 'opacity-100' : 'opacity-20'
+                    }`}
+                  >
+                    ⭐
+                  </button>
+                ))}
+                <span className="text-white/40 text-sm self-center ml-1">{rating}/5</span>
+              </div>
+            </div>
+            <div>
+              <Label className="text-white/70 mb-2 block text-sm">Review Text *</Label>
+              <textarea
+                placeholder="Paste the full review text here..."
+                value={comment}
+                onChange={e => setComment(e.target.value)}
+                rows={5}
+                className="w-full bg-white/5 border border-white/10 text-white placeholder:text-white/30 rounded-md px-3 py-2 text-sm focus:border-[#FFD700]/50 focus:outline-none resize-none"
+              />
+            </div>
+            <Button
+              onClick={draft}
+              disabled={!comment.trim() || loading}
+              className="w-full bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold"
+            >
+              {loading ? (
+                <span className="flex items-center gap-2"><span className="animate-spin">⟳</span> Drafting...</span>
+              ) : '✨ Draft Response'}
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Response output */}
+        <div className="space-y-4">
+          {response ? (
+            <Card className="bg-white/5 border-[#FFD700]/30">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-white text-base">Your Response</CardTitle>
+                  <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/30 text-xs">Ready to copy</Badge>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-white/80 text-sm leading-relaxed mb-5">{response}</p>
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={draft}
+                    className="border-white/10 text-white/50 hover:bg-white/5 text-xs flex-1"
+                  >
+                    ↻ Regenerate
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={copy}
+                    className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold text-xs flex-1"
+                  >
+                    {copied ? '✓ Copied!' : 'Copy Response'}
+                  </Button>
+                </div>
+                <p className="text-white/30 text-xs mt-4 text-center">
+                  Paste this response directly into Google Maps on your business profile
+                </p>
+                <button
+                  onClick={resetForm}
+                  className="text-white/20 text-xs mt-2 w-full text-center hover:text-white/40"
+                >
+                  ← Start a new review
+                </button>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="h-full flex items-center justify-center py-16 text-center">
+              <div>
+                <div className="text-4xl mb-3">⭐</div>
+                <p className="text-white/30 text-sm">Your drafted response will appear here</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* History */}
+      {history.length > 0 && (
+        <div className="mt-10">
+          <h2 className="text-lg font-semibold text-white mb-4">Recent Responses</h2>
+          <div className="space-y-3">
+            {history.map(item => (
+              <Card key={item.id} className="bg-white/5 border-white/10">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-white font-medium text-sm">{item.author}</span>
+                    <span className="text-yellow-400 text-xs">{'⭐'.repeat(item.rating)}</span>
+                    <span className="text-white/30 text-xs ml-auto">{item.timestamp}</span>
+                  </div>
+                  <p className="text-white/40 text-xs italic mb-2 line-clamp-1">&ldquo;{item.comment}&rdquo;</p>
+                  <p className="text-white/60 text-xs line-clamp-2">{item.response}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
-  );
+  )
 }

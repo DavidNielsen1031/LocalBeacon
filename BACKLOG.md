@@ -1,6 +1,6 @@
 # LocalBeacon.ai — Product Backlog & Go-Live Plan
 
-**Tagline:** Your local business, always visible. AI-powered. Always on.
+**Tagline:** "More calls. Less work. LocalBeacon handles your local visibility so you don't have to."
 **Domain:** localbeacon.ai ✅ (registered Feb 28, 2026)
 **Logo:** V4 (dramatic black/lighthouse/yellow beacon) ✅
 **Stack:** Next.js + Vercel + Stripe + Anthropic + Google Business Profile API
@@ -10,13 +10,25 @@
 
 ## 🎯 Product Vision
 
-LocalBeacon is a **Local Visibility Engine** — not a content generator. It runs every week without the business owner lifting a finger:
+LocalBeacon is a **Local Visibility Engine** — not a content generator. It runs automatically so the business owner never has to think about SEO.
 
-- **Weekly AI-written GBP posts** (auto-scheduled + published)
-- **AI service area page builder** (city/neighborhood landing pages)
-- **Review response drafting** (AI drafts, 1-click publish)
-- **Monthly local rank snapshot** (proves ROI, drives retention)
-- **Competitor gap alerts** (weekly nudges)
+**The 5 outcomes we sell (in customer language):**
+1. **More calls from Google Maps** — weekly GBP posts keep you at the top of the map
+2. **More calls from "near me" searches** — local pages for every neighborhood you serve
+3. **More calls from AI assistants** — when someone asks ChatGPT "best plumber near me," you show up
+4. **More 5-star reviews working for you** — we reply to every review so Google knows you're active
+5. **Know exactly what's working** — monthly report shows how many people found you and where
+
+**The mechanism (invisible to customers):**
+- Weekly AI-written GBP posts (auto-scheduled + published)
+- AI service area page builder (city/neighborhood landing pages)
+- Review response drafting (AI drafts, 1-click publish)
+- Monthly local blog post (AEO-optimized for AI search citations)
+- GBP audit score + weekly health check
+- Schema markup generator (LocalBusiness, FAQ, Service)
+- Review velocity monitoring + competitor pulse
+- "Near me" keyword rank tracker
+- Monthly visibility report (proves ROI, drives retention)
 
 **Go-to-market:** B2B2B — sell to web designers/marketing freelancers managing 10-50 SMB clients (Agency $79/mo, white-label), NOT direct to plumbers.
 
@@ -39,9 +51,9 @@ LocalBeacon is a **Local Visibility Engine** — not a content generator. It run
 ### LB-001 · Infrastructure Setup
 - [ ] Google Workspace activated + DNS verified on GoDaddy
 - [ ] Email addresses created: hello@, support@, david@localbeacon.ai
-- [ ] GitHub repo created: `DavidNielsen1031/LocalBeacon`
-- [ ] Vercel project created, linked to repo
-- [ ] Domain DNS pointed: localbeacon.ai → Vercel
+- [x] GitHub repo created: `DavidNielsen1031/LocalBeacon`
+- [x] Vercel project created, linked to repo
+- [x] Domain DNS pointed: localbeacon.ai → Vercel
 - [ ] Upstash Redis provisioned (session/queue management)
 - [ ] Stripe account configured: Free / Solo $29 / Agency $79 products
 - [ ] Anthropic API key provisioned (separate from Alexander's key)
@@ -121,6 +133,46 @@ LocalBeacon is a **Local Visibility Engine** — not a content generator. It run
 - [ ] Opportunity detection: keywords competitors rank for that client doesn't
 
 ---
+
+## 📅 Next — Sprint 3.5: Beefed-Up Offering (Added Mar 1, 2026)
+
+### LB-017 · Monthly Local Blog Post (AEO-Optimized)
+- [ ] AI generates 1 blog post/month per location (not daily — quality over quantity)
+- [ ] Locally customized: neighborhoods, landmarks, service radius, real city names
+- [ ] AEO-structured: answer capsules after every H2, FAQ schema, owned insights framing
+- [ ] Targets "best [service] in [city]" + "near me" keywords
+- [ ] Export to HTML (paste into WordPress/Squarespace/Wix)
+- [ ] Available on Solo ($29) and Agency ($79)
+
+### LB-018 · GBP Audit Score
+- [ ] On signup + weekly: auto-scan GBP for completeness
+- [ ] Score: 0-100 with specific missing items (photos, holiday hours, products, Q&A)
+- [ ] To-do list format: "Add 8 more photos to reach top 10% in your category"
+- [ ] Drives ongoing engagement and login frequency
+
+### LB-019 · Schema Markup Generator
+- [ ] Generates LocalBusiness, Service, FAQ, and Review schema (JSON-LD)
+- [ ] Customer copies one `<script>` tag, pastes into site footer
+- [ ] Massive perceived value vs. agency ($500+ to install manually)
+- [ ] Available on Solo+
+
+### LB-020 · Review Velocity Monitor
+- [ ] Shows: "You have 47 reviews. Top competitor has 89."
+- [ ] Calculates months to catch up at current velocity
+- [ ] One-click "request review" email template for customers to send
+- [ ] Available on Agency
+
+### LB-021 · Competitor Pulse
+- [ ] Weekly: "Your top competitor posted 4x to GBP this week. You posted 1x."
+- [ ] Creates urgency, drives logins, justifies subscription
+- [ ] Shows competitor review count, photo count, last post date
+- [ ] Available on Agency
+
+### LB-022 · "Near Me" Keyword Rank Tracker
+- [ ] Monthly snapshot: where they rank for "[service] near me" + "[service] in [city]"
+- [ ] Simple visual (up/down arrows, position number)
+- [ ] The #1 thing agencies use to justify retainers — we need this for retention
+- [ ] Available on Solo+
 
 ## 🔮 Later — Sprint 4: Growth & Retention (Target: Month 2+)
 
