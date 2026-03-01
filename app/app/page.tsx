@@ -1,48 +1,66 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
-const features = [
+const outcomes = [
   {
     icon: "📍",
-    title: "GBP Post Automation",
-    description:
-      "AI-generated Google Business Profile posts tailored to your business. Schedule, publish, and track performance — all in one place.",
+    title: "More calls from Google Maps",
+    description: "We post to your Google listing every week so you stay at the top when people search nearby.",
   },
   {
-    icon: "🌐",
-    title: "Local Page Builder",
-    description:
-      "Create SEO-optimized landing pages for every neighborhood you serve. Built for local search, not generic traffic.",
+    icon: "🔍",
+    title: 'More calls from "near me" searches',
+    description: "We create local pages for every city and neighborhood you serve — so you show up everywhere.",
+  },
+  {
+    icon: "🤖",
+    title: "Found by AI assistants",
+    description: "When someone asks Siri, ChatGPT, or Google AI for a recommendation — your business shows up.",
   },
   {
     icon: "⭐",
-    title: "AI Review Replies",
-    description:
-      "Respond to every review instantly with personalized, on-brand replies. Never let a review go unanswered again.",
+    title: "Your reviews work harder",
+    description: "We reply to every review so Google knows you're active and new customers trust you.",
   },
   {
     icon: "📊",
-    title: "Rank Tracking",
-    description:
-      "Know exactly where you rank in local search. Track keyword positions and watch your visibility grow week over week.",
+    title: "See exactly what's working",
+    description: "A monthly report shows how many people found you, where they came from, and what's improving.",
   },
 ];
+
+const withoutVsWith = {
+  without: [
+    "You forget to post for weeks — Google thinks you're inactive",
+    "Competitors show up above you in search results",
+    "Bad reviews sit unanswered — scaring away new customers",
+    "You have no idea if anything you're doing is working",
+    "You spend hours on marketing instead of running your business",
+  ],
+  with: [
+    "Fresh posts go out every week — automatically",
+    "Local pages help you rank in every city you serve",
+    "Every review gets a thoughtful, professional reply",
+    "Monthly reports prove your visibility is growing",
+    "You focus on your business — we handle the rest",
+  ],
+};
 
 const plans = [
   {
     name: "Free",
     price: "$0",
-    period: "/month",
-    description: "Get started with the basics.",
-    features: [
-      "1 location",
-      "5 GBP posts/month",
-      "3 landing pages",
-      "Basic rank tracking",
+    period: "forever",
+    tagline: "Try it out — see what LocalBeacon can do.",
+    outcomes: [
+      "5 Google posts per month",
+      "3 local city pages",
+      "1 business location",
+      "Copy & post to Google yourself",
     ],
-    cta: "Get Started Free",
+    cta: "Connect Your Google Listing",
     href: "/sign-up",
     highlight: false,
   },
@@ -50,16 +68,16 @@ const plans = [
     name: "Solo",
     price: "$29",
     period: "/month",
-    description: "Everything you need to dominate local search.",
-    features: [
-      "3 locations",
-      "Unlimited GBP posts",
-      "Unlimited landing pages",
-      "AI review replies",
-      "PDF export",
-      "Priority support",
+    tagline: "Hands-free local marketing for your business.",
+    outcomes: [
+      "Unlimited Google posts — auto-scheduled weekly",
+      "10 local city pages with SEO optimization",
+      "3 business locations",
+      "AI-written review replies",
+      "1 blog post per month",
+      "Monthly visibility report",
     ],
-    cta: "Start Solo",
+    cta: "Start Solo — $29/mo",
     href: "/sign-up",
     highlight: true,
   },
@@ -67,18 +85,45 @@ const plans = [
     name: "Agency",
     price: "$79",
     period: "/month",
-    description: "Scale across every client you manage.",
-    features: [
-      "Unlimited locations",
-      "White-label branding",
-      "Multi-client management",
-      "Everything in Solo",
-      "Dedicated support",
-      "Custom onboarding",
+    tagline: "Run local marketing for all your clients.",
+    outcomes: [
+      "Everything in Solo — unlimited",
+      "Unlimited client locations",
+      "Multi-client dashboard",
+      "White-label reports with your branding",
+      "Competitor monitoring & alerts",
+      "Priority support",
     ],
-    cta: "Start Agency",
+    cta: "Start Agency — $79/mo",
     href: "/sign-up",
     highlight: false,
+  },
+];
+
+const faqs = [
+  {
+    q: "What if I don't have a Google listing yet?",
+    a: "No problem! We'll help you create one during setup. It's free through Google and takes about 5 minutes.",
+  },
+  {
+    q: "Will this actually get me more phone calls?",
+    a: "Yes — businesses that post weekly to Google and have active review responses consistently rank higher in local search, which means more calls. Our monthly report tracks this so you can see the difference.",
+  },
+  {
+    q: "Is the content written by AI? Will it sound fake?",
+    a: "Our AI writes content specifically about your business, your services, and your city — not generic filler. Every post mentions real local details. You can review and edit anything before it goes live.",
+  },
+  {
+    q: "Can I cancel anytime?",
+    a: "Yes. No contracts, no commitments. Cancel anytime from your dashboard.",
+  },
+  {
+    q: "I'm not tech-savvy. Is this complicated?",
+    a: "Not at all. Connect your Google account, confirm your business info, and we handle the rest. Most people are set up in under 2 minutes.",
+  },
+  {
+    q: "How is this different from hiring an SEO agency?",
+    a: "An agency charges $800-1,500/month and you wait weeks for results. LocalBeacon does the same work — Google posts, local pages, review replies, rank tracking — for $29/month, starting immediately.",
   },
 ];
 
@@ -90,24 +135,16 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-2xl">🔦</span>
-            <span className="text-xl font-bold text-[#FFD700]">
-              LocalBeacon.ai
-            </span>
+            <span className="text-xl font-bold text-[#FFD700]">LocalBeacon.ai</span>
           </div>
           <div className="hidden md:flex items-center gap-6 text-sm text-white/70">
-            <Link href="#features" className="hover:text-white transition-colors">
-              Features
-            </Link>
-            <Link href="#pricing" className="hover:text-white transition-colors">
-              Pricing
-            </Link>
-            <Link href="/sign-in" className="hover:text-white transition-colors">
-              Sign In
-            </Link>
+            <Link href="#how-it-works" className="hover:text-white transition-colors">How It Works</Link>
+            <Link href="#pricing" className="hover:text-white transition-colors">Pricing</Link>
+            <Link href="/sign-in" className="hover:text-white transition-colors">Sign In</Link>
           </div>
           <Link href="/sign-up">
             <Button className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold">
-              Get Started Free
+              Connect Your Google Listing
             </Button>
           </Link>
         </div>
@@ -116,72 +153,53 @@ export default function LandingPage() {
       {/* Hero */}
       <section className="px-6 py-24 md:py-36 text-center">
         <div className="max-w-4xl mx-auto">
-          <Badge className="mb-6 bg-[#FFD700]/10 text-[#FFD700] border-[#FFD700]/30 text-sm px-4 py-1">
-            AI-Powered Local SEO
-          </Badge>
           <h1 className="text-5xl md:text-7xl font-extrabold leading-tight mb-6">
-            Your local business,{" "}
-            <span className="text-[#FFD700]">always visible.</span>
+            Your phone rings more.{" "}
+            <span className="text-[#FFD700]">We handle everything.</span>
           </h1>
           <p className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto mb-10">
-            LocalBeacon.ai automates your Google Business Profile, builds
-            hyper-local landing pages, and replies to every review — so you rank
-            higher and win more customers on autopilot.
+            LocalBeacon posts to your Google listing every week, creates local pages
+            for every city you serve, and replies to your reviews — so you get found
+            by more customers without lifting a finger.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/sign-up">
-              <Button
-                size="lg"
-                className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-bold text-lg px-8 py-6"
-              >
-                Get Started Free
-              </Button>
-            </Link>
-            <Link href="#features">
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-white/20 text-white hover:bg-white/10 text-lg px-8 py-6"
-              >
-                See How It Works
-              </Button>
-            </Link>
-          </div>
+          <Link href="/sign-up">
+            <Button size="lg" className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-bold text-lg px-10 py-6">
+              Connect Your Google Listing — Free
+            </Button>
+          </Link>
           <p className="mt-4 text-sm text-white/40">
-            No credit card required · Free forever plan available
+            No credit card required · Set up in under 2 minutes
           </p>
         </div>
       </section>
 
-      {/* Features */}
-      <section id="features" className="px-6 py-20 bg-white/[0.02]">
+      {/* Social proof placeholder */}
+      <section className="border-y border-white/10 py-6 px-6 bg-white/[0.02]">
+        <div className="max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-8 text-white/30 text-sm">
+          <span>Trusted by local businesses across the US</span>
+          <span>•</span>
+          <span>Plumbers · HVAC · Dentists · Roofers · Lawyers</span>
+        </div>
+      </section>
+
+      {/* 5 Outcomes */}
+      <section id="how-it-works" className="px-6 py-20">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Everything you need to{" "}
-              <span className="text-[#FFD700]">own your local market</span>
+              What LocalBeacon does <span className="text-[#FFD700]">for you</span>
             </h2>
-            <p className="text-white/60 text-lg max-w-2xl mx-auto">
-              One platform. Every tool. Built specifically for local businesses
-              that want to be found first.
+            <p className="text-white/50 text-lg max-w-xl mx-auto">
+              Five things that get you more customers — all on autopilot.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {features.map((feature) => (
-              <Card
-                key={feature.title}
-                className="bg-white/5 border-white/10 hover:border-[#FFD700]/40 transition-colors"
-              >
-                <CardHeader>
-                  <div className="text-3xl mb-2">{feature.icon}</div>
-                  <CardTitle className="text-white text-xl">
-                    {feature.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-white/60 leading-relaxed">
-                    {feature.description}
-                  </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {outcomes.map((o, i) => (
+              <Card key={o.title} className={`bg-white/5 border-white/10 hover:border-[#FFD700]/30 transition-colors ${i === 4 ? 'md:col-span-2 lg:col-span-1' : ''}`}>
+                <CardContent className="p-6">
+                  <div className="text-3xl mb-3">{o.icon}</div>
+                  <h3 className="text-white font-bold text-lg mb-2">{o.title}</h3>
+                  <p className="text-white/50 text-sm leading-relaxed">{o.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -189,67 +207,98 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Before / After */}
+      <section className="px-6 py-20 bg-white/[0.02]">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+            <span className="text-white/40">Without LocalBeacon</span> vs <span className="text-[#FFD700]">With LocalBeacon</span>
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-red-500/5 border border-red-500/20 rounded-xl p-6">
+              <h3 className="text-red-400 font-bold text-lg mb-4 flex items-center gap-2">
+                <span>😓</span> Without LocalBeacon
+              </h3>
+              <ul className="space-y-3">
+                {withoutVsWith.without.map(item => (
+                  <li key={item} className="flex items-start gap-2 text-white/60 text-sm">
+                    <span className="text-red-400 mt-0.5">✗</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="bg-[#FFD700]/5 border border-[#FFD700]/20 rounded-xl p-6">
+              <h3 className="text-[#FFD700] font-bold text-lg mb-4 flex items-center gap-2">
+                <span>🔦</span> With LocalBeacon
+              </h3>
+              <ul className="space-y-3">
+                {withoutVsWith.with.map(item => (
+                  <li key={item} className="flex items-start gap-2 text-white/80 text-sm">
+                    <span className="text-[#FFD700] mt-0.5">✓</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Pricing */}
       <section id="pricing" className="px-6 py-20">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
+          <div className="text-center mb-6">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Simple, transparent <span className="text-[#FFD700]">pricing</span>
+              Simple pricing. <span className="text-[#FFD700]">Real results.</span>
             </h2>
-            <p className="text-white/60 text-lg">
-              Start free. Upgrade when you&apos;re ready to grow.
+            <p className="text-white/50 text-lg">
+              Start free, upgrade anytime. No contracts.
             </p>
           </div>
+
+          {/* Comparison callout */}
+          <div className="text-center mb-12">
+            <div className="inline-flex flex-wrap items-center justify-center gap-4 bg-white/5 border border-white/10 rounded-full px-6 py-3 text-sm">
+              <span className="text-white/40">Compared to:</span>
+              <span className="text-white/60">Hiring an agency <span className="line-through text-white/30">$800–1,500/mo</span></span>
+              <span className="text-white/20">|</span>
+              <span className="text-white/60">BrightLocal <span className="line-through text-white/30">$39–59/mo</span> <span className="text-white/30">(fewer features)</span></span>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {plans.map((plan) => (
-              <Card
-                key={plan.name}
-                className={`relative flex flex-col ${
-                  plan.highlight
-                    ? "bg-[#FFD700]/10 border-[#FFD700] shadow-lg shadow-[#FFD700]/10"
-                    : "bg-white/5 border-white/10"
-                }`}
-              >
+            {plans.map(plan => (
+              <Card key={plan.name} className={`relative flex flex-col ${
+                plan.highlight
+                  ? "bg-[#FFD700]/10 border-[#FFD700] shadow-lg shadow-[#FFD700]/10"
+                  : "bg-white/5 border-white/10"
+              }`}>
                 {plan.highlight && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <Badge className="bg-[#FFD700] text-black font-bold px-4">
-                      Most Popular
-                    </Badge>
+                    <Badge className="bg-[#FFD700] text-black font-bold px-4">Most Popular</Badge>
                   </div>
                 )}
-                <CardHeader className="pt-8">
-                  <p className="text-sm text-white/50 uppercase tracking-wider font-semibold">
-                    {plan.name}
-                  </p>
-                  <div className="flex items-baseline gap-1 mt-2">
-                    <span className="text-4xl font-extrabold text-white">
-                      {plan.price}
-                    </span>
-                    <span className="text-white/50">{plan.period}</span>
+                <CardContent className="p-6 pt-8 flex-1 flex flex-col">
+                  <p className="text-sm text-white/50 uppercase tracking-wider font-semibold">{plan.name}</p>
+                  <div className="flex items-baseline gap-1 mt-2 mb-1">
+                    <span className="text-4xl font-extrabold text-white">{plan.price}</span>
+                    <span className="text-white/50 text-sm">{plan.period}</span>
                   </div>
-                  <p className="text-white/60 text-sm mt-1">{plan.description}</p>
-                </CardHeader>
-                <CardContent className="flex-1 flex flex-col">
+                  <p className="text-white/60 text-sm mb-6">{plan.tagline}</p>
                   <ul className="space-y-3 mb-8 flex-1">
-                    {plan.features.map((feature) => (
-                      <li
-                        key={feature}
-                        className="flex items-center gap-2 text-sm text-white/80"
-                      >
-                        <span className="text-[#FFD700]">✓</span>
-                        {feature}
+                    {plan.outcomes.map(o => (
+                      <li key={o} className="flex items-start gap-2 text-sm text-white/80">
+                        <span className="text-[#FFD700] mt-0.5">✓</span>
+                        {o}
                       </li>
                     ))}
                   </ul>
                   <Link href={plan.href}>
-                    <Button
-                      className={`w-full font-semibold ${
-                        plan.highlight
-                          ? "bg-[#FFD700] text-black hover:bg-[#FFD700]/90"
-                          : "border border-white/20 bg-transparent text-white hover:bg-white/10"
-                      }`}
-                      variant={plan.highlight ? "default" : "outline"}
-                    >
+                    <Button className={`w-full font-semibold ${
+                      plan.highlight
+                        ? "bg-[#FFD700] text-black hover:bg-[#FFD700]/90"
+                        : "border border-white/20 bg-transparent text-white hover:bg-white/10"
+                    }`} variant={plan.highlight ? "default" : "outline"}>
                       {plan.cta}
                     </Button>
                   </Link>
@@ -260,24 +309,38 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* CTA Banner */}
-      <section className="px-6 py-20 bg-[#FFD700]/5 border-y border-[#FFD700]/20">
+      {/* FAQ */}
+      <section className="px-6 py-20 bg-white/[0.02]">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-12">
+            Questions? <span className="text-[#FFD700]">We've got answers.</span>
+          </h2>
+          <div className="space-y-6">
+            {faqs.map(faq => (
+              <div key={faq.q} className="border-b border-white/10 pb-6">
+                <h3 className="text-white font-semibold text-base mb-2">{faq.q}</h3>
+                <p className="text-white/50 text-sm leading-relaxed">{faq.a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Bottom CTA */}
+      <section className="px-6 py-20 border-t border-white/10">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Ready to light up your local presence?
+            Ready for more calls and less work?
           </h2>
-          <p className="text-white/60 text-lg mb-8">
-            Join hundreds of local businesses already using LocalBeacon.ai to
-            rank higher, get more reviews, and win more customers.
+          <p className="text-white/50 text-lg mb-8">
+            Connect your Google listing and see your first posts generated in under 2 minutes.
           </p>
           <Link href="/sign-up">
-            <Button
-              size="lg"
-              className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-bold text-lg px-10 py-6"
-            >
-              Start for Free Today
+            <Button size="lg" className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-bold text-lg px-10 py-6">
+              Connect Your Google Listing — Free
             </Button>
           </Link>
+          <p className="mt-3 text-white/30 text-xs">No credit card required · Cancel anytime</p>
         </div>
       </section>
 
@@ -287,38 +350,14 @@ export default function LandingPage() {
           <div className="flex items-center gap-2">
             <span className="text-xl">🔦</span>
             <span className="font-bold text-[#FFD700]">LocalBeacon.ai</span>
-            <span className="text-white/40 text-sm ml-2">
-              Your local business, always visible.
-            </span>
           </div>
           <div className="flex gap-6 text-sm text-white/40">
-            <Link
-              href="#features"
-              className="hover:text-white/70 transition-colors"
-            >
-              Features
-            </Link>
-            <Link
-              href="/pricing"
-              className="hover:text-white/70 transition-colors"
-            >
-              Pricing
-            </Link>
-            <Link
-              href="/sign-in"
-              className="hover:text-white/70 transition-colors"
-            >
-              Sign In
-            </Link>
-            <Link
-              href="/sign-up"
-              className="hover:text-white/70 transition-colors"
-            >
-              Sign Up
-            </Link>
+            <Link href="#how-it-works" className="hover:text-white/70 transition-colors">How It Works</Link>
+            <Link href="#pricing" className="hover:text-white/70 transition-colors">Pricing</Link>
+            <Link href="/sign-in" className="hover:text-white/70 transition-colors">Sign In</Link>
           </div>
           <p className="text-white/30 text-xs">
-            © {new Date().getFullYear()} LocalBeacon.ai. All rights reserved.
+            © {new Date().getFullYear()} Perpetual Agility LLC. All rights reserved.
           </p>
         </div>
       </footer>
