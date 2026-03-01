@@ -66,19 +66,36 @@ export default function OnboardingPage() {
   }
 
   const generateFirstPost = async (businessId?: string) => {
-    const res = await fetch('/api/generate/gbp-post', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        business_id: businessId,
-        post_type: 'whats_new',
-        business_name: data.name,
-        business_category: data.category,
-        primary_city: data.primary_city,
-        service_areas: data.service_areas,
-      }),
-    })
-    return await res.json()
+    try {
+      const res = await fetch('/api/generate/gbp-post', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          business_id: businessId,
+          post_type: 'whats_new',
+          business_name: data.name,
+          business_category: data.category,
+          primary_city: data.primary_city,
+          service_areas: data.service_areas,
+        }),
+      })
+      const json = await res.json()
+      // Ensure we have content — fall back to mock if API failed
+      if (!json.title && !json.body) {
+        return {
+          title: `${data.name} — Trusted ${data.category} in ${data.primary_city}`,
+          body: `Looking for a reliable ${data.category.toLowerCase()} in ${data.primary_city}? ${data.name} has been proudly serving the community with professional service.\n\nWhether it's a routine check or an emergency, our team is ready.\n\n✅ Licensed & insured\n✅ Same-day service available\n✅ Transparent pricing`,
+          call_to_action: 'CALL',
+        }
+      }
+      return json
+    } catch {
+      return {
+        title: `${data.name} — Trusted ${data.category} in ${data.primary_city}`,
+        body: `Looking for a reliable ${data.category.toLowerCase()} in ${data.primary_city}? ${data.name} has been proudly serving the community with professional service.\n\nWhether it's a routine check or an emergency, our team is ready.\n\n✅ Licensed & insured\n✅ Same-day service available\n✅ Transparent pricing`,
+        call_to_action: 'CALL',
+      }
+    }
   }
 
   const handleStep3Continue = async (plan: string) => {
