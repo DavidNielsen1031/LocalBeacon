@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="#1B2A4A"/>
+  <!-- Lighthouse tower simplified -->
+  <path d="M13 28 L14.5 12 L17.5 12 L19 28 Z" fill="#FAFAF7"/>
+  <!-- Orange stripe -->
+  <rect x="14" y="18" width="4" height="2" fill="#FF6B35"/>
+  <!-- Lantern room -->
+  <rect x="13.5" y="9" width="5" height="3.5" rx="0.5" fill="#FAFAF7"/>
+  <!-- Cap -->
+  <path d="M14 9 L16 5 L18 9 Z" fill="#FAFAF7"/>
+  <!-- Beacon glow -->
+  <circle cx="16" cy="10.5" r="1.5" fill="#FF6B35"/>
+  <!-- Light rays -->
+  <line x1="16" y1="10.5" x2="8" y2="7" stroke="#FF6B35" stroke-width="0.8" opacity="0.6"/>
+  <line x1="16" y1="10.5" x2="24" y2="7" stroke="#FF6B35" stroke-width="0.8" opacity="0.6"/>
+  <line x1="16" y1="10.5" x2="7" y2="10.5" stroke="#FF6B35" stroke-width="0.8" opacity="0.6"/>
+  <line x1="16" y1="10.5" x2="25" y2="10.5" stroke="#FF6B35" stroke-width="0.8" opacity="0.6"/>
+  <!-- Base -->
+  <rect x="11" y="27" width="10" height="2" rx="0.5" fill="#FAFAF7"/>
+</svg>

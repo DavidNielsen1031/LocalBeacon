@@ -263,7 +263,8 @@ export default function LandingPage() {
           className="flex items-center justify-between h-16"
         >
           {/* Logo */}
-          <Link href="/" style={{ textDecoration: "none" }}>
+          <Link href="/" style={{ textDecoration: "none" }} className="flex items-center gap-2">
+            <img src="/logo.svg" alt="LocalBeacon" style={{ height: "32px", width: "32px" }} />
             <span
               style={{
                 fontWeight: 800,

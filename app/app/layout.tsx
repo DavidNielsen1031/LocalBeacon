@@ -52,6 +52,9 @@ export default function RootLayout({
 
   const content = (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+      </head>
       <body
         className={`${dmSans.variable} ${fraunces.variable} antialiased`}
         style={{ backgroundColor: "#FAFAF7", color: "#2D3436", fontFamily: "var(--font-dm-sans), sans-serif" }}
