@@ -78,6 +78,13 @@
 
 ---
 
+### LB-S5-04 · AI-Powered Meta Ad Strategy Generator (Agency Tier)
+- [ ] New dashboard page: /dashboard/ads
+- [ ] **Input:** Landing page URL, target audience (demographics, interests)
+- [ ] **Output:** 3-5 unique ad angles, 3 ad sets per angle, 3 creatives per ad set (image, headline, body copy, CTA)
+- [ ] Based on Gael Breton's approach (Claude-generated from URL)
+- [ ] Available on Agency tier ($99/mo) only (updated price)
+
 ## 🏃 Now — Sprint 5: Make It Real
 
 ### LB-S5-01 · End-to-End Flow Test
