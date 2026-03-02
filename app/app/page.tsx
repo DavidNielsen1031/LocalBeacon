@@ -22,33 +22,33 @@ import {
 const outcomes = [
   {
     Icon: MapPin,
-    title: "More calls from Google Maps",
+    title: "Show up on Google Maps",
     description:
-      "We post to your Google listing every week so you stay at the top when people search nearby.",
+      "Weekly posts keep your listing active. Google rewards that with higher placement when locals search.",
   },
   {
     Icon: Search,
-    title: 'More calls from "near me" searches',
+    title: 'Rank in every city you serve',
     description:
-      "We create local pages for every city and neighborhood you serve — so you show up everywhere.",
+      "We build a local page for each neighborhood and city. More pages, more search results, more calls.",
   },
   {
     Icon: Bot,
-    title: "Found by voice search & smart assistants",
+    title: "Visible to AI assistants",
     description:
-      "When someone asks Siri or Google for a recommendation — your business shows up.",
+      "When someone asks Siri, ChatGPT, or Google AI for a local recommendation, your business shows up.",
   },
   {
     Icon: Star,
-    title: "Your reviews work harder",
+    title: "Every review gets a reply",
     description:
-      "We reply to every review so Google knows you're active and new customers trust you.",
+      "Unanswered reviews scare off customers. We write professional replies so your reputation stays strong.",
   },
   {
     Icon: BarChart3,
-    title: "See exactly what's working",
+    title: "Monthly proof it's working",
     description:
-      "A monthly report shows how many people found you, where they came from, and what's improving.",
+      "A report that shows exactly how many people found you, clicked, and called. No guesswork.",
   },
 ];
 
@@ -61,11 +61,11 @@ const withoutVsWith = {
     "You spend hours on marketing instead of running your business",
   ],
   with: [
-    "Fresh posts go out every week — automatically",
-    "Local pages help you rank in every city you serve",
-    "Every review gets a thoughtful, professional reply",
-    "Monthly reports prove your visibility is growing",
-    "You focus on your business — we handle the rest",
+    "Fresh posts go out every week. You don't touch a thing.",
+    "Local pages put you in search results across every city you serve",
+    "Every review gets a professional reply within 24 hours",
+    "Monthly report shows calls, views, and search ranking changes",
+    "You run your business. Marketing runs itself.",
   ],
 };
 
@@ -89,7 +89,7 @@ const plans = [
     name: "Solo",
     price: "$49",
     period: "/month",
-    tagline: "Hands-free local marketing for your business.",
+    tagline: "Weekly posts, review replies, city pages. Done for you.",
     features: [
       "Unlimited Google posts — auto-scheduled weekly",
       "10 local city pages with SEO optimization",
@@ -124,15 +124,15 @@ const plans = [
 const faqs = [
   {
     q: "What if I don't have a Google listing yet?",
-    a: "No problem! We'll help you create one during setup. It's free through Google and takes about 5 minutes.",
+    a: "We'll help you create one during setup. It's free through Google and takes about 5 minutes.",
   },
   {
     q: "Will this actually get me more phone calls?",
-    a: "Yes — businesses that post weekly to Google and have active review responses consistently rank higher in local search, which means more calls. Our monthly report tracks this so you can see the difference.",
+    a: "Businesses that post weekly and reply to reviews rank higher in local search. Higher rank means more calls. The monthly report shows you the numbers.",
   },
   {
-    q: "Who writes the content? Will it sound generic?",
-    a: "Every post is written specifically about your business, your services, and your city — not generic filler. Real local details, real neighborhood names. You can review and edit anything before it goes live.",
+    q: "Who writes the content? Will it sound like a robot?",
+    a: "AI writes the first draft using your business details, services, and actual city names. It reads like a local wrote it, not a template. You can edit anything before it goes live.",
   },
   {
     q: "Can I cancel anytime?",
@@ -140,7 +140,7 @@ const faqs = [
   },
   {
     q: "I'm not tech-savvy. Is this complicated?",
-    a: "Not at all. Connect your Google account, confirm your business info, and we handle the rest. Most people are set up in under 2 minutes.",
+    a: "Connect your Google account, confirm your business info, done. Most people finish in under 2 minutes.",
   },
   {
     q: "How is this different from hiring an SEO agency?",
@@ -165,7 +165,7 @@ const steps = [
     num: "3",
     Icon: ThumbsUp,
     title: "Your phone starts ringing",
-    desc: "Fresh content goes live every week. More visibility, more calls — without lifting a finger.",
+    desc: "Fresh content goes live every week. More visibility, more calls. You don't do anything.",
   },
 ];
 
@@ -351,7 +351,7 @@ export default function LandingPage() {
               }}
             >
               <span style={{ color: ORANGE, fontWeight: 600, fontSize: "0.8125rem" }}>
-                Local marketing on autopilot
+                For plumbers, roofers, dentists & more
               </span>
             </div>
 
@@ -379,9 +379,8 @@ export default function LandingPage() {
                 maxWidth: "520px",
               }}
             >
-              LocalBeacon posts to your Google listing every week, creates local pages for
-              every city you serve, and replies to your reviews — so you get found by more
-              customers without lifting a finger.
+              LocalBeacon posts to your Google listing every week, builds local pages for
+              every city you serve, and replies to your reviews. More visibility, more calls.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 items-start">
@@ -557,7 +556,7 @@ export default function LandingPage() {
               <span style={{ color: ORANGE }}>for you</span>
             </h2>
             <p style={{ color: SLATE, fontSize: "1.0625rem", maxWidth: "480px", margin: "0 auto", lineHeight: 1.6 }}>
-              Five things that get you more customers — all on autopilot.
+              Five things that bring in more customers. All run weekly.
             </p>
           </div>
 
@@ -805,7 +804,7 @@ export default function LandingPage() {
               }}
             >
               Simple pricing.{" "}
-              <span style={{ color: ORANGE }}>Real results.</span>
+              <span style={{ color: ORANGE }}>No surprises.</span>
             </h2>
             <p style={{ color: SLATE, fontSize: "1.0625rem", lineHeight: 1.6 }}>
               Start free, upgrade anytime. No contracts.
@@ -942,8 +941,7 @@ export default function LandingPage() {
               marginBottom: "48px",
             }}
           >
-            Questions?{" "}
-            <span style={{ color: ORANGE }}>We&apos;ve got answers.</span>
+            Common questions
           </h2>
           <div>
             {faqs.map((faq) => (
@@ -971,10 +969,10 @@ export default function LandingPage() {
               marginBottom: "16px",
             }}
           >
-            Ready for more calls and less work?
+            Connect your Google listing. First posts go out today.
           </h2>
           <p style={{ color: "rgba(255,255,255,0.65)", fontSize: "1.0625rem", lineHeight: 1.6, marginBottom: "36px" }}>
-            Connect your Google listing and see your first posts generated in under 2 minutes.
+            Takes 2 minutes. No credit card. Cancel whenever.
           </p>
           <Link href="/sign-up" style={{ textDecoration: "none" }}>
             <button
