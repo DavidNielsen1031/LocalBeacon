@@ -264,7 +264,7 @@ export default function LandingPage() {
         >
           {/* Logo */}
           <Link href="/" style={{ textDecoration: "none" }} className="flex items-center gap-2">
-            <img src="/logo.svg" alt="LocalBeacon" style={{ height: "32px", width: "32px" }} />
+            <img src="/logo-48.png" alt="LocalBeacon" style={{ height: "40px", width: "40px" }} />
             <span
               style={{
                 fontWeight: 800,
@@ -1014,7 +1014,8 @@ export default function LandingPage() {
           style={{ maxWidth: "1200px", margin: "0 auto" }}
           className="flex flex-col md:flex-row items-center justify-between gap-5"
         >
-          <Link href="/" style={{ textDecoration: "none" }}>
+          <Link href="/" style={{ textDecoration: "none" }} className="flex items-center gap-2">
+            <img src="/logo-48.png" alt="LocalBeacon" style={{ height: "36px", width: "36px" }} />
             <span style={{ fontWeight: 800, fontSize: "1.125rem", color: NAVY }}>
               Local<span style={{ color: ORANGE }}>Beacon</span>.ai
             </span>
