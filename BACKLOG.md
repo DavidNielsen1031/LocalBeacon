@@ -78,6 +78,42 @@
 
 ---
 
+## 🏃 Now — Sprint 5: Make It Real
+
+### LB-S5-01 · End-to-End Flow Test
+- [ ] Sign up → create business → generate post → verify saved in Supabase
+- [ ] Fix any broken connections between Clerk auth, Supabase, and API routes
+- [ ] Verify service_role key works for server-side DB operations
+
+### LB-S5-02 · Stripe Checkout Integration
+- [ ] Wire Solo upgrade button to Stripe checkout ($49/mo)
+- [ ] Wire Agency upgrade to Stripe checkout ($99/mo)
+- [ ] Handle successful payment → update user plan in Supabase
+- [ ] Stripe webhook: subscription created/cancelled → plan sync
+
+### LB-S5-03 · Blog Post Generator (LB-017)
+- [ ] New dashboard page: /dashboard/blog
+- [ ] AI generates 1 blog post/month per location
+- [ ] Locally customized: neighborhoods, landmarks, city names
+- [ ] FAQ section with schema markup
+- [ ] Export to HTML (copy/paste into WordPress/Squarespace/Wix)
+- [ ] Available on Solo ($49) and Agency ($99)
+
+### LB-S5-04 · GBP Audit Score (LB-018)
+- [ ] New dashboard widget: "Google Listing Health Score: 62/100"
+- [ ] Checklist: photos, hours, description, categories, products, Q&A
+- [ ] Manual input for now (user checks boxes), auto-scan after GBP API
+- [ ] Drives return visits and engagement
+
+### LB-S5-05 · Schema Markup Generator (LB-019)
+- [ ] New dashboard page or section: /dashboard/schema
+- [ ] Generates LocalBusiness, Service, FAQ JSON-LD from business info
+- [ ] One `<script>` tag user copies into site footer
+- [ ] Preview what Google will see
+- [ ] Available on Solo+
+
+---
+
 ## 📋 Next — Backlog (Prioritized)
 
 ### High Priority
@@ -112,13 +148,18 @@
 
 ---
 
-## 💰 Revenue Model
+## 💰 Revenue Model (Updated Mar 1 — price increase)
 
 | Plan | Price | Limits | Target |
 |------|-------|--------|--------|
 | Free | $0 | 1 location, 5 posts/mo, 3 pages | Try before buy |
-| Solo | $29/mo | 3 locations, unlimited posts, 10 city pages | DIY business owners |
-| Agency | $79/mo | Unlimited everything, white-label, multi-client | Web designers/freelancers |
+| Solo | **$49/mo** | 3 locations, unlimited posts, 10 city pages | DIY business owners |
+| Agency | **$99/mo** | Unlimited everything, white-label, multi-client | Web designers/freelancers |
+
+**Stripe Price IDs (current):**
+- Solo: `price_1T6LhxB0OqzCjZpvnGc84VN7` ($49/mo)
+- Agency: `price_1T6LhxB0OqzCjZpvcNk2NQUO` ($99/mo)
+- Old $29/$79 prices: ARCHIVED
 
 ---
 

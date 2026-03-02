@@ -1,16 +1,19 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { DM_Sans, Fraunces } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
   subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
@@ -20,7 +23,7 @@ export const metadata: Metadata = {
   keywords: ["local SEO", "Google Business Profile", "local marketing automation", "AI marketing", "small business marketing", "GBP posts", "local visibility"],
   openGraph: {
     title: "LocalBeacon.ai — Your phone rings more. We handle everything.",
-    description: "AI-powered local marketing for small businesses. Weekly Google posts, city pages, review replies — all on autopilot. $29/mo.",
+    description: "AI-powered local marketing for small businesses. Weekly Google posts, city pages, review replies — all on autopilot. $49/mo.",
     url: "https://localbeacon.ai",
     siteName: "LocalBeacon.ai",
     type: "website",
@@ -48,9 +51,10 @@ export default function RootLayout({
   const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
   const content = (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white`}
+        className={`${dmSans.variable} ${fraunces.variable} antialiased`}
+        style={{ backgroundColor: "#FAFAF7", color: "#2D3436", fontFamily: "var(--font-dm-sans), sans-serif" }}
       >
         {children}
       </body>

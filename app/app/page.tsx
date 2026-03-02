@@ -1,33 +1,54 @@
+"use client";
+
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import { useState } from "react";
+import {
+  MapPin,
+  Search,
+  Bot,
+  Star,
+  BarChart3,
+  ChevronDown,
+  CheckCircle2,
+  XCircle,
+  Phone,
+  FileText,
+  ThumbsUp,
+  ArrowRight,
+} from "lucide-react";
+
+// ─── Data ────────────────────────────────────────────────────────────────────
 
 const outcomes = [
   {
-    icon: "📍",
+    Icon: MapPin,
     title: "More calls from Google Maps",
-    description: "We post to your Google listing every week so you stay at the top when people search nearby.",
+    description:
+      "We post to your Google listing every week so you stay at the top when people search nearby.",
   },
   {
-    icon: "🔍",
+    Icon: Search,
     title: 'More calls from "near me" searches',
-    description: "We create local pages for every city and neighborhood you serve — so you show up everywhere.",
+    description:
+      "We create local pages for every city and neighborhood you serve — so you show up everywhere.",
   },
   {
-    icon: "🤖",
+    Icon: Bot,
     title: "Found by AI assistants",
-    description: "When someone asks Siri, ChatGPT, or Google AI for a recommendation — your business shows up.",
+    description:
+      "When someone asks Siri, ChatGPT, or Google AI for a recommendation — your business shows up.",
   },
   {
-    icon: "⭐",
+    Icon: Star,
     title: "Your reviews work harder",
-    description: "We reply to every review so Google knows you're active and new customers trust you.",
+    description:
+      "We reply to every review so Google knows you're active and new customers trust you.",
   },
   {
-    icon: "📊",
+    Icon: BarChart3,
     title: "See exactly what's working",
-    description: "A monthly report shows how many people found you, where they came from, and what's improving.",
+    description:
+      "A monthly report shows how many people found you, where they came from, and what's improving.",
   },
 ];
 
@@ -54,7 +75,7 @@ const plans = [
     price: "$0",
     period: "forever",
     tagline: "Try it out — see what LocalBeacon can do.",
-    outcomes: [
+    features: [
       "5 Google posts per month",
       "3 local city pages",
       "1 business location",
@@ -69,7 +90,7 @@ const plans = [
     price: "$49",
     period: "/month",
     tagline: "Hands-free local marketing for your business.",
-    outcomes: [
+    features: [
       "Unlimited Google posts — auto-scheduled weekly",
       "10 local city pages with SEO optimization",
       "3 business locations",
@@ -86,7 +107,7 @@ const plans = [
     price: "$99",
     period: "/month",
     tagline: "Run local marketing for all your clients.",
-    outcomes: [
+    features: [
       "Everything in Solo — unlimited",
       "Unlimited client locations",
       "Multi-client dashboard",
@@ -127,239 +148,899 @@ const faqs = [
   },
 ];
 
+const steps = [
+  {
+    num: "1",
+    Icon: Phone,
+    title: "Connect your Google listing",
+    desc: "Link your Google Business Profile in under 2 minutes. We pull in your info automatically.",
+  },
+  {
+    num: "2",
+    Icon: FileText,
+    title: "We generate your content",
+    desc: "LocalBeacon writes posts, city pages, and review replies — tailored to your business and location.",
+  },
+  {
+    num: "3",
+    Icon: ThumbsUp,
+    title: "Your phone starts ringing",
+    desc: "Fresh content goes live every week. More visibility, more calls — without lifting a finger.",
+  },
+];
+
+// ─── Styles (inline for isolation — Tailwind v4 inline is fine) ──────────────
+
+const ORANGE = "#FF6B35";
+const NAVY = "#1B2A4A";
+const CREAM = "#FFF8F0";
+const WARM_WHITE = "#FAFAF7";
+const CHARCOAL = "#2D3436";
+const SLATE = "#636E72";
+const MIST = "#DFE6E9";
+
+// ─── Sub-components ───────────────────────────────────────────────────────────
+
+function FAQItem({ q, a }: { q: string; a: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div
+      style={{ borderBottom: `1px solid ${MIST}` }}
+      className="py-5"
+    >
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="w-full flex items-center justify-between text-left gap-4 group"
+        aria-expanded={open}
+      >
+        <span
+          style={{ color: NAVY, fontWeight: 600, fontSize: "1rem", lineHeight: "1.5" }}
+        >
+          {q}
+        </span>
+        <ChevronDown
+          size={20}
+          style={{
+            color: ORANGE,
+            flexShrink: 0,
+            transform: open ? "rotate(180deg)" : "rotate(0deg)",
+            transition: "transform 0.25s ease",
+          }}
+        />
+      </button>
+      <div
+        style={{
+          maxHeight: open ? "400px" : "0",
+          overflow: "hidden",
+          transition: "max-height 0.3s ease",
+        }}
+      >
+        <p
+          style={{ color: SLATE, fontSize: "0.9375rem", lineHeight: "1.65", paddingTop: "12px" }}
+        >
+          {a}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main page ────────────────────────────────────────────────────────────────
+
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-black text-white">
-      {/* Nav */}
-      <nav className="border-b border-white/10 px-6 py-4">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl">🔦</span>
-            <span className="text-xl font-bold text-[#FFD700]">LocalBeacon.ai</span>
+    <div style={{ backgroundColor: WARM_WHITE, color: CHARCOAL, fontFamily: "var(--font-dm-sans), sans-serif" }}>
+
+      {/* ── Sticky Nav ── */}
+      <nav
+        id="main-nav"
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 50,
+          backgroundColor: "#fff",
+          borderBottom: `1px solid ${MIST}`,
+        }}
+      >
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(){
+                var nav = document.getElementById('main-nav');
+                window.addEventListener('scroll', function(){
+                  if(window.scrollY > 8){
+                    nav.style.boxShadow = '0 2px 16px rgba(27,42,74,0.08)';
+                  } else {
+                    nav.style.boxShadow = 'none';
+                  }
+                });
+              })();
+            `,
+          }}
+        />
+        <div
+          style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}
+          className="flex items-center justify-between h-16"
+        >
+          {/* Logo */}
+          <Link href="/" style={{ textDecoration: "none" }}>
+            <span
+              style={{
+                fontWeight: 800,
+                fontSize: "1.25rem",
+                color: NAVY,
+                letterSpacing: "-0.02em",
+              }}
+            >
+              Local<span style={{ color: ORANGE }}>Beacon</span>.ai
+            </span>
+          </Link>
+
+          {/* Center nav */}
+          <div className="hidden md:flex items-center gap-8">
+            {[
+              { href: "#how-it-works", label: "How It Works" },
+              { href: "#pricing", label: "Pricing" },
+              { href: "/sign-in", label: "Sign In" },
+            ].map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                style={{
+                  color: SLATE,
+                  fontSize: "0.9375rem",
+                  fontWeight: 500,
+                  textDecoration: "none",
+                  transition: "color 0.15s",
+                }}
+                onMouseEnter={(e) => ((e.target as HTMLElement).style.color = NAVY)}
+                onMouseLeave={(e) => ((e.target as HTMLElement).style.color = SLATE)}
+              >
+                {label}
+              </Link>
+            ))}
           </div>
-          <div className="hidden md:flex items-center gap-6 text-sm text-white/70">
-            <Link href="#how-it-works" className="hover:text-white transition-colors">How It Works</Link>
-            <Link href="#pricing" className="hover:text-white transition-colors">Pricing</Link>
-            <Link href="/sign-in" className="hover:text-white transition-colors">Sign In</Link>
-          </div>
-          <Link href="/sign-up">
-            <Button className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold">
-              Connect Your Google Listing
-            </Button>
+
+          {/* CTA */}
+          <Link href="/sign-up" style={{ textDecoration: "none" }}>
+            <button
+              style={{
+                backgroundColor: ORANGE,
+                color: "#fff",
+                fontWeight: 700,
+                fontSize: "0.9375rem",
+                padding: "10px 22px",
+                borderRadius: "8px",
+                border: "none",
+                cursor: "pointer",
+                boxShadow: "0 4px 14px rgba(255,107,53,0.3)",
+                transition: "opacity 0.15s",
+              }}
+              onMouseEnter={(e) => ((e.target as HTMLElement).style.opacity = "0.88")}
+              onMouseLeave={(e) => ((e.target as HTMLElement).style.opacity = "1")}
+            >
+              Get Started Free
+            </button>
           </Link>
         </div>
       </nav>
 
-      {/* Hero */}
-      <section className="px-6 py-24 md:py-36 text-center">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-extrabold leading-tight mb-6">
-            Your phone rings more.{" "}
-            <span className="text-[#FFD700]">We handle everything.</span>
-          </h1>
-          <p className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto mb-10">
-            LocalBeacon posts to your Google listing every week, creates local pages
-            for every city you serve, and replies to your reviews — so you get found
-            by more customers without lifting a finger.
-          </p>
-          <Link href="/sign-up">
-            <Button size="lg" className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-bold text-lg px-10 py-6">
-              Connect Your Google Listing — Free
-            </Button>
-          </Link>
-          <p className="mt-4 text-sm text-white/40">
-            No credit card required · Set up in under 2 minutes
-          </p>
+      {/* ── Hero ── */}
+      <section
+        style={{
+          backgroundColor: WARM_WHITE,
+          padding: "80px 24px 96px",
+        }}
+      >
+        <div
+          style={{ maxWidth: "1200px", margin: "0 auto" }}
+          className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16"
+        >
+          {/* Left: text */}
+          <div className="flex-1 lg:max-w-[52%]">
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                backgroundColor: `${ORANGE}15`,
+                border: `1px solid ${ORANGE}30`,
+                borderRadius: "9999px",
+                padding: "6px 14px",
+                marginBottom: "24px",
+              }}
+            >
+              <span style={{ color: ORANGE, fontWeight: 600, fontSize: "0.8125rem" }}>
+                AI-powered local marketing
+              </span>
+            </div>
+
+            <h1
+              style={{
+                fontFamily: "var(--font-dm-sans), sans-serif",
+                fontWeight: 800,
+                fontSize: "clamp(2.25rem, 5vw, 4rem)",
+                lineHeight: 1.1,
+                letterSpacing: "-0.025em",
+                color: NAVY,
+                marginBottom: "24px",
+              }}
+            >
+              Your phone rings more.{" "}
+              <span style={{ color: ORANGE }}>We handle everything.</span>
+            </h1>
+
+            <p
+              style={{
+                fontSize: "1.125rem",
+                lineHeight: 1.7,
+                color: SLATE,
+                marginBottom: "36px",
+                maxWidth: "520px",
+              }}
+            >
+              LocalBeacon posts to your Google listing every week, creates local pages for
+              every city you serve, and replies to your reviews — so you get found by more
+              customers without lifting a finger.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 items-start">
+              <Link href="/sign-up" style={{ textDecoration: "none" }}>
+                <button
+                  style={{
+                    backgroundColor: ORANGE,
+                    color: "#fff",
+                    fontWeight: 700,
+                    fontSize: "1.0625rem",
+                    padding: "14px 28px",
+                    borderRadius: "8px",
+                    border: "none",
+                    cursor: "pointer",
+                    boxShadow: "0 4px 14px rgba(255,107,53,0.3)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  Connect Your Google Listing — Free
+                  <ArrowRight size={18} />
+                </button>
+              </Link>
+            </div>
+            <p style={{ color: SLATE, fontSize: "0.8125rem", marginTop: "12px" }}>
+              No credit card required · Set up in under 2 minutes
+            </p>
+          </div>
+
+          {/* Right: fake dashboard mockup */}
+          <div className="flex-1 w-full lg:max-w-[48%]">
+            <div
+              style={{
+                backgroundColor: "#fff",
+                borderRadius: "16px",
+                border: `1px solid ${MIST}`,
+                boxShadow: "0 10px 40px rgba(27,42,74,0.10)",
+                padding: "24px",
+                maxWidth: "480px",
+                margin: "0 auto",
+              }}
+            >
+              {/* Dashboard header */}
+              <div className="flex items-center justify-between mb-5">
+                <div>
+                  <p style={{ fontWeight: 700, color: NAVY, fontSize: "0.9375rem" }}>
+                    Mike&apos;s Plumbing — Denver, CO
+                  </p>
+                  <p style={{ color: SLATE, fontSize: "0.8125rem" }}>This month&apos;s activity</p>
+                </div>
+                <div
+                  style={{
+                    backgroundColor: "#00B89415",
+                    color: "#00B894",
+                    borderRadius: "9999px",
+                    padding: "4px 12px",
+                    fontSize: "0.75rem",
+                    fontWeight: 700,
+                  }}
+                >
+                  Active
+                </div>
+              </div>
+
+              {/* Stats row */}
+              <div className="grid grid-cols-3 gap-3 mb-5">
+                {[
+                  { label: "Google Views", val: "1,284", delta: "+23%" },
+                  { label: "Phone Clicks", val: "47", delta: "+18%" },
+                  { label: "Reviews Replied", val: "12", delta: "100%" },
+                ].map(({ label, val, delta }) => (
+                  <div
+                    key={label}
+                    style={{
+                      backgroundColor: CREAM,
+                      borderRadius: "10px",
+                      padding: "12px",
+                      textAlign: "center",
+                    }}
+                  >
+                    <p style={{ fontWeight: 800, color: NAVY, fontSize: "1.25rem" }}>{val}</p>
+                    <p style={{ color: SLATE, fontSize: "0.6875rem", marginBottom: "2px" }}>{label}</p>
+                    <p style={{ color: "#00B894", fontSize: "0.6875rem", fontWeight: 700 }}>{delta}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Recent posts */}
+              <p style={{ color: SLATE, fontSize: "0.75rem", fontWeight: 700, marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                Recent posts
+              </p>
+              <div className="space-y-2">
+                {[
+                  { title: "Spring drain cleaning special — Denver", date: "Mar 1" },
+                  { title: "5-star review reply — Sarah T.", date: "Feb 26" },
+                  { title: "Emergency plumber in Lakewood, CO", date: "Feb 22" },
+                ].map(({ title, date }) => (
+                  <div
+                    key={title}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: "10px 12px",
+                      backgroundColor: WARM_WHITE,
+                      borderRadius: "8px",
+                      border: `1px solid ${MIST}`,
+                    }}
+                  >
+                    <span style={{ color: CHARCOAL, fontSize: "0.8125rem" }}>{title}</span>
+                    <span style={{ color: SLATE, fontSize: "0.75rem", flexShrink: 0, marginLeft: "8px" }}>{date}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Social proof placeholder */}
-      <section className="border-y border-white/10 py-6 px-6 bg-white/[0.02]">
-        <div className="max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-8 text-white/30 text-sm">
-          <span>Trusted by local businesses across the US</span>
-          <span>•</span>
-          <span>Plumbers · HVAC · Dentists · Roofers · Lawyers</span>
+      {/* ── Social Proof Bar ── */}
+      <section
+        style={{
+          backgroundColor: CREAM,
+          borderTop: `1px solid ${MIST}`,
+          borderBottom: `1px solid ${MIST}`,
+          padding: "20px 24px",
+        }}
+      >
+        <div
+          style={{ maxWidth: "1200px", margin: "0 auto" }}
+          className="flex flex-wrap items-center justify-center gap-6"
+        >
+          <span style={{ color: SLATE, fontSize: "0.875rem", fontWeight: 500 }}>
+            Trusted by local businesses across the US:
+          </span>
+          {["Plumbers", "HVAC", "Dentists", "Roofers", "Lawyers", "Landscapers"].map((industry) => (
+            <span
+              key={industry}
+              style={{
+                backgroundColor: "#fff",
+                border: `1px solid ${MIST}`,
+                borderRadius: "9999px",
+                padding: "6px 16px",
+                fontSize: "0.8125rem",
+                fontWeight: 600,
+                color: NAVY,
+              }}
+            >
+              {industry}
+            </span>
+          ))}
         </div>
       </section>
 
-      {/* 5 Outcomes */}
-      <section id="how-it-works" className="px-6 py-20">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              What LocalBeacon does <span className="text-[#FFD700]">for you</span>
+      {/* ── Outcomes ── */}
+      <section
+        id="how-it-works"
+        style={{ backgroundColor: CREAM, padding: "96px 24px" }}
+      >
+        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: "56px" }}>
+            <h2
+              style={{
+                fontWeight: 800,
+                fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)",
+                color: NAVY,
+                letterSpacing: "-0.02em",
+                marginBottom: "16px",
+              }}
+            >
+              What LocalBeacon does{" "}
+              <span style={{ color: ORANGE }}>for you</span>
             </h2>
-            <p className="text-white/50 text-lg max-w-xl mx-auto">
+            <p style={{ color: SLATE, fontSize: "1.0625rem", maxWidth: "480px", margin: "0 auto", lineHeight: 1.6 }}>
               Five things that get you more customers — all on autopilot.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {outcomes.map((o, i) => (
-              <Card key={o.title} className={`bg-white/5 border-white/10 hover:border-[#FFD700]/30 transition-colors ${i === 4 ? 'md:col-span-2 lg:col-span-1' : ''}`}>
-                <CardContent className="p-6">
-                  <div className="text-3xl mb-3">{o.icon}</div>
-                  <h3 className="text-white font-bold text-lg mb-2">{o.title}</h3>
-                  <p className="text-white/50 text-sm leading-relaxed">{o.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Before / After */}
-      <section className="px-6 py-20 bg-white/[0.02]">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            <span className="text-white/40">Without LocalBeacon</span> vs <span className="text-[#FFD700]">With LocalBeacon</span>
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-red-500/5 border border-red-500/20 rounded-xl p-6">
-              <h3 className="text-red-400 font-bold text-lg mb-4 flex items-center gap-2">
-                <span>😓</span> Without LocalBeacon
-              </h3>
-              <ul className="space-y-3">
-                {withoutVsWith.without.map(item => (
-                  <li key={item} className="flex items-start gap-2 text-white/60 text-sm">
-                    <span className="text-red-400 mt-0.5">✗</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="bg-[#FFD700]/5 border border-[#FFD700]/20 rounded-xl p-6">
-              <h3 className="text-[#FFD700] font-bold text-lg mb-4 flex items-center gap-2">
-                <span>🔦</span> With LocalBeacon
-              </h3>
-              <ul className="space-y-3">
-                {withoutVsWith.with.map(item => (
-                  <li key={item} className="flex items-start gap-2 text-white/80 text-sm">
-                    <span className="text-[#FFD700] mt-0.5">✓</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing */}
-      <section id="pricing" className="px-6 py-20">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-6">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Simple pricing. <span className="text-[#FFD700]">Real results.</span>
-            </h2>
-            <p className="text-white/50 text-lg">
-              Start free, upgrade anytime. No contracts.
-            </p>
-          </div>
-
-          {/* Comparison callout */}
-          <div className="text-center mb-12">
-            <div className="inline-flex flex-wrap items-center justify-center gap-4 bg-white/5 border border-white/10 rounded-full px-6 py-3 text-sm">
-              <span className="text-white/40">Compared to:</span>
-              <span className="text-white/60">Hiring an agency <span className="line-through text-white/30">$800–1,500/mo</span></span>
-              <span className="text-white/20">|</span>
-              <span className="text-white/60">BrightLocal <span className="line-through text-white/30">$39–59/mo</span> <span className="text-white/30">(no AI content)</span></span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {plans.map(plan => (
-              <Card key={plan.name} className={`relative flex flex-col ${
-                plan.highlight
-                  ? "bg-[#FFD700]/10 border-[#FFD700] shadow-lg shadow-[#FFD700]/10"
-                  : "bg-white/5 border-white/10"
-              }`}>
-                {plan.highlight && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <Badge className="bg-[#FFD700] text-black font-bold px-4">Most Popular</Badge>
-                  </div>
-                )}
-                <CardContent className="p-6 pt-8 flex-1 flex flex-col">
-                  <p className="text-sm text-white/50 uppercase tracking-wider font-semibold">{plan.name}</p>
-                  <div className="flex items-baseline gap-1 mt-2 mb-1">
-                    <span className="text-4xl font-extrabold text-white">{plan.price}</span>
-                    <span className="text-white/50 text-sm">{plan.period}</span>
-                  </div>
-                  <p className="text-white/60 text-sm mb-6">{plan.tagline}</p>
-                  <ul className="space-y-3 mb-8 flex-1">
-                    {plan.outcomes.map(o => (
-                      <li key={o} className="flex items-start gap-2 text-sm text-white/80">
-                        <span className="text-[#FFD700] mt-0.5">✓</span>
-                        {o}
-                      </li>
-                    ))}
-                  </ul>
-                  <Link href={plan.href}>
-                    <Button className={`w-full font-semibold ${
-                      plan.highlight
-                        ? "bg-[#FFD700] text-black hover:bg-[#FFD700]/90"
-                        : "border border-white/20 bg-transparent text-white hover:bg-white/10"
-                    }`} variant={plan.highlight ? "default" : "outline"}>
-                      {plan.cta}
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="px-6 py-20 bg-white/[0.02]">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">
-            Questions? <span className="text-[#FFD700]">We've got answers.</span>
-          </h2>
-          <div className="space-y-6">
-            {faqs.map(faq => (
-              <div key={faq.q} className="border-b border-white/10 pb-6">
-                <h3 className="text-white font-semibold text-base mb-2">{faq.q}</h3>
-                <p className="text-white/50 text-sm leading-relaxed">{faq.a}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {outcomes.map(({ Icon, title, description }, i) => (
+              <div
+                key={title}
+                style={{
+                  backgroundColor: "#fff",
+                  borderRadius: "12px",
+                  padding: "28px 28px 28px 32px",
+                  borderLeft: `4px solid ${ORANGE}`,
+                  boxShadow: "0 1px 3px rgba(27,42,74,0.06), 0 1px 2px rgba(27,42,74,0.04)",
+                  ...(i === 4 ? { gridColumn: "span 1" } : {}),
+                }}
+              >
+                <div
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "44px",
+                    height: "44px",
+                    backgroundColor: `${ORANGE}15`,
+                    borderRadius: "10px",
+                    marginBottom: "16px",
+                  }}
+                >
+                  <Icon size={22} style={{ color: ORANGE }} />
+                </div>
+                <h3 style={{ fontWeight: 700, color: NAVY, fontSize: "1.0625rem", marginBottom: "8px" }}>
+                  {title}
+                </h3>
+                <p style={{ color: SLATE, fontSize: "0.9375rem", lineHeight: 1.65 }}>
+                  {description}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Bottom CTA */}
-      <section className="px-6 py-20 border-t border-white/10">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Ready for more calls and less work?
+      {/* ── Before / After ── */}
+      <section style={{ backgroundColor: WARM_WHITE, padding: "96px 24px" }}>
+        <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
+          <h2
+            style={{
+              textAlign: "center",
+              fontWeight: 800,
+              fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)",
+              color: NAVY,
+              letterSpacing: "-0.02em",
+              marginBottom: "48px",
+            }}
+          >
+            <span style={{ color: "#E17055" }}>Without LocalBeacon</span>
+            <span style={{ color: SLATE }}> vs </span>
+            <span style={{ color: "#00B894" }}>With LocalBeacon</span>
           </h2>
-          <p className="text-white/50 text-lg mb-8">
-            Connect your Google listing and see your first posts generated in under 2 minutes.
-          </p>
-          <Link href="/sign-up">
-            <Button size="lg" className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-bold text-lg px-10 py-6">
-              Connect Your Google Listing — Free
-            </Button>
-          </Link>
-          <p className="mt-3 text-white/30 text-xs">No credit card required · Cancel anytime</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Without */}
+            <div
+              style={{
+                backgroundColor: "#FFF5F3",
+                border: "1px solid #F5C6BC",
+                borderRadius: "12px",
+                padding: "28px",
+              }}
+            >
+              <h3
+                style={{
+                  fontWeight: 700,
+                  fontSize: "1.0625rem",
+                  color: "#C0392B",
+                  marginBottom: "20px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                }}
+              >
+                <XCircle size={20} style={{ color: "#E17055" }} />
+                Without LocalBeacon
+              </h3>
+              <ul style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                {withoutVsWith.without.map((item) => (
+                  <li key={item} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+                    <XCircle size={16} style={{ color: "#E17055", flexShrink: 0, marginTop: "3px" }} />
+                    <span style={{ color: "#5D4037", fontSize: "0.9375rem", lineHeight: 1.5 }}>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* With */}
+            <div
+              style={{
+                backgroundColor: "#F0FDF8",
+                border: "1px solid #A7E8D1",
+                borderRadius: "12px",
+                padding: "28px",
+              }}
+            >
+              <h3
+                style={{
+                  fontWeight: 700,
+                  fontSize: "1.0625rem",
+                  color: "#00795C",
+                  marginBottom: "20px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                }}
+              >
+                <CheckCircle2 size={20} style={{ color: "#00B894" }} />
+                With LocalBeacon
+              </h3>
+              <ul style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                {withoutVsWith.with.map((item) => (
+                  <li key={item} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+                    <CheckCircle2 size={16} style={{ color: "#00B894", flexShrink: 0, marginTop: "3px" }} />
+                    <span style={{ color: "#1B4332", fontSize: "0.9375rem", lineHeight: 1.5 }}>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="px-6 py-10 border-t border-white/10">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <span className="text-xl">🔦</span>
-            <span className="font-bold text-[#FFD700]">LocalBeacon.ai</span>
+      {/* ── How It Works ── */}
+      <section style={{ backgroundColor: CREAM, padding: "96px 24px" }}>
+        <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
+          <h2
+            style={{
+              textAlign: "center",
+              fontWeight: 800,
+              fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)",
+              color: NAVY,
+              letterSpacing: "-0.02em",
+              marginBottom: "56px",
+            }}
+          >
+            Up and running in <span style={{ color: ORANGE }}>2 minutes</span>
+          </h2>
+
+          <div className="flex flex-col md:flex-row items-start gap-8 md:gap-0 relative">
+            {/* connecting line (desktop) */}
+            <div
+              className="hidden md:block absolute top-8 left-[16.67%] right-[16.67%] h-px"
+              style={{ backgroundColor: MIST, zIndex: 0 }}
+            />
+
+            {steps.map(({ num, Icon, title, desc }, idx) => (
+              <div
+                key={num}
+                className="flex-1 flex flex-col items-center text-center px-4"
+                style={{ position: "relative", zIndex: 1 }}
+              >
+                <div
+                  style={{
+                    width: "56px",
+                    height: "56px",
+                    borderRadius: "9999px",
+                    backgroundColor: ORANGE,
+                    color: "#fff",
+                    fontWeight: 800,
+                    fontSize: "1.25rem",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginBottom: "20px",
+                    boxShadow: "0 4px 14px rgba(255,107,53,0.3)",
+                  }}
+                >
+                  {num}
+                </div>
+                <Icon size={28} style={{ color: NAVY, marginBottom: "12px", opacity: 0.7 }} />
+                <h3 style={{ fontWeight: 700, color: NAVY, fontSize: "1.0625rem", marginBottom: "10px" }}>
+                  {title}
+                </h3>
+                <p style={{ color: SLATE, fontSize: "0.9375rem", lineHeight: 1.65 }}>
+                  {desc}
+                </p>
+              </div>
+            ))}
           </div>
-          <div className="flex gap-6 text-sm text-white/40">
-            <Link href="#how-it-works" className="hover:text-white/70 transition-colors">How It Works</Link>
-            <Link href="#pricing" className="hover:text-white/70 transition-colors">Pricing</Link>
-            <Link href="/privacy" className="hover:text-white/70 transition-colors">Privacy</Link>
-            <Link href="/terms" className="hover:text-white/70 transition-colors">Terms</Link>
-            <Link href="/sign-in" className="hover:text-white/70 transition-colors">Sign In</Link>
+        </div>
+      </section>
+
+      {/* ── Testimonial ── */}
+      <section style={{ backgroundColor: CREAM, padding: "80px 24px", borderTop: `1px solid ${MIST}` }}>
+        <div style={{ maxWidth: "800px", margin: "0 auto", textAlign: "center" }}>
+          <p
+            style={{
+              fontFamily: "var(--font-fraunces), Georgia, serif",
+              fontStyle: "italic",
+              fontWeight: 400,
+              fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
+              color: NAVY,
+              lineHeight: 1.5,
+              marginBottom: "32px",
+            }}
+          >
+            &ldquo;I used to spend Sunday evenings trying to come up with things to post on Google. Now it
+            just happens. My calls are up and I haven&apos;t thought about marketing in months.&rdquo;
+          </p>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "16px" }}>
+            {/* Placeholder avatar */}
+            <div
+              style={{
+                width: "52px",
+                height: "52px",
+                borderRadius: "9999px",
+                backgroundColor: `${NAVY}20`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: 700,
+                color: NAVY,
+                fontSize: "1.125rem",
+              }}
+            >
+              M
+            </div>
+            <div style={{ textAlign: "left" }}>
+              <p style={{ fontWeight: 700, color: NAVY, fontSize: "0.9375rem" }}>Mike R.</p>
+              <p style={{ color: SLATE, fontSize: "0.875rem" }}>Owner, Mike&apos;s Plumbing — Denver, CO</p>
+            </div>
           </div>
-          <p className="text-white/30 text-xs">
-            © {new Date().getFullYear()} Perpetual Agility LLC. All rights reserved.
+        </div>
+      </section>
+
+      {/* ── Pricing ── */}
+      <section id="pricing" style={{ backgroundColor: WARM_WHITE, padding: "96px 24px" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: "20px" }}>
+            <h2
+              style={{
+                fontWeight: 800,
+                fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)",
+                color: NAVY,
+                letterSpacing: "-0.02em",
+                marginBottom: "12px",
+              }}
+            >
+              Simple pricing.{" "}
+              <span style={{ color: ORANGE }}>Real results.</span>
+            </h2>
+            <p style={{ color: SLATE, fontSize: "1.0625rem", lineHeight: 1.6 }}>
+              Start free, upgrade anytime. No contracts.
+            </p>
+          </div>
+
+          {/* Comparison callout */}
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: "48px" }}>
+            <div
+              style={{
+                display: "inline-flex",
+                flexWrap: "wrap",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "16px",
+                backgroundColor: CREAM,
+                border: `1px solid ${MIST}`,
+                borderRadius: "9999px",
+                padding: "10px 24px",
+                fontSize: "0.875rem",
+                color: SLATE,
+              }}
+            >
+              <span style={{ fontWeight: 600, color: NAVY }}>Compared to:</span>
+              <span>Hiring an agency <s style={{ opacity: 0.5 }}>$800–1,500/mo</s></span>
+              <span style={{ opacity: 0.3 }}>|</span>
+              <span>BrightLocal <s style={{ opacity: 0.5 }}>$39–59/mo</s> (no AI content)</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {plans.map((plan) => (
+              <div
+                key={plan.name}
+                style={{
+                  backgroundColor: "#fff",
+                  borderRadius: "12px",
+                  padding: "32px",
+                  border: plan.highlight ? `2px solid ${ORANGE}` : `1px solid ${MIST}`,
+                  boxShadow: plan.highlight
+                    ? "0 10px 30px rgba(255,107,53,0.12)"
+                    : "0 1px 3px rgba(27,42,74,0.06)",
+                  position: "relative",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                {plan.highlight && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "-14px",
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      backgroundColor: ORANGE,
+                      color: "#fff",
+                      fontWeight: 700,
+                      fontSize: "0.75rem",
+                      borderRadius: "9999px",
+                      padding: "4px 16px",
+                      letterSpacing: "0.04em",
+                    }}
+                  >
+                    Most Popular
+                  </div>
+                )}
+
+                <p
+                  style={{
+                    fontSize: "0.75rem",
+                    fontWeight: 700,
+                    color: SLATE,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.08em",
+                    marginBottom: "8px",
+                  }}
+                >
+                  {plan.name}
+                </p>
+
+                <div style={{ display: "flex", alignItems: "baseline", gap: "4px", marginBottom: "4px" }}>
+                  <span style={{ fontSize: "2.5rem", fontWeight: 800, color: NAVY }}>{plan.price}</span>
+                  <span style={{ color: SLATE, fontSize: "0.875rem" }}>{plan.period}</span>
+                </div>
+
+                <p style={{ color: SLATE, fontSize: "0.9375rem", marginBottom: "24px", lineHeight: 1.5 }}>
+                  {plan.tagline}
+                </p>
+
+                <ul style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "28px", flex: 1 }}>
+                  {plan.features.map((f) => (
+                    <li key={f} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+                      <CheckCircle2 size={16} style={{ color: ORANGE, flexShrink: 0, marginTop: "3px" }} />
+                      <span style={{ color: CHARCOAL, fontSize: "0.9375rem" }}>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Link href={plan.href} style={{ textDecoration: "none" }}>
+                  <button
+                    style={{
+                      width: "100%",
+                      padding: "13px",
+                      borderRadius: "8px",
+                      fontWeight: 700,
+                      fontSize: "0.9375rem",
+                      cursor: "pointer",
+                      border: plan.highlight ? "none" : `2px solid ${NAVY}`,
+                      backgroundColor: plan.highlight ? ORANGE : "transparent",
+                      color: plan.highlight ? "#fff" : NAVY,
+                      boxShadow: plan.highlight ? "0 4px 14px rgba(255,107,53,0.3)" : "none",
+                      transition: "opacity 0.15s",
+                    }}
+                  >
+                    {plan.cta}
+                  </button>
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── FAQ ── */}
+      <section style={{ backgroundColor: CREAM, padding: "96px 24px" }}>
+        <div style={{ maxWidth: "720px", margin: "0 auto" }}>
+          <h2
+            style={{
+              textAlign: "center",
+              fontWeight: 800,
+              fontSize: "clamp(1.75rem, 3.5vw, 2.25rem)",
+              color: NAVY,
+              letterSpacing: "-0.02em",
+              marginBottom: "48px",
+            }}
+          >
+            Questions?{" "}
+            <span style={{ color: ORANGE }}>We&apos;ve got answers.</span>
+          </h2>
+          <div>
+            {faqs.map((faq) => (
+              <FAQItem key={faq.q} q={faq.q} a={faq.a} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Bottom CTA ── */}
+      <section
+        style={{
+          backgroundColor: NAVY,
+          padding: "96px 24px",
+          textAlign: "center",
+        }}
+      >
+        <div style={{ maxWidth: "640px", margin: "0 auto" }}>
+          <h2
+            style={{
+              fontWeight: 800,
+              fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)",
+              color: "#fff",
+              letterSpacing: "-0.02em",
+              marginBottom: "16px",
+            }}
+          >
+            Ready for more calls and less work?
+          </h2>
+          <p style={{ color: "rgba(255,255,255,0.65)", fontSize: "1.0625rem", lineHeight: 1.6, marginBottom: "36px" }}>
+            Connect your Google listing and see your first posts generated in under 2 minutes.
+          </p>
+          <Link href="/sign-up" style={{ textDecoration: "none" }}>
+            <button
+              style={{
+                backgroundColor: ORANGE,
+                color: "#fff",
+                fontWeight: 700,
+                fontSize: "1.0625rem",
+                padding: "15px 32px",
+                borderRadius: "8px",
+                border: "none",
+                cursor: "pointer",
+                boxShadow: "0 4px 14px rgba(255,107,53,0.4)",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+              }}
+            >
+              Connect Your Google Listing — Free
+              <ArrowRight size={18} />
+            </button>
+          </Link>
+          <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "0.8125rem", marginTop: "12px" }}>
+            No credit card required · Cancel anytime
+          </p>
+        </div>
+      </section>
+
+      {/* ── Footer ── */}
+      <footer
+        style={{
+          backgroundColor: WARM_WHITE,
+          borderTop: `1px solid ${MIST}`,
+          padding: "40px 24px",
+        }}
+      >
+        <div
+          style={{ maxWidth: "1200px", margin: "0 auto" }}
+          className="flex flex-col md:flex-row items-center justify-between gap-5"
+        >
+          <Link href="/" style={{ textDecoration: "none" }}>
+            <span style={{ fontWeight: 800, fontSize: "1.125rem", color: NAVY }}>
+              Local<span style={{ color: ORANGE }}>Beacon</span>.ai
+            </span>
+          </Link>
+
+          <div className="flex flex-wrap items-center justify-center gap-6">
+            {[
+              { href: "#how-it-works", label: "How It Works" },
+              { href: "#pricing", label: "Pricing" },
+              { href: "/privacy", label: "Privacy" },
+              { href: "/terms", label: "Terms" },
+              { href: "/sign-in", label: "Sign In" },
+            ].map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                style={{ color: SLATE, fontSize: "0.875rem", textDecoration: "none" }}
+              >
+                {label}
+              </Link>
+            ))}
+          </div>
+
+          <p style={{ color: SLATE, fontSize: "0.8125rem", opacity: 0.7 }}>
+            © {new Date().getFullYear()} Perpetual Agility LLC
           </p>
         </div>
       </footer>
