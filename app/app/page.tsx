@@ -34,9 +34,9 @@ const outcomes = [
   },
   {
     Icon: Bot,
-    title: "Found by AI assistants",
+    title: "Found by voice search & smart assistants",
     description:
-      "When someone asks Siri, ChatGPT, or Google AI for a recommendation — your business shows up.",
+      "When someone asks Siri or Google for a recommendation — your business shows up.",
   },
   {
     Icon: Star,
@@ -94,7 +94,7 @@ const plans = [
       "Unlimited Google posts — auto-scheduled weekly",
       "10 local city pages with SEO optimization",
       "3 business locations",
-      "AI-written review replies",
+      "Professional review replies",
       "1 blog post per month",
       "Monthly visibility report",
     ],
@@ -131,8 +131,8 @@ const faqs = [
     a: "Yes — businesses that post weekly to Google and have active review responses consistently rank higher in local search, which means more calls. Our monthly report tracks this so you can see the difference.",
   },
   {
-    q: "Is the content written by AI? Will it sound fake?",
-    a: "Our AI writes content specifically about your business, your services, and your city — not generic filler. Every post mentions real local details. You can review and edit anything before it goes live.",
+    q: "Who writes the content? Will it sound generic?",
+    a: "Every post is written specifically about your business, your services, and your city — not generic filler. Real local details, real neighborhood names. You can review and edit anything before it goes live.",
   },
   {
     q: "Can I cancel anytime?",
@@ -351,7 +351,7 @@ export default function LandingPage() {
               }}
             >
               <span style={{ color: ORANGE, fontWeight: 600, fontSize: "0.8125rem" }}>
-                AI-powered local marketing
+                Local marketing on autopilot
               </span>
             </div>
 
@@ -832,7 +832,7 @@ export default function LandingPage() {
               <span style={{ fontWeight: 600, color: NAVY }}>Compared to:</span>
               <span>Hiring an agency <s style={{ opacity: 0.5 }}>$800–1,500/mo</s></span>
               <span style={{ opacity: 0.3 }}>|</span>
-              <span>BrightLocal <s style={{ opacity: 0.5 }}>$39–59/mo</s> (no AI content)</span>
+              <span>BrightLocal <s style={{ opacity: 0.5 }}>$39–59/mo</s> (fewer features)</span>
             </div>
           </div>
 

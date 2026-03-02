@@ -17,13 +17,13 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "LocalBeacon.ai — More calls. Less work. AI handles your local marketing.",
+  title: "LocalBeacon.ai — More calls. Less work. We handle your local marketing.",
   description:
     "LocalBeacon posts to your Google listing every week, creates local pages for every city you serve, and replies to your reviews — so you get found by more customers without lifting a finger. Start free.",
-  keywords: ["local SEO", "Google Business Profile", "local marketing automation", "AI marketing", "small business marketing", "GBP posts", "local visibility"],
+  keywords: ["local SEO", "Google Business Profile", "local marketing automation", "small business marketing", "GBP posts", "local visibility"],
   openGraph: {
     title: "LocalBeacon.ai — Your phone rings more. We handle everything.",
-    description: "AI-powered local marketing for small businesses. Weekly Google posts, city pages, review replies — all on autopilot. $49/mo.",
+    description: "We handle your local marketing. Weekly Google posts, city pages, review replies — all on autopilot. $49/mo.",
     url: "https://localbeacon.ai",
     siteName: "LocalBeacon.ai",
     type: "website",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "LocalBeacon.ai — More calls. Less work.",
-    description: "AI-powered local marketing. Weekly Google posts, city pages, review replies — all on autopilot.",
+    description: "We handle your local marketing. Weekly Google posts, city pages, review replies — all on autopilot.",
   },
   robots: {
     index: true,

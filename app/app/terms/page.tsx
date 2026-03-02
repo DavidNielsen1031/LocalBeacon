@@ -30,11 +30,11 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-white font-semibold text-lg mb-3">2. The Service</h2>
-            <p>LocalBeacon is an AI-powered local marketing platform that helps businesses manage their online visibility. We provide:</p>
+            <p>LocalBeacon is an local marketing platform that helps businesses manage their online visibility. We provide:</p>
             <ul className="list-disc pl-5 space-y-1 mt-2">
-              <li>AI-generated content for Google Business Profiles (posts, updates)</li>
+              <li>Content for Google Business Profiles (posts, updates)</li>
               <li>Local service area page generation</li>
-              <li>AI-drafted review responses</li>
+              <li>Review responses</li>
               <li>Local visibility tracking and reporting</li>
             </ul>
           </section>

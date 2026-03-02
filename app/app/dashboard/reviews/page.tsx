@@ -102,7 +102,7 @@ export default function ReviewsPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-white">Review Responses</h1>
-          <p className="text-white/50 text-sm mt-1">Draft AI-powered responses to your Google reviews</p>
+          <p className="text-white/50 text-sm mt-1">We draft professional responses to your Google reviews</p>
         </div>
         <Badge className="bg-amber-500/10 text-amber-400 border-amber-500/30 text-xs">
           Manual mode · GBP sync coming soon

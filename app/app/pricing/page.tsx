@@ -28,7 +28,7 @@ const plans = [
       "Unlimited Google posts — auto-scheduled weekly",
       "10 local city pages with SEO optimization",
       "3 business locations",
-      "AI-written review replies",
+      "Professional review replies",
       "1 blog post per month for your website",
       "Monthly visibility report",
     ],
@@ -73,12 +73,12 @@ const faqs = [
     a: "An agency charges $800-1,500/month and you wait weeks to see anything happen. LocalBeacon does the same work — Google posts, local pages, review replies, rank tracking — for $49/month, and your first content is generated within minutes of signing up.",
   },
   {
-    q: "Is the content written by AI? Will it sound fake?",
-    a: "Our AI writes content specifically about your business, your services, and your local area — not generic filler. You can review and edit every post before it goes live. Most customers find it sounds better than what they'd write themselves.",
+    q: "Who writes the content? Will it sound generic?",
+    a: "Every piece of content is written specifically about your business, your services, and your local area — not generic templates. You can review and edit everything before it goes live. Most customers find it sounds better than what they'd write themselves.",
   },
   {
     q: "How does LocalBeacon compare to BrightLocal?",
-    a: "BrightLocal costs $39-59/month per location and focuses on rank tracking and citations. LocalBeacon costs $49/month and does that PLUS auto-generates your Google posts, builds local city pages, and drafts review responses with AI. More features, lower price.",
+    a: "BrightLocal costs $39-59/month per location and focuses on rank tracking and citations. LocalBeacon costs $49/month and does that PLUS writes your Google posts, builds local city pages, and drafts your review responses. More features, lower price.",
   },
   {
     q: "What if I manage multiple clients? (Agency plan)",
@@ -186,7 +186,7 @@ export default function PricingPage() {
           <h2 className="text-2xl font-bold mb-8">Everything included — no hidden fees</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-left">
             {[
-              { emoji: "📝", label: "AI-written Google posts" },
+              { emoji: "📝", label: "Weekly Google posts" },
               { emoji: "🌐", label: "Local city pages" },
               { emoji: "⭐", label: "Review reply drafts" },
               { emoji: "📊", label: "Rank tracking" },
