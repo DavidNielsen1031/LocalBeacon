@@ -83,6 +83,25 @@ export default function PostsPage() {
   const [copied, setCopied] = useState(false)
   const [activeTab, setActiveTab] = useState<'pipeline' | 'create'>('pipeline')
   const [posts, setPosts] = useState<QueuedPost[]>(DEMO_POSTS)
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editTitle, setEditTitle] = useState('')
+  const [editBody, setEditBody] = useState('')
+
+  const startEdit = (post: QueuedPost) => {
+    setEditingId(post.id)
+    setEditTitle(post.title)
+    setEditBody(post.preview)
+  }
+
+  const saveEdit = (id: string) => {
+    setPosts(prev => prev.map(p => p.id === id ? { ...p, title: editTitle, preview: editBody } : p))
+    setEditingId(null)
+  }
+
+  const saveAndApprove = (id: string) => {
+    setPosts(prev => prev.map(p => p.id === id ? { ...p, title: editTitle, preview: editBody, status: 'scheduled' as PostStatus } : p))
+    setEditingId(null)
+  }
 
   const generate = async () => {
     setLoading(true)
@@ -179,45 +198,90 @@ export default function PostsPage() {
 
           {posts.map(post => {
             const style = STATUS_STYLES[post.status]
+            const isEditing = editingId === post.id
             return (
               <Card key={post.id} className={`bg-white/5 border-white/10 ${
                 post.status === 'draft' ? 'border-l-2 border-l-[#FFD700]/50' : ''
-              }`}>
+              } ${isEditing ? 'border-[#FFD700]/30' : ''}`}>
                 <CardContent className="p-4">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1.5">
-                        <span className="text-white/30 text-xs font-medium">{post.day}, {post.date}</span>
-                        <Badge className={`${style.bg} ${style.text} text-xs border-0`}>
-                          {style.label}
-                        </Badge>
-                        <Badge className="bg-white/5 text-white/30 text-xs border-0">{post.type}</Badge>
-                      </div>
-                      <p className="text-white font-medium text-sm mb-1">{post.title}</p>
-                      <p className="text-white/40 text-xs leading-relaxed line-clamp-2">{post.preview}</p>
-                    </div>
-                    <div className="flex gap-2 shrink-0">
-                      {post.status === 'draft' && (
-                        <Button
-                          size="sm"
-                          onClick={() => approvePost(post.id)}
-                          className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold text-xs"
-                        >
-                          Approve ✓
-                        </Button>
-                      )}
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => {
-                          navigator.clipboard.writeText(`${post.title}\n\n${post.preview}`)
-                        }}
-                        className="border-white/10 text-white/50 hover:bg-white/5 text-xs"
-                      >
-                        Copy
-                      </Button>
-                    </div>
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="text-white/30 text-xs font-medium">{post.day}, {post.date}</span>
+                    <Badge className={`${style.bg} ${style.text} text-xs border-0`}>
+                      {style.label}
+                    </Badge>
+                    <Badge className="bg-white/5 text-white/30 text-xs border-0">{post.type}</Badge>
                   </div>
+
+                  {isEditing ? (
+                    <div className="space-y-3 mt-2">
+                      <input
+                        type="text"
+                        value={editTitle}
+                        onChange={e => setEditTitle(e.target.value)}
+                        className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-[#FFD700]/50"
+                      />
+                      <textarea
+                        value={editBody}
+                        onChange={e => setEditBody(e.target.value)}
+                        rows={4}
+                        className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-sm leading-relaxed focus:outline-none focus:border-[#FFD700]/50 resize-none"
+                      />
+                      <div className="flex gap-2 justify-end">
+                        <Button size="sm" variant="outline"
+                          onClick={() => setEditingId(null)}
+                          className="border-white/10 text-white/50 hover:bg-white/5 text-xs">
+                          Cancel
+                        </Button>
+                        <Button size="sm" variant="outline"
+                          onClick={() => saveEdit(post.id)}
+                          className="border-white/20 text-white hover:bg-white/10 text-xs">
+                          Save Draft
+                        </Button>
+                        <Button size="sm"
+                          onClick={() => saveAndApprove(post.id)}
+                          className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold text-xs">
+                          Save & Approve ✓
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-white font-medium text-sm mb-1">{post.title}</p>
+                        <p className="text-white/40 text-xs leading-relaxed line-clamp-2">{post.preview}</p>
+                      </div>
+                      <div className="flex gap-2 shrink-0">
+                        {post.status === 'draft' && (
+                          <>
+                            <Button size="sm" variant="outline"
+                              onClick={() => startEdit(post)}
+                              className="border-white/20 text-white/70 hover:bg-white/10 text-xs">
+                              ✏️ Edit
+                            </Button>
+                            <Button size="sm"
+                              onClick={() => approvePost(post.id)}
+                              className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold text-xs">
+                              Approve ✓
+                            </Button>
+                          </>
+                        )}
+                        {post.status === 'scheduled' && (
+                          <Button size="sm" variant="outline"
+                            onClick={() => startEdit(post)}
+                            className="border-white/20 text-white/70 hover:bg-white/10 text-xs">
+                            ✏️ Edit
+                          </Button>
+                        )}
+                        <Button size="sm" variant="outline"
+                          onClick={() => {
+                            navigator.clipboard.writeText(`${post.title}\n\n${post.preview}`)
+                          }}
+                          className="border-white/10 text-white/50 hover:bg-white/5 text-xs">
+                          Copy
+                        </Button>
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             )
