@@ -1,205 +1,116 @@
-# LocalBeacon.ai — Product Backlog & Go-Live Plan
+# LocalBeacon.ai — Product Backlog
 
-**Tagline:** "More calls. Less work. LocalBeacon handles your local visibility so you don't have to."
-**Domain:** localbeacon.ai ✅ (registered Feb 28, 2026)
-**Logo:** V4 (dramatic black/lighthouse/yellow beacon) ✅
-**Stack:** Next.js + Vercel + Stripe + Anthropic + Google Business Profile API
+**Domain:** localbeacon.ai ✅
+**Stack:** Next.js + Vercel + Stripe + Anthropic + Supabase + GBP API
 **Pricing:** Free | Solo $29/mo | Agency $79/mo
+**GitHub:** DavidNielsen1031/LocalBeacon
+**Vercel:** localbeacon-ai
 
 ---
 
-## 🎯 Product Vision
+## ✅ Completed
 
-LocalBeacon is a **Local Visibility Engine** — not a content generator. It runs automatically so the business owner never has to think about SEO.
+### Sprint 1 — Foundation (Done Feb 28)
+- [x] LB-001: Infrastructure (GitHub, Vercel, DNS, Supabase, Stripe, Upstash Redis, Anthropic key)
+- [x] LB-003: Next.js scaffold (Clerk auth, Tailwind, shadcn/ui, 17 routes)
+- [x] Landing page + pricing + auth + dashboard skeleton deployed
 
-**The 5 outcomes we sell (in customer language):**
-1. **More calls from Google Maps** — weekly GBP posts keep you at the top of the map
-2. **More calls from "near me" searches** — local pages for every neighborhood you serve
-3. **More calls from AI assistants** — when someone asks ChatGPT "best plumber near me," you show up
-4. **More 5-star reviews working for you** — we reply to every review so Google knows you're active
-5. **Know exactly what's working** — monthly report shows how many people found you and where
+### Sprint 2 — Core Product (Done Mar 1)
+- [x] LB-004: Onboarding flow (4-step: business info → service areas → plan → first post)
+- [x] LB-005: GBP post generator (4 types, AI-powered via claude-haiku-4-5, mock fallback)
+- [x] LB-006: Service area page builder (city cards, HTML copy, preview)
+- [x] LB-007: Review response drafter (5 star levels, tone-matched)
+- [x] LB-008: Dashboard MVP (overview, activity feed, plan usage)
+- [x] Stripe products created (Solo $29, Agency $79)
+- [x] All env vars deployed to Vercel
 
-**The mechanism (invisible to customers):**
-- Weekly AI-written GBP posts (auto-scheduled + published)
-- AI service area page builder (city/neighborhood landing pages)
-- Review response drafting (AI drafts, 1-click publish)
-- Monthly local blog post (AEO-optimized for AI search citations)
-- GBP audit score + weekly health check
-- Schema markup generator (LocalBusiness, FAQ, Service)
-- Review velocity monitoring + competitor pulse
-- "Near me" keyword rank tracker
-- Monthly visibility report (proves ROI, drives retention)
-
-**Go-to-market:** B2B2B — sell to web designers/marketing freelancers managing 10-50 SMB clients (Agency $79/mo, white-label), NOT direct to plumbers.
-
----
-
-## 📋 Milestones
-
-### ✅ DONE
-- [x] Deep competitive research + red team analysis
-- [x] Product pivot: content generator → visibility engine
-- [x] Domain registered: localbeacon.ai
-- [x] Logo direction selected (V4)
-- [x] Channel renamed: #localbeacon-ai
-- [x] Google Workspace planned (hello@, support@, david@)
+### Sprint 3 — UX Redesign (Done Mar 1)
+- [x] Landing page redesign (outcome-led, before/after, FAQ, zero jargon)
+- [x] Pricing page redesign (competitive comparison, dedicated /pricing route)
+- [x] Dashboard redesign (never blank, activity feed, setup CTA, contextual stats)
+- [x] Auto-post pipeline (queue view, Draft→Scheduled→Published, inline edit, approve flow)
+- [x] GBP API application submitted (Case 1-4494000040327, GCP Project localbeacon #667608435377)
+- [x] GCP project created for LocalBeacon
+- [x] Google Workspace created (david@localbeacon.ai)
 
 ---
 
-## 🏃 Now — Sprint 1: Foundation (Target: Week 1-2)
+## 🏃 Now — Sprint 4: Polish & Credibility
 
-### LB-001 · Infrastructure Setup
-- [ ] Google Workspace activated + DNS verified on GoDaddy
-- [ ] Email addresses created: hello@, support@, david@localbeacon.ai
-- [x] GitHub repo created: `DavidNielsen1031/LocalBeacon`
-- [x] Vercel project created, linked to repo
-- [x] Domain DNS pointed: localbeacon.ai → Vercel
-- [ ] Upstash Redis provisioned (session/queue management)
-- [ ] Stripe account configured: Free / Solo $29 / Agency $79 products
-- [ ] Anthropic API key provisioned (separate from Alexander's key)
+### LB-S4-01 · Supabase Migration
+- [ ] Run `supabase/migrations/001_initial_schema.sql` in Supabase SQL Editor
+- [ ] Verify business creation + content saving persists
+- [ ] Test end-to-end: sign up → create business → generate post → saved in DB
+- **Owner:** David (manual paste into Supabase dashboard)
 
-### LB-002 · GBP API Application
-- [ ] Apply for Google Business Profile API access (agency platform application)
-- [ ] Document use case: automated posting on behalf of authorized clients
-- [ ] Set up OAuth 2.0 flow for client GBP authorization
-- [ ] Test posting to a personal GBP account
-- **Note:** Approval takes 2-4 weeks. MVP can ship with manual-paste mode while awaiting approval.
+### LB-S4-02 · Email Setup Complete
+- [ ] Add MX records to GoDaddy (if not done)
+- [ ] Activate Gmail for david@localbeacon.ai
+- [ ] Add aliases: hello@localbeacon.ai, support@localbeacon.ai
+- [ ] Add SPF/DKIM records
+- **Owner:** David (Google Admin Console)
 
-### LB-003 · Next.js App Scaffold
-- [ ] Init Next.js app with Tailwind + shadcn/ui
-- [ ] Auth: NextAuth or Clerk (user accounts required — no accounts = data loss)
-- [ ] Database: Supabase (user data, client profiles, generated content)
-- [ ] Stripe webhook handler
-- [ ] Deploy to Vercel, verify CI/CD pipeline
-- [ ] Domain live: https://localbeacon.ai
+### LB-S4-03 · Privacy Policy + Terms of Service
+- [ ] Create /privacy and /terms pages
+- [ ] Cover: data collection, GBP OAuth scope, AI content generation, Stripe billing
+- [ ] Link from footer on all pages
+- [ ] Required before any real user signups
 
----
+### LB-S4-04 · Healthcheck Cron
+- [ ] Create `localbeacon-healthcheck` cron (7am/1pm/7pm CST, Ollama)
+- [ ] Check: site responds 200, /api/health returns OK, Clerk auth working
+- [ ] Alert to #localbeacon-ai Discord on failure
 
-## 🏃 Now — Sprint 2: Core Product (Target: Week 2-4)
+### LB-S4-05 · Reviews + City Pages UX Polish
+- [ ] Apply same persona-driven treatment to /dashboard/reviews
+- [ ] Apply same treatment to /dashboard/pages
+- [ ] Pre-populate with demo data (never blank)
+- [ ] Zero jargon — "city pages" not "service area pages", plain language throughout
 
-### LB-004 · Onboarding Flow
-- [ ] Sign up / sign in
-- [ ] Connect Google Business Profile (OAuth)
-- [ ] Business profile setup: name, category, service areas, primary city
-- [ ] Plan selection + Stripe checkout
-- [ ] Welcome email (via hello@localbeacon.ai)
+### LB-S4-06 · SEO & Discoverability Basics
+- [ ] Add proper meta tags (title, description, og:image) to all pages
+- [ ] Create /robots.txt and /sitemap.xml
+- [ ] Add llms.txt (agent-native layer — basic version)
+- [ ] Submit sitemap to Google Search Console
 
-### LB-005 · GBP Post Generator (Core Feature)
-- [ ] AI generates 4 weekly GBP posts per business (1/week)
-- [ ] Post types: What's New, Offer, Event, Product
-- [ ] User reviews + approves OR auto-posts (toggle)
-- [ ] Scheduling queue: posts go out Mon/Wed/Fri/Sun
-- [ ] Manual paste mode (while awaiting GBP API approval)
-- [ ] Auto-post mode (post-API-approval)
-
-### LB-006 · Service Area Page Builder
-- [ ] Input: business type, primary city, target service areas (up to 10 for Solo, unlimited for Agency)
-- [ ] Output: SEO-optimized landing page copy for each city/neighborhood
-- [ ] Includes: H1, meta description, body copy, FAQs, schema markup suggestions
-- [ ] Export: copy to clipboard, PDF export (Solo+)
-- [ ] Anti-spam safeguards: unique signals per page, NOT cloned content
-
-### LB-007 · Review Response Drafter
-- [ ] Connect to GBP reviews feed
-- [ ] AI drafts response for each new review (tone: professional/warm)
-- [ ] 1-click publish to GBP or edit before posting
-- [ ] Templates for 5-star, 4-star, negative review scenarios
-
-### LB-008 · Dashboard MVP
-- [ ] Overview: GBP posts scheduled, pages generated, reviews pending
-- [ ] Activity feed: what LocalBeacon did this week
-- [ ] Simple monthly rank snapshot (manual entry or GSC integration v2)
-- [ ] Plan usage meter (Free: shows limits, Solo/Agency: shows activity)
+### LB-S4-07 · QR Code + Tracking for Expo
+- [ ] Generate QR code pointing to localbeacon.ai?ref=ramsey-expo-2026
+- [ ] Add ref tracking to signup flow (store in user metadata)
+- [ ] Print QR code for one-pager and booth banner
 
 ---
 
-## 📅 Next — Sprint 3: Agency Layer (Target: Week 4-6)
+## 📋 Next — Backlog (Prioritized)
 
-### LB-009 · Multi-Client Management
-- [ ] Agency dashboard: list of all client accounts
-- [ ] Add/remove clients
-- [ ] Per-client GBP connection
-- [ ] Bulk content generation across all clients
+### High Priority
+- [ ] **Expo Vendor Registration** — Register for Ramsey EDA Business Expo (Apr 25). ST19 form + $75 check. Deadline: Apr 10. Booth plan: `expo/BOOTH-PLAN.md`
+- [ ] **Booth Banner Design** — 33"x80" retractable banner for expo. Black/gold, QR code, tagline.
+- [ ] **One-Pager Finalize** — Print-ready PDF from `expo/one-pager.html`. 100 copies on cardstock.
 
-### LB-010 · White-Label Reports
-- [ ] Monthly PDF report: posts published, reviews responded, pages created
-- [ ] Agency branding: upload logo, set company name
-- [ ] Auto-send to client email on 1st of month
-- [ ] "Powered by LocalBeacon" optional footer (free) vs hidden (Agency)
+### Medium Priority
+- [ ] LB-009: Multi-client management (Agency dashboard)
+- [ ] LB-010: White-label reports
+- [ ] LB-017: Monthly local blog post (AEO-optimized)
+- [ ] LB-018: GBP audit score (0-100 completeness check)
+- [ ] LB-019: Schema markup generator (JSON-LD)
+- [ ] LB-011: Competitor gap alerts
+- [ ] Price evaluation: $29 → $39? Competitive analysis says underpriced.
 
-### LB-011 · Competitor Gap Alerts
-- [ ] Weekly scan: compare client GBP post frequency vs top 3 competitors
-- [ ] Alert: "Your competitor posted 3 times this week. You posted 1."
-- [ ] Opportunity detection: keywords competitors rank for that client doesn't
+### Lower Priority
+- [ ] LB-020: Review velocity monitor
+- [ ] LB-021: Competitor pulse
+- [ ] LB-022: "Near me" keyword rank tracker
+- [ ] LB-013: Google Search Console integration
+- [ ] LB-014: Citation/NAP audit
+- [ ] LB-015: Agent-native layer (openapi.yaml, MCP server)
 
 ---
 
-## 📅 Next — Sprint 3.5: Beefed-Up Offering (Added Mar 1, 2026)
+## 🅿️ Parking Lot
 
-### LB-017 · Monthly Local Blog Post (AEO-Optimized)
-- [ ] AI generates 1 blog post/month per location (not daily — quality over quantity)
-- [ ] Locally customized: neighborhoods, landmarks, service radius, real city names
-- [ ] AEO-structured: answer capsules after every H2, FAQ schema, owned insights framing
-- [ ] Targets "best [service] in [city]" + "near me" keywords
-- [ ] Export to HTML (paste into WordPress/Squarespace/Wix)
-- [ ] Available on Solo ($29) and Agency ($79)
-
-### LB-018 · GBP Audit Score
-- [ ] On signup + weekly: auto-scan GBP for completeness
-- [ ] Score: 0-100 with specific missing items (photos, holiday hours, products, Q&A)
-- [ ] To-do list format: "Add 8 more photos to reach top 10% in your category"
-- [ ] Drives ongoing engagement and login frequency
-
-### LB-019 · Schema Markup Generator
-- [ ] Generates LocalBusiness, Service, FAQ, and Review schema (JSON-LD)
-- [ ] Customer copies one `<script>` tag, pastes into site footer
-- [ ] Massive perceived value vs. agency ($500+ to install manually)
-- [ ] Available on Solo+
-
-### LB-020 · Review Velocity Monitor
-- [ ] Shows: "You have 47 reviews. Top competitor has 89."
-- [ ] Calculates months to catch up at current velocity
-- [ ] One-click "request review" email template for customers to send
-- [ ] Available on Agency
-
-### LB-021 · Competitor Pulse
-- [ ] Weekly: "Your top competitor posted 4x to GBP this week. You posted 1x."
-- [ ] Creates urgency, drives logins, justifies subscription
-- [ ] Shows competitor review count, photo count, last post date
-- [ ] Available on Agency
-
-### LB-022 · "Near Me" Keyword Rank Tracker
-- [ ] Monthly snapshot: where they rank for "[service] near me" + "[service] in [city]"
-- [ ] Simple visual (up/down arrows, position number)
-- [ ] The #1 thing agencies use to justify retainers — we need this for retention
-- [ ] Available on Solo+
-
-## 🔮 Later — Sprint 4: Growth & Retention (Target: Month 2+)
-
-### LB-012 · Auto-Posting (GBP API Live)
-- [ ] Full GBP API auto-scheduling once approved
-- [ ] No manual approval required (optional toggle)
-- [ ] Post performance tracking (views, clicks from GBP insights)
-
-### LB-013 · Rank Tracking Integration
-- [ ] Google Search Console OAuth integration
-- [ ] Monthly local keyword rank snapshot
-- [ ] "You moved up 3 positions for 'plumber in [City]'" notifications
-
-### LB-014 · Citation Audit
-- [ ] Basic NAP consistency check (Name, Address, Phone)
-- [ ] Top 20 directory scan
-- [ ] Fix recommendations
-
-### LB-015 · Agent-Native Layer
-- [ ] llms.txt
-- [ ] openapi.yaml
-- [ ] MCP server (localbeacon-mcp on npm)
-
-### LB-016 · Healthcheck Cron
-- [ ] Daily: verify GBP API connection live
-- [ ] Daily: verify Stripe webhooks firing
-- [ ] Alert to #localbeacon-ai Discord on any failure
+- **Google OAuth Onboarding (Sprint 3 Spec 4)** — Blocked on GBP API approval. Case `1-4494000040327`. Will unblock automatically when Google approves. ~2-4 weeks from Mar 1.
+- **GBP Auto-Posting (LB-012)** — Same blocker. Once API is approved, this becomes top priority.
+- **Automated email (Resend.com)** — Deferred, not needed pre-launch.
 
 ---
 
@@ -208,50 +119,22 @@ LocalBeacon is a **Local Visibility Engine** — not a content generator. It run
 | Plan | Price | Limits | Target |
 |------|-------|--------|--------|
 | Free | $0 | 1 location, 5 posts/mo, 3 pages | Try before buy |
-| Solo | $29/mo | 3 locations, unlimited posts, PDF export | DIY hustlers |
-| Agency | $79/mo | Unlimited locations, white-label, multi-client | Web designers/freelancers |
-
-**Break-even math:**
-- 10 Agency customers = $790/mo (covers ops + Anthropic API)
-- 50 Solo customers = $1,450/mo
-- Target Month 3: 5 Agency + 20 Solo = $975/mo
-
----
-
-## 🚀 Go-Live Checklist
-
-- [ ] localbeacon.ai live on Vercel ✅ DNS
-- [ ] Google Workspace email live
-- [ ] Stripe payments tested (all 3 plans)
-- [ ] GBP OAuth flow working (at least manual-paste mode)
-- [ ] Core features: post generator + page builder + review drafter
-- [ ] Dashboard functional
-- [ ] Onboarding flow: sign up → connect GBP → first post generated < 5 min
-- [ ] Privacy policy + Terms of Service pages
-- [ ] /pricing page live
-- [ ] llms.txt + basic SEO meta
-- [ ] Healthcheck cron running
-- [ ] 1 real beta user (web designer) onboarded before public launch
-
----
-
-## 📁 Files
-
-- Logo: `products/localbeacon/2026-02-28-logo-v4-dramatic.png`
-- Research: stored in Discord #localbeacon-ai channel history
-- This backlog: `products/localbeacon/BACKLOG.md`
+| Solo | $29/mo | 3 locations, unlimited posts, 10 city pages | DIY business owners |
+| Agency | $79/mo | Unlimited everything, white-label, multi-client | Web designers/freelancers |
 
 ---
 
 ## 🧠 Key Decisions (Locked)
 
-- **No "grooming" language anywhere** — always "refine/refinement"
-- **Distribution wedge: agencies first, not direct SMB**
-- **Manual-paste MVP** then auto-post after GBP API approval
-- **Accounts required from day 1** — no anonymous usage (data loss risk)
-- **One Stripe account** (Perpetual Agility LLC) — same as Refine Backlog
-- **Anti-spam by design** — unique signals per page, human review toggle
+- Distribution wedge: agencies first, not direct SMB
+- Manual-paste MVP, auto-post after GBP API approval
+- Accounts required from day 1
+- One Stripe account (Perpetual Agility LLC)
+- Anti-spam by design (unique signals per page)
+- "Bob test" for all UI copy — zero jargon
+- CTA always "Connect Your Google Listing"
+- Dashboard must never be blank
 
 ---
 
-*Created: February 28, 2026 | Stack: Next.js + Vercel + Stripe + Anthropic + Supabase + GBP API*
+*Created: Feb 28, 2026 | Updated: Mar 1, 2026*

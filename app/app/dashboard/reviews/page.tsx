@@ -25,7 +25,32 @@ export default function ReviewsPage() {
   const [loading, setLoading] = useState(false)
   const [response, setResponse] = useState('')
   const [copied, setCopied] = useState(false)
-  const [history, setHistory] = useState<DraftedResponse[]>([])
+  const [history, setHistory] = useState<DraftedResponse[]>([
+    {
+      id: 'demo-1',
+      author: 'Sarah M.',
+      rating: 5,
+      comment: 'Amazing service! They came out same day and fixed our furnace. Very professional and fair pricing. Will definitely use again!',
+      response: 'Thank you so much, Sarah! We\'re glad we could get to you quickly — same-day service is always our goal. It was a pleasure working with you and we appreciate the kind words about our pricing. We\'ll be here whenever you need us!',
+      timestamp: 'Today',
+    },
+    {
+      id: 'demo-2',
+      author: 'Mike R.',
+      rating: 3,
+      comment: 'Work was fine but had to wait 3 days for the appointment. Expected faster service.',
+      response: 'Hi Mike, thank you for your honest feedback. We understand how frustrating wait times can be, especially when you need help right away. We\'re actively working on expanding our team to reduce scheduling delays. We\'re glad the work itself met your expectations and we\'d love the chance to provide faster service next time.',
+      timestamp: 'Yesterday',
+    },
+    {
+      id: 'demo-3',
+      author: 'Jennifer K.',
+      rating: 5,
+      comment: 'Best plumber in Burnsville! Fixed a leak that two other companies couldn\'t figure out. Highly recommend.',
+      response: 'Wow, thank you Jennifer! That means a lot to us. Tricky leaks are actually our specialty — we love a good challenge. We\'re proud to serve the Burnsville community and thrilled we could solve the problem for you. Thank you for the recommendation!',
+      timestamp: '2 days ago',
+    },
+  ])
 
   const draft = async () => {
     if (!comment.trim()) return

@@ -15,7 +15,20 @@ interface ServicePage {
 }
 
 export default function PagesPage() {
-  const [pages, setPages] = useState<ServicePage[]>([])
+  const [pages, setPages] = useState<ServicePage[]>([
+    {
+      city: 'Burnsville',
+      html: '<h1>Professional Plumbing Services in Burnsville, MN</h1><p>Looking for a reliable plumber in Burnsville? We provide expert residential and commercial plumbing services throughout the Burnsville area...</p>',
+      title: 'Professional Plumbing Services in Burnsville, MN',
+      word_count: 850,
+    },
+    {
+      city: 'Apple Valley',
+      html: '<h1>Expert Plumbing Services in Apple Valley, MN</h1><p>Need a plumber in Apple Valley? Our licensed team serves Apple Valley and surrounding neighborhoods with fast, professional plumbing solutions...</p>',
+      title: 'Expert Plumbing Services in Apple Valley, MN',
+      word_count: 820,
+    },
+  ])
   const [cityInput, setCityInput] = useState('')
   const [generating, setGenerating] = useState(false)
   const [showAdd, setShowAdd] = useState(false)
@@ -52,8 +65,8 @@ export default function PagesPage() {
     <div className="flex-1 px-6 py-8 max-w-4xl">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-white">Service Area Pages</h1>
-          <p className="text-white/50 text-sm mt-1">Hyper-local pages for every city you serve</p>
+          <h1 className="text-2xl font-bold text-white">City Pages</h1>
+          <p className="text-white/50 text-sm mt-1">Local pages that help you show up when people search in nearby cities</p>
         </div>
         <div className="flex items-center gap-3">
           <Badge className="bg-[#FFD700]/10 text-[#FFD700] border-[#FFD700]/30 text-xs">
@@ -75,7 +88,7 @@ export default function PagesPage() {
           <div className="p-6">
             <h2 className="text-xl font-bold mb-2">Add Service Area</h2>
             <p className="text-white/50 text-sm mb-6">
-              We&apos;ll generate a unique, AEO-optimized landing page targeting searches for your service in that city.
+              We&apos;ll create a unique page designed to help you show up when people in that city search for your services.
             </p>
             <Input
               placeholder="e.g. Minneapolis, Apple Valley, Eagan..."
@@ -132,7 +145,7 @@ export default function PagesPage() {
                   <CardTitle className="text-white text-base">{page.city}</CardTitle>
                   <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/30 text-xs">Draft</Badge>
                 </div>
-                <p className="text-white/30 text-xs">{page.word_count} words · AEO-optimized · FAQ schema</p>
+                <p className="text-white/30 text-xs">{page.word_count} words · Optimized for local search · FAQ included</p>
               </CardHeader>
               <CardContent>
                 <div className="flex gap-2">

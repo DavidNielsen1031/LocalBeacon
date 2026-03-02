@@ -1,0 +1,34 @@
+# LocalBeacon.ai
+
+> AI-powered local visibility engine for small businesses.
+
+LocalBeacon automatically posts to your Google Business Profile every week, creates local city pages for every area you serve, and drafts thoughtful replies to your customer reviews — so you get found by more customers without lifting a finger.
+
+## What LocalBeacon Does
+- Weekly AI-generated Google Business Profile posts (auto-scheduled)
+- Local city/neighborhood landing pages with SEO optimization
+- AI-drafted review responses (tone-matched to star rating)
+- Monthly visibility reports
+- Competitor monitoring and alerts
+
+## Who It's For
+- Local service businesses: plumbers, HVAC, dentists, roofers, lawyers, electricians, landscapers
+- Marketing agencies managing multiple local business clients
+- Web designers/freelancers offering local SEO as a service
+
+## Pricing
+- Free: $0/month — 1 location, 5 posts/month, 3 city pages
+- Solo: $29/month — 3 locations, unlimited posts, review replies, monthly report
+- Agency: $79/month — unlimited locations, white-label reports, multi-client dashboard
+
+## Links
+- Website: https://localbeacon.ai
+- Pricing: https://localbeacon.ai/pricing
+- Sign Up: https://localbeacon.ai/sign-up
+- Privacy: https://localbeacon.ai/privacy
+- Terms: https://localbeacon.ai/terms
+
+## Company
+Perpetual Agility LLC
+Burnsville, MN
+support@localbeacon.ai
