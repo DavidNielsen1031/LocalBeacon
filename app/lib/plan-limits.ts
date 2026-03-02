@@ -24,6 +24,6 @@ export const PLAN_NAMES: Record<Plan, string> = {
 
 export const PLAN_PRICES: Record<Plan, string> = {
   free: '$0',
-  solo: '$29/mo',
-  agency: '$79/mo',
+  solo: '$49/mo',
+  agency: '$99/mo',
 }

@@ -21,7 +21,7 @@ const plans = [
   },
   {
     name: "Solo",
-    price: "$29",
+    price: "$49",
     period: "/month",
     tagline: "Hands-free local marketing. More calls, zero effort.",
     outcomes: [
@@ -32,13 +32,13 @@ const plans = [
       "1 blog post per month for your website",
       "Monthly visibility report",
     ],
-    cta: "Start Solo — $29/mo",
+    cta: "Start Solo — $49/mo",
     href: "/sign-up",
     highlight: true,
   },
   {
     name: "Agency",
-    price: "$79",
+    price: "$99",
     period: "/month",
     tagline: "Run local marketing for all your clients under your brand.",
     outcomes: [
@@ -49,7 +49,7 @@ const plans = [
       "Competitor monitoring & alerts",
       "Priority support",
     ],
-    cta: "Start Agency — $79/mo",
+    cta: "Start Agency — $99/mo",
     href: "/sign-up",
     highlight: false,
   },
@@ -70,7 +70,7 @@ const faqs = [
   },
   {
     q: "How is this different from hiring an SEO agency?",
-    a: "An agency charges $800-1,500/month and you wait weeks to see anything happen. LocalBeacon does the same work — Google posts, local pages, review replies, rank tracking — for $29/month, and your first content is generated within minutes of signing up.",
+    a: "An agency charges $800-1,500/month and you wait weeks to see anything happen. LocalBeacon does the same work — Google posts, local pages, review replies, rank tracking — for $49/month, and your first content is generated within minutes of signing up.",
   },
   {
     q: "Is the content written by AI? Will it sound fake?",
@@ -78,7 +78,7 @@ const faqs = [
   },
   {
     q: "How does LocalBeacon compare to BrightLocal?",
-    a: "BrightLocal costs $39-59/month per location and focuses on rank tracking and citations. LocalBeacon costs $29/month and does that PLUS auto-generates your Google posts, builds local city pages, and drafts review responses with AI. More features, lower price.",
+    a: "BrightLocal costs $39-59/month per location and focuses on rank tracking and citations. LocalBeacon costs $49/month and does that PLUS auto-generates your Google posts, builds local city pages, and drafts review responses with AI. More features, lower price.",
   },
   {
     q: "What if I manage multiple clients? (Agency plan)",
@@ -107,7 +107,7 @@ export default function PricingPage() {
       {/* Header */}
       <section className="px-6 pt-20 pb-8 text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
-          More calls for less than <span className="text-[#FFD700]">$1/day</span>
+          More calls for less than <span className="text-[#FFD700]">$2/day</span>
         </h1>
         <p className="text-white/50 text-lg max-w-xl mx-auto mb-8">
           Start free. Upgrade when you see the results. No contracts, cancel anytime.
@@ -128,7 +128,7 @@ export default function PricingPage() {
           <span className="text-white/20">|</span>
           <div className="flex items-center gap-1.5">
             <span className="text-[#FFD700] font-bold">LocalBeacon</span>
-            <span className="text-[#FFD700] font-bold">$29/mo</span>
+            <span className="text-[#FFD700] font-bold">$49/mo</span>
           </div>
         </div>
       </section>

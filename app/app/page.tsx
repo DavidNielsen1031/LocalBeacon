@@ -66,7 +66,7 @@ const plans = [
   },
   {
     name: "Solo",
-    price: "$29",
+    price: "$49",
     period: "/month",
     tagline: "Hands-free local marketing for your business.",
     outcomes: [
@@ -77,13 +77,13 @@ const plans = [
       "1 blog post per month",
       "Monthly visibility report",
     ],
-    cta: "Start Solo — $29/mo",
+    cta: "Start Solo — $49/mo",
     href: "/sign-up",
     highlight: true,
   },
   {
     name: "Agency",
-    price: "$79",
+    price: "$99",
     period: "/month",
     tagline: "Run local marketing for all your clients.",
     outcomes: [
@@ -94,7 +94,7 @@ const plans = [
       "Competitor monitoring & alerts",
       "Priority support",
     ],
-    cta: "Start Agency — $79/mo",
+    cta: "Start Agency — $99/mo",
     href: "/sign-up",
     highlight: false,
   },
@@ -123,7 +123,7 @@ const faqs = [
   },
   {
     q: "How is this different from hiring an SEO agency?",
-    a: "An agency charges $800-1,500/month and you wait weeks for results. LocalBeacon does the same work — Google posts, local pages, review replies, rank tracking — for $29/month, starting immediately.",
+    a: "An agency charges $800-1,500/month and you wait weeks for results. LocalBeacon does the same work — Google posts, local pages, review replies, rank tracking — for $49/month, starting immediately.",
   },
 ];
 
@@ -262,7 +262,7 @@ export default function LandingPage() {
               <span className="text-white/40">Compared to:</span>
               <span className="text-white/60">Hiring an agency <span className="line-through text-white/30">$800–1,500/mo</span></span>
               <span className="text-white/20">|</span>
-              <span className="text-white/60">BrightLocal <span className="line-through text-white/30">$39–59/mo</span> <span className="text-white/30">(fewer features)</span></span>
+              <span className="text-white/60">BrightLocal <span className="line-through text-white/30">$39–59/mo</span> <span className="text-white/30">(no AI content)</span></span>
             </div>
           </div>
 

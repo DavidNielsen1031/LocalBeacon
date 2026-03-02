@@ -49,8 +49,8 @@ export default function TermsPage() {
             <p className="mb-2">We offer three plans:</p>
             <ul className="list-disc pl-5 space-y-1">
               <li><strong className="text-white">Free ($0/month):</strong> 1 location, 5 posts/month, 3 city pages</li>
-              <li><strong className="text-white">Solo ($29/month):</strong> 3 locations, unlimited posts, 10 city pages, review replies, monthly report</li>
-              <li><strong className="text-white">Agency ($79/month):</strong> Unlimited locations, white-label reports, multi-client dashboard, competitor monitoring</li>
+              <li><strong className="text-white">Solo ($49/month):</strong> 3 locations, unlimited posts, 10 city pages, review replies, monthly report</li>
+              <li><strong className="text-white">Agency ($99/month):</strong> Unlimited locations, white-label reports, multi-client dashboard, competitor monitoring</li>
             </ul>
             <p className="mt-3">Paid plans are billed monthly through Stripe. You can cancel anytime — your plan remains active until the end of the billing period. We do not offer refunds for partial months.</p>
           </section>

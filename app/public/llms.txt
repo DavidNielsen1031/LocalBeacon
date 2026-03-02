@@ -18,8 +18,8 @@ LocalBeacon automatically posts to your Google Business Profile every week, crea
 
 ## Pricing
 - Free: $0/month — 1 location, 5 posts/month, 3 city pages
-- Solo: $29/month — 3 locations, unlimited posts, review replies, monthly report
-- Agency: $79/month — unlimited locations, white-label reports, multi-client dashboard
+- Solo: $49/month — 3 locations, unlimited posts, review replies, monthly report
+- Agency: $99/month — unlimited locations, white-label reports, multi-client dashboard
 
 ## Links
 - Website: https://localbeacon.ai

@@ -283,12 +283,12 @@ export default function OnboardingPage() {
                   cta: 'Start Free',
                 },
                 {
-                  plan: 'solo', name: 'Solo', price: '$29/mo', badge: 'Most Popular',
+                  plan: 'solo', name: 'Solo', price: '$49/mo', badge: 'Most Popular',
                   features: ['Unlimited GBP posts', '10 service area pages', '3 locations', '1 blog post/month', 'Review response drafts'],
                   cta: 'Start Solo →',
                 },
                 {
-                  plan: 'agency', name: 'Agency', price: '$79/mo', badge: null,
+                  plan: 'agency', name: 'Agency', price: '$99/mo', badge: null,
                   features: ['Everything unlimited', 'Multi-client dashboard', 'White-label reports', 'Priority support'],
                   cta: 'Start Agency →',
                 },

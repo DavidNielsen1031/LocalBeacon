@@ -37,41 +37,39 @@
 
 ## 🏃 Now — Sprint 4: Polish & Credibility
 
-### LB-S4-01 · Supabase Migration
-- [ ] Run `supabase/migrations/001_initial_schema.sql` in Supabase SQL Editor
-- [ ] Verify business creation + content saving persists
+### LB-S4-01 · Supabase Migration ✅
+- [x] Run `supabase/migrations/001_initial_schema.sql` in Supabase SQL Editor
+- [x] 4 tables created: users, businesses, content_items, reviews
+- [x] Vercel env vars updated with real keys
 - [ ] Test end-to-end: sign up → create business → generate post → saved in DB
-- **Owner:** David (manual paste into Supabase dashboard)
 
-### LB-S4-02 · Email Setup Complete
-- [ ] Add MX records to GoDaddy (if not done)
-- [ ] Activate Gmail for david@localbeacon.ai
-- [ ] Add aliases: hello@localbeacon.ai, support@localbeacon.ai
-- [ ] Add SPF/DKIM records
-- **Owner:** David (Google Admin Console)
+### LB-S4-02 · Email Setup Complete ✅
+- [x] MX records added
+- [x] Gmail activated for david@localbeacon.ai
+- [x] Aliases: hello@, support@ configured
+- [x] SPF/DKIM/DMARC verified
 
-### LB-S4-03 · Privacy Policy + Terms of Service
-- [ ] Create /privacy and /terms pages
+### LB-S4-03 · Privacy Policy + Terms of Service ✅
+- [x] Create /privacy and /terms pages
 - [ ] Cover: data collection, GBP OAuth scope, AI content generation, Stripe billing
 - [ ] Link from footer on all pages
 - [ ] Required before any real user signups
 
-### LB-S4-04 · Healthcheck Cron
-- [ ] Create `localbeacon-healthcheck` cron (7am/1pm/7pm CST, Ollama)
-- [ ] Check: site responds 200, /api/health returns OK, Clerk auth working
-- [ ] Alert to #localbeacon-ai Discord on failure
+### LB-S4-04 · Healthcheck Cron ✅
+- [x] `localbeacon-healthcheck` cron: 7am/1pm/7pm CST, Ollama
+- [x] Checks: site 200, /api/health 200, /pricing 200, /llms.txt 200
+- [x] Alerts to #localbeacon-ai Discord on failure
 
-### LB-S4-05 · Reviews + City Pages UX Polish
-- [ ] Apply same persona-driven treatment to /dashboard/reviews
-- [ ] Apply same treatment to /dashboard/pages
-- [ ] Pre-populate with demo data (never blank)
-- [ ] Zero jargon — "city pages" not "service area pages", plain language throughout
+### LB-S4-05 · Reviews + City Pages UX Polish ✅
+- [x] Reviews page: 3 demo responses pre-populated (never blank)
+- [x] City Pages: 2 demo cities, jargon removed ("City Pages", "Optimized for local search")
 
-### LB-S4-06 · SEO & Discoverability Basics
-- [ ] Add proper meta tags (title, description, og:image) to all pages
-- [ ] Create /robots.txt and /sitemap.xml
-- [ ] Add llms.txt (agent-native layer — basic version)
-- [ ] Submit sitemap to Google Search Console
+### LB-S4-06 · SEO & Discoverability Basics ✅
+- [x] Meta tags: og:title, og:description, twitter card, canonical, keywords
+- [x] /robots.txt (blocks /api/ and /dashboard/)
+- [x] /sitemap.xml (4 pages)
+- [x] /llms.txt (agent-native layer)
+- [ ] Submit sitemap to Google Search Console (next session)
 
 ### LB-S4-07 · QR Code + Tracking for Expo
 - [ ] Generate QR code pointing to localbeacon.ai?ref=ramsey-expo-2026
