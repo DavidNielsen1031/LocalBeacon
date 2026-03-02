@@ -9,6 +9,9 @@ const navItems = [
   { href: "/dashboard/posts", label: "GBP Posts", icon: "📍" },
   { href: "/dashboard/pages", label: "Page Builder", icon: "🌐" },
   { href: "/dashboard/reviews", label: "Reviews", icon: "⭐" },
+  { href: "/dashboard/blog", label: "Blog Posts", icon: "📝" },
+  { href: "/dashboard/audit", label: "Listing Health", icon: "🩺" },
+  { href: "/dashboard/schema", label: "Schema Markup", icon: "🔗" },
   { href: "/dashboard/settings", label: "Settings", icon: "⚙️" },
 ];
 
