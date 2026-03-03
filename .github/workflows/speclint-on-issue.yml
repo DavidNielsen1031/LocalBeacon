@@ -1,0 +1,21 @@
+name: Speclint on Issue Open
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+    steps:
+      - name: Lint issue spec with Speclint
+        id: speclint
+        uses: speclint-ai/speclint-action@473fe71c3fc6af325b23e6abc3554964af0bfc55
+        with:
+          api-key: ${{ secrets.SPECLINT_KEY }}
+          threshold: "75"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
