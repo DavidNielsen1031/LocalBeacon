@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 import { auth } from '@clerk/nextjs/server'
 import { generateText } from '@/lib/anthropic-client'
 import { createServerClient } from '@/lib/supabase'
+import { enforceLimits } from '@/lib/plan-limits'
 import { NextRequest, NextResponse } from 'next/server'
 
 const postTypeDescriptions: Record<string, string> = {
@@ -22,6 +23,10 @@ function mockPost(businessName: string, category: string, city: string) {
 export async function POST(req: NextRequest) {
   const { userId } = await auth()
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  // Check plan limits
+  const limitError = await enforceLimits(userId, 'gbp_post')
+  if (limitError) return NextResponse.json(limitError, { status: 403 })
 
   const body = await req.json()
   const {
