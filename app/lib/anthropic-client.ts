@@ -1,7 +1,8 @@
 import Anthropic from '@anthropic-ai/sdk'
 
-const client = process.env.LB_ANTHROPIC_API_KEY
-  ? new Anthropic({ apiKey: process.env.LB_ANTHROPIC_API_KEY })
+const apiKey = process.env.LB_ANTHROPIC_API_KEY || process.env.ANTHROPIC_API_KEY
+const client = apiKey
+  ? new Anthropic({ apiKey })
   : null
 
 interface AnthropicResult {
