@@ -146,6 +146,14 @@ const faqs = [
     q: "How is this different from hiring an SEO agency?",
     a: "An agency charges $800-1,500/month and you wait weeks for results. LocalBeacon does the same work — Google posts, local pages, review replies, rank tracking — for $49/month, starting immediately.",
   },
+  {
+    q: "Will AI assistants like ChatGPT recommend my business?",
+    a: "LocalBeacon optimizes your content so AI search engines can find and cite your business. We generate FAQ pages, AI discovery files, and structured data that ChatGPT, Perplexity, Claude, and Google AI use when people search for local services.",
+  },
+  {
+    q: "What are city pages and why do I need them?",
+    a: "City pages are dedicated pages on your website for each area you serve — like 'Plumbing Services in Apple Valley, MN.' They help both Google and AI assistants recommend you when someone searches for services in that specific city.",
+  },
 ];
 
 const steps = [
@@ -930,6 +938,23 @@ export default function LandingPage() {
       </section>
 
       {/* ── FAQ ── */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": faqs.map(faq => ({
+              "@type": "Question",
+              "name": faq.q,
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": faq.a,
+              },
+            })),
+          }),
+        }}
+      />
       <section style={{ backgroundColor: CREAM, padding: "96px 24px" }}>
         <div style={{ maxWidth: "720px", margin: "0 auto" }}>
           <h2

@@ -54,6 +54,35 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/favicon.png" type="image/png" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              "name": "LocalBeacon.ai",
+              "applicationCategory": "BusinessApplication",
+              "operatingSystem": "Web",
+              "url": "https://localbeacon.ai",
+              "description": "AI-powered local visibility engine. Automates Google Business Profile posts, city pages, review responses, and AI search optimization for local businesses.",
+              "offers": [
+                { "@type": "Offer", "price": "0", "priceCurrency": "USD", "name": "Free" },
+                { "@type": "Offer", "price": "49", "priceCurrency": "USD", "name": "Solo", "priceSpecification": { "@type": "UnitPriceSpecification", "billingDuration": "P1M" } },
+                { "@type": "Offer", "price": "99", "priceCurrency": "USD", "name": "Agency", "priceSpecification": { "@type": "UnitPriceSpecification", "billingDuration": "P1M" } }
+              ],
+              "provider": {
+                "@type": "Organization",
+                "@id": "https://localbeacon.ai/#organization",
+                "name": "Perpetual Agility LLC",
+                "url": "https://localbeacon.ai",
+                "email": "support@localbeacon.ai",
+                "sameAs": [
+                  "https://github.com/DavidNielsen1031/LocalBeacon"
+                ]
+              }
+            })
+          }}
+        />
       </head>
       <body
         className={`${dmSans.variable} ${fraunces.variable} antialiased`}
