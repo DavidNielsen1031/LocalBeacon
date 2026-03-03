@@ -1,5 +1,6 @@
 export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
+import { createServerClient } from '@/lib/supabase'
 import rulesConfig from '@/lib/aeo-rules.json'
 
 interface CheckResult {
@@ -430,6 +431,8 @@ export async function POST(req: NextRequest) {
   const passed = checks.filter(c => c.passed).length
   const failed = checks.filter(c => !c.passed).length
 
+  const scannedAt = new Date().toISOString()
+
   console.log(JSON.stringify({
     event: 'aeo_scan_complete',
     url: baseUrl,
@@ -437,8 +440,31 @@ export async function POST(req: NextRequest) {
     passed,
     failed,
     rulesVersion: rulesConfig.version,
-    timestamp: new Date().toISOString(),
+    timestamp: scannedAt,
   }))
+
+  // Persist scan to Supabase (best-effort, don't fail the response)
+  try {
+    const supabase = createServerClient()
+    if (supabase) {
+      await supabase.from('aeo_scans').insert({
+        url: baseUrl,
+        score,
+        passed,
+        failed,
+        checks,
+        rules_version: rulesConfig.version,
+        scanned_at: scannedAt,
+      })
+    }
+  } catch (err) {
+    console.error(JSON.stringify({
+      event: 'aeo_scan_persist_failed',
+      url: baseUrl,
+      error: err instanceof Error ? err.message : 'unknown',
+      timestamp: scannedAt,
+    }))
+  }
 
   return NextResponse.json({
     url: baseUrl,
@@ -448,6 +474,40 @@ export async function POST(req: NextRequest) {
     total: checks.length,
     checks,
     rulesVersion: rulesConfig.version,
-    scannedAt: new Date().toISOString(),
+    scannedAt,
+  })
+}
+
+// --- History endpoint ---
+
+export async function GET(req: NextRequest) {
+  const url = req.nextUrl.searchParams.get('url')
+  const limit = Math.min(parseInt(req.nextUrl.searchParams.get('limit') || '20'), 100)
+
+  if (!url) {
+    return NextResponse.json({ error: 'url query parameter is required' }, { status: 400 })
+  }
+
+  const supabase = createServerClient()
+  if (!supabase) {
+    return NextResponse.json({ error: 'Database not configured' }, { status: 503 })
+  }
+
+  const { data, error } = await supabase
+    .from('aeo_scans')
+    .select('id, url, score, passed, failed, rules_version, scanned_at')
+    .eq('url', url.replace(/\/+$/, ''))
+    .order('scanned_at', { ascending: false })
+    .limit(limit)
+
+  if (error) {
+    console.error(JSON.stringify({ event: 'aeo_history_failed', url, error: error.message }))
+    return NextResponse.json({ error: 'Failed to fetch scan history' }, { status: 500 })
+  }
+
+  return NextResponse.json({
+    url,
+    scans: data || [],
+    total: data?.length || 0,
   })
 }

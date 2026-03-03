@@ -1,6 +1,6 @@
 'use client'
 export const dynamic = 'force-dynamic'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 
@@ -22,6 +22,16 @@ interface ScanResult {
   total: number
   checks: CheckResult[]
   scannedAt: string
+}
+
+interface HistoryScan {
+  id: string
+  url: string
+  score: number
+  passed: number
+  failed: number
+  rules_version: string
+  scanned_at: string
 }
 
 function ScoreRing({ score }: { score: number }) {
@@ -48,6 +58,54 @@ function ScoreRing({ score }: { score: number }) {
   )
 }
 
+function TrendChart({ scans }: { scans: HistoryScan[] }) {
+  if (scans.length < 2) return null
+
+  const sorted = [...scans].reverse() // oldest first
+  const maxScore = 100
+  const width = 320
+  const height = 80
+  const padding = 4
+  const stepX = (width - padding * 2) / (sorted.length - 1)
+
+  const points = sorted.map((s, i) => ({
+    x: padding + i * stepX,
+    y: height - padding - ((s.score / maxScore) * (height - padding * 2)),
+    score: s.score,
+    date: new Date(s.scanned_at).toLocaleDateString(),
+  }))
+
+  const pathD = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ')
+  const firstScore = sorted[0].score
+  const lastScore = sorted[sorted.length - 1].score
+  const delta = lastScore - firstScore
+  const deltaColor = delta > 0 ? 'text-green-400' : delta < 0 ? 'text-red-400' : 'text-white/40'
+
+  return (
+    <Card className="bg-white/5 border-white/10">
+      <CardContent className="p-5">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm font-semibold text-white">Score History</h3>
+          <span className={`text-sm font-bold ${deltaColor}`}>
+            {delta > 0 ? `+${delta}` : delta} pts
+          </span>
+        </div>
+        <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-20">
+          <path d={pathD} fill="none" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          {points.map((p, i) => (
+            <circle key={i} cx={p.x} cy={p.y} r="3" fill="#FFD700" />
+          ))}
+        </svg>
+        <div className="flex justify-between text-xs text-white/30 mt-1">
+          <span>{points[0].date}</span>
+          <span>{scans.length} scans</span>
+          <span>{points[points.length - 1].date}</span>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
 function getGradeLabel(score: number): { label: string; color: string; emoji: string; message: string } {
   if (score >= 90) return { label: 'Excellent', color: 'text-green-400', emoji: '🏆', message: 'AI search engines can find and recommend your business easily.' }
   if (score >= 70) return { label: 'Good', color: 'text-green-300', emoji: '👍', message: 'You\'re ahead of most local businesses, but there\'s room to improve.' }
@@ -61,12 +119,27 @@ export default function AIReadinessPage() {
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<ScanResult | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [history, setHistory] = useState<HistoryScan[]>([])
+
+  const fetchHistory = async (scanUrl: string) => {
+    try {
+      let normalized = scanUrl.trim()
+      if (!normalized.startsWith('http')) normalized = `https://${normalized}`
+      normalized = normalized.replace(/\/+$/, '')
+      const res = await fetch(`/api/ai-readiness?url=${encodeURIComponent(normalized)}`)
+      const data = await res.json()
+      if (data.scans) setHistory(data.scans)
+    } catch {
+      // History is non-critical
+    }
+  }
 
   const handleScan = async () => {
     if (!url.trim()) return
     setLoading(true)
     setError(null)
     setResult(null)
+    setHistory([])
 
     try {
       const res = await fetch('/api/ai-readiness', {
@@ -79,6 +152,8 @@ export default function AIReadinessPage() {
         setError(data.error)
       } else {
         setResult(data)
+        // Fetch history after scan completes (includes the new scan)
+        fetchHistory(url)
       }
     } catch {
       setError('Failed to scan. Please check the URL and try again.')
@@ -167,6 +242,9 @@ export default function AIReadinessPage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Trend chart */}
+          {history.length >= 2 && <TrendChart scans={history} />}
 
           {/* Failed checks first */}
           {result.checks.filter(c => !c.passed).length > 0 && (
