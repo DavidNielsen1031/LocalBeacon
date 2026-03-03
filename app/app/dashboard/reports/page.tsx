@@ -49,6 +49,34 @@ async function getMonthlyData(clerkUserId: string) {
     .eq('type', 'review_reply')
     .gte('created_at', startOfMonth.toISOString())
 
+  // Previous month counts for comparison
+  const prevMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+  const prevMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59)
+
+  const { count: prevPostsCount } = await supabase
+    .from('content_items')
+    .select('*', { count: 'exact', head: true })
+    .eq('business_id', business.id)
+    .eq('type', 'gbp_post')
+    .gte('created_at', prevMonthStart.toISOString())
+    .lte('created_at', prevMonthEnd.toISOString())
+
+  const { count: prevPagesCount } = await supabase
+    .from('content_items')
+    .select('*', { count: 'exact', head: true })
+    .eq('business_id', business.id)
+    .eq('type', 'city_page')
+    .gte('created_at', prevMonthStart.toISOString())
+    .lte('created_at', prevMonthEnd.toISOString())
+
+  const { count: prevReviewsCount } = await supabase
+    .from('content_items')
+    .select('*', { count: 'exact', head: true })
+    .eq('business_id', business.id)
+    .eq('type', 'review_reply')
+    .gte('created_at', prevMonthStart.toISOString())
+    .lte('created_at', prevMonthEnd.toISOString())
+
   // Count queued items
   const { count: queuedCount } = await supabase
     .from('content_queue')
@@ -75,8 +103,11 @@ async function getMonthlyData(clerkUserId: string) {
   return {
     businessName: business.name,
     postsGenerated: postsCount ?? 0,
+    prevPosts: prevPostsCount ?? 0,
     pagesCreated: pagesCount ?? 0,
+    prevPages: prevPagesCount ?? 0,
     reviewsReplied: reviewsCount ?? 0,
+    prevReviews: prevReviewsCount ?? 0,
     queuedTotal: queuedCount ?? 0,
     queuedPosted: postedCount ?? 0,
     aeoScore: aeoScan?.score ?? null,
@@ -90,17 +121,17 @@ export default async function ReportsPage() {
   const data = userId ? await getMonthlyData(userId) : null
 
   const stats = [
-    { label: 'Google Posts', value: data?.postsGenerated ?? 0, icon: '📝', color: '#FF6B35' },
-    { label: 'City Pages', value: data?.pagesCreated ?? 0, icon: '🌐', color: '#FF6B35' },
-    { label: 'Review Replies', value: data?.reviewsReplied ?? 0, icon: '⭐', color: '#FF6B35' },
-    { label: 'Posts Queued', value: data?.queuedTotal ?? 0, icon: '📅', color: '#FFD700' },
-    { label: 'Posts Published', value: data?.queuedPosted ?? 0, icon: '✅', color: '#00B894' },
+    { label: 'Google Posts', value: data?.postsGenerated ?? 0, prev: data?.prevPosts ?? 0, icon: '📝' },
+    { label: 'City Pages', value: data?.pagesCreated ?? 0, prev: data?.prevPages ?? 0, icon: '🌐' },
+    { label: 'Review Replies', value: data?.reviewsReplied ?? 0, prev: data?.prevReviews ?? 0, icon: '⭐' },
+    { label: 'Posts Queued', value: data?.queuedTotal ?? 0, prev: null, icon: '📅' },
+    { label: 'Posts Published', value: data?.queuedPosted ?? 0, prev: null, icon: '✅' },
   ]
 
   return (
     <div className="flex-1 px-6 py-8 max-w-4xl">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white">Monthly Content Summary</h1>
+        <h1 className="text-2xl font-bold text-white">Your Monthly Report</h1>
         <p className="text-white/50 mt-1 text-sm">
           {data?.monthName ?? 'This month'} — {data?.businessName ?? 'Your Business'}
         </p>
@@ -108,15 +139,23 @@ export default async function ReportsPage() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
-        {stats.map((stat) => (
-          <Card key={stat.label} className="bg-white/5 border-white/10">
-            <CardContent className="p-5 text-center">
-              <div className="text-2xl mb-2">{stat.icon}</div>
-              <p className="text-3xl font-bold text-white">{stat.value}</p>
-              <p className="text-xs text-white/40 mt-1">{stat.label}</p>
-            </CardContent>
-          </Card>
-        ))}
+        {stats.map((stat) => {
+          const delta = stat.prev !== null ? stat.value - stat.prev : null
+          return (
+            <Card key={stat.label} className="bg-white/5 border-white/10">
+              <CardContent className="p-5 text-center">
+                <div className="text-2xl mb-2">{stat.icon}</div>
+                <p className="text-3xl font-bold text-white">{stat.value}</p>
+                <p className="text-xs text-white/40 mt-1">{stat.label}</p>
+                {delta !== null && delta !== 0 && (
+                  <p className={`text-xs mt-1 font-semibold ${delta > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                    {delta > 0 ? `↑ ${delta} more` : `↓ ${Math.abs(delta)} fewer`} than last month
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          )
+        })}
       </div>
 
       {/* AEO Score */}

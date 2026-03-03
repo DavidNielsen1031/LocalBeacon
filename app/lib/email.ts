@@ -59,9 +59,20 @@ export async function sendWeeklyContentEmail(data: WeeklyEmailData) {
     </a>
   </div>
 
+  <div style="background: #FFF8F0; border-radius: 8px; padding: 16px; margin-bottom: 24px;">
+    <p style="color: #636E72; font-size: 13px; margin: 0 0 8px 0; font-weight: 600;">📋 How to post this (30 seconds):</p>
+    <ol style="color: #636E72; font-size: 13px; margin: 0; padding-left: 20px; line-height: 1.8;">
+      <li>Copy the post text above</li>
+      <li>Go to <a href="https://business.google.com" style="color: #FF6B35;">business.google.com</a></li>
+      <li>Click "Add update" and paste</li>
+      <li>Hit Publish — done!</li>
+    </ol>
+  </div>
+
   <hr style="border: none; border-top: 1px solid #DFE6E9; margin: 24px 0;">
   <p style="color: #636E72; font-size: 12px; text-align: center;">
-    You're receiving this because you're signed up at <a href="https://localbeacon.ai" style="color: #FF6B35;">LocalBeacon.ai</a>.
+    You're receiving this because you're signed up at <a href="https://localbeacon.ai" style="color: #FF6B35;">LocalBeacon.ai</a>.<br>
+    <a href="https://localbeacon.ai/dashboard/settings" style="color: #B2BEC3; font-size: 11px;">Unsubscribe from weekly emails</a>
   </p>
 </body>
 </html>`,
@@ -128,7 +139,8 @@ export async function sendMonthlyReportEmail(data: MonthlyEmailData) {
 
   <hr style="border: none; border-top: 1px solid #DFE6E9; margin: 24px 0;">
   <p style="color: #636E72; font-size: 12px; text-align: center;">
-    You're receiving this because you're signed up at <a href="https://localbeacon.ai" style="color: #FF6B35;">LocalBeacon.ai</a>.
+    You're receiving this because you're signed up at <a href="https://localbeacon.ai" style="color: #FF6B35;">LocalBeacon.ai</a>.<br>
+    <a href="https://localbeacon.ai/dashboard/settings" style="color: #B2BEC3; font-size: 11px;">Unsubscribe from monthly reports</a>
   </p>
 </body>
 </html>`,

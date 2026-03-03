@@ -7,7 +7,7 @@ import { UserButton } from "@clerk/nextjs";
 const navItems = [
   { href: "/dashboard", label: "Overview", icon: "🏠" },
   { href: "/dashboard/posts", label: "GBP Posts", icon: "📍" },
-  { href: "/dashboard/queue", label: "Post Queue", icon: "📅" },
+  { href: "/dashboard/queue", label: "Upcoming Posts", icon: "📅" },
   { href: "/dashboard/pages", label: "Page Builder", icon: "🌐" },
   { href: "/dashboard/reviews", label: "Reviews", icon: "⭐" },
   { href: "/dashboard/blog", label: "Blog Posts", icon: "📝" },
@@ -16,7 +16,7 @@ const navItems = [
   { href: "/dashboard/llms-txt", label: "AI Discovery File", icon: "📄" },
   { href: "/dashboard/audit", label: "Listing Health", icon: "🩺" },
   { href: "/dashboard/schema", label: "Schema Markup", icon: "🔗" },
-  { href: "/dashboard/reports", label: "Monthly Report", icon: "📊" },
+  { href: "/dashboard/reports", label: "Your Monthly Report", icon: "📊" },
   { href: "/dashboard/settings", label: "Settings", icon: "⚙️" },
 ];
 

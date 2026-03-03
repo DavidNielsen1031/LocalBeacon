@@ -7,6 +7,7 @@ interface QueueActionsProps {
   businessId: string | null
   itemId?: string
   content?: string
+  title?: string
   status?: 'draft' | 'ready' | 'posted'
   variant?: 'header' | 'empty' | 'item'
 }
@@ -15,18 +16,22 @@ export function QueueActions({
   businessId,
   itemId,
   content,
+  title,
   status,
   variant = 'header',
 }: QueueActionsProps) {
   const [generating, setGenerating] = useState(false)
   const [copying, setCopying] = useState(false)
   const [marking, setMarking] = useState(false)
+  const [expanded, setExpanded] = useState(false)
+  const [editMode, setEditMode] = useState(false)
+  const [editText, setEditText] = useState(content ?? '')
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
   async function handleGenerate() {
     if (!businessId) {
-      setError('No business found. Set up your business first.')
+      setError('No business found. Set up your business in Settings first.')
       return
     }
     setGenerating(true)
@@ -39,6 +44,10 @@ export function QueueActions({
       })
       if (!res.ok) {
         const data = await res.json()
+        if (data.error === 'limit_reached') {
+          setError(`You've used all ${data.limit} posts this month. Upgrade to keep going — plans start at $49/mo.`)
+          return
+        }
         throw new Error(data.error || 'Failed to generate post')
       }
       router.refresh()
@@ -50,10 +59,11 @@ export function QueueActions({
   }
 
   async function handleCopy() {
-    if (!content) return
+    const textToCopy = editMode ? editText : (content ?? '')
+    if (!textToCopy) return
     setCopying(true)
     try {
-      await navigator.clipboard.writeText(content)
+      await navigator.clipboard.writeText(textToCopy)
       setTimeout(() => setCopying(false), 1500)
     } catch {
       setCopying(false)
@@ -91,38 +101,94 @@ export function QueueActions({
           disabled={generating || !businessId}
           className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold"
         >
-          {generating ? 'Generating…' : "Generate This Week's Post"}
+          {generating ? 'Writing…' : "Write My Post For This Week"}
         </Button>
-        {error && <p className="text-red-400 text-xs">{error}</p>}
+        {error && (
+          <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-sm max-w-sm">
+            <p className="text-red-400">{error}</p>
+            {error.includes('Upgrade') && (
+              <a href="/pricing" className="text-[#FFD700] font-semibold text-xs hover:underline mt-1 inline-block">
+                View Plans →
+              </a>
+            )}
+          </div>
+        )}
       </div>
     )
   }
 
-  // Per-item actions: Copy + Mark as Posted
+  // Per-item actions: Expand, Edit, Copy, Mark as Posted
   return (
-    <div className="flex flex-col gap-2 items-end">
-      <Button
-        size="sm"
-        variant="outline"
-        onClick={handleCopy}
-        className="border-white/20 text-white/70 hover:text-white hover:border-white/40 text-xs"
-      >
-        {copying ? '✅ Copied!' : '📋 Copy to Google'}
-      </Button>
+    <div className="flex flex-col gap-2 w-full">
+      {/* Expand/collapse full content */}
+      {expanded && (
+        <div className="bg-white/5 border border-white/10 rounded-lg p-4 mb-2">
+          <p className="text-xs text-white/40 mb-1 font-semibold">{title || 'Your Post'}</p>
+          {editMode ? (
+            <textarea
+              value={editText}
+              onChange={(e) => setEditText(e.target.value)}
+              className="w-full bg-black/50 border border-white/20 rounded-lg p-3 text-white text-sm min-h-[120px] focus:outline-none focus:border-[#FFD700]/50"
+            />
+          ) : (
+            <p className="text-white/80 text-sm whitespace-pre-wrap">{content}</p>
+          )}
+        </div>
+      )}
 
-      {status !== 'posted' && (
+      <div className="flex items-center gap-2 flex-wrap">
         <Button
           size="sm"
           variant="outline"
-          onClick={handleMarkPosted}
-          disabled={marking}
-          className="border-green-500/30 text-green-400 hover:bg-green-500/10 text-xs"
+          onClick={() => { setExpanded(!expanded); if (!expanded) setEditText(content ?? '') }}
+          className="border-white/20 text-white/70 hover:text-white hover:border-white/40 text-xs"
         >
-          {marking ? 'Saving…' : '✅ Mark as Posted'}
+          {expanded ? '▲ Collapse' : '▼ Read Full Post'}
         </Button>
-      )}
 
-      {error && <p className="text-red-400 text-xs">{error}</p>}
+        {expanded && (
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setEditMode(!editMode)}
+            className="border-white/20 text-white/70 hover:text-white hover:border-white/40 text-xs"
+          >
+            {editMode ? '👁 Preview' : '✏️ Edit Before Copying'}
+          </Button>
+        )}
+
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={handleCopy}
+          className="border-white/20 text-white/70 hover:text-white hover:border-white/40 text-xs"
+        >
+          {copying ? '✅ Copied!' : '📋 Copy Text'}
+        </Button>
+
+        {status !== 'posted' && (
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleMarkPosted}
+            disabled={marking}
+            className="border-green-500/30 text-green-400 hover:bg-green-500/10 text-xs"
+          >
+            {marking ? 'Saving…' : '✅ Mark as Posted'}
+          </Button>
+        )}
+      </div>
+
+      {error && (
+        <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-2 text-xs">
+          <p className="text-red-400">{error}</p>
+          {error.includes('Upgrade') && (
+            <a href="/pricing" className="text-[#FFD700] font-semibold hover:underline mt-1 inline-block">
+              View Plans →
+            </a>
+          )}
+        </div>
+      )}
     </div>
   )
 }

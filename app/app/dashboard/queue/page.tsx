@@ -5,6 +5,7 @@ import { createServerClient } from '@/lib/supabase'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { QueueActions } from './queue-actions'
+import { UsageMeter } from '@/components/usage-meter'
 
 interface QueueItem {
   id: string
@@ -66,14 +67,17 @@ export default async function QueuePage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-white">Post Queue</h1>
+          <h1 className="text-2xl font-bold text-white">Your Upcoming Posts</h1>
           <p className="text-white/50 text-sm mt-1">
-            Your scheduled Google Business Profile posts
+            Posts we&apos;ve written for your Google listing — ready to copy and publish
           </p>
         </div>
 
         <QueueActions businessId={business?.id ?? null} />
       </div>
+
+      {/* Usage meter for free plan */}
+      <UsageMeter />
 
       {/* List */}
       {items.length === 0 ? (
@@ -92,39 +96,34 @@ export default async function QueuePage() {
           {items.map((item) => (
             <Card key={item.id} className="bg-[#111] border-white/10">
               <CardContent className="p-5">
-                <div className="flex items-start justify-between gap-4">
+                {/* Title + meta */}
+                <div className="flex items-start justify-between gap-4 mb-2">
                   <div className="flex-1 min-w-0">
-                    {/* Title */}
                     <p className="font-semibold text-white truncate">
                       {item.title || 'Untitled Post'}
                     </p>
-
-                    {/* Preview */}
                     <p className="text-white/50 text-sm mt-1 line-clamp-2">
                       {item.content.slice(0, 100)}
                       {item.content.length > 100 ? '…' : ''}
                     </p>
-
-                    {/* Meta row */}
-                    <div className="flex items-center gap-3 mt-3">
-                      <StatusBadge status={item.status} />
-                      <span className="text-white/30 text-xs">
-                        📅 {formatDate(item.scheduled_for)}
-                      </span>
-                    </div>
                   </div>
-
-                  {/* Action buttons */}
-                  <div className="flex-shrink-0">
-                    <QueueActions
-                      businessId={business?.id ?? null}
-                      itemId={item.id}
-                      content={item.content}
-                      status={item.status}
-                      variant="item"
-                    />
+                  <div className="flex items-center gap-3 flex-shrink-0">
+                    <StatusBadge status={item.status} />
+                    <span className="text-white/30 text-xs">
+                      📅 {formatDate(item.scheduled_for)}
+                    </span>
                   </div>
                 </div>
+
+                {/* Actions below content */}
+                <QueueActions
+                  businessId={business?.id ?? null}
+                  itemId={item.id}
+                  content={item.content}
+                  title={item.title ?? undefined}
+                  status={item.status}
+                  variant="item"
+                />
               </CardContent>
             </Card>
           ))}

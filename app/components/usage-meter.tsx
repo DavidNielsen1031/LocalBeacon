@@ -27,7 +27,7 @@ export function UsageMeter() {
     <div className="bg-white/5 border border-white/10 rounded-lg p-4 mb-6">
       <div className="flex items-center justify-between mb-3">
         <p className="text-white/60 text-xs font-semibold uppercase tracking-wider">
-          Free Plan Usage
+          Your Monthly Limit
         </p>
         <Link
           href="/pricing"
