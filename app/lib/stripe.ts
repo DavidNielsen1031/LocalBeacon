@@ -15,12 +15,12 @@ export const PLANS = {
   },
   SOLO: {
     name: "Solo",
-    price: 29,
-    priceId: process.env.STRIPE_SOLO_PRICE_ID,
+    price: 49,
+    priceId: process.env.STRIPE_SOLO_PRICE_ID || "price_1T6LhxB0OqzCjZpvnGc84VN7",
   },
   AGENCY: {
     name: "Agency",
-    price: 79,
-    priceId: process.env.STRIPE_AGENCY_PRICE_ID,
+    price: 99,
+    priceId: process.env.STRIPE_AGENCY_PRICE_ID || "price_1T6LhxB0OqzCjZpvcNk2NQUO",
   },
 } as const;

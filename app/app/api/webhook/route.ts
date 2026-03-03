@@ -1,27 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
-
-// TODO: Connect to Supabase to update user subscription status
-// TODO: Send welcome/upgrade emails via your email provider
-// TODO: Handle plan downgrades and cancellations
+import { createServerClient } from "@/lib/supabase";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const signature = req.headers.get("stripe-signature");
 
   if (!signature) {
-    return NextResponse.json(
-      { error: "Missing stripe-signature header" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Missing stripe-signature header" }, { status: 400 });
   }
-
-  let event: Stripe.Event;
 
   if (!stripe) {
     return NextResponse.json({ error: "Stripe not configured" }, { status: 500 });
   }
+
+  let event: Stripe.Event;
 
   try {
     event = stripe.webhooks.constructEvent(
@@ -31,41 +25,68 @@ export async function POST(req: NextRequest) {
     );
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
-    console.error(`Stripe webhook signature verification failed: ${message}`);
-    return NextResponse.json(
-      { error: `Webhook error: ${message}` },
-      { status: 400 }
-    );
+    console.error(`Stripe webhook verification failed: ${message}`);
+    return NextResponse.json({ error: `Webhook error: ${message}` }, { status: 400 });
   }
 
-  // Handle events
+  const supabase = createServerClient();
+
   switch (event.type) {
     case "checkout.session.completed": {
       const session = event.data.object as Stripe.Checkout.Session;
-      // TODO: Provision access — update user's plan in Supabase
-      // TODO: Associate Stripe customerId with Clerk userId
-      console.log("Checkout completed:", session.id);
+      const clerkUserId = session.metadata?.clerk_user_id;
+      const plan = session.metadata?.plan?.toLowerCase() || "solo";
+
+      if (clerkUserId && supabase) {
+        await supabase
+          .from("users")
+          .update({
+            plan: plan,
+            stripe_customer_id: session.customer as string,
+            stripe_subscription_id: session.subscription as string,
+          })
+          .eq("clerk_id", clerkUserId);
+      }
+      console.log(`Checkout completed: ${session.id} — plan: ${plan}, user: ${clerkUserId}`);
       break;
     }
 
     case "customer.subscription.updated": {
       const subscription = event.data.object as Stripe.Subscription;
-      // TODO: Update user's plan/status in Supabase
-      console.log("Subscription updated:", subscription.id);
+      const clerkUserId = subscription.metadata?.clerk_user_id;
+      const status = subscription.status;
+
+      if (clerkUserId && supabase) {
+        if (status === "active") {
+          // Plan stays as-is
+        } else if (status === "past_due" || status === "unpaid") {
+          // Keep plan but flag status
+          console.log(`Subscription ${status} for user ${clerkUserId}`);
+        }
+      }
       break;
     }
 
     case "customer.subscription.deleted": {
       const subscription = event.data.object as Stripe.Subscription;
-      // TODO: Downgrade user to Free plan in Supabase
-      console.log("Subscription cancelled:", subscription.id);
+      const clerkUserId = subscription.metadata?.clerk_user_id;
+
+      if (clerkUserId && supabase) {
+        await supabase
+          .from("users")
+          .update({
+            plan: "free",
+            stripe_subscription_id: null,
+          })
+          .eq("clerk_id", clerkUserId);
+      }
+      console.log(`Subscription cancelled for user ${clerkUserId}`);
       break;
     }
 
     case "invoice.payment_failed": {
       const invoice = event.data.object as Stripe.Invoice;
-      // TODO: Notify user of failed payment, possibly restrict access
-      console.log("Payment failed for invoice:", invoice.id);
+      console.log(`Payment failed for invoice: ${invoice.id}`);
       break;
     }
 

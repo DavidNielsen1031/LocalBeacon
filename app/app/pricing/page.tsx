@@ -1,4 +1,6 @@
+"use client";
 import Link from "next/link";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -87,6 +89,34 @@ const faqs = [
 ];
 
 export default function PricingPage() {
+  const [loading, setLoading] = useState<string | null>(null);
+
+  const handleCheckout = async (plan: "SOLO" | "AGENCY") => {
+    setLoading(plan);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else if (data.error === "Unauthorized") {
+        // Not signed in — redirect to sign up first
+        window.location.href = "/sign-up";
+      } else {
+        console.error("Checkout error:", data.error);
+        // Fallback to sign-up
+        window.location.href = "/sign-up";
+      }
+    } catch {
+      window.location.href = "/sign-up";
+    } finally {
+      setLoading(null);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Nav */}
@@ -162,15 +192,26 @@ export default function PricingPage() {
                     </li>
                   ))}
                 </ul>
-                <Link href={plan.href}>
-                  <Button className={`w-full font-semibold h-12 text-base ${
-                    plan.highlight
-                      ? "bg-[#FFD700] text-black hover:bg-[#FFD700]/90"
-                      : "border border-white/20 bg-transparent text-white hover:bg-white/10"
-                  }`} variant={plan.highlight ? "default" : "outline"}>
-                    {plan.cta}
+                {plan.name === "Free" ? (
+                  <Link href={plan.href}>
+                    <Button className="w-full font-semibold h-12 text-base border border-white/20 bg-transparent text-white hover:bg-white/10" variant="outline">
+                      {plan.cta}
+                    </Button>
+                  </Link>
+                ) : (
+                  <Button
+                    onClick={() => handleCheckout(plan.name === "Solo" ? "SOLO" : "AGENCY")}
+                    disabled={loading !== null}
+                    className={`w-full font-semibold h-12 text-base ${
+                      plan.highlight
+                        ? "bg-[#FFD700] text-black hover:bg-[#FFD700]/90"
+                        : "border border-white/20 bg-transparent text-white hover:bg-white/10"
+                    }`}
+                    variant={plan.highlight ? "default" : "outline"}
+                  >
+                    {loading === (plan.name === "Solo" ? "SOLO" : "AGENCY") ? "Redirecting to checkout..." : plan.cta}
                   </Button>
-                </Link>
+                )}
                 {plan.name === "Free" && (
                   <p className="text-white/30 text-xs text-center mt-2">No credit card required</p>
                 )}
