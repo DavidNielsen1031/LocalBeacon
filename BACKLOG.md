@@ -35,57 +35,26 @@
 
 ---
 
-## 🏃 Now — Sprint 4: Polish & Credibility
-
-### LB-S4-01 · Supabase Migration ✅
-- [x] Run `supabase/migrations/001_initial_schema.sql` in Supabase SQL Editor
-- [x] 4 tables created: users, businesses, content_items, reviews
-- [x] Vercel env vars updated with real keys
-- [ ] Test end-to-end: sign up → create business → generate post → saved in DB
-
-### LB-S4-02 · Email Setup Complete ✅
-- [x] MX records added
-- [x] Gmail activated for david@localbeacon.ai
-- [x] Aliases: hello@, support@ configured
-- [x] SPF/DKIM/DMARC verified
-
-### LB-S4-03 · Privacy Policy + Terms of Service ✅
-- [x] Create /privacy and /terms pages
-- [ ] Cover: data collection, GBP OAuth scope, AI content generation, Stripe billing
-- [ ] Link from footer on all pages
-- [ ] Required before any real user signups
-
-### LB-S4-04 · Healthcheck Cron ✅
-- [x] `localbeacon-healthcheck` cron: 7am/1pm/7pm CST, Ollama
-- [x] Checks: site 200, /api/health 200, /pricing 200, /llms.txt 200
-- [x] Alerts to #localbeacon-ai Discord on failure
-
-### LB-S4-05 · Reviews + City Pages UX Polish ✅
-- [x] Reviews page: 3 demo responses pre-populated (never blank)
-- [x] City Pages: 2 demo cities, jargon removed ("City Pages", "Optimized for local search")
-
-### LB-S4-06 · SEO & Discoverability Basics ✅
-- [x] Meta tags: og:title, og:description, twitter card, canonical, keywords
-- [x] /robots.txt (blocks /api/ and /dashboard/)
-- [x] /sitemap.xml (4 pages)
-- [x] /llms.txt (agent-native layer)
-- [ ] Submit sitemap to Google Search Console (next session)
-
-### LB-S4-07 · QR Code + Tracking for Expo
-- [ ] Generate QR code pointing to localbeacon.ai?ref=ramsey-expo-2026
-- [ ] Add ref tracking to signup flow (store in user metadata)
-- [ ] Print QR code for one-pager and booth banner
+### Sprint 4 — Polish & Credibility (Done Mar 2)
+- [x] LB-S4-01: Supabase Migration (tables created, env vars updated)
+- [x] LB-S4-02: Email Setup (MX, Gmail, aliases, SPF/DKIM/DMARC)
+- [x] LB-S4-03: Privacy Policy + Terms pages created
+- [x] LB-S4-04: Healthcheck Cron (7am/1pm/7pm CST)
+- [x] LB-S4-05: Reviews + City Pages UX Polish
+- [x] LB-S4-06: SEO & Discoverability Basics (meta tags, robots.txt, sitemap, llms.txt)
+- *Carried to Sprint 5:* LB-S4-01 e2e test, LB-S4-03 content coverage, LB-S4-06 GSC submission, LB-S4-07 QR/Expo tracking
 
 ---
 
-### LB-S5-04 · AI-Powered Meta Ad Strategy Generator (Agency Tier)
-- [ ] New dashboard page: /dashboard/ads
-- [ ] **Input:** Landing page URL, target audience (demographics, interests)
-- [ ] **Output:** 3-5 unique ad angles, 3 ad sets per angle, 3 creatives per ad set (image, headline, body copy, CTA)
-- [ ] Based on Gael Breton's approach (Claude-generated from URL)
-- [ ] Available on Agency tier ($99/mo) only (updated price)
-
 ## 🏃 Now — Sprint 5: Make It Real
+
+*Active Sprint: See GitHub Milestone "Sprint 5 — Make It Real"*
+
+### Carried from Sprint 4
+- [ ] Test end-to-end: sign up → create business → generate post → saved in DB (from LB-S4-01)
+- [ ] Privacy policy content: data collection, GBP OAuth scope, AI content generation, Stripe billing + footer links (from LB-S4-03)
+- [ ] Submit sitemap to Google Search Console (from LB-S4-06)
+- [ ] QR Code + Tracking for Expo (from LB-S4-07)
 
 ### LB-S5-01 · End-to-End Flow Test
 - [ ] Sign up → create business → generate post → verify saved in Supabase
