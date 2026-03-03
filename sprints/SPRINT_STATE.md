@@ -10,7 +10,7 @@
 | 6 | Closed | 2026-03-02 | 2026-03-02 | sprints/sprint-6-forensics.md |
 | 7 | Closed | 2026-03-02 | 2026-03-03 | sprints/sprint-7-forensics.md |
 | 8 | Closed | 2026-03-03 | 2026-03-03 | sprints/sprint-8-forensics.md, sprints/sprint-8-review-retro.md |
-| 9 | Active | 2026-03-03 | — | — |
+| 9 | Closed | 2026-03-03 | 2026-03-03 | sprints/sprint-9-review-retro.md |
 
 ## Sprint State Definitions
 
