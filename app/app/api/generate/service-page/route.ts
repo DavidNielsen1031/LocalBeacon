@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic'
 import { auth } from '@clerk/nextjs/server'
-import Anthropic from '@anthropic-ai/sdk'
+import { generateText } from '@/lib/anthropic-client'
 import { createServerClient } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -107,19 +107,7 @@ export async function POST(req: NextRequest) {
 
   if (!target_city) return NextResponse.json({ error: 'target_city is required' }, { status: 400 })
 
-  const apiKey = process.env.ANTHROPIC_API_KEY
-  if (!apiKey || apiKey === 'placeholder') {
-    return NextResponse.json(mockPage(business_name, business_category, target_city, phone))
-  }
-
-  const client = new Anthropic({ apiKey })
-
-  const message = await client.messages.create({
-    model: 'claude-haiku-4-5',
-    max_tokens: 2000,
-    messages: [{
-      role: 'user',
-      content: `Generate a complete service area landing page for a local business targeting "${business_category} in ${target_city}" searches.
+  const prompt = `Generate a complete service area landing page for a local business targeting "${business_category} in ${target_city}" searches.
 
 Business: ${business_name}
 Category: ${business_category}
@@ -142,11 +130,15 @@ Generate HTML body content (not a full HTML page, just the content) with:
 
 CRITICAL: Content must be unique to ${target_city}. AEO-optimized FAQ answers (self-contained, 20-25 words each).
 
-Return only HTML content.`,
-    }],
-  })
+Return only HTML content.`
 
-  const html = message.content[0].type === 'text' ? message.content[0].text : ''
+  const result = await generateText(prompt, { maxTokens: 2000 })
+
+  if (!result.success || !result.text) {
+    return NextResponse.json({ ...mockPage(business_name, business_category, target_city, phone), isDegraded: result.isDegraded })
+  }
+
+  const html = result.text
   const wordCount = html.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length
 
   if (business_id) {

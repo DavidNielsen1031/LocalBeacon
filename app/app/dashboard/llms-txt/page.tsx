@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { getAllPlatforms, getInstructions, type Platform } from '@/lib/deployment-instructions'
 
 interface LlmsTxtResult {
   content: string
@@ -28,6 +29,7 @@ export default function LlmsTxtPage() {
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<LlmsTxtResult | null>(null)
   const [copied, setCopied] = useState(false)
+  const [platform, setPlatform] = useState<Platform>('generic')
 
   const handleGenerate = async () => {
     if (!businessName || !category || !city || !state) return
@@ -217,17 +219,36 @@ export default function LlmsTxtPage() {
             </CardContent>
           </Card>
 
-          {/* Instructions */}
+          {/* Platform-specific instructions */}
           <Card className="bg-[#FFD700]/5 border-[#FFD700]/20">
             <CardContent className="p-5">
-              <h3 className="font-semibold text-[#FFD700] text-sm mb-3">📋 How to add this to your website</h3>
-              <ol className="text-white/60 text-sm space-y-3 list-decimal list-inside">
-                <li><strong>Download the file</strong> using the button above</li>
-                <li><strong>Upload it to your website&apos;s root folder</strong> — the same place where your homepage lives. It should be accessible at <code className="bg-white/10 px-1.5 py-0.5 rounded text-xs">yourwebsite.com/llms.txt</code></li>
-                <li><strong>If you use WordPress:</strong> Upload via Media Library won&apos;t work. Use FTP or your hosting file manager to place it in the root directory (same folder as wp-config.php)</li>
-                <li><strong>If you use Squarespace/Wix:</strong> You may need to add it as a page with the URL slug &quot;/llms.txt&quot; — contact your website person for help</li>
-                <li><strong>Test it:</strong> Visit <code className="bg-white/10 px-1.5 py-0.5 rounded text-xs">yourwebsite.com/llms.txt</code> in your browser. If you see the text above, you&apos;re done!</li>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-semibold text-[#FFD700] text-sm">📋 How to add this to your website</h3>
+                <select
+                  value={platform}
+                  onChange={(e) => setPlatform(e.target.value as Platform)}
+                  className="bg-white/5 border border-white/10 rounded px-2 py-1 text-xs text-white focus:outline-none focus:border-[#FFD700]/50"
+                >
+                  {getAllPlatforms().map(p => (
+                    <option key={p.id} value={p.id} className="bg-[#111]">{p.name}</option>
+                  ))}
+                </select>
+              </div>
+              <ol className="text-white/60 text-sm space-y-2 list-decimal list-inside">
+                {getInstructions(platform).llmsTxt.map((step, i) => (
+                  <li key={i}>{step}</li>
+                ))}
               </ol>
+              {getInstructions(platform).pitfalls.length > 0 && (
+                <div className="mt-3 pt-3 border-t border-white/10">
+                  <p className="text-white/40 text-xs font-medium mb-1">⚠️ Watch out for:</p>
+                  <ul className="text-white/40 text-xs space-y-1 list-disc list-inside">
+                    {getInstructions(platform).pitfalls.map((p, i) => (
+                      <li key={i}>{p}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               <p className="text-white/40 text-xs mt-4">
                 AI search engines typically discover new llms.txt files within 1-4 weeks of deployment.
               </p>

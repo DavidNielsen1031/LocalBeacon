@@ -1,0 +1,131 @@
+{
+  "version": "1.0.0",
+  "rules": [
+    {
+      "id": "llms_txt",
+      "label": "llms.txt file exists",
+      "description": "A llms.txt file tells AI assistants about your business — what you do, where you operate, and how to recommend you.",
+      "fix": "Download your llms.txt from LocalBeacon and upload it to your website root folder. Your website person can do this in 2 minutes.",
+      "weight": 10,
+      "severity": "high",
+      "category": "ai_discovery"
+    },
+    {
+      "id": "robots_txt",
+      "label": "AI crawlers are allowed",
+      "description": "Your robots.txt file controls which bots can read your website. AI assistants like ChatGPT and Claude need access to recommend you.",
+      "fix": "Edit your robots.txt to remove blocks on AI crawlers. These are the bots that power ChatGPT, Claude, and Perplexity search.",
+      "weight": 8,
+      "severity": "high",
+      "category": "ai_discovery"
+    },
+    {
+      "id": "schema_markup",
+      "label": "Business schema markup present",
+      "description": "Schema markup is structured data that tells AI exactly what your business does, where it is, and what services you offer. It's like a business card for robots.",
+      "fix": "Generate your Schema Markup in LocalBeacon's Schema tool and add it to your website's HTML head section. This helps AI understand your business details.",
+      "weight": 9,
+      "severity": "high",
+      "category": "structured_data"
+    },
+    {
+      "id": "faq_content",
+      "label": "FAQ content exists on site",
+      "description": "FAQ pages are gold for AI visibility. When someone asks ChatGPT a question about your service, it looks for clear Q&A content to cite.",
+      "fix": "Use LocalBeacon's FAQ Builder to generate 15-25 questions specific to your business and location. Add them to your website with our FAQ schema markup.",
+      "weight": 9,
+      "severity": "high",
+      "category": "content"
+    },
+    {
+      "id": "https",
+      "label": "Website uses HTTPS (secure)",
+      "description": "AI engines strongly prefer secure websites. An unsecured site is less likely to be recommended.",
+      "fix": "Contact your hosting provider to enable SSL/HTTPS. Most hosts offer free SSL certificates.",
+      "weight": 6,
+      "severity": "medium",
+      "category": "technical"
+    },
+    {
+      "id": "open_graph",
+      "label": "Social/AI preview tags present",
+      "description": "Open Graph and Twitter tags help AI engines understand your pages. They're used by ChatGPT, Perplexity, and social media when sharing your links.",
+      "fix": "Add Open Graph meta tags to your homepage: og:title, og:description, og:type, og:image. Most website builders have an SEO settings section for this.",
+      "weight": 5,
+      "severity": "medium",
+      "category": "technical"
+    },
+    {
+      "id": "mobile",
+      "label": "Mobile-friendly",
+      "description": "AI engines deprioritize websites that don't work on phones. Most people asking AI for recommendations are on mobile.",
+      "fix": "Add a viewport meta tag to your HTML head: <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
+      "weight": 6,
+      "severity": "medium",
+      "category": "technical"
+    },
+    {
+      "id": "sitemap",
+      "label": "Sitemap exists",
+      "description": "A sitemap helps AI crawlers discover all your pages efficiently. Without one, some pages may never be found.",
+      "fix": "Most website builders can generate a sitemap automatically. Check your platform's SEO settings, or ask your website person to add one.",
+      "weight": 4,
+      "severity": "low",
+      "category": "technical"
+    },
+    {
+      "id": "headings",
+      "label": "Clean heading structure",
+      "description": "AI breaks your pages into sections using headings (H1, H2, H3). Clear headings help AI extract and cite specific answers from your content.",
+      "fix": "Ensure your homepage has exactly one H1 tag (your business name or main headline) and at least 2-3 H2 tags for different sections (Services, About, FAQ, etc.).",
+      "weight": 5,
+      "severity": "medium",
+      "category": "content"
+    },
+    {
+      "id": "service_pages",
+      "label": "Service area pages exist",
+      "description": "Dedicated pages for each city you serve dramatically increase your chances of being recommended when someone asks AI for services \"near me\" or in a specific city.",
+      "fix": "Use LocalBeacon's Page Builder to create pages for each city you serve. Example: \"Plumbing Services in Apple Valley, MN\" — each page should answer local questions.",
+      "weight": 8,
+      "severity": "high",
+      "category": "content"
+    },
+    {
+      "id": "freshness",
+      "label": "Content is fresh and current",
+      "description": "AI engines strongly favor recent content. Pages with current dates and updated information get cited more often.",
+      "fix": "Update your website content to reference the current year. Add \"Last updated\" dates to key pages. Fresh content gets cited more by AI search engines.",
+      "weight": 6,
+      "severity": "medium",
+      "category": "content"
+    },
+    {
+      "id": "reviews",
+      "label": "Reviews or testimonials on site",
+      "description": "Third-party validation (reviews, testimonials) is one of the strongest signals for AI recommendations. AI engines trust businesses that customers vouch for.",
+      "fix": "Add customer testimonials to your website with AggregateRating schema markup. Include star ratings and review counts.",
+      "weight": 7,
+      "severity": "high",
+      "category": "trust"
+    },
+    {
+      "id": "answer_first",
+      "label": "Answer-first content structure",
+      "description": "AI engines extract the first clear answer they find. Your homepage should immediately state what you do and where, not start with generic marketing fluff.",
+      "fix": "Start your homepage with a clear statement: \"[Business Name] provides [service] in [city], [state].\" AI engines look for direct answers in the first few paragraphs.",
+      "weight": 7,
+      "severity": "high",
+      "category": "content"
+    },
+    {
+      "id": "nap",
+      "label": "Contact info is clear and consistent",
+      "description": "AI engines verify your business by checking if your name, address, and phone (NAP) are consistent. Inconsistent info = less trustworthy = less likely to be recommended.",
+      "fix": "Display one consistent phone number and full address on every page. Use structured address markup (schema.org PostalAddress) so AI can read it accurately.",
+      "weight": 7,
+      "severity": "high",
+      "category": "trust"
+    }
+  ]
+}

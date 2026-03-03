@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { getAllPlatforms, getInstructions, type Platform } from '@/lib/deployment-instructions'
 
 interface Faq {
   question: string
@@ -25,6 +26,7 @@ export default function FaqBuilderPage() {
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<FaqResult | null>(null)
   const [copied, setCopied] = useState<'html' | 'schema' | null>(null)
+  const [platform, setPlatform] = useState<Platform>('generic')
 
   const handleGenerate = async () => {
     if (!businessName || !category || !city || !state) return
@@ -203,16 +205,36 @@ export default function FaqBuilderPage() {
             </CardContent>
           </Card>
 
-          {/* Instructions for Bob */}
+          {/* Platform-specific instructions */}
           <Card className="bg-[#FFD700]/5 border-[#FFD700]/20">
             <CardContent className="p-5">
-              <h3 className="font-semibold text-[#FFD700] text-sm mb-2">📧 Send this to your website person</h3>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-semibold text-[#FFD700] text-sm">📧 How to add this to your website</h3>
+                <select
+                  value={platform}
+                  onChange={(e) => setPlatform(e.target.value as Platform)}
+                  className="bg-white/5 border border-white/10 rounded px-2 py-1 text-xs text-white focus:outline-none focus:border-[#FFD700]/50"
+                >
+                  {getAllPlatforms().map(p => (
+                    <option key={p.id} value={p.id} className="bg-[#111]">{p.name}</option>
+                  ))}
+                </select>
+              </div>
               <ol className="text-white/60 text-sm space-y-2 list-decimal list-inside">
-                <li>Click &quot;Copy HTML + Schema&quot; above</li>
-                <li>Email it to whoever manages your website</li>
-                <li>Tell them: &quot;Please add this FAQ section to our homepage or a new FAQ page, and paste the schema code in the head tag&quot;</li>
-                <li>That&apos;s it! AI search engines will start finding these answers within 1-2 weeks of crawling your site.</li>
+                {getInstructions(platform).faqHtml.map((step, i) => (
+                  <li key={i}>{step}</li>
+                ))}
               </ol>
+              {getInstructions(platform).pitfalls.length > 0 && (
+                <div className="mt-3 pt-3 border-t border-white/10">
+                  <p className="text-white/40 text-xs font-medium mb-1">⚠️ Watch out for:</p>
+                  <ul className="text-white/40 text-xs space-y-1 list-disc list-inside">
+                    {getInstructions(platform).pitfalls.map((p, i) => (
+                      <li key={i}>{p}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </CardContent>
           </Card>
         </>

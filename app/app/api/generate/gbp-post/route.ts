@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic'
 import { auth } from '@clerk/nextjs/server'
-import Anthropic from '@anthropic-ai/sdk'
+import { generateText } from '@/lib/anthropic-client'
 import { createServerClient } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -33,19 +33,7 @@ export async function POST(req: NextRequest) {
     service_areas = [],
   } = body
 
-  const apiKey = process.env.ANTHROPIC_API_KEY
-  if (!apiKey || apiKey === 'placeholder') {
-    return NextResponse.json(mockPost(business_name, business_category, primary_city))
-  }
-
-  const client = new Anthropic({ apiKey })
-
-  const message = await client.messages.create({
-    model: 'claude-haiku-4-5',
-    max_tokens: 600,
-    messages: [{
-      role: 'user',
-      content: `Generate a Google Business Profile post for this local business.
+  const prompt = `Generate a Google Business Profile post for this local business.
 
 Business: ${business_name}
 Category: ${business_category}
@@ -63,16 +51,18 @@ Requirements:
 
 Respond in JSON only:
 {"title":"...","body":"...","call_to_action":"CALL"}`
-    }],
-  })
 
-  const text = message.content[0].type === 'text' ? message.content[0].text : ''
+  const aiResult = await generateText(prompt, { maxTokens: 600 })
 
   let result
-  try {
-    const jsonMatch = text.match(/\{[\s\S]*\}/)
-    result = jsonMatch ? JSON.parse(jsonMatch[0]) : mockPost(business_name, business_category, primary_city)
-  } catch {
+  if (aiResult.success && aiResult.text) {
+    try {
+      const jsonMatch = aiResult.text.match(/\{[\s\S]*\}/)
+      result = jsonMatch ? JSON.parse(jsonMatch[0]) : mockPost(business_name, business_category, primary_city)
+    } catch {
+      result = mockPost(business_name, business_category, primary_city)
+    }
+  } else {
     result = mockPost(business_name, business_category, primary_city)
   }
 
@@ -91,5 +81,5 @@ Respond in JSON only:
     }
   }
 
-  return NextResponse.json(result)
+  return NextResponse.json({ ...result, isDegraded: aiResult.isDegraded })
 }

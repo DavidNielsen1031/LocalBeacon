@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic'
 import { auth } from '@clerk/nextjs/server'
-import Anthropic from '@anthropic-ai/sdk'
+import { generateText } from '@/lib/anthropic-client'
 import { NextRequest, NextResponse } from 'next/server'
 
 const mockResponses: Record<number, (name: string, biz: string) => string> = {
@@ -32,20 +32,7 @@ export async function POST(req: NextRequest) {
     business_category = '',
   } = body
 
-  const apiKey = process.env.ANTHROPIC_API_KEY
-  if (!apiKey || apiKey === 'placeholder') {
-    const fn = mockResponses[rating] || mockResponses[3]
-    return NextResponse.json({ response: fn(reviewer_name, business_name) })
-  }
-
-  const client = new Anthropic({ apiKey })
-
-  const message = await client.messages.create({
-    model: 'claude-haiku-4-5',
-    max_tokens: 250,
-    messages: [{
-      role: 'user',
-      content: `Write a Google review response for this local business.
+  const prompt = `Write a Google review response for this local business.
 
 Business: ${business_name}${business_category ? ` (${business_category})` : ''}
 Reviewer: ${reviewer_name}
@@ -63,10 +50,14 @@ Rules:
 - Sound human, not corporate
 - Vary the opening (don't start with "Thank you for your review")
 
-Return only the response text.`,
-    }],
-  })
+Return only the response text.`
 
-  const response = message.content[0].type === 'text' ? message.content[0].text.trim() : ''
-  return NextResponse.json({ response })
+  const result = await generateText(prompt, { maxTokens: 250 })
+
+  if (result.success && result.text) {
+    return NextResponse.json({ response: result.text.trim(), isDegraded: false })
+  }
+
+  const fn = mockResponses[rating] || mockResponses[3]
+  return NextResponse.json({ response: fn(reviewer_name, business_name), isDegraded: result.isDegraded })
 }

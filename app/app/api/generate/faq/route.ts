@@ -1,11 +1,7 @@
 export const dynamic = 'force-dynamic'
 import { auth } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
-import Anthropic from '@anthropic-ai/sdk'
-
-const anthropic = process.env.LB_ANTHROPIC_API_KEY
-  ? new Anthropic({ apiKey: process.env.LB_ANTHROPIC_API_KEY })
-  : null
+import { generateText } from '@/lib/anthropic-client'
 
 interface FaqRequest {
   businessName: string
@@ -31,23 +27,7 @@ export async function POST(req: NextRequest) {
     ? `Services offered: ${services.join(', ')}`
     : `Common services for a ${category}`
 
-  if (!anthropic) {
-    // Return demo FAQ data
-    return NextResponse.json({
-      businessName,
-      faqs: getDemoFaqs(businessName, category, city, state),
-      schema: generateFaqSchema(getDemoFaqs(businessName, category, city, state)),
-      isDemo: true,
-    })
-  }
-
-  try {
-    const message = await anthropic.messages.create({
-      model: 'claude-haiku-4-5-20250414',
-      max_tokens: 2000,
-      messages: [{
-        role: 'user',
-        content: `Generate exactly ${count} FAQ questions and answers for a local business website. These FAQs must be optimized for AI search engines (ChatGPT, Perplexity, Google AI Overviews) to cite.
+  const prompt = `Generate exactly ${count} FAQ questions and answers for a local business website. These FAQs must be optimized for AI search engines (ChatGPT, Perplexity, Google AI Overviews) to cite.
 
 Business: ${businessName}
 Category: ${category}
@@ -64,18 +44,16 @@ RULES:
 7. NO generic filler. Every answer must contain a specific, useful fact.
 
 Return as JSON array: [{"question": "...", "answer": "..."}]
-Return ONLY the JSON array, nothing else.`,
-      }],
-    })
+Return ONLY the JSON array, nothing else.`
 
-    const text = message.content[0].type === 'text' ? message.content[0].text : ''
+  const result = await generateText(prompt)
+
+  if (result.success && result.text) {
     let faqs: Array<{question: string; answer: string}>
-
     try {
-      faqs = JSON.parse(text)
+      faqs = JSON.parse(result.text)
     } catch {
-      // Try extracting JSON from response
-      const match = text.match(/\[[\s\S]*\]/)
+      const match = result.text.match(/\[[\s\S]*\]/)
       faqs = match ? JSON.parse(match[0]) : getDemoFaqs(businessName, category, city, state)
     }
 
@@ -85,15 +63,16 @@ Return ONLY the JSON array, nothing else.`,
       schema: generateFaqSchema(faqs),
       isDemo: false,
     })
-  } catch (err) {
-    console.error('FAQ generation error:', err)
-    return NextResponse.json({
-      businessName,
-      faqs: getDemoFaqs(businessName, category, city, state),
-      schema: generateFaqSchema(getDemoFaqs(businessName, category, city, state)),
-      isDemo: true,
-    })
   }
+
+  // Degraded mode — return demo data
+  return NextResponse.json({
+    businessName,
+    faqs: getDemoFaqs(businessName, category, city, state),
+    schema: generateFaqSchema(getDemoFaqs(businessName, category, city, state)),
+    isDemo: true,
+    isDegraded: result.isDegraded,
+  })
 }
 
 function getDemoFaqs(name: string, category: string, city: string, state: string) {
