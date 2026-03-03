@@ -61,7 +61,7 @@ export default function SettingsPage() {
             and AI review replies.
           </p>
           <Button className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold text-sm">
-            Upgrade to Solo — $29/month
+            Upgrade to Solo — $49/month
           </Button>
         </CardContent>
       </Card>

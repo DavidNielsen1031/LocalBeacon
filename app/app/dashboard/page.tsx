@@ -4,41 +4,102 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { createServerClient } from "@/lib/supabase";
+
+async function getBusinessData(userId: string) {
+  const supabase = createServerClient();
+  if (!supabase) return null;
+
+  // Get business for this user
+  const { data: business } = await supabase
+    .from("businesses")
+    .select("*")
+    .eq("user_id", userId)
+    .single();
+
+  if (!business) return null;
+
+  // Get content counts
+  const { count: postsCount } = await supabase
+    .from("content_items")
+    .select("*", { count: "exact", head: true })
+    .eq("business_id", business.id)
+    .eq("type", "gbp_post");
+
+  const { count: pagesCount } = await supabase
+    .from("content_items")
+    .select("*", { count: "exact", head: true })
+    .eq("business_id", business.id)
+    .eq("type", "city_page");
+
+  const { count: reviewsCount } = await supabase
+    .from("content_items")
+    .select("*", { count: "exact", head: true })
+    .eq("business_id", business.id)
+    .eq("type", "review_reply");
+
+  // Get recent content items
+  const { data: recentItems } = await supabase
+    .from("content_items")
+    .select("*")
+    .eq("business_id", business.id)
+    .order("created_at", { ascending: false })
+    .limit(5);
+
+  // Get latest AEO scan
+  const { data: aeoScan } = await supabase
+    .from("aeo_scans")
+    .select("*")
+    .eq("business_id", business.id)
+    .order("scanned_at", { ascending: false })
+    .limit(1)
+    .single();
+
+  return {
+    business,
+    postsCount: postsCount ?? 0,
+    pagesCount: pagesCount ?? 0,
+    reviewsCount: reviewsCount ?? 0,
+    recentItems: recentItems ?? [],
+    aeoScore: aeoScan?.score ?? null,
+  };
+}
 
 export default async function DashboardPage() {
   const user = await currentUser();
   const firstName = user?.firstName ?? "there";
+  const userId = user?.id ?? "";
 
-  // TODO: Fetch real data from Supabase once business is created
-  const hasBusiness = false; // Will be true after onboarding
-  const businessName = "Your Business";
-
-  // Activity feed — never empty. Shows what's happening or what to do next.
-  const activity = hasBusiness
-    ? [
-        { icon: "✅", text: "4 Google posts generated for this week", time: "Just now", action: "/dashboard/posts" },
-        { icon: "📄", text: "3 local city pages ready to review", time: "Today", action: "/dashboard/pages" },
-        { icon: "⭐", text: "2 reviews waiting for your response", time: "Today", action: "/dashboard/reviews" },
-      ]
-    : [
-        { icon: "🔗", text: "Connect your Google listing to get started", time: "First step", action: "/onboarding" },
-        { icon: "📝", text: "We'll generate your first Google posts automatically", time: "After setup", action: null },
-        { icon: "🌐", text: "Local city pages will be built for areas you serve", time: "After setup", action: null },
-        { icon: "⭐", text: "Review replies will be drafted as new reviews come in", time: "After setup", action: null },
-      ];
+  const data = userId ? await getBusinessData(userId) : null;
+  const hasBusiness = !!data?.business;
 
   const stats = hasBusiness
     ? [
-        { label: "Google Posts", value: "4", sub: "scheduled this week", icon: "📍", href: "/dashboard/posts" },
-        { label: "City Pages", value: "3", sub: "cities covered", icon: "🌐", href: "/dashboard/pages" },
-        { label: "Reviews", value: "2", sub: "need your response", icon: "⭐", href: "/dashboard/reviews" },
-        { label: "Visibility", value: "—", sub: "first report in 30 days", icon: "📊", href: "/dashboard/reviews" },
+        { label: "Google Posts", value: String(data!.postsCount), sub: "posts created", icon: "📍", href: "/dashboard/posts" },
+        { label: "City Pages", value: String(data!.pagesCount), sub: "cities covered", icon: "🌐", href: "/dashboard/pages" },
+        { label: "Reviews", value: String(data!.reviewsCount), sub: "replies drafted", icon: "⭐", href: "/dashboard/reviews" },
+        { label: "AI Readiness", value: data!.aeoScore !== null ? `${data!.aeoScore}` : "—", sub: data!.aeoScore !== null ? "out of 100" : "run your first scan", icon: "🤖", href: "/dashboard/ai-readiness" },
       ]
     : [
         { label: "Google Posts", value: "—", sub: "connect listing to start", icon: "📍", href: "/onboarding" },
         { label: "City Pages", value: "—", sub: "set up your service areas", icon: "🌐", href: "/onboarding" },
         { label: "Reviews", value: "—", sub: "we'll draft replies for you", icon: "⭐", href: "/onboarding" },
-        { label: "Visibility", value: "—", sub: "first report in 30 days", icon: "📊", href: "/onboarding" },
+        { label: "AI Readiness", value: "—", sub: "scan your website", icon: "🤖", href: "/dashboard/ai-readiness" },
+      ];
+
+  // Activity feed — real data if available, onboarding guide if not
+  const activity = hasBusiness && data!.recentItems.length > 0
+    ? data!.recentItems.map(item => ({
+        icon: item.type === "gbp_post" ? "📝" : item.type === "city_page" ? "🌐" : item.type === "review_reply" ? "⭐" : "📄",
+        text: item.title || `${item.type.replace("_", " ")} created`,
+        time: new Date(item.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+        action: item.type === "gbp_post" ? "/dashboard/posts" : item.type === "city_page" ? "/dashboard/pages" : "/dashboard/reviews",
+      }))
+    : [
+        { icon: "🔗", text: "Connect your Google listing to get started", time: "First step", action: "/onboarding" },
+        { icon: "📝", text: "Generate your first Google post", time: "Step 2", action: "/dashboard/posts" },
+        { icon: "🌐", text: "Build city pages for areas you serve", time: "Step 3", action: "/dashboard/pages" },
+        { icon: "🤖", text: "Check your AI Readiness score", time: "Step 4", action: "/dashboard/ai-readiness" },
       ];
 
   return (
@@ -57,7 +118,7 @@ export default async function DashboardPage() {
               Welcome back, {firstName}!
             </h1>
             <p className="text-white/50 mt-1">
-              Here&apos;s what LocalBeacon is doing for <strong className="text-white">{businessName}</strong> this week.
+              Here&apos;s what&apos;s happening with <strong className="text-white">{data!.business.name}</strong>.
             </p>
           </>
         ) : (
@@ -66,7 +127,7 @@ export default async function DashboardPage() {
               Welcome, {firstName}! Let&apos;s get you set up.
             </h1>
             <p className="text-white/50 mt-1">
-              Connect your Google listing and we&apos;ll start generating posts, pages, and review replies automatically.
+              Connect your Google listing and we&apos;ll start writing posts, pages, and review replies for your business.
             </p>
           </>
         )}
@@ -79,7 +140,7 @@ export default async function DashboardPage() {
             <div>
               <h3 className="text-white font-bold text-lg mb-1">Connect your Google listing</h3>
               <p className="text-white/50 text-sm">
-                It takes 2 minutes. We&apos;ll auto-detect your business info and generate your first posts immediately.
+                It takes 2 minutes. We&apos;ll auto-detect your business info and write your first posts immediately.
               </p>
             </div>
             <Link href="/onboarding">
@@ -112,7 +173,7 @@ export default async function DashboardPage() {
       {/* Activity Feed */}
       <div className="mb-10">
         <h2 className="text-lg font-semibold text-white mb-4">
-          {hasBusiness ? "This Week" : "What happens after setup"}
+          {hasBusiness && data!.recentItems.length > 0 ? "Recent Activity" : "Getting Started"}
         </h2>
         <div className="space-y-3">
           {activity.map((item, i) => (
@@ -147,27 +208,27 @@ export default async function DashboardPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {[
             {
-              title: hasBusiness ? "Review This Week's Posts" : "Generate Your First Posts",
+              title: hasBusiness ? "Write New Posts" : "Generate Your First Posts",
               description: hasBusiness
-                ? "4 posts are ready — review, edit, or let them auto-publish."
-                : "Connect your Google listing and we'll create 4 posts instantly.",
+                ? "Create fresh Google post drafts for your business."
+                : "Connect your Google listing and we'll write posts for you.",
               icon: "📝",
               href: hasBusiness ? "/dashboard/posts" : "/onboarding",
-              cta: hasBusiness ? "View Posts" : "Get Started",
+              cta: hasBusiness ? "Write Posts" : "Get Started",
             },
             {
-              title: "Add a City Page",
-              description: "Create a local page to rank for searches in a specific city or neighborhood.",
+              title: "Build a City Page",
+              description: "Create a local page to target searches in a specific city or neighborhood.",
               icon: "🌐",
               href: "/dashboard/pages",
-              cta: "Add City",
+              cta: "Build Page",
             },
             {
-              title: "Respond to Reviews",
-              description: "Draft professional, thoughtful replies to your Google reviews with AI.",
-              icon: "⭐",
-              href: "/dashboard/reviews",
-              cta: "View Reviews",
+              title: "Check AI Readiness",
+              description: "Scan any URL and see how visible it is to AI search engines like ChatGPT.",
+              icon: "🤖",
+              href: "/dashboard/ai-readiness",
+              cta: "Run Scan",
             },
           ].map((action) => (
             <Card key={action.title} className="bg-white/5 border-white/10 flex flex-col">

@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic';
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import DashboardSidebar from "@/components/dashboard/sidebar";
+import { DegradedBanner } from "@/components/degraded-banner";
 
 export default async function DashboardLayout({
   children,
@@ -17,7 +18,10 @@ export default async function DashboardLayout({
   return (
     <div className="flex min-h-screen bg-black text-white">
       <DashboardSidebar />
-      <main className="flex-1 flex flex-col min-h-screen">{children}</main>
+      <main className="flex-1 flex flex-col min-h-screen">
+        <DegradedBanner />
+        {children}
+      </main>
     </div>
   );
 }

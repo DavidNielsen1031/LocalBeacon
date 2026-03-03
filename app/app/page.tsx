@@ -24,48 +24,48 @@ const outcomes = [
     Icon: MapPin,
     title: "Show up on Google Maps",
     description:
-      "Weekly posts keep your listing active. Google rewards that with higher placement when locals search.",
+      "Weekly posts keep your listing fresh and active. An active listing signals to Google that your business is open and engaged.",
   },
   {
     Icon: Search,
     title: 'Rank in every city you serve',
     description:
-      "We build a local page for each neighborhood and city. More pages, more search results, more calls.",
+      "We build a local page for each neighborhood and city. More pages targeting local keywords means more chances to appear in search results.",
   },
   {
     Icon: Bot,
-    title: "Visible to AI assistants",
+    title: "Get found by AI search engines",
     description:
-      "When someone asks Siri, ChatGPT, or Google AI for a local recommendation, your business shows up.",
+      "We optimize your content so AI assistants like ChatGPT, Perplexity, and Google AI are more likely to recommend your business.",
   },
   {
     Icon: Star,
     title: "Every review gets a reply",
     description:
-      "Unanswered reviews scare off customers. We write professional replies so your reputation stays strong.",
+      "Unanswered reviews scare off customers. We draft professional replies you can post — keeping your reputation strong.",
   },
   {
     Icon: BarChart3,
-    title: "Monthly proof it's working",
+    title: "AI Readiness score",
     description:
-      "A report that shows exactly how many people found you, clicked, and called. No guesswork.",
+      "See exactly how visible your business is to AI search engines with a 15-point audit and actionable recommendations.",
   },
 ];
 
 const withoutVsWith = {
   without: [
-    "You forget to post for weeks — Google thinks you're inactive",
+    "You forget to post for weeks — your listing goes stale",
     "Competitors show up above you in search results",
     "Bad reviews sit unanswered — scaring away new customers",
-    "You have no idea if anything you're doing is working",
+    "You have no idea how visible you are to AI search engines",
     "You spend hours on marketing instead of running your business",
   ],
   with: [
-    "Fresh posts go out every week. You don't touch a thing.",
+    "Fresh posts are written for you every week — ready to publish",
     "Local pages put you in search results across every city you serve",
-    "Every review gets a professional reply within 24 hours",
-    "Monthly report shows calls, views, and search ranking changes",
-    "You run your business. Marketing runs itself.",
+    "Every review gets a professional reply drafted for you",
+    "AI Readiness score shows exactly where you stand",
+    "You run your business. We write the marketing.",
   ],
 };
 
@@ -76,7 +76,7 @@ const plans = [
     period: "forever",
     tagline: "Try it out — see what LocalBeacon can do.",
     features: [
-      "5 Google posts per month",
+      "5 Google post drafts per month",
       "3 local city pages",
       "1 business location",
       "Copy & post to Google yourself",
@@ -89,14 +89,14 @@ const plans = [
     name: "Solo",
     price: "$49",
     period: "/month",
-    tagline: "Weekly posts, review replies, city pages. Done for you.",
+    tagline: "AI-written content for your local business, every week.",
     features: [
-      "Unlimited Google posts — auto-scheduled weekly",
+      "Unlimited Google post drafts — generated weekly",
       "10 local city pages with SEO optimization",
-      "3 business locations",
-      "Professional review replies",
-      "1 blog post per month",
-      "Monthly visibility report",
+      "AI-written review replies",
+      "Blog post generator",
+      "AI Readiness score & recommendations",
+      "Schema markup & llms.txt generator",
     ],
     cta: "Start Solo — $49/mo",
     href: "/sign-up",
@@ -106,14 +106,13 @@ const plans = [
     name: "Agency",
     price: "$99",
     period: "/month",
-    tagline: "Run local marketing for all your clients.",
+    tagline: "Everything in Solo — built for agencies managing clients.",
     features: [
       "Everything in Solo — unlimited",
-      "Unlimited client locations",
-      "Multi-client dashboard",
-      "White-label reports with your branding",
-      "Competitor monitoring & alerts",
-      "Priority support",
+      "Unlimited content generation",
+      "FAQ builder with schema markup",
+      "Priority email support",
+      "Multi-client & white-label — coming soon",
     ],
     cta: "Start Agency — $99/mo",
     href: "/sign-up",
@@ -144,7 +143,7 @@ const faqs = [
   },
   {
     q: "How is this different from hiring an SEO agency?",
-    a: "An agency charges $800-1,500/month and you wait weeks for results. LocalBeacon does the same work — Google posts, local pages, review replies, rank tracking — for $49/month, starting immediately.",
+    a: "An agency charges $800-1,500/month and you wait weeks for results. LocalBeacon writes your Google posts, builds local pages, and drafts review replies — for $49/month, starting immediately.",
   },
   {
     q: "Will AI assistants like ChatGPT recommend my business?",
@@ -166,14 +165,14 @@ const steps = [
   {
     num: "2",
     Icon: FileText,
-    title: "We generate your content",
+    title: "We write your content",
     desc: "LocalBeacon writes posts, city pages, and review replies — tailored to your business and location.",
   },
   {
     num: "3",
     Icon: ThumbsUp,
-    title: "Your phone starts ringing",
-    desc: "Fresh content goes live every week. More visibility, more calls. You don't do anything.",
+    title: "Review, post, grow",
+    desc: "Review what we wrote, post it to Google, and watch your visibility grow. Auto-publishing coming soon.",
   },
 ];
 
@@ -376,7 +375,7 @@ export default function LandingPage() {
               }}
             >
               Your phone rings more.{" "}
-              <span style={{ color: ORANGE }}>We handle everything.</span>
+              <span style={{ color: ORANGE }}>We create everything.</span>
             </h1>
 
             <p
@@ -388,8 +387,8 @@ export default function LandingPage() {
                 maxWidth: "520px",
               }}
             >
-              LocalBeacon posts to your Google listing every week, builds local pages for
-              every city you serve, and replies to your reviews. More visibility, more calls.
+              LocalBeacon writes Google posts for your business every week, builds local pages for
+              every city you serve, and drafts replies to your reviews. More visibility, more calls.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 items-start">
@@ -524,7 +523,7 @@ export default function LandingPage() {
           className="flex flex-wrap items-center justify-center gap-6"
         >
           <span style={{ color: SLATE, fontSize: "0.875rem", fontWeight: 500 }}>
-            Trusted by local businesses across the US:
+            Built for local businesses:
           </span>
           {["Plumbers", "HVAC", "Dentists", "Roofers", "Lawyers", "Landscapers"].map((industry) => (
             <span
@@ -756,7 +755,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Testimonial ── */}
+      {/* ── Why We Built This ── */}
       <section style={{ backgroundColor: CREAM, padding: "80px 24px", borderTop: `1px solid ${MIST}` }}>
         <div style={{ maxWidth: "800px", margin: "0 auto", textAlign: "center" }}>
           <p
@@ -770,30 +769,30 @@ export default function LandingPage() {
               marginBottom: "32px",
             }}
           >
-            &ldquo;I used to spend Sunday evenings trying to come up with things to post on Google. Now it
-            just happens. My calls are up and I haven&apos;t thought about marketing in months.&rdquo;
+            &ldquo;Local businesses shouldn&apos;t need a marketing degree to show up on Google.
+            We built LocalBeacon so business owners can focus on what they do best — while AI
+            handles the content that gets them found.&rdquo;
           </p>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "16px" }}>
-            {/* Placeholder avatar */}
             <div
               style={{
                 width: "52px",
                 height: "52px",
                 borderRadius: "9999px",
-                backgroundColor: `${NAVY}20`,
+                backgroundColor: `${ORANGE}20`,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 fontWeight: 700,
-                color: NAVY,
+                color: ORANGE,
                 fontSize: "1.125rem",
               }}
             >
-              M
+              D
             </div>
             <div style={{ textAlign: "left" }}>
-              <p style={{ fontWeight: 700, color: NAVY, fontSize: "0.9375rem" }}>Mike R.</p>
-              <p style={{ color: SLATE, fontSize: "0.875rem" }}>Owner, Mike&apos;s Plumbing — Denver, CO</p>
+              <p style={{ fontWeight: 700, color: NAVY, fontSize: "0.9375rem" }}>David Nielsen</p>
+              <p style={{ color: SLATE, fontSize: "0.875rem" }}>Founder, Perpetual Agility LLC</p>
             </div>
           </div>
         </div>
@@ -995,7 +994,7 @@ export default function LandingPage() {
               marginBottom: "16px",
             }}
           >
-            Connect your Google listing. First posts go out today.
+            Connect your Google listing. First posts written in minutes.
           </h2>
           <p style={{ color: "rgba(255,255,255,0.65)", fontSize: "1.0625rem", lineHeight: 1.6, marginBottom: "36px" }}>
             Takes 2 minutes. No credit card. Cancel whenever.

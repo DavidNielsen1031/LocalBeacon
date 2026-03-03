@@ -25,14 +25,14 @@ const plans = [
     name: "Solo",
     price: "$49",
     period: "/month",
-    tagline: "Hands-free local marketing. More calls, zero effort.",
+    tagline: "AI-written content for your local business, every week.",
     outcomes: [
-      "Unlimited Google posts — auto-scheduled weekly",
+      "Unlimited Google post drafts — generated weekly",
       "10 local city pages with SEO optimization",
-      "3 business locations",
-      "Professional review replies",
-      "1 blog post per month for your website",
-      "Monthly visibility report",
+      "AI-written review replies",
+      "Blog post generator",
+      "AI Readiness score & recommendations",
+      "Schema markup & llms.txt generator",
     ],
     cta: "Start Solo — $49/mo",
     href: "/sign-up",
@@ -42,14 +42,13 @@ const plans = [
     name: "Agency",
     price: "$99",
     period: "/month",
-    tagline: "Run local marketing for all your clients under your brand.",
+    tagline: "Everything in Solo — built for agencies managing clients.",
     outcomes: [
       "Everything in Solo — unlimited",
-      "Unlimited client locations",
-      "Multi-client dashboard",
-      "White-label reports with your branding",
-      "Competitor monitoring & alerts",
-      "Priority support",
+      "Unlimited content generation",
+      "FAQ builder with schema markup",
+      "Priority email support",
+      "Multi-client & white-label reports — coming soon",
     ],
     cta: "Start Agency — $99/mo",
     href: "/sign-up",
@@ -72,7 +71,7 @@ const faqs = [
   },
   {
     q: "How is this different from hiring an SEO agency?",
-    a: "An agency charges $800-1,500/month and you wait weeks to see anything happen. LocalBeacon does the same work — Google posts, local pages, review replies, rank tracking — for $49/month, and your first content is generated within minutes of signing up.",
+    a: "An agency charges $800-1,500/month and you wait weeks to see anything happen. LocalBeacon writes your Google posts, builds local pages, and drafts review replies — for $49/month. Your first content is generated within minutes of signing up.",
   },
   {
     q: "Who writes the content? Will it sound generic?",
@@ -80,11 +79,11 @@ const faqs = [
   },
   {
     q: "How does LocalBeacon compare to BrightLocal?",
-    a: "BrightLocal costs $39-59/month per location and focuses on rank tracking and citations. LocalBeacon costs $49/month and does that PLUS writes your Google posts, builds local city pages, and drafts your review responses. More features, lower price.",
+    a: "BrightLocal focuses on rank tracking and citations. LocalBeacon focuses on content creation — we write your Google posts, build local city pages, draft review responses, and optimize your business for AI search engines. Different tools for different needs.",
   },
   {
     q: "What if I manage multiple clients? (Agency plan)",
-    a: "The Agency plan gives you a multi-client dashboard where you manage all your clients from one place. White-label reports go out under your brand. Your clients never see LocalBeacon — they just see great results from their marketing agency.",
+    a: "The Agency plan gives you unlimited content generation across all your clients. Multi-client management and white-label reports are coming soon — for now, you can generate content for any client from your dashboard.",
   },
 ];
 
@@ -227,15 +226,15 @@ export default function PricingPage() {
           <h2 className="text-2xl font-bold mb-8">Everything included — no hidden fees</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-left">
             {[
-              { emoji: "📝", label: "Weekly Google posts" },
+              { emoji: "📝", label: "AI-written Google posts" },
               { emoji: "🌐", label: "Local city pages" },
               { emoji: "⭐", label: "Review reply drafts" },
-              { emoji: "📊", label: "Rank tracking" },
-              { emoji: "📈", label: "Monthly reports" },
-              { emoji: "🏷️", label: "SEO tags & structured data" },
-              { emoji: "🔔", label: "Competitor alerts" },
+              { emoji: "🤖", label: "AI Readiness scoring" },
+              { emoji: "📄", label: "FAQ & blog generation" },
+              { emoji: "🏷️", label: "Schema markup generator" },
+              { emoji: "📋", label: "llms.txt generator" },
               { emoji: "📱", label: "Works on mobile" },
-              { emoji: "🎨", label: "White-label (Agency)" },
+              { emoji: "🔍", label: "Listing health audit" },
             ].map(f => (
               <div key={f.label} className="flex items-center gap-3 p-3 rounded-lg bg-white/5">
                 <span className="text-xl">{f.emoji}</span>
