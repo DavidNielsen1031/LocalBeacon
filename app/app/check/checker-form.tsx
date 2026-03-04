@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 
 interface CheckResult {
   id: string
@@ -60,7 +61,14 @@ function getGrade(score: number): { letter: string; color: string; summary: stri
 }
 
 export function CheckerForm() {
+  const searchParams = useSearchParams()
   const [url, setUrl] = useState('')
+
+  // Pre-fill URL from query param
+  useEffect(() => {
+    const urlParam = searchParams.get('url')
+    if (urlParam) setUrl(urlParam)
+  }, [searchParams])
   const [competitorUrl, setCompetitorUrl] = useState('')
   const [showCompetitor, setShowCompetitor] = useState(false)
   const [viewState, setViewState] = useState<ViewState>('idle')
@@ -267,7 +275,7 @@ export function CheckerForm() {
           <div className="bg-[#FAFAF7] rounded-xl p-6 border border-black/5">
             <h3 className="font-semibold text-[#1B2A4A] mb-1">See your full breakdown</h3>
             <p className="text-sm text-[#1B2A4A]/50 mb-4">
-              Get the detailed report — which signals passed, which failed, and exactly how to fix each one.
+              See which of the 14 signals passed or failed, and get step-by-step instructions to fix each one.
             </p>
             <form onSubmit={handleEmailSubmit} className="flex gap-2">
               <input

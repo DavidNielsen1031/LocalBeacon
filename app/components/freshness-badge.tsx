@@ -54,7 +54,7 @@ export function FreshnessBadge({ daysSinceLastPost, status, lastPostDate }: Fres
   return (
     <div className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-red-500/10 border border-red-500/30 text-sm text-red-400">
       <span>🔴</span>
-      <span>Last post: {dayLabel} — Your listing needs attention!</span>
+      <span>Last post: {dayLabel} — Your Google listing needs a new post!</span>
     </div>
   )
 }

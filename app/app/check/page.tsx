@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { CheckerForm } from './checker-form'
 
 export const metadata: Metadata = {
@@ -38,17 +39,19 @@ export default function CheckPage() {
           FREE TOOL — NO SIGNUP REQUIRED
         </div>
         <h1 className="text-4xl md:text-5xl font-bold text-[#1B2A4A] leading-tight mb-4 font-[var(--font-fraunces)]">
-          Can AI search engines <br className="hidden md:block" />
+          Can ChatGPT and Google AI <br className="hidden md:block" />
           find your business?
         </h1>
         <p className="text-lg text-[#1B2A4A]/60 max-w-xl mx-auto mb-10">
-          ChatGPT, Google AI, and Perplexity are replacing traditional search.
-          Check if your website is ready — in 10 seconds.
+          When people ask ChatGPT, Google AI, or Perplexity for a recommendation,
+          will they mention you? Find out in 10 seconds.
         </p>
       </section>
 
       {/* Checker Form */}
-      <CheckerForm />
+      <Suspense fallback={<div className="max-w-2xl mx-auto px-6 pb-8"><div className="bg-white rounded-2xl shadow-lg border border-black/5 p-6 animate-pulse h-20" /></div>}>
+        <CheckerForm />
+      </Suspense>
 
       {/* How It Works */}
       <section className="max-w-3xl mx-auto px-6 py-16">
