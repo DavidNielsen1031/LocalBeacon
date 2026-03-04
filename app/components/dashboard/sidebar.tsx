@@ -16,6 +16,7 @@ const navItems = [
   { href: "/dashboard/llms-txt", label: "AI Discovery File", icon: "📄" },
   { href: "/dashboard/audit", label: "Listing Health", icon: "🩺" },
   { href: "/dashboard/schema", label: "Schema Markup", icon: "🔗" },
+  { href: "/dashboard/competitors", label: "Competitors", icon: "🏆" },
   { href: "/dashboard/reports", label: "Your Monthly Report", icon: "📊" },
   { href: "/dashboard/settings", label: "Settings", icon: "⚙️" },
 ];
