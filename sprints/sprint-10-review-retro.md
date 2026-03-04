@@ -178,38 +178,101 @@ Score dropped from Sprint 9's 87 to 77 (-10 points). Root cause: S10-01 and S10-
 
 ## 🔮 TOP 3 RECOMMENDATIONS — Continuous Improvement
 
-### 1. Establish a Sub-Agent Reliability Standard
-**Problem:** 2/3 delegated tasks timed out this sprint. We're getting delegation *volume* right (60%) but not delegation *quality* (33% full success).
+*These recommendations span the full Sprint OS flywheel: planning, execution, delegation, documentation, infrastructure, and memory. Each one compounds — improving one makes the others easier.*
 
-**Recommendation:** Create a pre-delegation checklist:
-- [ ] Explicit absolute file paths for every file to create/modify
-- [ ] Timeout set by size: S=10m, M=15m, L=20m, XL=30m
-- [ ] Include a `tree` output of the project structure in TASK.md
-- [ ] Define the exact import paths to use (`@/lib/...` vs relative)
-- [ ] Add "verify with `npx next build` before completing" as final step
+### 1. Create a Sprint Starter Kit (Planning Flywheel)
+**Category:** Planning · Process · Documentation  
+**Problem:** Every sprint starts from scratch — re-reading the roadmap, remembering what Speclint expects, recalling delegation thresholds, checking which personas to run. This is repeated cognitive overhead that should be automated.
 
-**Target:** 80% full-success rate by Sprint 12.
+**Recommendation:** Build a `sprint-os/SPRINT_STARTER.md` template that Alexander loads at the start of every sprint:
+```
+## Sprint Starter Checklist
+1. Read SPRINT_ROADMAP.md → identify items for this sprint
+2. Read previous sprint retro → carry forward action items
+3. Check SPRINT_STATE.md → confirm previous sprint is Closed
+4. Co-plan scope with David → persona-validate each item
+5. Write spec → run Speclint (target 85+)
+6. For each L+ item: write TASK.md with pre-delegation checklist
+7. Post plan to Discord → get approval
+8. Set SPRINT_STATE to Active
+```
 
-### 2. Automate Supabase Migrations
-**Problem:** We've now been blocked on manual Supabase table creation for 2 sprints. David has to open the Dashboard SQL Editor and paste SQL manually. This breaks the autonomous execution loop.
+**Why it compounds:** Eliminates planning variance. Sprint 8 scored 50% process because steps were forgotten. Sprint 10 scored 100% because they'd been drilled. A checklist makes 100% the default, not the achievement.
 
-**Recommendation:** One of:
-- **(a)** Get psql connection working (debug the password auth issue — likely URL encoding or pooler port)
-- **(b)** Add a migration API route (`/api/admin/migrate`) that runs SQL via the Supabase JS client with service role key (protected by admin auth check)
-- **(c)** Use the Supabase CLI with `supabase db push` for schema management
+**Also add:**
+- `sprint-os/TASK_TEMPLATE.md` — standard delegation spec with project `tree` output, absolute paths, timeout by size, import patterns
+- `sprint-os/RETRO_TEMPLATE.md` — this report format as a template (including Top 3 Recs)
 
-**Impact:** Every future sprint with schema changes (S11 will have multi-client tables) will benefit.
+### 2. Sprint Memory & Cross-Sprint Learning (Memory Flywheel)
+**Category:** Memory · File System · Knowledge Management  
+**Problem:** Lessons learned in Sprint 8 were partially forgotten by Sprint 10. Action items from retros sometimes carry forward, sometimes don't. The daily memory files capture *what happened* but not *what we learned that changes how we work*.
 
-### 3. Build a "Sprint Pulse" During Execution
-**Problem:** David sent 3 messages during this sprint's build phase with no response. The silent execution window erodes trust even when everything is working.
+**Recommendation:** Create `sprint-os/LESSONS.md` — a living document of accumulated sprint wisdom:
+```markdown
+## Delegation
+- Absolute paths in TASK.md (learned Sprint 10 — S10-03 wrote to wrong dir)
+- Timeout by size: S=10m, M=15m, L=20m, XL=30m (Sprint 10)
+- Don't delegate under 30 min direct (Sprint 9 — ROI negative)
+- sessions_spawn > Claude Code CLI (Sprint 9 — auth issues)
 
-**Recommendation:** Implement an execution pulse pattern:
-- At sprint start: "🚀 Sprint 10 started. Building S10-04 directly, delegated S10-02, S10-03. ETA: ~2 hours."
-- Every 15 min: "📊 Progress: S10-04 ✅ done, S10-02 ✅ merged, S10-03 running. Starting S10-01 now."
-- On delegation complete: "🤖 S10-02 merged — 4 min, clean build. 2 agents still running."
-- At sprint end: Full report (as we do now)
+## Specs
+- Short specs score better on Speclint (Sprint 10 — XL specs scored 65)
+- Co-planning with David = +23 Speclint points (Sprint 8→9)
+- Verification steps are the #1 gap (Sprint 8, 9, 10)
 
-This mirrors how an Agile team does standups during a sprint — proactive communication, not just a final report.
+## Execution
+- Always ack before going silent (Sprint 10 — 3 unanswered messages)
+- Bob Test every UI label before committing (Sprint 9 — "Post Queue" fail)
+```
+
+**Why it compounds:** Each sprint makes the next one better. LESSONS.md is the flywheel gear — retro outputs feed into it, and the Sprint Starter Checklist reads from it. Knowledge doesn't decay between sessions.
+
+**Also:** Update `sprint-reports/LocalBeacon/` automatically after every retro (not manual SCP — add it to the sprint close process).
+
+### 3. Automate the Sprint Infrastructure (Execution Flywheel)
+**Category:** Infrastructure · Execution · Delegation  
+**Problem:** Three things broke the autonomous execution loop this sprint: (a) Supabase migrations required David's manual intervention, (b) sub-agents timed out because the default timeout was wrong, (c) status updates required manual effort during deep work.
+
+**Recommendation — 3 fixes that remove friction from every future sprint:**
+
+**(a) Supabase migration route:** Add `/api/admin/migrate` that accepts SQL and runs it via service role key. Protected by a secret header. Eliminates the "David, please run this SQL" bottleneck.
+
+**(b) Pre-delegation checklist in TASK_TEMPLATE.md:**
+- [ ] Project `tree` output included (top 2 levels)
+- [ ] All file paths are absolute
+- [ ] Import pattern specified (`@/lib/...`)
+- [ ] Timeout set by size (S/M/L/XL)
+- [ ] Build verification step at end
+- [ ] No assumptions about project structure
+
+**(c) Sprint Pulse pattern (proactive comms):**
+- Sprint start: announce plan + ETA
+- Every 15 min OR on delegation complete: brief status
+- Sprint end: full report
+
+**Why it compounds:** Infrastructure improvements are the highest-leverage category — they reduce friction on *every* future sprint, not just the next one. Fixing Supabase migrations once saves 10-15 min per sprint forever. The pulse pattern builds trust that sustains the delegation model.
+
+---
+
+### Flywheel Summary
+
+```
+LESSONS.md (cross-sprint wisdom)
+    ↓ feeds into
+SPRINT_STARTER.md (planning checklist)
+    ↓ drives
+Speclint Pre-Flight (spec quality)
+    ↓ enables
+TASK_TEMPLATE.md (delegation quality)
+    ↓ produces
+Sprint Execution (parallel work)
+    ↓ generates
+Sprint Retro (lessons + recommendations)
+    ↓ updates
+LESSONS.md ← (cycle repeats, each sprint better)
+```
+
+Each gear makes the next gear turn faster. The flywheel accelerates with every sprint.
 
 ---
 
