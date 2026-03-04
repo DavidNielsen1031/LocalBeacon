@@ -6,6 +6,8 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { QueueActions } from './queue-actions'
 import { UsageMeter } from '@/components/usage-meter'
+import { getFreshness } from '@/lib/freshness'
+import { FreshnessBadge } from '@/components/freshness-badge'
 
 interface QueueItem {
   id: string
@@ -61,6 +63,7 @@ export default async function QueuePage() {
   if (!user) redirect('/sign-in')
 
   const { business, items } = await getQueueData(user.id)
+  const freshness = await getFreshness(user.id)
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
@@ -74,6 +77,15 @@ export default async function QueuePage() {
         </div>
 
         <QueueActions businessId={business?.id ?? null} />
+      </div>
+
+      {/* Freshness badge */}
+      <div className="mb-4">
+        <FreshnessBadge
+          daysSinceLastPost={freshness.daysSinceLastPost}
+          status={freshness.status}
+          lastPostDate={freshness.lastPostDate}
+        />
       </div>
 
       {/* Usage meter for free plan */}

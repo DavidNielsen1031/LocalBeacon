@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { createServerClient } from "@/lib/supabase";
+import { getFreshness } from "@/lib/freshness";
+import { FreshnessBadge } from "@/components/freshness-badge";
 
 async function getBusinessData(userId: string) {
   const supabase = createServerClient();
@@ -71,6 +73,7 @@ export default async function DashboardPage() {
   const userId = user?.id ?? "";
 
   const data = userId ? await getBusinessData(userId) : null;
+  const freshness = userId ? await getFreshness(userId) : null;
   const hasBusiness = !!data?.business;
 
   const stats = hasBusiness
@@ -130,6 +133,17 @@ export default async function DashboardPage() {
               Connect your Google listing and we&apos;ll start writing posts, pages, and review replies for your business.
             </p>
           </>
+        )}
+
+        {/* Freshness badge — only visible when user has a business */}
+        {hasBusiness && freshness && (
+          <div className="mt-3">
+            <FreshnessBadge
+              daysSinceLastPost={freshness.daysSinceLastPost}
+              status={freshness.status}
+              lastPostDate={freshness.lastPostDate}
+            />
+          </div>
         )}
       </div>
 

@@ -1,8 +1,10 @@
 'use client'
 export const dynamic = 'force-dynamic'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { getRecommendations } from '@/lib/aeo-recommendations'
+import { AeoRecommendations } from '@/components/aeo-recommendations'
 
 interface CheckResult {
   id: string
@@ -164,6 +166,16 @@ export default function AIReadinessPage() {
 
   const grade = result ? getGradeLabel(result.score) : null
 
+  // Compute recommendations from scan results
+  const recommendations = useMemo(() => {
+    if (!result) return []
+    const signals: Record<string, boolean> = {}
+    for (const check of result.checks) {
+      signals[check.id] = check.passed
+    }
+    return getRecommendations(signals)
+  }, [result])
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -309,6 +321,9 @@ export default function AIReadinessPage() {
               </div>
             </div>
           )}
+
+          {/* AEO Recommendations */}
+          <AeoRecommendations recommendations={recommendations} />
 
           {/* Scanned timestamp */}
           <p className="text-white/20 text-xs text-center">
