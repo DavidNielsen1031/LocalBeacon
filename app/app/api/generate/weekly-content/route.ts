@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 import { auth } from '@clerk/nextjs/server'
 import { generateText } from '@/lib/anthropic-client'
 import { createServerClient } from '@/lib/supabase'
+import { getBusinessContext, buildPromptContext } from '@/lib/prompt-context'
 import { NextRequest, NextResponse } from 'next/server'
 
 function getNextMonday9AMCST(): Date {
@@ -61,11 +62,18 @@ export async function POST(req: NextRequest) {
   const category = business.category || 'Service Provider'
   const city = business.primary_city || 'Your City'
 
-  const prompt = `Generate a Google Business Profile post for the upcoming week.
+  // Enrich with full business context from Settings if available
+  const bizCtx = await getBusinessContext(userId)
+  const contextBlock = bizCtx
+    ? `You are writing content for the following business:\n${buildPromptContext(bizCtx)}\n\n`
+    : ''
 
-Business: ${businessName}
-Category: ${category}
-City: ${city}
+  const prompt = `${contextBlock}Generate a Google Business Profile post for the upcoming week.
+
+Business: ${bizCtx?.name || businessName}
+Category: ${bizCtx?.category || category}
+City: ${bizCtx?.primary_city || city}
+${bizCtx?.specialties?.length ? `Specialties: ${bizCtx.specialties.join(', ')}` : ''}
 
 Requirements:
 - Title: max 58 characters, upbeat, mentions the city or a key service

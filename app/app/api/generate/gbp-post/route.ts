@@ -3,6 +3,7 @@ import { auth } from '@clerk/nextjs/server'
 import { generateText } from '@/lib/anthropic-client'
 import { createServerClient } from '@/lib/supabase'
 import { enforceLimits } from '@/lib/plan-limits'
+import { getBusinessContext, buildPromptContext } from '@/lib/prompt-context'
 import { NextRequest, NextResponse } from 'next/server'
 
 const postTypeDescriptions: Record<string, string> = {
@@ -38,12 +39,20 @@ export async function POST(req: NextRequest) {
     service_areas = [],
   } = body
 
-  const prompt = `Generate a Google Business Profile post for this local business.
+  // Enrich prompt with business context from Settings if available
+  const bizCtx = await getBusinessContext(userId)
+  const contextBlock = bizCtx
+    ? `You are writing content for the following business:\n${buildPromptContext(bizCtx)}\n\n`
+    : ''
 
-Business: ${business_name}
-Category: ${business_category}
-Primary city: ${primary_city}
-Service areas: ${[primary_city, ...service_areas].join(', ')}
+  const prompt = `${contextBlock}Generate a Google Business Profile post for this local business.
+
+Business: ${bizCtx?.name || business_name}
+Category: ${bizCtx?.category || business_category}
+Primary city: ${bizCtx?.primary_city || primary_city}
+Service areas: ${bizCtx
+    ? [bizCtx.primary_city, ...bizCtx.service_areas].join(', ')
+    : [primary_city, ...service_areas].join(', ')}
 Post type: ${postTypeDescriptions[post_type] || postTypeDescriptions.whats_new}
 
 Requirements:

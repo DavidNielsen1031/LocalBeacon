@@ -3,6 +3,7 @@ import { auth } from '@clerk/nextjs/server'
 import { generateText } from '@/lib/anthropic-client'
 import { createServerClient } from '@/lib/supabase'
 import { enforceLimits } from '@/lib/plan-limits'
+import { getBusinessContext, buildPromptContext } from '@/lib/prompt-context'
 import { NextRequest, NextResponse } from 'next/server'
 
 function mockPage(businessName: string, category: string, city: string, phone: string) {
@@ -112,12 +113,22 @@ export async function POST(req: NextRequest) {
 
   if (!target_city) return NextResponse.json({ error: 'target_city is required' }, { status: 400 })
 
-  const prompt = `Generate a complete service area landing page for a local business targeting "${business_category} in ${target_city}" searches.
+  // Enrich prompt with business context from Settings if available
+  const bizCtx = await getBusinessContext(userId)
+  const contextBlock = bizCtx
+    ? `You are writing content for the following business:\n${buildPromptContext(bizCtx)}\n\n`
+    : ''
 
-Business: ${business_name}
-Category: ${business_category}
+  const effectiveName = bizCtx?.name || business_name
+  const effectiveCategory = bizCtx?.category || business_category
+  const effectiveHQ = bizCtx?.primary_city || primary_city
+
+  const prompt = `${contextBlock}Generate a complete service area landing page for a local business targeting "${effectiveCategory} in ${target_city}" searches.
+
+Business: ${effectiveName}
+Category: ${effectiveCategory}
 Target city: ${target_city}
-HQ city: ${primary_city}
+HQ city: ${effectiveHQ}
 Phone: ${phone || 'Contact us'}
 
 Generate HTML body content (not a full HTML page, just the content) with:
@@ -140,7 +151,7 @@ Return only HTML content.`
   const result = await generateText(prompt, { maxTokens: 2000 })
 
   if (!result.success || !result.text) {
-    return NextResponse.json({ ...mockPage(business_name, business_category, target_city, phone), isDegraded: result.isDegraded })
+    return NextResponse.json({ ...mockPage(effectiveName, effectiveCategory, target_city, phone), isDegraded: result.isDegraded })
   }
 
   const html = result.text
@@ -153,12 +164,12 @@ Return only HTML content.`
         business_id,
         type: 'service_page',
         status: 'draft',
-        title: `${business_category} in ${target_city}`,
+        title: `${effectiveCategory} in ${target_city}`,
         body: html,
         metadata: { target_city, word_count: wordCount },
       })
     }
   }
 
-  return NextResponse.json({ html, title: `${business_category} in ${target_city}`, word_count: wordCount })
+  return NextResponse.json({ html, title: `${effectiveCategory} in ${target_city}`, word_count: wordCount })
 }

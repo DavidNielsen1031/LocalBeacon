@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic'
 import { auth } from '@clerk/nextjs/server'
 import { generateText } from '@/lib/anthropic-client'
+import { getBusinessContext, buildPromptContext } from '@/lib/prompt-context'
 import { NextRequest, NextResponse } from 'next/server'
 
 const mockResponses: Record<number, (name: string, biz: string) => string> = {
@@ -32,9 +33,18 @@ export async function POST(req: NextRequest) {
     business_category = '',
   } = body
 
-  const prompt = `Write a Google review response for this local business.
+  // Enrich with business context from Settings if available
+  const bizCtx = await getBusinessContext(userId)
+  const contextBlock = bizCtx
+    ? `You are writing content for the following business:\n${buildPromptContext(bizCtx)}\n\n`
+    : ''
 
-Business: ${business_name}${business_category ? ` (${business_category})` : ''}
+  const effectiveName = bizCtx?.name || business_name
+  const effectiveCategory = bizCtx?.category || business_category
+
+  const prompt = `${contextBlock}Write a Google review response for this local business.
+
+Business: ${effectiveName}${effectiveCategory ? ` (${effectiveCategory})` : ''}
 Reviewer: ${reviewer_name}
 Rating: ${rating}/5 stars
 Review: "${review_text}"
@@ -59,5 +69,5 @@ Return only the response text.`
   }
 
   const fn = mockResponses[rating] || mockResponses[3]
-  return NextResponse.json({ response: fn(reviewer_name, business_name), isDegraded: result.isDegraded })
+  return NextResponse.json({ response: fn(reviewer_name, effectiveName), isDegraded: result.isDegraded })
 }
