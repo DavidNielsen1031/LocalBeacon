@@ -22,31 +22,31 @@ import {
 const outcomes = [
   {
     Icon: MapPin,
-    title: "Show up on Google Maps",
+    title: "Stop losing jobs to competitors who post more",
     description:
       "Weekly posts keep your listing fresh and active. An active listing signals to Google that your business is open and engaged.",
   },
   {
     Icon: Search,
-    title: 'Rank in every city you serve',
+    title: "Get found in cities you serve but don't rank for",
     description:
       "We build a local page for each neighborhood and city. More pages targeting local keywords means more chances to appear in search results.",
   },
   {
     Icon: Bot,
-    title: "Get found by AI search engines",
+    title: "Be the business Siri and ChatGPT recommend",
     description:
       "We optimize your content so AI assistants like ChatGPT, Perplexity, and Google AI are more likely to recommend your business.",
   },
   {
     Icon: Star,
-    title: "Every review gets a reply",
+    title: "Stop scaring off customers with unanswered reviews",
     description:
       "Unanswered reviews scare off customers. We draft professional replies you can post — keeping your reputation strong.",
   },
   {
     Icon: BarChart3,
-    title: "AI Readiness score",
+    title: "Know exactly what's bringing in calls",
     description:
       "See exactly how visible your business is to AI search engines with a 15-point audit and actionable recommendations.",
   },
@@ -363,6 +363,18 @@ export default function LandingPage() {
               </span>
             </div>
 
+            <p
+              style={{
+                fontSize: "1.25rem",
+                fontWeight: 700,
+                color: "#E17055",
+                marginBottom: "16px",
+                maxWidth: "520px",
+              }}
+            >
+              Your competitors are getting the calls you should be getting.
+            </p>
+
             <h1
               style={{
                 fontFamily: "var(--font-dm-sans), sans-serif",
@@ -375,7 +387,7 @@ export default function LandingPage() {
               }}
             >
               Your phone rings more.{" "}
-              <span style={{ color: ORANGE }}>We create everything.</span>
+              <span style={{ color: ORANGE }}>Without you lifting a finger.</span>
             </h1>
 
             <p
@@ -387,8 +399,7 @@ export default function LandingPage() {
                 maxWidth: "520px",
               }}
             >
-              LocalBeacon writes Google posts for your business every week, builds local pages for
-              every city you serve, and drafts replies to your reviews. More visibility, more calls.
+              They post on Google every week. They reply to every review. They show up when someone asks ChatGPT for a plumber. You don&apos;t. LocalBeacon fixes that — automatically.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 items-start">
