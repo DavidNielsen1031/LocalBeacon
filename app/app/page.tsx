@@ -544,9 +544,15 @@ export default function LandingPage() {
             { label: "HVAC", href: "/for/hvac" },
             { label: "Dentists", href: "/for/dental" },
             { label: "Roofers", href: "/for/roofers" },
-            { label: "Lawyers", href: "#pricing" },
+            { label: "Auto Repair", href: "/for/auto-repair" },
             { label: "Landscapers", href: "/for/landscapers" },
             { label: "Electricians", href: "/for/electricians" },
+            { label: "Restaurants", href: "/for/restaurants" },
+            { label: "Hair Salons", href: "/for/hair-salons" },
+            { label: "Photographers", href: "/for/photographers" },
+            { label: "Gyms", href: "/for/gyms" },
+            { label: "Veterinarians", href: "/for/veterinarians" },
+            { label: "60+ Industries", href: "#pricing" },
           ].map((industry) => (
             <Link
               key={industry.label}

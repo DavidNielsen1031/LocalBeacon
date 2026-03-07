@@ -1,8 +1,7 @@
 import type { MetadataRoute } from 'next'
+import { industrySlugs } from '@/lib/industry-data'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const industries = ['plumbers', 'hvac', 'dental', 'roofers', 'landscapers', 'electricians']
-
   return [
     {
       url: 'https://localbeacon.ai',
@@ -22,7 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.8,
     },
-    ...industries.map(slug => ({
+    ...industrySlugs.map(slug => ({
       url: `https://localbeacon.ai/for/${slug}`,
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,
