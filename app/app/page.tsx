@@ -287,6 +287,7 @@ export default function LandingPage() {
           {/* Center nav */}
           <div className="hidden md:flex items-center gap-8">
             {[
+              { href: "/check", label: "Free AI Check" },
               { href: "#how-it-works", label: "How It Works" },
               { href: "#pricing", label: "Pricing" },
               { href: "/sign-in", label: "Sign In" },
@@ -534,7 +535,7 @@ export default function LandingPage() {
           className="flex flex-wrap items-center justify-center gap-6"
         >
           <span style={{ color: SLATE, fontSize: "0.875rem", fontWeight: 500 }}>
-            Built for local businesses:
+            Join businesses improving their local visibility:
           </span>
           {["Plumbers", "HVAC", "Dentists", "Roofers", "Lawyers", "Landscapers"].map((industry) => (
             <span
@@ -706,6 +707,50 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── Free Checker CTA ── */}
+      <section style={{ backgroundColor: NAVY, padding: "80px 24px", textAlign: "center" }}>
+        <div style={{ maxWidth: "640px", margin: "0 auto" }}>
+          <h2
+            style={{
+              fontWeight: 800,
+              fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
+              color: "#fff",
+              letterSpacing: "-0.02em",
+              marginBottom: "16px",
+            }}
+          >
+            How visible is your business to ChatGPT?
+          </h2>
+          <p style={{ color: "rgba(255,255,255,0.65)", fontSize: "1.0625rem", lineHeight: 1.6, marginBottom: "28px" }}>
+            Find out in 10 seconds. Free — no signup required.
+          </p>
+          <Link href="/check" style={{ textDecoration: "none" }}>
+            <button
+              style={{
+                backgroundColor: ORANGE,
+                color: "#fff",
+                fontWeight: 700,
+                fontSize: "1.0625rem",
+                padding: "15px 32px",
+                borderRadius: "8px",
+                border: "none",
+                cursor: "pointer",
+                boxShadow: "0 4px 14px rgba(255,107,53,0.4)",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+              }}
+            >
+              Check Your AI Score — Free →
+              <ArrowRight size={18} />
+            </button>
+          </Link>
+          <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "0.8125rem", marginTop: "16px" }}>
+            We scan 14 signals that AI search engines look for
+          </p>
+        </div>
+      </section>
+
       {/* ── How It Works ── */}
       <section style={{ backgroundColor: CREAM, padding: "96px 24px" }}>
         <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
@@ -766,6 +811,190 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── AEO Explainer ── */}
+      <section style={{ backgroundColor: WARM_WHITE, padding: "96px 24px" }}>
+        <div style={{ maxWidth: "1000px", margin: "0 auto", textAlign: "center" }}>
+          <h2
+            style={{
+              fontWeight: 800,
+              fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)",
+              color: NAVY,
+              letterSpacing: "-0.02em",
+              marginBottom: "16px",
+            }}
+          >
+            Google isn&apos;t the only search engine anymore.
+          </h2>
+          <p
+            style={{
+              color: SLATE,
+              fontSize: "1.0625rem",
+              lineHeight: 1.65,
+              maxWidth: "600px",
+              margin: "0 auto 48px",
+            }}
+          >
+            When someone asks ChatGPT, Perplexity, or Google AI for a recommendation, will they mention your business?
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6" style={{ marginBottom: "40px" }}>
+            {/* The old way */}
+            <div
+              style={{
+                backgroundColor: "#FFF5F3",
+                border: "1px solid #F5C6BC",
+                borderRadius: "12px",
+                padding: "32px",
+                textAlign: "left",
+              }}
+            >
+              <p style={{ fontWeight: 700, fontSize: "1.0625rem", color: "#C0392B", marginBottom: "20px" }}>
+                The old way
+              </p>
+              <p style={{ fontWeight: 700, color: "#5D4037", marginBottom: "16px", fontSize: "0.9375rem" }}>
+                Traditional SEO
+              </p>
+              <ul style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                {[
+                  "Optimize for Google's blue links",
+                  "Compete for page 1 rankings",
+                  "Hope someone clicks your link",
+                ].map((item) => (
+                  <li key={item} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+                    <XCircle size={16} style={{ color: "#E17055", flexShrink: 0, marginTop: "3px" }} />
+                    <span style={{ color: "#5D4037", fontSize: "0.9375rem", lineHeight: 1.5 }}>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* The new way */}
+            <div
+              style={{
+                backgroundColor: "#F0FDF8",
+                border: "1px solid #A7E8D1",
+                borderRadius: "12px",
+                padding: "32px",
+                textAlign: "left",
+              }}
+            >
+              <p style={{ fontWeight: 700, fontSize: "1.0625rem", color: "#00795C", marginBottom: "20px" }}>
+                The new way
+              </p>
+              <p style={{ fontWeight: 700, color: "#1B4332", marginBottom: "16px", fontSize: "0.9375rem" }}>
+                Answer Engine Optimization
+              </p>
+              <ul style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                {[
+                  "Optimize for AI answers",
+                  "Be the business AI recommends",
+                  "Get cited directly in the answer",
+                ].map((item) => (
+                  <li key={item} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+                    <CheckCircle2 size={16} style={{ color: "#00B894", flexShrink: 0, marginTop: "3px" }} />
+                    <span style={{ color: "#1B4332", fontSize: "0.9375rem", lineHeight: 1.5 }}>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <p style={{ color: NAVY, fontWeight: 700, fontSize: "1.0625rem" }}>
+            LocalBeacon optimizes for both — so you show up everywhere people search.
+          </p>
+        </div>
+      </section>
+
+      {/* ── Agency Section ── */}
+      <section style={{ backgroundColor: CREAM, padding: "80px 24px" }}>
+        <div style={{ maxWidth: "1000px", margin: "0 auto", textAlign: "center" }}>
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              backgroundColor: `${ORANGE}15`,
+              borderRadius: "9999px",
+              padding: "6px 16px",
+              marginBottom: "20px",
+            }}
+          >
+            <span style={{ color: ORANGE, fontWeight: 600, fontSize: "0.8125rem" }}>
+              For agencies &amp; freelancers
+            </span>
+          </div>
+          <h2
+            style={{
+              fontWeight: 800,
+              fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)",
+              color: NAVY,
+              letterSpacing: "-0.02em",
+              marginBottom: "16px",
+            }}
+          >
+            Managing multiple clients?
+          </h2>
+          <p style={{ color: SLATE, fontSize: "1.0625rem", lineHeight: 1.65, maxWidth: "640px", margin: "0 auto 40px" }}>
+            One dashboard for all your clients. Generate content, download branded reports, and onboard new clients in 60 seconds.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6" style={{ marginBottom: "36px" }}>
+            {[
+              {
+                emoji: "🏢",
+                title: "Multi-Client Dashboard",
+                desc: "Switch between clients instantly. Each gets their own content, settings, and AI readiness history.",
+              },
+              {
+                emoji: "📄",
+                title: "White-Label Reports",
+                desc: "Download branded PDF reports with your logo. Send to clients monthly — no extra work.",
+              },
+              {
+                emoji: "⚡",
+                title: "60-Second Onboarding",
+                desc: "Add a new client in 3 steps. We pre-populate their services based on industry.",
+              },
+            ].map(({ emoji, title, desc }) => (
+              <div
+                key={title}
+                style={{
+                  backgroundColor: "#fff",
+                  borderRadius: "12px",
+                  padding: "28px 28px 28px 32px",
+                  borderLeft: `4px solid ${ORANGE}`,
+                  boxShadow: "0 1px 3px rgba(27,42,74,0.06)",
+                  textAlign: "left",
+                }}
+              >
+                <p style={{ fontSize: "1.75rem", marginBottom: "12px" }}>{emoji}</p>
+                <h3 style={{ fontWeight: 700, color: NAVY, fontSize: "1.0625rem", marginBottom: "8px" }}>
+                  {title}
+                </h3>
+                <p style={{ color: SLATE, fontSize: "0.9375rem", lineHeight: 1.65 }}>{desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <Link href="/sign-up" style={{ textDecoration: "none" }}>
+            <button
+              style={{
+                backgroundColor: ORANGE,
+                color: "#fff",
+                fontWeight: 700,
+                fontSize: "1.0625rem",
+                padding: "14px 28px",
+                borderRadius: "8px",
+                border: "none",
+                cursor: "pointer",
+                boxShadow: "0 4px 14px rgba(255,107,53,0.3)",
+              }}
+            >
+              Start Agency — $99/mo
+            </button>
+          </Link>
+        </div>
+      </section>
+
       {/* ── Why We Built This ── */}
       <section style={{ backgroundColor: CREAM, padding: "80px 24px", borderTop: `1px solid ${MIST}` }}>
         <div style={{ maxWidth: "800px", margin: "0 auto", textAlign: "center" }}>
@@ -781,8 +1010,8 @@ export default function LandingPage() {
             }}
           >
             &ldquo;Local businesses shouldn&apos;t need a marketing degree to show up on Google.
-            We built LocalBeacon so business owners can focus on what they do best — while AI
-            handles the content that gets them found.&rdquo;
+            We built LocalBeacon so business owners can focus on what they do best — while we
+            handle the content that gets them found.&rdquo;
           </p>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "16px" }}>
             <div
@@ -1058,8 +1287,11 @@ export default function LandingPage() {
 
           <div className="flex flex-wrap items-center justify-center gap-6">
             {[
+              { href: "/check", label: "Free AI Check" },
               { href: "#how-it-works", label: "How It Works" },
               { href: "#pricing", label: "Pricing" },
+              { href: "/blog", label: "Blog" },
+              { href: "mailto:hello@localbeacon.ai", label: "Contact" },
               { href: "/privacy", label: "Privacy" },
               { href: "/terms", label: "Terms" },
               { href: "/sign-in", label: "Sign In" },

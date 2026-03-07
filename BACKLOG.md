@@ -2,9 +2,22 @@
 
 **Domain:** localbeacon.ai ✅
 **Stack:** Next.js + Vercel + Stripe + Anthropic + Supabase + GBP API
-**Pricing:** Free | Solo $29/mo | Agency $79/mo
+**Pricing:** Free | Solo $49/mo | Agency $99/mo
 **GitHub:** DavidNielsen1031/LocalBeacon
 **Vercel:** localbeacon-ai
+
+---
+
+## Product Objectives (Problem-Oriented)
+
+> Framing: SVPG-style outcome objectives. Features ladder up to these. Measure results, not output.
+
+| Objective | Key Results | Status |
+|-----------|------------|--------|
+| **Agencies save ≥5 hrs/week managing local visibility for their clients** | KR1: 3 agency evangelists confirm time savings in interviews · KR2: Average session time >10 min (engaged, not bouncing) · KR3: 1 agency uses dashboard for ≥3 clients | 🔴 Not started — need customer discovery |
+| **SMBs become findable by AI assistants (AEO)** | KR1: AI Readiness score improves after using tools · KR2: 1 business appears in ChatGPT/Perplexity answer after optimization · KR3: "AI Readiness" is cited as buying reason by 2+ users | 🔴 Not validated |
+| **First paying customer within 60 days of evangelist recruitment** | KR1: 6 evangelists recruited · KR2: 3 complete the onboarding flow · KR3: 1 converts to Solo or Agency plan | 🔴 Not started |
+| **LocalBeacon is the go-to tool for local AEO** | KR1: Top 3 Google result for "AI readiness checker local business" · KR2: Listed in 3+ AI/marketing directories · KR3: 1 inbound referral from an existing user | 🔴 Not started |
 
 ---
 
@@ -138,6 +151,12 @@
 - Old $29/$79 prices: ARCHIVED
 
 ---
+
+## 🎨 Design System
+
+- **Canonical doc:** `design-system/SKILL.md` (created Mar 4, 2026)
+- **Delegation rule:** All standalone UI pages (new dashboard tools, landing sections) are mandatory delegation candidates. Spawn sub-agent with design system skill + spec.
+- **Minimum delegation target:** 2 UI tasks per sprint delegated to sub-agents
 
 ## 🧠 Key Decisions (Locked)
 

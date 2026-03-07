@@ -63,13 +63,14 @@ async function getMonthlyUsage(
   
   if (!user) return 0
 
-  // Get business ID
-  const { data: business } = await supabase
+  // Get first business ID (for backward compat — callers should pass businessId directly)
+  const { data: businesses } = await supabase
     .from('businesses')
     .select('id')
     .eq('user_id', user.id)
-    .single()
+    .limit(1)
 
+  const business = businesses?.[0]
   if (!business) return 0
 
   // Count this month's content items

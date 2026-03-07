@@ -33,6 +33,7 @@ const plans = [
       "Blog post generator",
       "AI Readiness score & recommendations",
       "Schema markup & llms.txt generator",
+      "Up to 3 business locations",
     ],
     cta: "Start Solo — $49/mo",
     href: "/sign-up",
@@ -45,10 +46,12 @@ const plans = [
     tagline: "Everything in Solo — built for agencies managing clients.",
     outcomes: [
       "Everything in Solo — unlimited",
-      "Unlimited content generation",
+      "Multi-client dashboard — manage all clients in one place",
+      "White-label PDF reports with your branding",
+      "Client onboarding wizard",
+      "Unlimited business locations",
       "FAQ builder with schema markup",
       "Priority email support",
-      "Multi-client & white-label reports — coming soon",
     ],
     cta: "Start Agency — $99/mo",
     href: "/sign-up",
@@ -83,7 +86,7 @@ const faqs = [
   },
   {
     q: "What if I manage multiple clients? (Agency plan)",
-    a: "The Agency plan gives you unlimited content generation across all your clients. Multi-client management and white-label reports are coming soon — for now, you can generate content for any client from your dashboard.",
+    a: "The Agency plan includes a multi-client dashboard where you manage all your clients from one screen. Switch between clients instantly, generate content for each one, and download white-label PDF reports with your own branding. Add unlimited client businesses to your account.",
   },
 ];
 

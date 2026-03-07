@@ -1,28 +1,24 @@
-# Sprint State
+# Sprint State — LocalBeacon
 
-| Sprint | State | Opened | Closed | Review Artifact |
-|--------|-------|--------|--------|-----------------|
-| 1 | Closed | 2026-02-28 | 2026-02-28 | — (pre-governance) |
-| 2 | Closed | 2026-02-28 | 2026-03-01 | — (pre-governance) |
-| 3 | Closed | 2026-03-01 | 2026-03-01 | — (pre-governance) |
-| 4 | Closed | 2026-03-01 | 2026-03-01 | — (pre-governance) |
-| 5 | Closed | 2026-03-01 | 2026-03-02 | sprints/sprint-5-review.md (informal, in retro) |
-| 6 | Closed | 2026-03-02 | 2026-03-02 | sprints/sprint-6-forensics.md |
-| 7 | Closed | 2026-03-02 | 2026-03-03 | sprints/sprint-7-forensics.md |
-| 8 | Closed | 2026-03-03 | 2026-03-03 | sprints/sprint-8-forensics.md, sprints/sprint-8-review-retro.md |
-| 9 | Closed | 2026-03-03 | 2026-03-03 | sprints/sprint-9-review-retro.md |
-| 10 | Closed | 2026-03-03 | 2026-03-03 | sprints/sprint-10-review-retro.md |
+**Current Sprint:** 11
+**Theme:** Agency Layer + Conversion
+**Status:** 🟢 Active
+**Started:** 2026-03-06 19:40 CST
+**Items:** 5 (1 XL + 1 L + 2 M + 1 S)
 
-## Sprint State Definitions
+## Items
 
-- **Draft** — Spec written, not yet approved for work
-- **Active** — Work in progress
-- **Pending Review** — All spec items complete, awaiting review/forensics artifact
-- **Closed** — Review artifact committed, sprint formally closed
+| ID | Title | Size | Status | Assigned |
+|----|-------|------|--------|----------|
+| S11-01 | Landing Page Conversion Overhaul | L | 🔄 In Progress | Sub-agent |
+| S11-02 | Multi-Client Dashboard | XL | 🔄 In Progress | Direct |
+| S11-03 | Client Onboarding Wizard | M | 🔄 In Progress | Sub-agent |
+| S11-04 | White-Label PDF Reports | M | ⏳ Waiting | Direct (after S11-02) |
+| S11-05 | Pricing & Nav Update | S | 🔄 In Progress | Sub-agent |
 
-## Rules
-
-1. Cannot open Sprint N+1 if Sprint N is not `Closed`
-2. Sprint transitions to `Pending Review` when all spec items are marked complete
-3. Sprint cannot transition to `Closed` without a review/forensics artifact committed to `sprints/`
-4. Alexander checks this file before starting any new sprint work
+## Quality Persona Panel
+- 🧪 Quinn (QA): ✅ Runs this sprint
+- 🤖 Tara (Test): ✅ Runs this sprint
+- 🏗️ Morgan (Tech Lead): ✅ Runs this sprint
+- 🔒 Sam (Security): ✅ Runs this sprint
+- 📊 Riley (Product): ✅ Runs this sprint
