@@ -110,9 +110,11 @@ const plans = [
     features: [
       "Everything in Solo — unlimited",
       "Unlimited content generation",
+      "Multi-client dashboard — manage all your clients",
+      "White-label PDF reports for each client",
+      "Client onboarding wizard",
       "FAQ builder with schema markup",
       "Priority email support",
-      "Multi-client & white-label — coming soon",
     ],
     cta: "Start Agency — $99/mo",
     href: "/sign-up",

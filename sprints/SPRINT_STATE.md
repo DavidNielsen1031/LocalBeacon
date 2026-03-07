@@ -1,24 +1,17 @@
 # Sprint State — LocalBeacon
 
-**Current Sprint:** 11
-**Theme:** Agency Layer + Conversion
-**Status:** 🟢 Active
-**Started:** 2026-03-06 19:40 CST
-**Items:** 5 (1 XL + 1 L + 2 M + 1 S)
+**Current Sprint:** 12
+**Theme:** Distribution
+**Status:** EXECUTING
+**Branch:** sprint/localbeacon/s12
+**Started:** 2026-03-07
 
-## Items
+## History
 
-| ID | Title | Size | Status | Assigned |
-|----|-------|------|--------|----------|
-| S11-01 | Landing Page Conversion Overhaul | L | 🔄 In Progress | Sub-agent |
-| S11-02 | Multi-Client Dashboard | XL | 🔄 In Progress | Direct |
-| S11-03 | Client Onboarding Wizard | M | 🔄 In Progress | Sub-agent |
-| S11-04 | White-Label PDF Reports | M | ⏳ Waiting | Direct (after S11-02) |
-| S11-05 | Pricing & Nav Update | S | 🔄 In Progress | Sub-agent |
-
-## Quality Persona Panel
-- 🧪 Quinn (QA): ✅ Runs this sprint
-- 🤖 Tara (Test): ✅ Runs this sprint
-- 🏗️ Morgan (Tech Lead): ✅ Runs this sprint
-- 🔒 Sam (Security): ✅ Runs this sprint
-- 📊 Riley (Product): ✅ Runs this sprint
+| Sprint | State | Opened | Closed | Review Artifact |
+|--------|-------|--------|--------|-----------------|
+| 8 | CLOSED | 2026-03-03 | 2026-03-03 | sprint-8-review-retro.md |
+| 9 | CLOSED | 2026-03-03 | 2026-03-03 | sprint-9-review-retro.md |
+| 10 | CLOSED | 2026-03-03 | 2026-03-04 | sprint-10-review-retro.md |
+| 11 | CLOSED | 2026-03-06 | 2026-03-07 | sprint-11-review-retro.md (pre-gate system, 30% process) |
+| 12 | PLANNING | 2026-03-07 | — | — |

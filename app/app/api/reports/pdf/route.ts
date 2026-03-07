@@ -23,6 +23,15 @@ export async function GET(req: NextRequest) {
 
   if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 })
 
+  // Plan gate: PDF reports require Solo+ plan
+  const userPlan = (user.plan || 'free').toLowerCase()
+  if (userPlan === 'free') {
+    return NextResponse.json(
+      { error: 'PDF reports require a Solo or Agency plan.', upgrade_url: '/pricing' },
+      { status: 403 }
+    )
+  }
+
   const { data: business } = await supabase
     .from('businesses')
     .select('*')
