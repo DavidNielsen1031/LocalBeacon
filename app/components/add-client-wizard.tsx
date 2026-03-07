@@ -124,6 +124,7 @@ export function AddClientWizard({ open, onOpenChange, onComplete }: AddClientWiz
       zip: form.zip,
       service_areas: form.service_areas,
       website: form.website,
+      google_listing: form.google_listing,
       phone: form.phone,
       specialties,
       description: "",
@@ -160,10 +161,10 @@ export function AddClientWizard({ open, onOpenChange, onComplete }: AddClientWiz
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={loading ? undefined : onOpenChange}>
       <DialogContent
         className="bg-[#111] border border-white/10 text-white max-w-lg p-0 overflow-hidden"
-        showCloseButton={true}
+        showCloseButton={!loading}
       >
         {/* Progress bar */}
         <div className="h-1 w-full bg-white/10">

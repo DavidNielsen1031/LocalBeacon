@@ -23,6 +23,15 @@ export async function GET(req: NextRequest) {
 
   if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 })
 
+  // Plan gate: PDF reports require Solo+ plan
+  const userPlan = (user.plan || 'free').toLowerCase()
+  if (userPlan === 'free') {
+    return NextResponse.json(
+      { error: 'PDF reports require a Solo or Agency plan.', upgrade_url: '/pricing' },
+      { status: 403 }
+    )
+  }
+
   const { data: business } = await supabase
     .from('businesses')
     .select('*')
@@ -101,8 +110,17 @@ export async function GET(req: NextRequest) {
   // Generate PDF
   const doc = new jsPDF()
   const pageWidth = doc.internal.pageSize.getWidth()
+  const pageHeight = doc.internal.pageSize.getHeight()
   const margin = 20
   let y = 30
+
+  // Helper: check if we need a new page
+  function checkPageBreak(requiredSpace: number = 30) {
+    if (y + requiredSpace > pageHeight - 30) {
+      doc.addPage()
+      y = 30
+    }
+  }
 
   // Header
   doc.setFontSize(22)
@@ -124,6 +142,7 @@ export async function GET(req: NextRequest) {
   y += 14
 
   // Content Summary Section
+  checkPageBreak(60)
   doc.setFontSize(14)
   doc.setTextColor(27, 42, 74)
   doc.text('Content Summary', margin, y)
@@ -150,6 +169,7 @@ export async function GET(req: NextRequest) {
   y += 6
 
   // AI Readiness Score
+  checkPageBreak(40)
   doc.setFontSize(14)
   doc.setTextColor(27, 42, 74)
   doc.text('AI Readiness Score', margin, y)
@@ -174,6 +194,7 @@ export async function GET(req: NextRequest) {
   }
 
   // Content Freshness
+  checkPageBreak(30)
   y += 4
   doc.setFontSize(14)
   doc.setTextColor(27, 42, 74)
@@ -193,6 +214,7 @@ export async function GET(req: NextRequest) {
   y += 12
 
   // Recommendations
+  checkPageBreak(40)
   y += 4
   doc.setFontSize(14)
   doc.setTextColor(27, 42, 74)
@@ -219,6 +241,7 @@ export async function GET(req: NextRequest) {
   }
 
   for (const rec of recommendations) {
+    checkPageBreak(16)
     doc.text(`• ${rec}`, margin, y, { maxWidth: pageWidth - margin * 2 })
     y += 8
   }
