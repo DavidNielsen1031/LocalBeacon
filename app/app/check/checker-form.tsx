@@ -140,6 +140,7 @@ export function CheckerForm() {
           email: email.trim(),
           url_scanned: result.url,
           score: result.score,
+          checks: result.checks,
         }),
       })
       setEmailSaved(true)

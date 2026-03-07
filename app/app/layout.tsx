@@ -76,6 +76,14 @@ export default function RootLayout({
                 "name": "Perpetual Agility LLC",
                 "url": "https://localbeacon.ai",
                 "email": "support@localbeacon.ai",
+                "telephone": "+16512636612",
+                "address": {
+                  "@type": "PostalAddress",
+                  "addressLocality": "Burnsville",
+                  "addressRegion": "MN",
+                  "postalCode": "55337",
+                  "addressCountry": "US"
+                },
                 "sameAs": [
                   "https://github.com/DavidNielsen1031/LocalBeacon"
                 ]

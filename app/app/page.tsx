@@ -539,9 +539,18 @@ export default function LandingPage() {
           <span style={{ color: SLATE, fontSize: "0.875rem", fontWeight: 500 }}>
             Join businesses improving their local visibility:
           </span>
-          {["Plumbers", "HVAC", "Dentists", "Roofers", "Lawyers", "Landscapers"].map((industry) => (
-            <span
-              key={industry}
+          {[
+            { label: "Plumbers", href: "/for/plumbers" },
+            { label: "HVAC", href: "/for/hvac" },
+            { label: "Dentists", href: "/for/dental" },
+            { label: "Roofers", href: "/for/roofers" },
+            { label: "Lawyers", href: "#pricing" },
+            { label: "Landscapers", href: "/for/landscapers" },
+            { label: "Electricians", href: "/for/electricians" },
+          ].map((industry) => (
+            <Link
+              key={industry.label}
+              href={industry.href}
               style={{
                 backgroundColor: "#fff",
                 border: `1px solid ${MIST}`,
@@ -550,10 +559,11 @@ export default function LandingPage() {
                 fontSize: "0.8125rem",
                 fontWeight: 600,
                 color: NAVY,
+                textDecoration: "none",
               }}
             >
-              {industry}
-            </span>
+              {industry.label}
+            </Link>
           ))}
         </div>
       </section>
@@ -1308,9 +1318,35 @@ export default function LandingPage() {
             ))}
           </div>
 
-          <p style={{ color: SLATE, fontSize: "0.8125rem", opacity: 0.7 }}>
-            © {new Date().getFullYear()} Perpetual Agility LLC
-          </p>
+          <div className="flex flex-wrap items-center justify-center gap-4" style={{ marginTop: "8px" }}>
+            <span style={{ color: SLATE, fontSize: "0.8125rem", opacity: 0.5 }}>Industries:</span>
+            {[
+              { href: "/for/plumbers", label: "Plumbers" },
+              { href: "/for/hvac", label: "HVAC" },
+              { href: "/for/dental", label: "Dentists" },
+              { href: "/for/roofers", label: "Roofers" },
+              { href: "/for/landscapers", label: "Landscapers" },
+              { href: "/for/electricians", label: "Electricians" },
+            ].map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                style={{ color: SLATE, fontSize: "0.8125rem", textDecoration: "none", opacity: 0.6 }}
+              >
+                {label}
+              </Link>
+            ))}
+          </div>
+
+          <div style={{ textAlign: "center", marginTop: "12px" }}>
+            <p style={{ color: SLATE, fontSize: "0.8125rem", margin: "0 0 4px" }}>
+              <a href="tel:+16512636612" style={{ color: SLATE, textDecoration: "none" }}>(651) 263-6612</a>
+              {" · "}Burnsville, MN 55337
+            </p>
+            <p style={{ color: SLATE, fontSize: "0.8125rem", opacity: 0.7, margin: 0 }}>
+              © {new Date().getFullYear()} Perpetual Agility LLC
+            </p>
+          </div>
         </div>
       </footer>
     </div>
