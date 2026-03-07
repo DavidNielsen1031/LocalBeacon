@@ -1,0 +1,1 @@
+PREVIEW DEPLOY FAILED — Vercel Turbopack/Next.js 16 build error on API routes. Pre-existing issue (not from Sprint 12 changes). Local build passes with 0 errors. Production deploy from main works fine.
