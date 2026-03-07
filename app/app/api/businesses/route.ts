@@ -7,7 +7,12 @@ export async function POST(req: NextRequest) {
   const { userId } = await auth()
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const body = await req.json()
+  let body: Record<string, unknown>
+  try {
+    body = await req.json()
+  } catch {
+    return NextResponse.json({ error: 'Invalid request body' }, { status: 400 })
+  }
   const supabase = createServerClient()
   if (!supabase) return NextResponse.json({ error: 'Database not configured' }, { status: 503 })
 
@@ -119,6 +124,7 @@ export async function POST(req: NextRequest) {
         : [],
       phone: body.phone || '',
       website: body.website || '',
+      google_listing: body.google_listing || '',
       address: body.address || '',
       zip: body.zip || '',
       description: body.description || '',

@@ -28,7 +28,7 @@ interface DashboardData {
 
 export default function DashboardPage() {
   const { user } = useUser();
-  const { activeBusiness, activeBusinessId } = useBusinessContext();
+  const { activeBusiness, activeBusinessId, plan } = useBusinessContext();
   const firstName = user?.firstName ?? "there";
   const hasBusiness = !!activeBusiness;
 
@@ -43,6 +43,7 @@ export default function DashboardPage() {
     }
 
     setLoading(true);
+    setData(null); // Clear stale data immediately to prevent flash of wrong business data
     fetch(`/api/businesses/${activeBusinessId}/dashboard`)
       .then((res) => (res.ok ? res.json() : null))
       .then((d) => setData(d))
@@ -85,7 +86,7 @@ export default function DashboardPage() {
         <div className="flex items-center gap-2 mb-1">
           <span className="text-2xl">🔦</span>
           <Badge className="bg-[#FFD700]/10 text-[#FFD700] border-[#FFD700]/30 text-xs">
-            Free Plan
+            {plan === "agency" ? "Agency Plan" : plan === "solo" ? "Solo Plan" : "Free Plan"}
           </Badge>
         </div>
         {hasBusiness ? (

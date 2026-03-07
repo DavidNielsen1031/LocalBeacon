@@ -26,6 +26,7 @@ interface BusinessContextType {
   refreshBusinesses: () => Promise<void>;
   canAddBusiness: boolean;
   businessLimit: number | null; // null = unlimited
+  plan: "free" | "solo" | "agency";
   loading: boolean;
 }
 
@@ -37,6 +38,7 @@ const BusinessContext = createContext<BusinessContextType>({
   refreshBusinesses: async () => {},
   canAddBusiness: true,
   businessLimit: null,
+  plan: "free",
   loading: true,
 });
 
@@ -110,6 +112,7 @@ export function BusinessProvider({
         refreshBusinesses,
         canAddBusiness,
         businessLimit,
+        plan,
         loading,
       }}
     >

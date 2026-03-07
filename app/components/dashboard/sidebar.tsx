@@ -30,6 +30,7 @@ export default function DashboardSidebar() {
     businesses,
     activeBusiness,
     switchBusiness,
+    refreshBusinesses,
     canAddBusiness,
     businessLimit,
   } = useBusinessContext();
@@ -184,7 +185,8 @@ export default function DashboardSidebar() {
       <AddClientWizard
         open={showWizard}
         onOpenChange={setShowWizard}
-        onComplete={(businessId) => {
+        onComplete={async (businessId) => {
+          await refreshBusinesses();
           switchBusiness(businessId);
           setShowWizard(false);
         }}
