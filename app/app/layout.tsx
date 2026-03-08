@@ -73,7 +73,7 @@ export default function RootLayout({
               "provider": {
                 "@type": "Organization",
                 "@id": "https://localbeacon.ai/#organization",
-                "name": "Perpetual Agility LLC",
+                "name": "LocalBeacon",
                 "url": "https://localbeacon.ai",
                 "email": "support@localbeacon.ai",
                 "telephone": "+16512636612",

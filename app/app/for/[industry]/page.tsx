@@ -674,7 +674,7 @@ export default async function IndustryPage({
           </div>
 
           <p style={{ color: SLATE, fontSize: "0.8125rem", opacity: 0.7 }}>
-            © {new Date().getFullYear()} Perpetual Agility LLC
+            © {new Date().getFullYear()} LocalBeacon
           </p>
         </div>
       </footer>

@@ -125,7 +125,7 @@ export default function CheckPage() {
 
       {/* Footer */}
       <footer className="border-t border-black/5 py-8 text-center text-sm text-[#1B2A4A]/30">
-        © 2026 Perpetual Agility LLC. All rights reserved.
+        © 2026 LocalBeacon. All rights reserved.
       </footer>
     </div>
   )

@@ -285,7 +285,7 @@ export default function PricingPage() {
             <span className="text-xl">🔦</span>
             <span className="font-bold text-[#FFD700]">LocalBeacon.ai</span>
           </Link>
-          <p className="text-white/30 text-xs">© {new Date().getFullYear()} Perpetual Agility LLC. All rights reserved.</p>
+          <p className="text-white/30 text-xs">© {new Date().getFullYear()} LocalBeacon. All rights reserved.</p>
         </div>
       </footer>
     </div>

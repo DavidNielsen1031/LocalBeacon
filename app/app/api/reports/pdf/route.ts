@@ -251,7 +251,7 @@ export async function GET(req: NextRequest) {
   doc.setFontSize(8)
   doc.setTextColor(99, 110, 114)
   doc.text('Powered by LocalBeacon.ai — More calls. Less work.', margin, y)
-  doc.text(`© ${now.getFullYear()} Perpetual Agility LLC`, pageWidth - margin - 50, y)
+  doc.text(`© ${now.getFullYear()} LocalBeacon`, pageWidth - margin - 50, y)
 
   // Output
   const pdfBuffer = Buffer.from(doc.output('arraybuffer'))

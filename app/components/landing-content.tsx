@@ -1053,7 +1053,7 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
             </div>
             <div style={{ textAlign: "left" }}>
               <p style={{ fontWeight: 700, color: NAVY, fontSize: "0.9375rem" }}>David Nielsen</p>
-              <p style={{ color: SLATE, fontSize: "0.875rem" }}>Founder, Perpetual Agility LLC</p>
+              <p style={{ color: SLATE, fontSize: "0.875rem" }}>Founder, LocalBeacon</p>
             </div>
           </div>
         </div>
@@ -1488,7 +1488,7 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
               {" · "}Burnsville, MN 55337
             </p>
             <p style={{ color: SLATE, fontSize: "0.8125rem", opacity: 0.7, margin: 0 }}>
-              © {new Date().getFullYear()} Perpetual Agility LLC
+              © {new Date().getFullYear()} LocalBeacon
             </p>
           </div>
         </div>

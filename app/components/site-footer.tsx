@@ -73,7 +73,7 @@ export function SiteFooter() {
             {" · "}Burnsville, MN 55337
           </p>
           <p style={{ color: SLATE, fontSize: "0.8125rem", opacity: 0.7, margin: 0 }}>
-            © {new Date().getFullYear()} Perpetual Agility LLC
+            © {new Date().getFullYear()} LocalBeacon
           </p>
         </div>
       </div>
