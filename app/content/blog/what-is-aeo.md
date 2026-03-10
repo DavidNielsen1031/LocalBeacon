@@ -114,3 +114,6 @@ It's unlikely in the near term. SEO and AEO will coexist. But the share of traff
 
 **How do I check if AI assistants recommend my business?**
 Try asking ChatGPT, Perplexity, or Google AI questions like "Who's the best [your service] in [your city]?" If your business doesn't appear, you have room to improve.
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

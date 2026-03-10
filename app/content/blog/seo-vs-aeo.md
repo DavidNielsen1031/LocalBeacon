@@ -148,3 +148,6 @@ Somewhat. Website builders that make it easy to add structured data (schema mark
 
 **How much should I spend on AEO vs SEO?**
 Most local businesses should spend about 70% of their effort on overlapping activities (GBP, reviews, content, citations) and 30% on AEO-specific items (schema, llms.txt, FAQ markup). The overlap work benefits both.
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

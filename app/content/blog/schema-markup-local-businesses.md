@@ -134,3 +134,6 @@ Schema markup is one of the highest-leverage things a local business can do for 
 Most of your local competitors haven't done this. Which means getting it right now is a meaningful edge.
 
 If you want to see exactly what signals AI search tools are picking up from your website right now — structured data, citations, review scores, and more — [run a free AI Readiness Scan at LocalBeacon.ai](https://localbeacon.ai). You'll get a full picture of where you stand and what to fix first.
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

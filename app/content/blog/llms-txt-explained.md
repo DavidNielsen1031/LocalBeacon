@@ -183,3 +183,6 @@ No. It's a plain text file that search engines will either ignore or treat as a 
 
 **How long should my llms.txt file be?**
 There's no strict limit, but aim for completeness without padding. Most local business llms.txt files are 50-150 lines. Include everything relevant, skip the fluff.
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

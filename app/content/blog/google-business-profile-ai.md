@@ -160,3 +160,6 @@ Paid GBP features primarily boost visibility in Google Maps, not AI assistants. 
 
 **Can I manage multiple GBP listings?**
 Yes. If you have multiple locations, each should have its own fully optimized GBP listing. Tools like LocalBeacon can manage multiple listings from a single dashboard.
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

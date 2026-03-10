@@ -143,3 +143,6 @@ No. The score indicates readiness — how well-positioned you are. AI recommenda
 
 **How does LocalBeacon calculate this score?**
 The score is based on a 15-point audit across the categories described above. Each factor is weighted by its impact on AI discoverability, based on research into how major AI models source and prioritize local business information.
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*
