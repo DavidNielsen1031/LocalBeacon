@@ -415,4 +415,100 @@ export const professionalServices: Record<string, IndustryData> = {
       },
     ],
   },
+
+  'tax-preparation': {
+    slug: 'tax-preparation',
+    name: 'Tax Preparation',
+    plural: 'Tax Preparers',
+    headline: 'Tax season searches. Year-round clients.',
+    subheadline: 'Millions search for tax preparers every January through April. LocalBeacon makes your firm the one they find and trust.',
+    description: 'Local SEO for tax preparation services. Rank for tax preparer near me, tax filing services, and CPA tax help in your area.',
+    painPoints: [
+      { icon: '📅', title: 'Tax season creates a 4-month revenue window', text: 'Most tax preparers earn 80% of revenue in 4 months. Without year-round content building your pipeline, you scramble every January to attract clients who searched in December.' },
+      { icon: '💻', title: 'TurboTax and H&R Block dominate search results', text: 'DIY software and national chains spend millions on ads. Without strong local positioning, independent tax preparers get buried beneath corporate listings.' },
+      { icon: '🔄', title: 'Client retention requires year-round visibility', text: 'Tax clients forget your name by June. Without ongoing content keeping you top-of-mind, they search fresh every January and may choose a different preparer.' },
+    ],
+    features: [
+      { title: 'Tax service landing pages', text: 'Pages for individual returns, small business taxes, self-employment taxes, and multi-state filings — each targeting the specific service searches clients make.' },
+      { title: 'Seasonal content calendar', text: 'Automated posts about filing deadlines, deduction tips, estimated tax reminders, and year-end planning that keep you visible across all 12 months.' },
+      { title: 'DIY vs. professional comparison content', text: 'Content explaining when TurboTax is not enough — complex situations, missed deductions, audit risk — positioning your expertise as the smart choice.' },
+      { title: 'Tax planning year-round content', text: 'Posts about estimated taxes, mid-year planning, and tax-saving strategies that attract clients outside of filing season.' },
+    ],
+    stats: [
+      { value: '$300-$500', label: 'avg tax prep fee' },
+      { value: '3.8×', label: 'more clients during peak season' },
+      { value: '82%', label: 'of new clients search online first' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help tax preparers get more clients?', answer: 'We create service-specific pages and seasonal content targeting "tax preparer near me," "CPA tax help," and "small business tax filing" — driving clients to your practice instead of chains or software.' },
+      { question: 'Can LocalBeacon help me compete with TurboTax and H&R Block?', answer: 'Yes. Content explaining your personalized service, complex situation expertise, and accuracy guarantee attracts clients who need more than DIY software provides.' },
+      { question: 'How do I keep clients coming back every year?', answer: 'Year-round content about tax planning, estimated payments, and deduction strategies keeps you visible between filing seasons so clients remember you in January.' },
+      { question: 'Will this help me attract small business tax clients?', answer: 'Absolutely. Small business tax pages target the highest-value search segment — business owners who need ongoing tax guidance and are willing to pay for expertise.' },
+      { question: 'How early should I start my tax season marketing?', answer: 'LocalBeacon runs year-round, but tax-specific content intensifies in October with year-end planning and peaks January through April. Year-round visibility means clients find you before the rush.' },
+    ],
+  },
+
+  'retirement-planning': {
+    slug: 'retirement-planning',
+    name: 'Retirement Planning',
+    plural: 'Retirement Planners',
+    headline: 'Their future starts with finding you.',
+    subheadline: 'People approaching retirement search for local financial guidance. LocalBeacon makes your retirement planning expertise visible when they are ready.',
+    description: 'Local SEO for retirement planners and financial advisors. Rank for retirement planning, 401k advisor, and retirement financial advisor near me.',
+    painPoints: [
+      { icon: '🎂', title: 'Pre-retirees research for months before engaging an advisor', text: 'People spend 3-6 months researching retirement planning before choosing an advisor. Without ongoing educational content, you miss the entire research phase and lose to advisors with better content.' },
+      { icon: '🏦', title: 'Robo-advisors capture the DIY retirement segment', text: 'Betterment and Wealthfront ads target every retirement search. Without content explaining why human retirement planning is superior for complex situations, you lose clients to algorithms.' },
+      { icon: '📊', title: 'Retirement topics are saturated online', text: 'Every financial blog covers retirement. Without locally-focused, personally-relevant content, your practice blends into the noise of generic retirement advice.' },
+    ],
+    features: [
+      { title: 'Retirement milestone pages', text: 'Pages for pre-retirement planning, Social Security optimization, 401k rollover, and pension analysis — targeting the specific life stage searches pre-retirees make.' },
+      { title: 'Local retirement lifestyle content', text: 'Content connecting retirement planning to local cost of living, state tax implications, and community resources — making your advice personally relevant.' },
+      { title: 'Fiduciary and credentials content', text: 'Content highlighting your fiduciary duty, certifications, and fee transparency — the trust signals that differentiate you from commission-based advisors.' },
+      { title: 'Educational webinar and event promotion', text: 'Posts promoting your retirement planning workshops, seminars, and consultations — driving in-person engagement that converts to clients.' },
+    ],
+    stats: [
+      { value: '$250K+', label: 'avg client AUM' },
+      { value: '2.4×', label: 'more consultation requests' },
+      { value: '76%', label: 'research online before engaging' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help retirement planners get clients?', answer: 'We create life-stage specific content — 401k rollover guides, Social Security optimization, pre-retirement checklists — targeting the searches people make when they start planning retirement seriously.' },
+      { question: 'Can LocalBeacon help me compete with robo-advisors?', answer: 'Yes. Content explaining the complexity of retirement planning — tax optimization, Social Security timing, healthcare planning — demonstrates why human guidance is essential for real retirement success.' },
+      { question: 'How do I attract pre-retirees in the research phase?', answer: 'Educational content about retirement milestones, planning timelines, and common mistakes captures pre-retirees months before they engage an advisor — giving you first-mover advantage.' },
+      { question: 'Will this help me promote retirement planning seminars?', answer: 'Absolutely. Google Business Profile posts promoting your workshops and seminars reach local pre-retirees actively researching retirement planning options.' },
+      { question: 'How does retirement planning SEO differ from general financial advisor SEO?', answer: 'Retirement searches are milestone-driven — "how much do I need to retire," "when to take Social Security." Our content targets these specific planning questions rather than generic investment terms.' },
+    ],
+  },
+
+  'mobile-notary': {
+    slug: 'mobile-notary',
+    name: 'Mobile Notary',
+    plural: 'Mobile Notaries',
+    headline: 'They need a notary now. Come to them.',
+    subheadline: 'Mobile notary searches surge for real estate closings, legal documents, and medical directives. LocalBeacon makes you the notary they call.',
+    description: 'Local SEO for mobile notary services. Rank for mobile notary near me, traveling notary, and notary public at home.',
+    painPoints: [
+      { icon: '🏠', title: 'Mobile notary searches are hyper-local and urgent', text: 'Someone needing a mobile notary for a hospital signing or closing cannot wait. They call the first available notary in their area. Without strong local presence, you lose these high-value urgent calls.' },
+      { icon: '📍', title: 'You cover a wide area but rank nowhere', text: 'Mobile notaries travel 30+ miles but Google shows you in none of those areas without dedicated local pages for each neighborhood and city you serve.' },
+      { icon: '💼', title: 'Loan signing agents compete for the same searches', text: 'Title companies and signing services capture most notary searches. Without positioning your direct availability and personal service, you lose to middlemen who take a cut of your fee.' },
+    ],
+    features: [
+      { title: 'Service area pages', text: 'Dedicated pages for every city, neighborhood, and area you travel to — so clients in each location find your mobile notary service directly.' },
+      { title: 'Service-specific landing pages', text: 'Pages for loan signings, hospital notarizations, estate documents, and apostille services — targeting the specific reasons clients need a mobile notary.' },
+      { title: 'Availability and response time content', text: 'Google Business Profile posts highlighting same-day availability, evening and weekend service, and fast response times — the factors that drive urgent notary decisions.' },
+      { title: 'Direct booking optimization', text: 'Content encouraging clients to book directly with you instead of through signing services — keeping your full fee and building your client base.' },
+    ],
+    stats: [
+      { value: '$100-$200', label: 'avg mobile notary visit' },
+      { value: '3.6×', label: 'more direct bookings' },
+      { value: '85%', label: 'search on mobile devices' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help mobile notaries get more appointments?', answer: 'We create city-specific and service-specific pages targeting "mobile notary in [city]," "notary near me open now," and "traveling notary for real estate closing" — the exact searches clients make.' },
+      { question: 'Can LocalBeacon help me rank in multiple cities?', answer: 'Yes. Service area pages for every city and neighborhood you cover ensure you appear in local searches across your entire travel radius — not just your home base.' },
+      { question: 'How do I get more direct bookings instead of signing service assignments?', answer: 'Content positioning your direct availability, competitive pricing, and personal service helps clients find and book you directly — eliminating the signing service middleman.' },
+      { question: 'Will this help me get hospital and care facility notary work?', answer: 'Absolutely. Pages targeting hospital notarizations, healthcare directive signings, and care facility visits capture this specialized, recurring market.' },
+      { question: 'How quickly will mobile notary pages start generating calls?', answer: 'Mobile notary searches are highly local and specific. Most notaries see new direct inquiries within 2-3 weeks as service area pages index.' },
+    ],
+  },
 }

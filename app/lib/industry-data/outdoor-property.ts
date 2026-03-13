@@ -405,4 +405,132 @@ export const outdoorProperty: Record<string, IndustryData> = {
       },
     ],
   },
+
+  'hardscaping': {
+    slug: 'hardscaping',
+    name: 'Hardscaping',
+    plural: 'Hardscaping Companies',
+    headline: 'Patios and walls start with a search.',
+    subheadline: 'Homeowners research hardscaping extensively before committing to $10K+ projects. LocalBeacon makes your company the one they call.',
+    description: 'Local SEO for hardscaping companies. Rank for patio installation, retaining walls, outdoor living spaces, and hardscape design in your area.',
+    painPoints: [
+      { icon: '🧱', title: 'High-value projects require high trust', text: 'Hardscaping projects run $5K-$50K. Homeowners compare 3-5 contractors and read every review. Without strong content showcasing your portfolio, you lose to companies with better online presence.' },
+      { icon: '📸', title: 'Visual proof drives hardscaping decisions', text: 'Homeowners want to see completed patios, walls, and outdoor kitchens before choosing. Without project showcase content, your expertise is invisible.' },
+      { icon: '🌧️', title: 'Seasonal demand leaves winter revenue gaps', text: 'Hardscaping peaks spring through fall. Without year-round content capturing winter planners, you scramble every spring instead of entering with a full pipeline.' },
+    ],
+    features: [
+      { title: 'Project-specific landing pages', text: 'Pages for patios, retaining walls, walkways, outdoor kitchens, fire pits, and driveways — each targeting the specific projects homeowners search.' },
+      { title: 'Portfolio showcase content', text: 'Before/after posts with design details and materials used — the visual proof that drives quote requests.' },
+      { title: 'Material education content', text: 'Posts about pavers vs. flagstone, concrete vs. natural stone that position you as the knowledgeable expert.' },
+      { title: 'Winter planning content', text: 'Content targeting homeowners planning spring projects during winter — building your pipeline months before the season.' },
+    ],
+    stats: [
+      { value: '$12K+', label: 'avg project value' },
+      { value: '2.6x', label: 'more quote requests' },
+      { value: '87%', label: 'research online before requesting quotes' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help hardscaping companies get more projects?', answer: 'We create project-specific pages with portfolio showcases that drive quote requests from homeowners actively researching patios, walls, and outdoor living spaces.' },
+      { question: 'Can visual portfolio content really drive leads?', answer: 'Absolutely. Hardscaping is a visual decision. Completed project showcases with design details build the confidence homeowners need to request your quote.' },
+      { question: 'How do I get leads during the off-season?', answer: 'Winter planning content captures homeowners dreaming about spring projects months before the season — filling your pipeline before competitors start marketing.' },
+      { question: 'Will material education content attract better clients?', answer: 'Yes. Homeowners who understand material options are better qualified leads — they know what they want and are willing to pay for quality installation.' },
+      { question: 'How does hardscaping SEO differ from general landscaping?', answer: 'Hardscaping searches are project-specific with higher values. Our content targets these premium searches rather than general lawn care terms.' },
+    ],
+  },
+
+  'lawn-care': {
+    slug: 'lawn-care',
+    name: 'Lawn Care',
+    plural: 'Lawn Care Services',
+    headline: 'Green lawns. Green revenue growth.',
+    subheadline: 'Lawn care is the most searched outdoor service category. LocalBeacon makes your service the one homeowners choose for their yard.',
+    description: 'Local SEO for lawn care services. Rank for lawn care near me, lawn mowing, fertilization, and weed control in your area.',
+    painPoints: [
+      { icon: '🌱', title: 'TruGreen and national chains dominate lawn care searches', text: 'National chains spend millions on digital marketing. Without strong local content, independent lawn care operators get buried beneath chain listings.' },
+      { icon: '💵', title: 'Low-price competitors make it a race to the bottom', text: 'Every neighborhood has someone mowing for $25. Without content positioning your quality, reliability, and full-service capability, you compete on price alone.' },
+      { icon: '📅', title: 'Spring rush creates feast-or-famine scheduling', text: 'Everyone wants lawn service starting in April. Without year-round content building your client list, you scramble every spring while losing clients who booked early with competitors.' },
+    ],
+    features: [
+      { title: 'Service-specific landing pages', text: 'Pages for mowing, fertilization, weed control, aeration, overseeding, and seasonal cleanup — each targeting specific lawn care searches.' },
+      { title: 'Seasonal lawn care content', text: 'Automated posts about spring startup, summer watering tips, fall aeration, and winter prep that keep you visible year-round.' },
+      { title: 'Neighborhood service pages', text: 'Pages for every neighborhood and subdivision you serve — capturing homeowners searching for lawn care in their specific area.' },
+      { title: 'Subscription and program marketing', text: 'Content promoting your annual lawn care programs, seasonal packages, and subscription plans that drive recurring revenue.' },
+    ],
+    stats: [
+      { value: '$200+', label: 'avg monthly lawn care contract' },
+      { value: '3.4x', label: 'more seasonal signups' },
+      { value: '76%', label: 'search online for lawn care' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help lawn care services get more clients?', answer: 'We create service-specific and neighborhood-specific pages that capture homeowners searching for lawn care in their area — driving them to your service instead of national chains.' },
+      { question: 'Can LocalBeacon help me compete with TruGreen?', answer: 'Yes. Content highlighting your local expertise, personalized service, and responsive communication differentiates you from chains with 1-800 numbers and rotating crews.' },
+      { question: 'How do I get year-round lawn care clients?', answer: 'Annual program and subscription content drives commitment early in the season. Winter and fall content captures planning-stage homeowners months before spring.' },
+      { question: 'Will neighborhood pages help a lawn care business?', answer: 'Absolutely. Homeowners search for lawn care by neighborhood and subdivision name. Pages for each area you serve ensure you appear in every local search.' },
+      { question: 'How quickly will lawn care pages start generating leads?', answer: 'Lawn care is high-volume local search. Most services see new inquiries within 2-3 weeks, with a major surge as spring search season begins.' },
+    ],
+  },
+
+  'tree-removal': {
+    slug: 'tree-removal',
+    name: 'Tree Removal',
+    plural: 'Tree Removal Services',
+    headline: 'Dangerous trees. Urgent searches. Be first.',
+    subheadline: 'Storm damage, dead trees, dangerous limbs — tree removal is urgent and high-value. LocalBeacon makes your service the one homeowners call.',
+    description: 'Local SEO for tree removal services. Rank for tree removal near me, emergency tree removal, and tree cutting service in your area.',
+    painPoints: [
+      { icon: '🌳', title: 'Storm damage creates urgent, high-value calls', text: 'After storms, homeowners frantically search for tree removal. Without strong emergency-specific content, you lose these $2K-$10K urgent jobs to competitors who rank first.' },
+      { icon: '⚠️', title: 'Safety concerns make tree removal a trust decision', text: 'Homeowners know tree removal is dangerous. Without visible insurance, licensing, and safety content, they choose companies that demonstrate professionalism online.' },
+      { icon: '📞', title: 'Most tree removal calls go to the first company found', text: 'Tree emergencies are urgent — homeowners call the first licensed, insured company they find. Without top search visibility, you miss these calls entirely.' },
+    ],
+    features: [
+      { title: 'Emergency tree removal pages', text: 'Storm damage, fallen tree, and emergency removal pages targeting urgent searches that happen during and after severe weather.' },
+      { title: 'Service-specific pages', text: 'Pages for tree removal, stump grinding, lot clearing, and hazardous tree assessment — each targeting specific service searches.' },
+      { title: 'Safety and credentials content', text: 'Content showcasing your insurance, licensing, safety record, and equipment — the trust signals homeowners need for dangerous tree work.' },
+      { title: 'Storm season preparedness content', text: 'Pre-storm content about tree assessment, preventive trimming, and storm preparation that captures proactive homeowners before emergencies happen.' },
+    ],
+    stats: [
+      { value: '$1,500+', label: 'avg tree removal job' },
+      { value: '4.3x', label: 'more emergency calls after storms' },
+      { value: '92%', label: 'call the first company they find' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help tree removal services get emergency calls?', answer: 'We create emergency-specific pages that rank for storm damage, fallen tree, and urgent removal searches — capturing homeowners who need help immediately and call the first service they find.' },
+      { question: 'Can storm preparedness content drive business before emergencies?', answer: 'Yes. Content about pre-storm tree assessment and preventive removal captures proactive homeowners — and builds the relationship that makes them call you when storms hit.' },
+      { question: 'How do I build trust for dangerous tree work?', answer: 'Content showcasing your insurance coverage, safety certifications, and professional equipment builds the credibility homeowners need before hiring for high-risk tree removal.' },
+      { question: 'Will this help me get large tree and lot clearing jobs?', answer: 'Absolutely. Pages targeting commercial tree removal, lot clearing, and large tree specialist searches capture the highest-value projects in your market.' },
+      { question: 'How quickly will tree removal pages generate calls?', answer: 'Tree removal is urgency-driven. Emergency pages can generate calls within days of indexing — especially during storm season when search volume spikes dramatically.' },
+    ],
+  },
+
+  'pressure-washing': {
+    slug: 'pressure-washing',
+    name: 'Pressure Washing',
+    plural: 'Pressure Washing Services',
+    headline: 'Dirty surfaces search for you. Be found.',
+    subheadline: 'Homeowners and property managers search for pressure washing when grime builds up. LocalBeacon makes your service the obvious choice.',
+    description: 'Local SEO for pressure washing services. Rank for pressure washing near me, power washing, and house washing in your area.',
+    painPoints: [
+      { icon: '💦', title: 'Low barrier to entry means tons of competition', text: 'Anyone with a pressure washer advertises online. Without content differentiating your professional service, insurance, and equipment, you compete with unlicensed operators on price.' },
+      { icon: '🏠', title: 'Homeowners do not know they need pressure washing until they see it', text: 'Pressure washing is reactive — homeowners search when they notice dirty siding or a green driveway. Without content targeting these moments, you miss the trigger point.' },
+      { icon: '📍', title: 'Service area coverage determines your market', text: 'Pressure washing serves a radius, but Google shows you only in your home area. Without neighborhood pages, you lose jobs in every other area you serve.' },
+    ],
+    features: [
+      { title: 'Surface-specific landing pages', text: 'Pages for driveway washing, house washing, deck cleaning, fence cleaning, and roof washing — each targeting the specific surface homeowners want cleaned.' },
+      { title: 'Service area pages', text: 'Neighborhood and city pages for every area you serve — capturing homeowners searching for pressure washing in their specific location.' },
+      { title: 'Before/after showcase content', text: 'Dramatic cleaning transformation posts that visually demonstrate your results — the most persuasive content type for pressure washing.' },
+      { title: 'Seasonal cleaning content', text: 'Spring cleaning, pre-sale home prep, and HOA compliance content targeting the seasonal triggers that drive pressure washing bookings.' },
+    ],
+    stats: [
+      { value: '$250-$500', label: 'avg residential job' },
+      { value: '3.2x', label: 'more booking requests' },
+      { value: '81%', label: 'search when they notice the problem' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help pressure washing businesses get more jobs?', answer: 'We create surface-specific pages — driveway, siding, deck, roof — targeting the exact searches homeowners make when they notice dirt and want it gone.' },
+      { question: 'Can LocalBeacon help me differentiate from cheap competitors?', answer: 'Yes. Content highlighting your insurance, professional equipment, soft wash capability, and surface-safe techniques positions you above unlicensed operators who may damage property.' },
+      { question: 'How do service area pages help pressure washers?', answer: 'Pages for every city and neighborhood you serve mean homeowners in each location find you — not just homeowners in your base city.' },
+      { question: 'Will before/after content drive bookings?', answer: 'Absolutely. Pressure washing has the most dramatic before/after transformations of any service. Visual posts are your single most effective marketing tool.' },
+      { question: 'How quickly will pressure washing pages generate leads?', answer: 'Pressure washing searches are reactive and local. Most businesses see new inquiries within 2-4 weeks, with spikes during spring cleaning season.' },
+    ],
+  },
 }

@@ -168,3 +168,6 @@ Card padding: 32px
 - Desktop: 1440 x auto
 - Tablet: 768 x auto
 - Mobile: 375 x auto
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

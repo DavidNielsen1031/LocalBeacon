@@ -153,3 +153,6 @@ Our GTM is B2B2B — sell to web designers and agencies managing SMB clients. We
 - David can start outreach to 20 agencies immediately after sprint
 - Materials are professional enough to not embarrass the brand
 - Each email version has a clear hypothesis about what resonates
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

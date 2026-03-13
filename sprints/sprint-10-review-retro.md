@@ -304,3 +304,6 @@ Each gear makes the next gear turn faster. The flywheel accelerates with every s
 ---
 
 *Sprint 10 Closed. Review artifact committed. Next: Sprint 11 — Agency Layer (multi-client views, white-label, PDF export)*
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

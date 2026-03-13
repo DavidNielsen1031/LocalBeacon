@@ -1,0 +1,14 @@
+{
+  "article": {
+    "title": "LocalBeacon \u2014 AI-powered marketing for local businesses",
+    "body_markdown": "# LocalBeacon \u2014 AI-powered marketing for local businesses\n\nLocalBeacon helps local businesses get found by AI search engines \u2014 not just Google.\n\n## The Problem\n\nAI assistants (ChatGPT, Perplexity, Claude) are replacing Google for local searches. SMBs have zero presence in AI results. Traditional SEO doesn't help with AI Engine Optimization (AEO).\n\n## The Solution\n\nIndustry-specific landing pages optimized for AI crawlers, automated blog content, email reports, and AEO best practices \u2014 all done-for-you.\n\n## How It Works\n\n1. Paste any user story or spec\n2. Get scored 0-100 across 5 dimensions\n3. If below threshold, get an AI-powered rewrite\n\n## Try It\n\n- **Website:** https://localbeacon.ai\n- **CLI:** `npx speclint lint`\n- **Open Source:** MIT licensed\n\n---\n\n*What do you think? Drop a comment if you're using AI coding agents \u2014 I'd love to hear about your spec quality challenges.*\n",
+    "published": false,
+    "tags": [
+      "ai",
+      "devtools",
+      "productivity",
+      "opensource"
+    ],
+    "series": null
+  }
+}

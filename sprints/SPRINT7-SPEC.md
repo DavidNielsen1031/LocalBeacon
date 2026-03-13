@@ -308,3 +308,6 @@ Sprint 7 is complete when:
 
 *Created: March 2, 2026*
 *Informed by: Sprint 6 Forensics Audit (`sprints/sprint-6-forensics.md`)*
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

@@ -123,3 +123,6 @@
 ---
 
 *Sprint 8 Closed.*
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

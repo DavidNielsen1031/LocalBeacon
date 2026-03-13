@@ -369,3 +369,6 @@ Before calling Sprint 2 done, verify:
 ---
 
 *Designed March 1, 2026 | Ready to spawn build agent when dependencies are set up*
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

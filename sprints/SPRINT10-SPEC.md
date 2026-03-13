@@ -286,3 +286,6 @@ Time 5h:    Sprint review + retro
 ---
 
 *Spec ready for Speclint pre-flight and David's review.*
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

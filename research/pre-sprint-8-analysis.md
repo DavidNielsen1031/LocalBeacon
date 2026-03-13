@@ -364,3 +364,6 @@ Each persona visits both BrightLocal.com and LocalBeacon.ai as a first-time visi
 
 *Generated: March 3, 2026*  
 *Sources: BrightLocal.com (live site fetch + 22 screenshots), LocalBeacon.ai (live site fetch + 7 screenshots), LocalBeacon codebase audit, persona research (personas.md)*
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

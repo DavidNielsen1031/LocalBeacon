@@ -337,4 +337,132 @@ export const foodLocal: Record<string, IndustryData> = {
       },
     ],
   },
+
+  'pizza-shops': {
+    slug: 'pizza-shops',
+    name: 'Pizza Shop',
+    plural: 'Pizza Shops',
+    headline: 'Hungry searchers. Hot slices. More orders.',
+    subheadline: 'Pizza is the most-searched food category in local search. LocalBeacon makes your shop the one that gets the call.',
+    description: 'Local SEO for pizza shops and pizzerias. Rank for pizza near me, best pizza, and pizza delivery in your area.',
+    painPoints: [
+      { icon: '🍕', title: 'Dominos and Pizza Hut own the top of every pizza search', text: 'National chains spend billions on digital marketing. Without strong local SEO, independent pizza shops get buried beneath chain listings — even when your pizza is better.' },
+      { icon: '📱', title: 'Delivery app fees eat your margins', text: 'DoorDash and Uber Eats take 15-30% per order. Without driving direct orders through your own search presence, you are paying platforms for customers who would have found you anyway.' },
+      { icon: '⭐', title: 'One bad review tanks pizza shop visibility', text: 'Pizza shops live and die by reviews. One unanswered negative review can drop you from top results and send customers to competitors with better-managed reputations.' },
+    ],
+    features: [
+      { title: 'Menu and specialty pizza pages', text: 'Pages for your signature pizzas, specialty pies, gluten-free options, and catering menu — targeting the specific searches hungry customers make.' },
+      { title: 'Direct ordering optimization', text: 'Content driving customers to order directly from you instead of through delivery apps — saving you 15-30% per order in platform fees.' },
+      { title: 'Neighborhood delivery area pages', text: 'Pages for every neighborhood in your delivery zone so customers searching "pizza delivery in [neighborhood]" find your shop first.' },
+      { title: 'Review management for food', text: 'AI-drafted responses to food reviews that address complaints professionally and highlight your quality — protecting the reputation that drives pizza orders.' },
+    ],
+    stats: [
+      { value: '3.8×', label: 'more direct orders' },
+      { value: '20%+', label: 'saved vs. delivery app fees' },
+      { value: '#1', label: 'most-searched local food category' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help independent pizza shops compete with chains?', answer: 'We build local search visibility that national chains cannot replicate — neighborhood-specific pages, local review management, and community-focused content that positions your shop as the local favorite.' },
+      { question: 'Can LocalBeacon help me reduce delivery app dependence?', answer: 'Yes. Driving customers to find you directly on Google means they order from you — not through DoorDash or Uber Eats. You keep 100% of the order value.' },
+      { question: 'How do I handle negative food reviews?', answer: 'Our AI drafts professional, empathetic responses that address concerns, offer to make things right, and show future customers that you care about quality and satisfaction.' },
+      { question: 'Will delivery area pages help my pizza shop?', answer: 'Absolutely. Neighborhood-specific pages mean customers in every part of your delivery zone find you when they search "pizza delivery near me."' },
+      { question: 'How quickly will this generate more pizza orders?', answer: 'Pizza is the highest-volume food search term. Most shops see increased direct orders within 2-3 weeks as pages index and Google Business Profile engagement grows.' },
+    ],
+  },
+
+  'food-trucks': {
+    slug: 'food-trucks',
+    name: 'Food Truck',
+    plural: 'Food Trucks',
+    headline: 'Your truck moves. Your search rankings stay.',
+    subheadline: 'Food truck customers search for nearby food options daily. LocalBeacon makes your truck discoverable wherever you park.',
+    description: 'Local SEO for food trucks and mobile food vendors. Rank for food trucks near me, food truck events, and street food in your area.',
+    painPoints: [
+      { icon: '🚚', title: 'Changing locations makes Google discovery nearly impossible', text: 'Your truck moves daily but Google wants a fixed address. Without location-aware content strategy, customers at your current spot cannot find you and customers at tomorrow\'s spot do not know you are coming.' },
+      { icon: '📲', title: 'Social media is your only discovery channel', text: 'Most food trucks rely entirely on Instagram and Twitter for customer communication. When algorithms change or posts get buried, your foot traffic drops immediately.' },
+      { icon: '🎪', title: 'Event bookings require online credibility', text: 'Corporate events, weddings, and festivals book food trucks with strong online presence. Without professional content and reviews, you miss these high-value catering opportunities.' },
+    ],
+    features: [
+      { title: 'Location and schedule content', text: 'Google Business Profile posts with your weekly schedule, regular stops, and event appearances — making your truck findable wherever you park.' },
+      { title: 'Event and catering pages', text: 'Landing pages for food truck catering, corporate events, weddings, and festivals — targeting the high-value booking searches event planners make.' },
+      { title: 'Menu and specialty content', text: 'Posts showcasing your signature items, seasonal specials, and menu rotations that build anticipation and drive foot traffic.' },
+      { title: 'Review management for mobile food', text: 'Review responses that build your reputation as the must-visit food truck — critical for event bookings and repeat customers.' },
+    ],
+    stats: [
+      { value: '2.6×', label: 'more event booking inquiries' },
+      { value: '$2K+', label: 'avg event catering booking' },
+      { value: '64%', label: 'search "food trucks near me" weekly' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help food trucks that change locations?', answer: 'We use Google Business Profile posts and schedule content to keep customers informed about where you will be — creating persistent search visibility regardless of your daily location.' },
+      { question: 'Can LocalBeacon help me get event and catering bookings?', answer: 'Yes. Catering and event pages targeting "food truck catering," "food truck for weddings," and "corporate food truck" capture high-value booking inquiries from event planners.' },
+      { question: 'How do I build consistent visibility when my location changes daily?', answer: 'Regular Google Business Profile posts with your schedule, popular stops, and menu specials create a consistent online presence that brings repeat customers to your regular locations.' },
+      { question: 'Will this help me depend less on Instagram for customers?', answer: 'Absolutely. Google search captures customers who are hungry NOW and searching for food near them — higher intent than scrolling social media and hoping they see your post.' },
+      { question: 'How do food truck reviews work without a fixed location?', answer: 'Reviews attach to your Google Business Profile, not your location. We manage these reviews to build your reputation as a must-visit food truck — critical for both daily customers and event bookings.' },
+    ],
+  },
+
+  'coffee-shops': {
+    slug: 'coffee-shops',
+    name: 'Coffee Shop',
+    plural: 'Coffee Shops',
+    headline: 'Better than Starbucks? Now prove it online.',
+    subheadline: 'Independent coffee shops compete with chains on every corner. LocalBeacon makes your cafe the first choice for local coffee lovers.',
+    description: 'Local SEO for independent coffee shops and cafes. Rank for coffee shop near me, best coffee, and local cafe in your area.',
+    painPoints: [
+      { icon: '☕', title: 'Starbucks and chains dominate every coffee search', text: 'National coffee chains appear first in nearly every local search. Without strong local SEO, your independent cafe is invisible to customers who would prefer your quality over chain convenience.' },
+      { icon: '💻', title: 'Remote workers search for cafe workspaces', text: 'Work-from-home professionals actively search for coffee shops with wifi and workspace. Without content addressing this audience, you miss a daily-visit customer segment.' },
+      { icon: '🫘', title: 'Specialty coffee drinkers search for quality, not convenience', text: 'Third-wave coffee enthusiasts search for specific roasters, brewing methods, and specialty drinks. Without content showcasing your coffee expertise, they find competitors who market their craft better.' },
+    ],
+    features: [
+      { title: 'Specialty coffee content', text: 'Posts about your roasters, brewing methods, seasonal drinks, and single-origin offerings that attract quality-focused coffee enthusiasts.' },
+      { title: 'Workspace and ambiance pages', text: 'Content highlighting wifi, power outlets, workspace-friendly atmosphere, and hours — targeting the remote work segment that visits daily.' },
+      { title: 'Community hub content', text: 'Posts about live music, art shows, open mic nights, and community events that position your cafe as the neighborhood gathering spot.' },
+      { title: 'Google Business Profile optimization', text: 'Regular posts with seasonal drinks, new menu items, and hours updates that keep your cafe visible and current in local searches.' },
+    ],
+    stats: [
+      { value: '3.1×', label: 'more new customer visits' },
+      { value: '$5-$7', label: 'avg ticket boosted by visibility' },
+      { value: '89%', label: 'search "coffee near me" on mobile' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help independent coffee shops compete with chains?', answer: 'We build local search presence that highlights what chains cannot offer — your specialty roasts, community atmosphere, and unique character. Coffee lovers who discover you choose you over Starbucks.' },
+      { question: 'Can LocalBeacon help me attract remote workers?', answer: 'Yes. Workspace-focused content about wifi speed, outlet availability, and quiet atmosphere attracts remote workers who become daily regulars — your most valuable customer segment.' },
+      { question: 'How do I market specialty coffee to enthusiasts?', answer: 'Content about your roasting partners, brewing methods, and seasonal origins attracts third-wave coffee seekers who actively search for quality over convenience.' },
+      { question: 'Will community events content drive more foot traffic?', answer: 'Absolutely. Posts about open mics, art shows, and community events reach people searching for things to do locally — introducing your cafe to customers who might not search for coffee specifically.' },
+      { question: 'How quickly will this generate more cafe traffic?', answer: 'Coffee searches are among the highest-volume local searches. Most cafes see increased foot traffic within 2-3 weeks as content indexes and Google Business Profile engagement grows.' },
+    ],
+  },
+
+  'wedding-catering': {
+    slug: 'wedding-catering',
+    name: 'Wedding Catering',
+    plural: 'Wedding Caterers',
+    headline: 'Dream weddings need discoverable caterers.',
+    subheadline: 'Couples planning weddings search for caterers months in advance. LocalBeacon makes your catering service visible throughout their planning journey.',
+    description: 'Local SEO for wedding catering services. Rank for wedding caterer near me, reception catering, and wedding food service.',
+    painPoints: [
+      { icon: '💒', title: 'Couples research caterers for 3-6 months before booking', text: 'Wedding catering decisions take months of comparison. Without ongoing content visible throughout their research journey, you lose to caterers who maintain stronger online presence.' },
+      { icon: '📋', title: 'Venue partnerships capture most catering referrals', text: 'Venues with preferred caterer lists send most wedding clients to their partners. Without your own search visibility, you depend entirely on venue relationships for bookings.' },
+      { icon: '💰', title: 'Wedding catering is your highest-value service but hardest to market', text: 'A single wedding generates $5K-$20K in revenue but requires enormous trust. Without content demonstrating your wedding experience, couples choose caterers with better portfolios.' },
+    ],
+    features: [
+      { title: 'Wedding catering portfolio pages', text: 'Pages showcasing your wedding menu options, past events, and service style — the visual and content proof couples need to add you to their shortlist.' },
+      { title: 'Wedding planning timeline content', text: 'Posts about when to book catering, menu tasting tips, and wedding food trends that capture couples in the early planning phase.' },
+      { title: 'Venue-specific content', text: 'Pages mentioning popular local venues you have served — capturing couples searching for catering at specific locations.' },
+      { title: 'Tasting and consultation optimization', text: 'Content driving couples to book your tasting or consultation — the critical conversion step for wedding catering bookings.' },
+    ],
+    stats: [
+      { value: '$8K-$15K', label: 'avg wedding catering value' },
+      { value: '2.4×', label: 'more tasting bookings' },
+      { value: '6 months', label: 'avg planning lead time' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help wedding caterers get more bookings?', answer: 'We create wedding-specific content that appears throughout the 3-6 month planning journey — menu showcases, venue-specific pages, and planning guides that build familiarity before couples book tastings.' },
+      { question: 'Can LocalBeacon help me get bookings without venue partnerships?', answer: 'Yes. Direct search visibility means couples find you independently — you are not dependent on venue preferred lists. This also gives you negotiating power with venues.' },
+      { question: 'How do I market wedding tasting events?', answer: 'Google Business Profile posts promoting your tasting events, seasonal menu previews, and open house dates drive the in-person experiences that convert to bookings.' },
+      { question: 'Will venue-specific content really help?', answer: 'Absolutely. Couples searching "caterer for [venue name]" are ready to book. Pages mentioning venues you have served capture this high-intent, late-stage search traffic.' },
+      { question: 'How far in advance do wedding couples start searching for caterers?', answer: 'Typically 6-12 months before the wedding. LocalBeacon ensures your content is visible throughout this extended research period — not just when you run ads.' },
+    ],
+  },
 }

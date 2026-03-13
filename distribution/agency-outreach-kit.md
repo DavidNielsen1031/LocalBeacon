@@ -137,3 +137,6 @@ LocalBeacon.ai
 - Never send more than 10 emails/day
 - Personalize Version A with actual AI Readiness score for a real client
 - Track opens + replies in a spreadsheet
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

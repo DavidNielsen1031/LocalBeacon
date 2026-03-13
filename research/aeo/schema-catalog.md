@@ -136,3 +136,6 @@
 | Accountant | `AccountingService` |
 
 *Next review: April 2, 2026*
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

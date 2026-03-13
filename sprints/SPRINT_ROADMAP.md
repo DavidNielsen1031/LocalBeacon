@@ -225,3 +225,6 @@ These are BrightLocal's strengths. We don't compete on their turf. Our moat is *
 ---
 
 *This roadmap is a living document. Review after each sprint. Adjust based on GBP API status, expo timeline, and customer feedback.*
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

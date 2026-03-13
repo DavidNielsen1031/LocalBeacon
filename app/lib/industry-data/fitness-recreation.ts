@@ -337,4 +337,100 @@ export const fitnessRecreation: Record<string, IndustryData> = {
       },
     ],
   },
+
+  'crossfit-gyms': {
+    slug: 'crossfit-gyms',
+    name: 'CrossFit',
+    plural: 'CrossFit Gyms',
+    headline: 'WODs are hard. Getting found should not be.',
+    subheadline: 'CrossFit athletes search for local boxes with strong communities and coaching. LocalBeacon makes your box the one they try first.',
+    description: 'Local SEO for CrossFit gyms and boxes. Rank for CrossFit near me, CrossFit gym, and CrossFit classes in your area.',
+    painPoints: [
+      { icon: '🏋️', title: 'CrossFit boxes compete on community, not just workouts', text: 'Athletes choose CrossFit boxes based on coaching quality and community vibe — but Google cannot show that. Without content communicating your culture, you lose to boxes with better online presence.' },
+      { icon: '💪', title: 'Free trial classes need butts through the door first', text: 'Your free intro class converts great — but only if people show up. Without local search visibility, potential members do not even know your box exists, let alone book a trial.' },
+      { icon: '📉', title: 'January resolution surges need year-round capture', text: 'CrossFit searches spike in January and fade by March. Without year-round content, you miss the steady stream of athletes looking to switch boxes or try CrossFit for the first time.' },
+    ],
+    features: [
+      { title: 'CrossFit-specific landing pages', text: 'Pages targeting "CrossFit near me," "beginner CrossFit," and "CrossFit box in [city]" — the exact terms potential members search.' },
+      { title: 'Community showcase content', text: 'Posts highlighting member achievements, competition results, coach credentials, and community events that communicate your box culture.' },
+      { title: 'Free trial optimization', text: 'Content with clear calls to action driving visitors to book your intro class or free trial — converting online interest into in-person visits.' },
+      { title: 'CrossFit education content', text: 'Posts about WOD explanations, scaling options, and beginner guides that make CrossFit approachable for new athletes.' },
+    ],
+    stats: [
+      { value: '$150-$250', label: 'avg monthly membership' },
+      { value: '3.1×', label: 'more trial class bookings' },
+      { value: '68%', label: 'search locally before visiting' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help CrossFit boxes get more members?', answer: 'We create CrossFit-specific content targeting "CrossFit near me" and "beginner CrossFit classes" — driving trial class bookings from athletes actively looking for a new box.' },
+      { question: 'Can LocalBeacon help us showcase our community online?', answer: 'Yes. Regular posts about member achievements, community events, and coaching highlights communicate the culture that makes your box special — the factor that converts trials to memberships.' },
+      { question: 'How do we compete with other CrossFit boxes in our area?', answer: 'Content differentiating your coaching credentials, programming style, competition team, and community culture helps athletes choose your box over alternatives.' },
+      { question: 'Will this help us get more beginner athletes?', answer: 'Absolutely. Beginner-focused content — scaling explanations, first-day guides, no-experience-needed messaging — removes the intimidation factor that keeps new athletes from trying CrossFit.' },
+      { question: 'How does CrossFit SEO differ from general gym marketing?', answer: 'CrossFit athletes search for "boxes" and community-driven gyms, not generic fitness centers. Our content targets this specific audience with CrossFit terminology and culture.' },
+    ],
+  },
+
+  'brazilian-jiu-jitsu': {
+    slug: 'brazilian-jiu-jitsu',
+    name: 'Brazilian Jiu-Jitsu',
+    plural: 'BJJ Academies',
+    headline: 'New white belts start with a Google search.',
+    subheadline: 'BJJ is booming. New students research academies extensively before stepping on the mat. LocalBeacon makes your academy the first they visit.',
+    description: 'Local SEO for Brazilian Jiu-Jitsu academies. Rank for BJJ near me, jiu-jitsu classes, and Brazilian jiu-jitsu academy in your area.',
+    painPoints: [
+      { icon: '🥋', title: 'BJJ is intimidating and students research extensively', text: 'New students are nervous about starting BJJ. They read reviews, watch videos, and compare 3-5 academies before visiting. Without content addressing beginner concerns, you lose to academies that market better.' },
+      { icon: '🏆', title: 'Instructor lineage and credentials matter to BJJ students', text: 'BJJ students care about instructor belt rank, lineage, and competition experience. Without content showcasing your credentials, you miss the knowledgeable students who research deeply.' },
+      { icon: '👨‍👩‍👧', title: 'Kids BJJ is your highest-growth segment', text: 'Parents searching for kids martial arts often choose BJJ for anti-bullying and discipline benefits. Without kids-specific content, you miss this family-driven revenue stream.' },
+    ],
+    features: [
+      { title: 'BJJ program landing pages', text: 'Pages for adult BJJ, kids jiu-jitsu, no-gi, competition team, and women-only classes — each targeting specific program searches.' },
+      { title: 'Instructor credentials content', text: 'Content showcasing belt rank, lineage, competition record, and teaching experience — the credentials that serious BJJ students evaluate.' },
+      { title: 'Beginner-friendly content strategy', text: 'Posts about first-class expectations, what to wear, basic techniques, and academy etiquette that reduce intimidation for new students.' },
+      { title: 'Kids and family BJJ content', text: 'Pages targeting parents with anti-bullying, confidence, discipline, and fitness messaging that drives kids enrollment.' },
+    ],
+    stats: [
+      { value: '$120-$200', label: 'avg monthly membership' },
+      { value: '2.8×', label: 'more trial class bookings' },
+      { value: '74%', label: 'search online before visiting' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help BJJ academies get more students?', answer: 'We create program-specific pages and beginner-friendly content that captures new students at the research phase — when they are comparing academies and deciding where to train.' },
+      { question: 'Can LocalBeacon help me attract more kids BJJ students?', answer: 'Yes. Kids-focused content targeting parents who search for "kids martial arts," "anti-bullying classes," and "kids jiu-jitsu" drives family enrollment — your most stable revenue source.' },
+      { question: 'How do I differentiate my academy from other BJJ schools?', answer: 'Content showcasing your instructor lineage, competition results, unique programming, and academy culture helps serious students choose your school over competitors.' },
+      { question: 'Will this help reduce the intimidation factor for beginners?', answer: 'Absolutely. First-class guides, beginner FAQ content, and welcoming messaging directly address the anxiety that keeps 90% of interested people from ever stepping on a mat.' },
+      { question: 'How does BJJ marketing differ from general martial arts marketing?', answer: 'BJJ students research more deeply than karate or TKD students — they care about lineage, competition results, and training culture. Our content targets this knowledgeable audience.' },
+    ],
+  },
+
+  'kickboxing-gyms': {
+    slug: 'kickboxing-gyms',
+    name: 'Kickboxing',
+    plural: 'Kickboxing Gyms',
+    headline: 'Kick-start their fitness. Kick-start your growth.',
+    subheadline: 'Kickboxing classes attract fitness seekers who want intense, fun workouts. LocalBeacon makes your gym the first they find.',
+    description: 'Local SEO for kickboxing gyms and fitness kickboxing classes. Rank for kickboxing near me, cardio kickboxing, and kickboxing classes.',
+    painPoints: [
+      { icon: '🥊', title: 'Kickboxing competes with every boutique fitness trend', text: 'Orange Theory, Barry\'s, F45 — kickboxing competes for the same fitness-seeker audience. Without strong differentiation content, you blend in with every other boutique workout option.' },
+      { icon: '📱', title: 'ClassPass and workout apps capture your potential members', text: 'Fitness seekers discover classes through apps instead of Google. Without strong search presence, you depend on platforms that commoditize your classes and take a cut.' },
+      { icon: '🎯', title: 'You serve fitness seekers AND fighters but market to neither well', text: 'Fitness kickboxing and competitive Muay Thai attract different audiences. Without segmented content, your messaging confuses both groups.' },
+    ],
+    features: [
+      { title: 'Fitness vs. competitive class pages', text: 'Separate pages for cardio kickboxing fitness classes and competitive training — attracting both audience segments with appropriate messaging.' },
+      { title: 'Calorie burn and results content', text: 'Posts about kickboxing calorie burn, body transformation, and fitness results that compete with other boutique fitness marketing.' },
+      { title: 'Trial class optimization', text: 'Content with clear trial class booking CTAs, what-to-expect guides, and beginner welcome messaging that drives first visits.' },
+      { title: 'Community and energy content', text: 'Posts showcasing your class energy, community atmosphere, and instructor personalities — the experience factors that convert trials to memberships.' },
+    ],
+    stats: [
+      { value: '$100-$180', label: 'avg monthly membership' },
+      { value: '800+', label: 'calories per class highlighted' },
+      { value: '3.3×', label: 'more trial bookings' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help kickboxing gyms get more members?', answer: 'We create class-specific pages targeting "kickboxing classes near me," "cardio kickboxing," and "beginner kickboxing" — driving trial class bookings from fitness seekers actively looking.' },
+      { question: 'Can LocalBeacon help me compete with boutique fitness chains?', answer: 'Yes. Content emphasizing your unique class format, community, calorie burn, and stress relief benefits differentiates you from generic boutique fitness options.' },
+      { question: 'How do I market to both fitness seekers and aspiring fighters?', answer: 'Separate content streams for cardio kickboxing (fitness-focused) and competitive training (technique-focused) attract both audiences without confusing either.' },
+      { question: 'Will this help me reduce dependence on ClassPass?', answer: 'Absolutely. Strong organic search visibility drives direct bookings — members who find you on Google pay full price and are more likely to commit long-term.' },
+      { question: 'How quickly will kickboxing pages start generating trial bookings?', answer: 'Fitness class searches are high-volume and local. Most gyms see new trial bookings within 3-4 weeks as class-specific pages index in your area.' },
+    ],
+  },
 }

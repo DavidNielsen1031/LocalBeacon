@@ -110,3 +110,6 @@
 - [ ] 5+ email signups from /check
 - [ ] 1+ trial signup from the expo
 - [ ] Learn what resonates with Bob (pain points, objections, questions)
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

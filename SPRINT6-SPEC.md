@@ -223,3 +223,6 @@ Build a living research system that keeps LocalBeacon ahead of the AEO curve. Th
 
 *Created: March 2, 2026*
 *Research sources: Search Engine Land (GEO 2026 guide), HubSpot (AEO trends 2026), Amsive (AEO complete guide), CXL (AEO comprehensive guide), r/localseo (practitioner reports), llmstxt.org (specification)*
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

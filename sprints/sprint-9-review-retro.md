@@ -227,3 +227,6 @@ Score improved from Sprint 8's **64/100** to **87/100** (+23 points). Agent-read
 ---
 
 *Sprint 9 Closed. Review artifact committed. Next: Sprint 10 — Differentiation (per SPRINT_ROADMAP.md)*
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

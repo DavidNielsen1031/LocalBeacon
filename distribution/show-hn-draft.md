@@ -77,3 +77,6 @@ Would love feedback on the scoring methodology and any signals I'm missing.
 ## David's HN Account
 - Username: `dnielsen1031`
 - Note: Used previously for Speclint Show HN (https://news.ycombinator.com/item?id=47281933)
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

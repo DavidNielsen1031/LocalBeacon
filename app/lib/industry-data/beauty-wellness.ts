@@ -488,4 +488,132 @@ export const beautyWellness: Record<string, IndustryData> = {
       },
     ],
   },
+
+  'hair-color-specialists': {
+    slug: 'hair-color-specialists',
+    name: 'Hair Color',
+    plural: 'Hair Color Specialists',
+    headline: 'Color clients search by technique. Be found.',
+    subheadline: 'Balayage, highlights, vivid colors — clients search for specific color techniques and specialists. LocalBeacon puts your color expertise in front of them.',
+    description: 'Local SEO for hair color specialists. Rank for balayage, highlights, hair coloring, and color correction services in your area.',
+    painPoints: [
+      { icon: '🎨', title: 'Clients search for specific color techniques', text: 'Nobody searches "hair salon" when they want balayage. They search "balayage near me" or "color correction specialist." Without technique-specific content, you are invisible to your ideal clients.' },
+      { icon: '📸', title: 'Color work demands visual portfolio proof', text: 'Color clients want to see your actual work before booking. Without optimized before/after showcases and transformation content, they scroll past to stylists with stronger visual presence.' },
+      { icon: '💸', title: 'Color services are premium but price-sensitive searches dominate', text: 'Clients search "balayage cost" and "highlights price near me." Without content addressing pricing and value, you lose to salons that market their pricing transparently.' },
+    ],
+    features: [
+      { title: 'Technique-specific landing pages', text: 'Dedicated pages for balayage, highlights, ombre, vivid colors, and color correction — each targeting the exact technique searches your ideal clients make.' },
+      { title: 'Color transformation showcase content', text: 'Before/after focused posts and pages that highlight your best color work — the visual proof that drives bookings for premium color services.' },
+      { title: 'Color education content strategy', text: 'Posts about hair color maintenance, at-home care tips, and technique explanations that build trust and position you as the local color authority.' },
+      { title: 'Review optimization for color specialists', text: 'Responses that highlight your color expertise and encourage clients to share their transformation photos — building the visual review portfolio that drives new bookings.' },
+    ],
+    stats: [
+      { value: '$200-$400', label: 'avg color service value' },
+      { value: '3.5×', label: 'more color bookings in 90 days' },
+      { value: '82%', label: 'search by technique name' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help hair color specialists get found?', answer: 'We create technique-specific pages — balayage, highlights, color correction — targeting the exact searches color clients make instead of generic "hair salon near me" terms.' },
+      { question: 'Can LocalBeacon help me attract premium color clients?', answer: 'Yes. Content showcasing your expertise, technique knowledge, and transformation results attracts clients who value quality over price.' },
+      { question: 'How do I compete with salon chains for color services?', answer: 'LocalBeacon positions your specialized color training, premium products, and personalized consultations — the expertise that chains with rotating stylists cannot match.' },
+      { question: 'Will this help me get more balayage clients specifically?', answer: 'Absolutely. Balayage-specific pages target the massive search volume around this technique — "balayage near me," "balayage cost," "best balayage in [city]."' },
+      { question: 'How does color specialist SEO differ from general salon SEO?', answer: 'Color clients search by technique, not by "hair salon." Our content targets these technique-specific, higher-value searches that indicate a client ready to book premium color services.' },
+    ],
+  },
+
+  'botox-clinics': {
+    slug: 'botox-clinics',
+    name: 'Botox & Injectables',
+    plural: 'Botox Clinics',
+    headline: 'Fewer wrinkles. More bookings.',
+    subheadline: 'Botox, Dysport, and filler patients research extensively before choosing a provider. LocalBeacon makes your clinic the obvious choice.',
+    description: 'Local SEO for Botox and injectable providers. Rank for Botox near me, lip fillers, and dermal filler injections in your area.',
+    painPoints: [
+      { icon: '💉', title: 'Patients cannot tell qualified injectors from unqualified ones online', text: 'Search results mix board-certified providers with weekend-course injectors. Without credential-forward content, patients choose on price alone — and you lose to less qualified providers.' },
+      { icon: '🔍', title: 'Botox patients compare 4-5 providers before booking', text: 'Injectable patients research extensively — checking reviews, credentials, and before/after photos. Without a strong content presence, you lose the comparison to competitors with better marketing.' },
+      { icon: '📅', title: 'Botox is a repeat business — retention matters as much as acquisition', text: 'Botox patients rebook every 3-4 months. Without ongoing content keeping you top-of-mind, patients drift to competitors offering promotions or better convenience.' },
+    ],
+    features: [
+      { title: 'Injectable treatment landing pages', text: 'Dedicated pages for Botox, Dysport, Juvederm, Restylane, and lip fillers — each targeting specific treatment searches patients make.' },
+      { title: 'Provider credibility content', text: 'Content showcasing your medical credentials, injection technique, and training — the trust signals that differentiate qualified providers from discount injectors.' },
+      { title: 'Natural results showcase', text: 'Before/after content emphasizing natural-looking results — the #1 concern for injectable patients who fear looking "overdone."' },
+      { title: 'Retention and rebooking content', text: 'Seasonal touch-up reminders and loyalty-focused posts that keep existing patients coming back every quarter.' },
+    ],
+    stats: [
+      { value: '$500+', label: 'avg Botox visit value' },
+      { value: '4×/year', label: 'repeat booking frequency' },
+      { value: '3.2×', label: 'more new consultations' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help Botox clinics get more patients?', answer: 'We create treatment-specific pages targeting "Botox near me," "lip fillers cost," and "best Botox injector in [city]" — the high-intent searches that drive new consultations.' },
+      { question: 'Can LocalBeacon help me compete with discount Botox providers?', answer: 'Yes. Content positioning your medical credentials, natural results, and patient safety record attracts quality-focused patients who understand why expertise matters for injectables.' },
+      { question: 'How do I retain Botox patients between treatments?', answer: 'Seasonal content, treatment reminders, and loyalty-focused posts keep your practice top-of-mind during the 3-4 month interval between Botox appointments.' },
+      { question: 'Will this help me attract lip filler patients?', answer: 'Absolutely. Lip filler searches are among the highest-volume injectable terms. We create specific pages targeting this growing market with natural results messaging.' },
+      { question: 'How does injectable SEO differ from general med spa marketing?', answer: 'Injectable patients search by treatment name and compare providers on credentials and results. Our content targets these specific, high-value searches rather than generic wellness terms.' },
+    ],
+  },
+
+  'laser-hair-removal': {
+    slug: 'laser-hair-removal',
+    name: 'Laser Hair Removal',
+    plural: 'Laser Hair Removal Clinics',
+    headline: 'Smooth skin searches. Smoother bookings.',
+    subheadline: 'Laser hair removal clients compare prices, technology, and results before booking. LocalBeacon makes your clinic the one they choose.',
+    description: 'Local SEO for laser hair removal clinics. Rank for laser hair removal near me, full body laser, and permanent hair removal in your area.',
+    painPoints: [
+      { icon: '✨', title: 'Groupon and discount sites undercut your pricing', text: 'Cheap laser deals on Groupon train clients to shop on price alone. Without content communicating your technology advantage and treatment quality, you compete on price instead of value.' },
+      { icon: '🔬', title: 'Technology differences confuse patients', text: 'Patients do not understand why your diode laser is better than a competitor IPL device. Without educational content explaining technology differences, they choose the cheapest option.' },
+      { icon: '📆', title: 'Multi-session treatments require patient commitment', text: 'Laser hair removal requires 6-8 sessions. Without content setting expectations and building trust, patients drop off mid-treatment and leave negative reviews about "not working."' },
+    ],
+    features: [
+      { title: 'Treatment area landing pages', text: 'Dedicated pages for underarms, bikini, legs, face, and full body laser — each targeting area-specific searches patients make when researching.' },
+      { title: 'Technology differentiation content', text: 'Content explaining your laser technology, skin type compatibility, and safety certifications — the expertise that justifies premium pricing over discount providers.' },
+      { title: 'Treatment expectation content', text: 'Posts about session count, results timeline, and aftercare that set realistic expectations and reduce drop-off rates.' },
+      { title: 'Seasonal promotion content', text: 'Winter prep and pre-summer campaigns that drive bookings during peak planning seasons.' },
+    ],
+    stats: [
+      { value: '$1,500+', label: 'avg full-treatment value' },
+      { value: '6-8', label: 'sessions per treatment area' },
+      { value: '2.8×', label: 'more package bookings' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help laser clinics get more clients?', answer: 'We create area-specific pages — bikini laser, underarm laser, full body laser — targeting the exact searches patients make when researching hair removal options in your area.' },
+      { question: 'Can LocalBeacon help me compete with Groupon laser deals?', answer: 'Yes. Content explaining your technology, safety protocols, and superior results helps patients understand why quality laser treatment is worth more than a discount deal.' },
+      { question: 'How do I reduce patient drop-off during multi-session treatments?', answer: 'Expectation-setting content about session counts, results timelines, and the science behind multiple treatments keeps patients committed through their full treatment plan.' },
+      { question: 'Will seasonal content drive more laser bookings?', answer: 'Absolutely. "Start laser now for summer-ready skin" campaigns in winter and spring drive bookings during the highest-intent planning periods.' },
+      { question: 'How does laser hair removal SEO differ from general med spa marketing?', answer: 'Laser clients search by treatment area and compare technology. Our content targets these specific searches and positions your technology advantage for patients ready to commit.' },
+    ],
+  },
+
+  'spray-tanning': {
+    slug: 'spray-tanning',
+    name: 'Spray Tanning',
+    plural: 'Spray Tan Studios',
+    headline: 'Golden glow. Golden search rankings.',
+    subheadline: 'Spray tan clients search for natural-looking results and experienced technicians. LocalBeacon makes your studio the go-to for sunless tanning.',
+    description: 'Local SEO for spray tan studios. Rank for spray tan near me, airbrush tanning, and sunless tanning services in your area.',
+    painPoints: [
+      { icon: '☀️', title: 'Event-driven demand creates feast-or-famine bookings', text: 'Proms, weddings, and vacations drive spray tan demand in waves. Without year-round content, you are invisible during off-peak months when steady clients are still searching.' },
+      { icon: '🤳', title: 'Bad spray tan fears drive extensive research', text: 'Clients are terrified of looking orange or streaky. Without content showcasing natural results and your technique, they choose studios with better visual proof of quality.' },
+      { icon: '🏠', title: 'Mobile spray tan competitors undercut your pricing', text: 'Mobile spray tan operators work from home with low overhead. Without positioning your studio experience, premium products, and consistent results, you lose to convenience-based competitors.' },
+    ],
+    features: [
+      { title: 'Event-specific spray tan pages', text: 'Pages for wedding spray tans, prom tans, competition tans, and vacation prep — targeting the event-specific searches that drive bookings.' },
+      { title: 'Natural results showcase content', text: 'Before/after content emphasizing your natural, streak-free results — addressing the #1 fear that spray tan clients have.' },
+      { title: 'Solution-based content strategy', text: 'Posts about spray tan prep, aftercare, and longevity tips that build trust and position you as the knowledgeable local expert.' },
+      { title: 'Seasonal and year-round content', text: 'Summer glow campaigns, winter warmth content, and event season pushes that keep bookings steady across all seasons.' },
+    ],
+    stats: [
+      { value: '$45-$75', label: 'avg spray tan service' },
+      { value: '3.1×', label: 'more event bookings' },
+      { value: '68%', label: 'become repeat clients' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help spray tan studios get more bookings?', answer: 'We create event-specific and service-specific pages that target how clients actually search — "wedding spray tan," "prom tan near me," "airbrush tan cost" — driving high-intent bookings.' },
+      { question: 'Can LocalBeacon help me get year-round bookings?', answer: 'Yes. Year-round content about maintaining a healthy glow, winter skin care, and regular tanning schedules attracts steady clients beyond the event-driven spikes.' },
+      { question: 'How do I compete with mobile spray tan operators?', answer: 'Content positioning your studio environment, premium solutions, consistent temperature control, and professional technique highlights the quality advantages over mobile services.' },
+      { question: 'Will this help me attract bridal spray tan parties?', answer: 'Absolutely. Bridal spray tan pages are high-value — brides bring bridesmaids, mothers, and friends. We target "bridal spray tan" and "wedding party tanning" searches.' },
+      { question: 'How do I address concerns about looking orange or streaky?', answer: 'Our content showcases your natural results, explains your technique and product quality, and includes testimonials about natural-looking outcomes — directly addressing the fear that holds clients back.' },
+    ],
+  },
 }

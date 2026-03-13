@@ -89,3 +89,6 @@
 **Not used this sprint:** Teresa (discovery — not applicable to retroactive review), Sasha (UX — no new flows designed), Jules (UI — no new visual work), Tara (test automation — no test suite yet), Riley (product analyst — will run at retro)
 
 **Bias rate:** 0% (0 bias incidents / 3 customer personas)
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

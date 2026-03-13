@@ -410,4 +410,132 @@ export const automotive: Record<string, IndustryData> = {
       },
     ],
   },
+
+  'brake-shops': {
+    slug: 'brake-shops',
+    name: 'Brake Repair',
+    plural: 'Brake Shops',
+    headline: 'Squealing brakes search urgently. Be first.',
+    subheadline: 'Brake problems are urgent and scary. Drivers search fast and book the first shop they trust. LocalBeacon puts your brake expertise at the top.',
+    description: 'Local SEO for brake repair shops. Rank for brake repair near me, brake pad replacement, and brake service in your area.',
+    painPoints: [
+      { icon: '🛑', title: 'Brake customers search with urgency', text: 'A driver hearing grinding or squealing needs brakes NOW. They call the first shop they find with good reviews. Without prominent search presence, you lose these high-intent, time-sensitive customers.' },
+      { icon: '🔧', title: 'National chains dominate brake advertising', text: 'Midas, Firestone, and Pep Boys spend millions on brake ads. Without strong local content, independent shops get buried beneath chain listings that may not offer better service.' },
+      { icon: '💰', title: 'Low-cost brake ads attract price shoppers', text: '"$99 brake special" ads train customers to shop on price. Without content explaining your quality parts, warranty, and expertise, you compete on price against shops using inferior components.' },
+    ],
+    features: [
+      { title: 'Brake service landing pages', text: 'Dedicated pages for brake pads, rotors, calipers, brake fluid flush, and ABS diagnostics — targeting the specific brake searches drivers make.' },
+      { title: 'Urgency-optimized content', text: 'Content addressing brake warning signs, grinding noises, and safety concerns — capturing drivers who are searching because something feels wrong.' },
+      { title: 'Quality differentiation messaging', text: 'Posts about OEM parts, ceramic pads, warranties, and professional diagnostics that justify your pricing against chain shop specials.' },
+      { title: 'Review management for trust building', text: 'Review responses emphasizing safety expertise, honest diagnostics, and quality parts — the trust signals brake customers rely on.' },
+    ],
+    stats: [
+      { value: '$350+', label: 'avg brake service value' },
+      { value: '4.2×', label: 'more brake inquiries' },
+      { value: '89%', label: 'search when symptoms appear' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help brake shops get more customers?', answer: 'We create symptom-based content — grinding noises, spongy pedal, brake warning light — targeting the urgent searches drivers make when they realize they need brake work.' },
+      { question: 'Can LocalBeacon help me compete with national brake chains?', answer: 'Yes. Content positioning your local expertise, personal service, honest diagnostics, and quality parts differentiates you from chain shops with rotating technicians.' },
+      { question: 'How do I attract customers who value quality over price?', answer: 'Content explaining OEM vs. budget parts, warranty differences, and proper diagnostic procedures attracts customers who understand why quality brake work costs more.' },
+      { question: 'Will this help me get emergency brake repair calls?', answer: 'Absolutely. Urgent content targeting "brake repair near me now" and "grinding brakes" captures drivers who need immediate service and will pay for availability.' },
+      { question: 'How quickly will brake repair pages start generating leads?', answer: 'Brake searches are urgent and local. Most shops see new inquiries within 2-4 weeks as symptom-specific pages index and your Google Business Profile gains visibility.' },
+    ],
+  },
+
+  'transmission-repair': {
+    slug: 'transmission-repair',
+    name: 'Transmission Repair',
+    plural: 'Transmission Shops',
+    headline: 'Transmission trouble? They will find you.',
+    subheadline: 'Transmission problems are expensive and stressful. Vehicle owners research extensively before choosing a shop. LocalBeacon makes your expertise visible.',
+    description: 'Local SEO for transmission repair shops. Rank for transmission repair, transmission rebuild, and transmission service near me.',
+    painPoints: [
+      { icon: '⚙️', title: 'Transmission repair is a trust-dependent service', text: 'A $3,000-$5,000 transmission repair requires extreme trust. Without strong reviews, credentials content, and warranty information visible online, customers choose the shop with better trust signals.' },
+      { icon: '🔍', title: 'Customers research transmission shops more than any other auto service', text: 'The high cost means customers compare 5-7 shops, read reviews extensively, and look for specialization. Without comprehensive content, you lose to shops that market their expertise better.' },
+      { icon: '🏪', title: 'AAMCO and national chains capture most transmission searches', text: 'Brand recognition gives chains an unfair advantage in search. Without strong local content positioning your independent expertise, you compete on price instead of quality.' },
+    ],
+    features: [
+      { title: 'Transmission service pages', text: 'Pages for transmission rebuilds, fluid service, clutch repair, CVT service, and torque converter replacement — targeting specific transmission searches.' },
+      { title: 'Trust and warranty content', text: 'Content showcasing your warranty terms, diagnostic process, and technician certifications — the trust builders that justify premium transmission repair pricing.' },
+      { title: 'Symptom-based educational content', text: 'Posts about slipping, shuddering, hard shifting, and other transmission symptoms that capture drivers in the early research phase.' },
+      { title: 'Vehicle-specific transmission pages', text: 'Content targeting common transmission issues by vehicle make — Ford, Honda, Nissan CVT problems — capturing highly specific searches.' },
+    ],
+    stats: [
+      { value: '$3K-$5K', label: 'avg transmission repair value' },
+      { value: '2.6×', label: 'more repair inquiries' },
+      { value: '94%', label: 'research online before choosing' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help transmission shops get more business?', answer: 'We create symptom-based and service-specific content that captures vehicle owners when they first notice transmission problems — before they default to AAMCO or a chain.' },
+      { question: 'Can LocalBeacon help me compete with AAMCO?', answer: 'Yes. Content highlighting your local expertise, better warranty terms, honest diagnostics, and independent shop advantages gives customers reasons to choose you over chains.' },
+      { question: 'How do I attract customers for high-value transmission rebuilds?', answer: 'Educational content about rebuild vs. replace decisions, warranty comparisons, and diagnostic transparency builds the trust needed for customers to commit to $3,000+ repairs at your shop.' },
+      { question: 'Will vehicle-specific content help my shop?', answer: 'Absolutely. Pages targeting "Nissan CVT problems" or "Honda transmission issues" capture owners searching about their specific vehicle — high-intent, ready-to-book customers.' },
+      { question: 'How do I build trust online for expensive transmission work?', answer: 'LocalBeacon creates warranty-focused, certification-focused content and manages reviews to build the credibility that customers need before committing to major transmission repairs.' },
+    ],
+  },
+
+  'mobile-car-wash': {
+    slug: 'mobile-car-wash',
+    name: 'Mobile Car Wash',
+    plural: 'Mobile Car Wash Services',
+    headline: 'Clean cars come to them. So should clients.',
+    subheadline: 'Mobile car wash customers want convenience. LocalBeacon makes your mobile service the first they find when searching from home or office.',
+    description: 'Local SEO for mobile car wash services. Rank for mobile car wash, car wash at home, and on-site car detailing in your area.',
+    painPoints: [
+      { icon: '🚗', title: 'Mobile services are harder to find online than fixed locations', text: 'Google favors businesses with physical locations. Without location-optimized content for every neighborhood you serve, your mobile service is invisible to customers searching locally.' },
+      { icon: '📍', title: 'You serve many areas but rank in none', text: 'A mobile car wash covers a wide service area but Google shows you in none of those neighborhoods without dedicated local pages for each area.' },
+      { icon: '📱', title: 'App-based wash services are capturing your market', text: 'Washos, MobileWash, and local apps are grabbing mobile wash customers. Without strong search presence, you lose to platforms that do nothing but connect customers to operators.' },
+    ],
+    features: [
+      { title: 'Neighborhood service area pages', text: 'Dedicated pages for every neighborhood, office park, and community you serve — so customers in each area find you when they search for mobile wash services.' },
+      { title: 'Convenience-focused content', text: 'Posts highlighting your at-home and at-office service, flexible scheduling, and waterless wash options that emphasize why mobile beats driving to a car wash.' },
+      { title: 'Fleet and office park marketing', text: 'Content targeting office buildings, apartment complexes, and small fleet owners who need regular on-site wash services.' },
+      { title: 'Booking optimization content', text: 'Google Business Profile posts with clear service menus, pricing, and booking calls to action that convert mobile searchers into same-day bookings.' },
+    ],
+    stats: [
+      { value: '$45-$120', label: 'avg mobile wash booking' },
+      { value: '3.7×', label: 'more bookings in 90 days' },
+      { value: '72%', label: 'search on mobile devices' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help mobile car wash services get found?', answer: 'We create neighborhood-specific pages for every area you serve — office parks, residential communities, apartment complexes — so customers in each location find your mobile service.' },
+      { question: 'Can LocalBeacon help me rank without a physical location?', answer: 'Yes. Service-area business optimization is core to what we do. We build your visibility across your entire coverage area without needing a storefront address.' },
+      { question: 'How do I compete with car wash apps like Washos?', answer: 'Content positioning your personal service, consistent quality, and direct booking (no platform fees) attracts customers who want a reliable local operator over an anonymous app.' },
+      { question: 'Will this help me get fleet and corporate accounts?', answer: 'Absolutely. Corporate and fleet-focused pages target office managers and fleet operators searching for regular on-site wash services — your highest-value recurring accounts.' },
+      { question: 'How do I market waterless and eco-friendly mobile washing?', answer: 'Eco-conscious content about waterless wash technology and environmental benefits attracts the growing segment of customers who choose services based on sustainability.' },
+    ],
+  },
+
+  'roadside-assistance': {
+    slug: 'roadside-assistance',
+    name: 'Roadside Assistance',
+    plural: 'Roadside Assistance Services',
+    headline: 'Stranded drivers search NOW. Be found.',
+    subheadline: 'Flat tires, dead batteries, lockouts — roadside emergencies mean instant phone searches. LocalBeacon makes your service the one they call.',
+    description: 'Local SEO for roadside assistance services. Rank for roadside assistance near me, flat tire help, jump start service, and lockout assistance.',
+    painPoints: [
+      { icon: '🔋', title: 'Roadside calls are won in seconds, not minutes', text: 'A stranded driver calls the first service they find. If your phone number and availability are not immediately visible in search results, you lose that call permanently.' },
+      { icon: '🏢', title: 'AAA dominates roadside assistance searches', text: 'AAA brand recognition means most roadside searches see them first. Without strong local positioning and faster response time messaging, independent operators get overlooked.' },
+      { icon: '🌙', title: 'Most roadside calls happen after hours', text: 'Evenings, nights, and weekends generate the majority of roadside calls. Without 24/7 availability signals in your online presence, after-hours searchers skip you.' },
+    ],
+    features: [
+      { title: 'Emergency service landing pages', text: 'Pages for jump starts, flat tire changes, lockouts, fuel delivery, and winch-outs — each targeting the specific emergency searches stranded drivers make.' },
+      { title: '24/7 availability optimization', text: 'Google Business Profile and website content prominently displaying your after-hours, overnight, and holiday availability for urgent searches.' },
+      { title: 'Response time messaging', text: 'Content highlighting your average response time, local coverage area, and dispatch process — the factors stranded drivers care about most.' },
+      { title: 'Service area coverage pages', text: 'Pages for every highway, neighborhood, and area you cover so stranded drivers anywhere in your territory find you first.' },
+    ],
+    stats: [
+      { value: '$75-$150', label: 'avg roadside service call' },
+      { value: '15 min', label: 'highlighted avg response time' },
+      { value: '4.1×', label: 'more after-hours calls' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help roadside assistance companies get more calls?', answer: 'We create emergency-specific pages — jump starts, lockouts, flat tires — with prominent phone numbers and availability information targeting the exact searches stranded drivers make.' },
+      { question: 'Can LocalBeacon help me compete with AAA?', answer: 'Yes. Content highlighting your faster local response times, no membership required, and transparent pricing gives drivers reasons to call you instead of waiting for AAA dispatch.' },
+      { question: 'How do I capture after-hours roadside calls?', answer: 'We optimize your 24/7 availability across Google Business Profile, create after-hours specific content, and ensure your phone number is immediately visible in all search results.' },
+      { question: 'Will coverage area pages help my roadside business?', answer: 'Absolutely. Highway-specific and area-specific pages mean a driver stranded on I-35 finds your service — not a company 40 miles away.' },
+      { question: 'How quickly will roadside assistance pages generate calls?', answer: 'Roadside searches are urgent and ultra-local. Most services see additional calls within 1-2 weeks as emergency-specific pages index in your coverage area.' },
+    ],
+  },
 }

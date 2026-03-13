@@ -350,3 +350,6 @@ All competitor details above have been cited to official sites or user reviews. 
 
 **Sources:** For features and pricing we used vendor websites and pricing pages【6†L226-L234】【25†L224-L232】【33†L99-L107】【66†L74-L83】. User sentiment quotes are from G2 reviews【40†L464-L472】【58†L224-L232】【61†L43-L47】. All claims in analysis tie back to these.
 
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

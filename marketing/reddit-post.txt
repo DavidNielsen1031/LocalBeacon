@@ -1,0 +1,6 @@
+**Title:** I built a tool that optimizes local businesses for AI search (ChatGPT, Perplexity, Claude)
+**Body:**
+Google is still king, but AI search is growing fast. When someone asks ChatGPT "best [service] near me", most local businesses are invisible.
+I built LocalBeacon to fix that. It creates AI-optimized landing pages for 60+ industries, generates blog content, and provides AEO (AI Engine Optimization) audits.
+It's early but the site is live: https://localbeacon.ai
+Would love feedback from anyone in local marketing or small business.

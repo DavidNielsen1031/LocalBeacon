@@ -332,4 +332,132 @@ export const eventsCreative: Record<string, IndustryData> = {
       },
     ],
   },
+
+  'wedding-photographers': {
+    slug: 'wedding-photographers',
+    name: 'Wedding Photography',
+    plural: 'Wedding Photographers',
+    headline: 'Couples search. Your portfolio converts.',
+    subheadline: 'Engaged couples research wedding photographers for months. LocalBeacon makes your portfolio the one they find first and book.',
+    description: 'Local SEO for wedding photographers. Rank for wedding photographer near me, engagement photos, and bridal photography in your area.',
+    painPoints: [
+      { icon: '📸', title: 'Couples research 5-10 photographers before booking', text: 'Wedding photography is a once-in-a-lifetime decision. Couples compare extensively — and photographers with better online presence win the comparison every time.' },
+      { icon: '💍', title: 'The Knot and WeddingWire capture most searches', text: 'Wedding directories dominate photographer searches. Without your own strong SEO, you depend on platforms that charge listing fees and commoditize your work.' },
+      { icon: '📅', title: 'Wedding season creates booking pressure', text: 'Peak wedding season fills up fast. Without year-round visibility capturing couples in the planning phase, you miss early bookers who lock in photographers 12-18 months out.' },
+    ],
+    features: [
+      { title: 'Portfolio-driven landing pages', text: 'Pages showcasing your wedding work by style — editorial, documentary, romantic, candid — targeting the aesthetic searches couples make.' },
+      { title: 'Venue-specific content', text: 'Pages for popular wedding venues you have shot at — capturing couples who search for photographers experienced at their specific venue.' },
+      { title: 'Engagement session marketing', text: 'Content promoting engagement shoots as the entry point to wedding bookings — your most effective lead generation tool.' },
+      { title: 'Wedding planning timeline content', text: 'Posts about when to book a photographer, what to look for, and consultation tips — capturing couples in the early research phase.' },
+    ],
+    stats: [
+      { value: '$3K-$6K', label: 'avg wedding package value' },
+      { value: '2.7x', label: 'more inquiries from couples' },
+      { value: '12-18 mo', label: 'typical advance booking window' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help wedding photographers get more bookings?', answer: 'We create portfolio pages and venue-specific content that appears when engaged couples search — capturing them during the research phase when they are comparing photographers.' },
+      { question: 'Can LocalBeacon help me depend less on The Knot and WeddingWire?', answer: 'Yes. Building your own search visibility means couples find you directly — no listing fees, no competing with 50 other photographers on the same page.' },
+      { question: 'How do venue-specific pages help?', answer: 'Couples searching for photographers at their specific venue are high-intent leads. Pages showcasing your work at popular venues capture these ready-to-book clients.' },
+      { question: 'Will engagement session content drive wedding bookings?', answer: 'Absolutely. Engagement sessions are your best lead generation tool — couples who love their engagement photos almost always book you for the wedding.' },
+      { question: 'How far in advance do couples book wedding photographers?', answer: 'Typically 12-18 months. LocalBeacon ensures your content is visible throughout this extended planning period — not just during ad campaigns.' },
+    ],
+  },
+
+  'real-estate-photographers': {
+    slug: 'real-estate-photographers',
+    name: 'Real Estate Photography',
+    plural: 'Real Estate Photographers',
+    headline: 'Listings sell faster with you. Get found.',
+    subheadline: 'Agents and homeowners need professional real estate photos. LocalBeacon makes your photography service the first call when a listing goes live.',
+    description: 'Local SEO for real estate photographers. Rank for real estate photography, listing photos, and property photography near me.',
+    painPoints: [
+      { icon: '🏠', title: 'Agents have one photographer they always call', text: 'Real estate photography is relationship-driven. If agents do not know you exist, they keep calling their current photographer. Without search visibility, you never get the chance to compete.' },
+      { icon: '📱', title: 'iPhone photos are replacing professional photography', text: 'Many agents think phone photos are "good enough." Without content demonstrating the listing performance difference of professional photos, you lose to DIY photography.' },
+      { icon: '💰', title: 'Low barriers to entry create price pressure', text: 'Everyone with a camera offers real estate photography. Without content positioning your professional editing, turnaround time, and consistency, you compete on price alone.' },
+    ],
+    features: [
+      { title: 'Service-specific landing pages', text: 'Pages for listing photography, aerial/drone photography, virtual tours, twilight shoots, and video walkthroughs — each targeting specific agent needs.' },
+      { title: 'Agent-focused content', text: 'Posts about how professional photos increase listing views, reduce days on market, and drive higher sale prices — the ROI story agents need to hear.' },
+      { title: 'Turnaround and reliability content', text: 'Content highlighting your 24-48 hour turnaround, consistent quality, and scheduling flexibility — the operational factors agents value most.' },
+      { title: 'Portfolio showcase optimization', text: 'Before/after staging comparisons and dramatic property showcases that demonstrate the value of professional real estate photography.' },
+    ],
+    stats: [
+      { value: '32%', label: 'more online views with pro photos' },
+      { value: '$200-$400', label: 'avg listing photo package' },
+      { value: '2.8x', label: 'more agent inquiries' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help real estate photographers get clients?', answer: 'We create service-specific pages and agent-focused content that appears when agents search for listing photographers — or when homeowners selling FSBO need professional photos.' },
+      { question: 'Can LocalBeacon help me break into the real estate market?', answer: 'Yes. Strong search visibility introduces you to agents who need a new photographer. One successful listing shoot often leads to ongoing work as their go-to photographer.' },
+      { question: 'How do I convince agents to use professional photos?', answer: 'Content about listing performance data — more views, faster sales, higher prices — gives agents the ROI justification they need to invest in professional photography.' },
+      { question: 'Will drone photography content attract more clients?', answer: 'Absolutely. Aerial/drone photography pages target the growing demand for elevated property views — a premium service that differentiates you from phone-photo competitors.' },
+      { question: 'How quickly will real estate photography pages generate leads?', answer: 'Real estate photography is urgency-driven — agents need a photographer this week. Most photographers see new agent inquiries within 2-4 weeks as pages index.' },
+    ],
+  },
+
+  'wedding-djs': {
+    slug: 'wedding-djs',
+    name: 'Wedding DJ',
+    plural: 'Wedding DJs',
+    headline: 'They want the party. Help them find you.',
+    subheadline: 'Couples planning receptions search for DJs who understand weddings. LocalBeacon makes your entertainment service the obvious choice.',
+    description: 'Local SEO for wedding DJs and wedding entertainment. Rank for wedding DJ near me, reception DJ, and wedding music services.',
+    painPoints: [
+      { icon: '🎵', title: 'Couples fear hiring the wrong DJ more than any other vendor', text: 'A bad DJ ruins the reception. Couples research extensively, watch videos, and read every review before booking. Without strong content and reviews, you lose to DJs with better online presence.' },
+      { icon: '🎤', title: 'Budget DJs and Spotify playlists are your competition', text: 'Some couples think a laptop and Spotify is "good enough." Without content showing the difference a professional DJ makes, you lose bookings to DIY and discount alternatives.' },
+      { icon: '📆', title: 'Saturday dates book 12+ months in advance', text: 'Popular wedding dates sell out fast. Without early visibility capturing engaged couples at the start of planning, your Saturdays go to competitors who market earlier.' },
+    ],
+    features: [
+      { title: 'Wedding entertainment landing pages', text: 'Pages for reception DJs, ceremony music, MC services, uplighting, and photo booths — targeting the specific entertainment searches couples make.' },
+      { title: 'Venue-specific experience content', text: 'Content mentioning venues you have worked at — capturing couples searching for DJs experienced at their specific reception venue.' },
+      { title: 'Wedding planning content', text: 'Posts about music timeline planning, first dance song selection, and reception flow tips that position you as the wedding entertainment expert.' },
+      { title: 'Video and audio showcase content', text: 'Content directing couples to your reception videos and mixed samples — the proof points that convert research into bookings.' },
+    ],
+    stats: [
+      { value: '$1,200-$2,500', label: 'avg wedding DJ package' },
+      { value: '2.5x', label: 'more consultation bookings' },
+      { value: '93%', label: 'say DJ is the most important vendor' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help wedding DJs get more bookings?', answer: 'We create wedding-specific content and venue pages that appear when couples search for reception DJs — driving consultations from couples in the active booking phase.' },
+      { question: 'Can LocalBeacon help me compete with budget DJs?', answer: 'Yes. Content explaining the difference between professional DJs and budget operators — equipment, experience, MC skills, reading the crowd — helps couples understand the value.' },
+      { question: 'How do venue pages help wedding DJs?', answer: 'Couples searching for "DJ at [venue name]" are ready to book. Pages mentioning venues you have worked at capture these high-intent, venue-specific searches.' },
+      { question: 'Will planning content drive DJ bookings?', answer: 'Absolutely. Reception timeline, music selection, and flow planning content positions you as the expert who cares about their wedding — not just someone who plays music.' },
+      { question: 'How far in advance should wedding DJs start marketing?', answer: 'Couples book DJs 8-14 months out. LocalBeacon keeps you visible year-round, capturing engaged couples throughout their planning journey.' },
+    ],
+  },
+
+  'event-florists': {
+    slug: 'event-florists',
+    name: 'Event Floristry',
+    plural: 'Event Florists',
+    headline: 'Every event needs flowers. Be the florist.',
+    subheadline: 'Corporate events, galas, and large celebrations need professional floral design. LocalBeacon makes your event floristry service discoverable.',
+    description: 'Local SEO for event florists and large-scale floral design. Rank for event florist, corporate flowers, and gala floral arrangements.',
+    painPoints: [
+      { icon: '🌸', title: 'Event planners have established florist relationships', text: 'Breaking into the event market means competing with florists who already have planner relationships. Without strong search presence, planners never discover your capabilities.' },
+      { icon: '💐', title: 'Wedding florists dominate floral searches', text: 'Most floral SEO targets weddings. Corporate events, galas, and large-scale installations need different content — without it, event planners searching for commercial floristry find wedding florists instead.' },
+      { icon: '📊', title: 'High-value event contracts require portfolio proof', text: 'A $5K-$20K floral installation contract requires proof of capability. Without showcase content demonstrating your large-scale work, event planners cannot justify hiring you.' },
+    ],
+    features: [
+      { title: 'Event type landing pages', text: 'Pages for corporate events, galas, fundraisers, conference florals, and hotel installations — targeting commercial floral searches separate from wedding content.' },
+      { title: 'Large-scale installation showcase', text: 'Portfolio content featuring your largest and most impressive installations — the proof event planners need to trust you with high-budget projects.' },
+      { title: 'Corporate client content', text: 'Posts about weekly office arrangements, lobby displays, and recurring corporate floral programs — targeting the steady recurring revenue stream.' },
+      { title: 'Seasonal event content', text: 'Holiday party, corporate gala, and seasonal event floristry content timed to when event planners are booking vendors.' },
+    ],
+    stats: [
+      { value: '$3K-$15K', label: 'avg event floral contract' },
+      { value: '2.3x', label: 'more event inquiries' },
+      { value: '78%', label: 'of planners search for new florists online' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help event florists get commercial work?', answer: 'We create event-type specific pages — corporate, galas, conferences — that appear when event planners search for commercial florists, separate from wedding-focused results.' },
+      { question: 'Can LocalBeacon help me break into the corporate floral market?', answer: 'Yes. Content targeting weekly office arrangements, lobby displays, and corporate event floristry captures the recurring revenue clients that stabilize your business.' },
+      { question: 'How do installation showcases drive bookings?', answer: 'Event planners need visual proof of large-scale capability. Portfolio pages featuring your biggest installations demonstrate that you can handle their event budget and scope.' },
+      { question: 'Will seasonal content help my event floristry business?', answer: 'Absolutely. Content published before holiday party season and gala season captures planners when they are actively booking florists — timing is critical.' },
+      { question: 'How does event floristry SEO differ from wedding floristry?', answer: 'Event planners search for "corporate florist," "event flowers," and venue-specific terms — different from couples searching for "wedding florist." Separate content captures both markets.' },
+    ],
+  },
 }

@@ -98,3 +98,6 @@ Once we've found someone with genuine pain:
 ---
 
 *Last updated: 2026-03-04*
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

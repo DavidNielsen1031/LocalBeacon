@@ -158,3 +158,6 @@ These MUST use the delegation substrate to establish baseline data.
 ---
 
 *Sprint 8 Review + Retrospective complete. Lessons logged. Sprint 9 will be held to a higher process standard.*
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

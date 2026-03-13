@@ -164,3 +164,6 @@ Sprint 2 shipped working features (GBP post generator, service area pages, revie
 - [ ] Pricing page compared side-by-side with BrightLocal and Localo — is our value prop clear?
 - [ ] Dashboard screenshot after first login — is it blank? If yes, fail.
 - [ ] Mobile test on iPhone: full flow works, nothing broken
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

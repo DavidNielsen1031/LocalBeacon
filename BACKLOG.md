@@ -172,3 +172,6 @@
 ---
 
 *Created: Feb 28, 2026 | Updated: Mar 1, 2026*
+
+---
+*See also: [[MEMORY|Alexander's Memory]] · [[TOOLS|Infrastructure]] · [[SOUL|Soul]]*

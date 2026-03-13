@@ -123,3 +123,6 @@ components/
 lib/
   [module].ts           ← Business logic, API clients, utils
 ```
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

@@ -84,3 +84,6 @@
 - Create UTM link: `localbeacon.ai?ref=ramsey-expo-2026`
 - Track signups from expo separately
 - Follow up with leads within 48 hours
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

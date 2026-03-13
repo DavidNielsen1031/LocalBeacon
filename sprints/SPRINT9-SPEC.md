@@ -172,3 +172,6 @@
 ---
 
 *Draft spec. Pending: Speclint validation, David approval, then open sprint.*
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

@@ -58,3 +58,6 @@ Allow: /
 - The trade-off is clear for local businesses: visibility > protection
 
 *Next review: April 2, 2026*
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

@@ -128,3 +128,6 @@ Tools: HubSpot AEO Grader (free), Geoptie, CoreMention, OmniSEO
 ---
 
 *Next review: April 2, 2026*
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

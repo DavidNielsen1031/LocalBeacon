@@ -219,3 +219,6 @@ No persona was consulted at any point during this sprint. This is the worst poss
 ---
 
 *Sprint 11 was a technical success and a process failure. Every item shipped, every sub-agent succeeded, but zero quality gates were executed. The Sprint OS exists to prevent exactly this kind of "ship fast, check later" behavior. Recommendations R-01, R-02, and R-07 are the highest priority fixes.*
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

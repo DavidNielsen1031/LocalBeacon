@@ -59,3 +59,6 @@ Nobody else does AEO for local businesses. Google SEO tools are everywhere. AI d
 - **Gross margin:** ~95%+ (SaaS, minimal COGS beyond API calls)
 - **LTV target:** $500+ per agency (10+ month retention)
 - **Revenue model:** Monthly recurring subscriptions via Stripe
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

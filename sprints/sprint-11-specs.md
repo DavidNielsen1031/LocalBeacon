@@ -127,3 +127,6 @@ The pricing page still says "coming soon" for multi-client and white-label featu
 
 ### Measurable Outcome
 A visitor to the pricing page sees accurate feature lists. Zero false claims. Agency tier has clear differentiation justifying the $99/mo price.
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

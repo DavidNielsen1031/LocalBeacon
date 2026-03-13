@@ -81,3 +81,6 @@ When checking a competitor's AI presence:
 5. Identify gaps: what do they have that the client doesn't?
 
 *Next review: April 2, 2026*
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*

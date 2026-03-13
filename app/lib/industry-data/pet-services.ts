@@ -259,4 +259,100 @@ export const petServices: Record<string, IndustryData> = {
       },
     ],
   },
+
+  'mobile-pet-grooming': {
+    slug: 'mobile-pet-grooming',
+    name: 'Mobile Pet Grooming',
+    plural: 'Mobile Pet Groomers',
+    headline: 'Grooming comes to them. Clients come to you.',
+    subheadline: 'Pet owners love mobile grooming convenience. LocalBeacon makes your van the one they book when they search from home.',
+    description: 'Local SEO for mobile pet grooming services. Rank for mobile dog grooming, at-home pet grooming, and mobile groomer near me.',
+    painPoints: [
+      { icon: '🚐', title: 'Mobile groomers are harder to find online than shops', text: 'Google prioritizes businesses with physical locations. Without neighborhood-specific pages for every area you serve, pet owners searching locally never find your mobile service.' },
+      { icon: '📍', title: 'You serve a wide area but rank in none of it', text: 'Your grooming van covers 20+ miles but Google shows you in none of those neighborhoods without dedicated service area pages for each community.' },
+      { icon: '🐕', title: 'Pet owners want to see the groomer before booking', text: 'Mobile grooming requires trust — owners want to see your van, your reviews, and your work before letting you take their pet. Without strong content and reviews, they choose established shops instead.' },
+    ],
+    features: [
+      { title: 'Neighborhood service area pages', text: 'Pages for every neighborhood and community you serve — so pet owners in each area find your mobile grooming service when they search.' },
+      { title: 'Mobile advantage content', text: 'Posts highlighting reduced pet stress, one-on-one attention, no cage waiting, and door-to-door convenience — the reasons pet owners choose mobile over shops.' },
+      { title: 'Trust and safety content', text: 'Content showcasing your van setup, certifications, insurance, and pet handling approach — building the trust mobile grooming requires.' },
+      { title: 'Review management for mobile services', text: 'Responses highlighting positive grooming experiences, pet comfort, and convenience — the social proof that overcomes mobile grooming skepticism.' },
+    ],
+    stats: [
+      { value: '$75-$120', label: 'avg mobile grooming visit' },
+      { value: '3.4×', label: 'more bookings in service area' },
+      { value: '91%', label: 'of pet owners search locally' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help mobile pet groomers get found?', answer: 'We create neighborhood-specific pages for every area you serve, so pet owners searching "mobile dog grooming near me" in any neighborhood find your service directly.' },
+      { question: 'Can LocalBeacon help me rank without a shop location?', answer: 'Yes. Service-area business optimization is built for mobile operators. We build your visibility across your entire coverage area without needing a physical storefront.' },
+      { question: 'How do I build trust for a mobile grooming service?', answer: 'Content showcasing your van, certifications, insurance, and pet handling philosophy builds the trust pet owners need before booking a service they have not physically visited.' },
+      { question: 'Will this help me compete with grooming shops?', answer: 'Absolutely. Content highlighting reduced pet stress, one-on-one attention, and no-cage-waiting convenience positions your mobile service as the premium, pet-friendly alternative.' },
+      { question: 'How quickly will mobile grooming pages generate bookings?', answer: 'Mobile pet grooming searches are specific and local. Most groomers see new bookings within 3-4 weeks as service area pages index across their coverage territory.' },
+    ],
+  },
+
+  'pet-sitting': {
+    slug: 'pet-sitting',
+    name: 'Pet Sitting',
+    plural: 'Pet Sitters',
+    headline: 'They travel. Their pets stay happy.',
+    subheadline: 'Pet owners search for trusted sitters before every trip. LocalBeacon makes your pet sitting service the one they book with confidence.',
+    description: 'Local SEO for pet sitting services. Rank for pet sitter near me, in-home pet sitting, and house sitting with pets.',
+    painPoints: [
+      { icon: '🏠', title: 'Rover and Wag capture most pet sitting searches', text: 'Platform apps dominate pet sitting search results. Without strong local SEO, independent pet sitters lose to platforms that take 20-40% of every booking.' },
+      { icon: '🔒', title: 'Trust is the #1 barrier for pet sitting bookings', text: 'Leaving pets and house keys with a stranger requires enormous trust. Without reviews, credentials, and insurance information visible online, potential clients choose platforms with built-in verification.' },
+      { icon: '📅', title: 'Holiday demand creates feast-or-famine income', text: 'Thanksgiving, Christmas, and summer vacations drive 70% of pet sitting demand. Without year-round content, you miss the steady stream of business travelers and weekend trippers.' },
+    ],
+    features: [
+      { title: 'In-home pet sitting pages', text: 'Pages for overnight pet sitting, daily drop-in visits, and house sitting with pets — each targeting specific service searches pet owners make.' },
+      { title: 'Trust and credibility content', text: 'Content showcasing your pet first aid certification, insurance, background check, and years of experience — the trust signals that compete with platform verification.' },
+      { title: 'Direct booking optimization', text: 'Content encouraging pet owners to book directly with you instead of through Rover or Wag — keeping your full fee and building lasting client relationships.' },
+      { title: 'Holiday and seasonal booking content', text: 'Advance booking reminders for holidays, spring break, and summer travel season that fill your calendar before peak periods.' },
+    ],
+    stats: [
+      { value: '$35-$75', label: 'avg daily sitting rate' },
+      { value: '2.9×', label: 'more direct bookings' },
+      { value: '100%', label: 'of your fee kept (no platform cut)' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help pet sitters compete with Rover?', answer: 'We build your independent online presence so pet owners find you directly — no 20-40% platform fee. Strong local SEO means clients book you, not an app that takes a cut.' },
+      { question: 'Can LocalBeacon help me build trust with new clients?', answer: 'Yes. Content highlighting your certifications, insurance, experience, and client testimonials builds the same trust that platform verification provides — but directly for your brand.' },
+      { question: 'How do I get year-round pet sitting bookings?', answer: 'Content targeting business travelers, weekend trip pet care, and regular drop-in visits captures clients who need pet sitting beyond just holiday vacations.' },
+      { question: 'Will this help me get more holiday season bookings?', answer: 'Absolutely. Advance booking content published weeks before holidays drives early reservations — so your calendar is full before competitors start marketing.' },
+      { question: 'How quickly will pet sitting pages generate clients?', answer: 'Pet sitting searches are local and trust-driven. Most sitters see new direct inquiries within 4-6 weeks as pages index and reviews accumulate.' },
+    ],
+  },
+
+  'dog-daycare': {
+    slug: 'dog-daycare',
+    name: 'Dog Daycare',
+    plural: 'Dog Daycare Centers',
+    headline: 'Happy dogs. Happy owners. Full facility.',
+    subheadline: 'Working pet owners need reliable dog daycare. LocalBeacon makes your facility the first they find when searching for daily care.',
+    description: 'Local SEO for dog daycare facilities. Rank for dog daycare near me, doggy daycare, and puppy daycare in your area.',
+    painPoints: [
+      { icon: '🐕', title: 'Pet owners tour multiple daycares before choosing', text: 'Dog owners visit 2-3 facilities before committing to regular daycare. Without strong online presence convincing them to tour yours first, you lose to facilities with better marketing.' },
+      { icon: '📱', title: 'National chains like Camp Bow Wow dominate searches', text: 'Franchise daycares have brand recognition and marketing budgets. Without local content differentiating your facility, independent daycares get buried in search results.' },
+      { icon: '💰', title: 'Recurring revenue requires retention, not just acquisition', text: 'Dog daycare is a subscription-like business — but only if clients keep coming. Without ongoing content keeping you top-of-mind, clients try new facilities or reduce frequency.' },
+    ],
+    features: [
+      { title: 'Facility showcase content', text: 'Posts and pages highlighting your play areas, staff credentials, safety protocols, and group size limits — the factors parents evaluate when choosing daycare.' },
+      { title: 'Service-specific landing pages', text: 'Pages for full-day daycare, half-day rates, puppy socialization, and training add-ons — each targeting specific service searches.' },
+      { title: 'Webcam and transparency content', text: 'Content promoting your webcam access, daily report cards, and photo updates — the transparency features that build trust with anxious pet parents.' },
+      { title: 'Multi-pack and loyalty content', text: 'Posts about day packages, loyalty programs, and referral bonuses that drive commitment and word-of-mouth growth.' },
+    ],
+    stats: [
+      { value: '$30-$55', label: 'avg daily daycare rate' },
+      { value: '3.2×', label: 'more tour bookings' },
+      { value: '$400+', label: 'avg monthly recurring revenue per dog' },
+    ],
+    faqs: [
+      { question: 'How does LocalBeacon help dog daycares get more enrollments?', answer: 'We create facility-focused content and local landing pages that drive tour bookings — the critical first step in converting interested pet owners into regular daycare clients.' },
+      { question: 'Can LocalBeacon help me compete with franchise daycares?', answer: 'Yes. Content highlighting your personalized attention, smaller group sizes, and owner-operated care differentiates you from chain facilities with rotating staff.' },
+      { question: 'How do I attract puppy owners specifically?', answer: 'Puppy socialization and puppy daycare pages target new dog owners who are actively searching for early socialization opportunities — your highest lifetime-value clients.' },
+      { question: 'Will this help me fill weekday spots?', answer: 'Absolutely. Content targeting working professionals and remote workers who need regular weekday daycare drives consistent bookings on your slowest days.' },
+      { question: 'How does dog daycare SEO differ from pet boarding SEO?', answer: 'Daycare clients search for daily care, socialization, and convenience — different intent than boarding clients who need overnight stays. Our content targets the recurring daily-care market.' },
+    ],
+  },
 }
