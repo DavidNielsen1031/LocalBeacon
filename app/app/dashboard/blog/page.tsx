@@ -1,6 +1,7 @@
 'use client'
 export const dynamic = 'force-dynamic'
 import { useState } from 'react'
+import { useBusinessContext } from '@/components/business-context'
 
 const BLOG_TYPES = [
   { value: 'seasonal', label: 'Seasonal Tips', desc: 'Timely advice your customers are searching for right now' },
@@ -9,47 +10,89 @@ const BLOG_TYPES = [
   { value: 'local', label: 'Local Guide', desc: 'Neighborhood-specific content that wins "near me" searches' },
 ]
 
-const DEMO_POSTS = [
-  {
-    id: '1',
-    title: '5 Signs Your AC Needs Maintenance Before Summer',
-    type: 'seasonal',
-    city: 'Burnsville',
-    wordCount: 850,
-    status: 'ready' as const,
-    preview: "As temperatures start climbing in Burnsville and the surrounding south metro area, your air conditioning system is about to work overtime. Here are 5 warning signs that your AC needs professional attention before the summer rush hits...",
-    faqs: [
-      { q: 'How often should I service my AC?', a: 'Most HVAC professionals recommend servicing your AC at least once a year...' },
-      { q: 'How much does AC maintenance cost in Burnsville?', a: 'A typical AC tune-up in the Burnsville area runs between $89-$150...' },
-    ]
-  },
-  {
-    id: '2',
-    title: "Homeowner's Guide to Emergency Plumbing in Apple Valley",
-    type: 'how_to',
-    city: 'Apple Valley',
-    wordCount: 1100,
-    status: 'draft' as const,
-    preview: "A burst pipe at 2 AM is every Apple Valley homeowner's nightmare. Before you panic, here's exactly what to do — and when to call a professional. Step 1: Locate your main water shutoff valve...",
-    faqs: [
-      { q: 'What counts as a plumbing emergency?', a: 'Any situation involving uncontrolled water flow, sewage backup, or no water at all...' },
-      { q: 'How fast can a plumber get to Apple Valley?', a: 'Most emergency plumbers in the south metro can arrive within 60-90 minutes...' },
-    ]
-  },
-]
+interface GeneratedPost {
+  id: string
+  title: string
+  type: string
+  city: string
+  wordCount: number
+  status: 'ready' | 'draft'
+  preview: string
+  html: string
+  faqs: Array<{ q: string; a: string }>
+}
 
 export default function BlogPage() {
+  const { activeBusinessId } = useBusinessContext()
   const [selectedType, setSelectedType] = useState('seasonal')
   const [city, setCity] = useState('')
   const [topic, setTopic] = useState('')
   const [generating, setGenerating] = useState(false)
-  const [posts] = useState(DEMO_POSTS)
+  const [error, setError] = useState<string | null>(null)
+  const [posts, setPosts] = useState<GeneratedPost[]>([])
   const [expandedPost, setExpandedPost] = useState<string | null>(null)
+  const [copiedId, setCopiedId] = useState<string | null>(null)
 
   const handleGenerate = async () => {
     setGenerating(true)
-    // TODO: Wire to /api/blog endpoint
-    setTimeout(() => setGenerating(false), 2000)
+    setError(null)
+    try {
+      const res = await fetch('/api/generate/blog-post', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          business_id: activeBusinessId || undefined,
+          type: selectedType,
+          city: city.trim() || undefined,
+          topic: topic.trim() || undefined,
+        }),
+      })
+      const data = await res.json()
+
+      if (!res.ok) {
+        if (res.status === 403 && data.upgradeUrl) {
+          setError(`You've reached your plan limit. Upgrade to Solo or Agency for unlimited blog posts.`)
+        } else {
+          setError(data.error || 'Generation failed — please try again.')
+        }
+        return
+      }
+
+      const newPost: GeneratedPost = {
+        id: Date.now().toString(),
+        title: data.title || 'Blog Post',
+        type: selectedType,
+        city: city.trim() || 'Your City',
+        wordCount: data.word_count || 0,
+        status: 'ready',
+        preview: data.preview || '',
+        html: data.html || '',
+        faqs: data.faqs || [],
+      }
+
+      setPosts(prev => [newPost, ...prev])
+      setExpandedPost(newPost.id)
+    } catch {
+      setError('Something went wrong. Please try again.')
+    } finally {
+      setGenerating(false)
+    }
+  }
+
+  const copyHtml = async (post: GeneratedPost) => {
+    await navigator.clipboard.writeText(post.html)
+    setCopiedId(post.id)
+    setTimeout(() => setCopiedId(null), 2000)
+  }
+
+  const downloadHtml = (post: GeneratedPost) => {
+    const blob = new Blob([post.html], { type: 'text/html' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `${post.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 60)}.html`
+    a.click()
+    URL.revokeObjectURL(url)
   }
 
   return (
@@ -62,7 +105,7 @@ export default function BlogPage() {
       {/* Generator */}
       <div className="bg-[#111] border border-white/10 rounded-xl p-6 mb-8">
         <h2 className="text-lg font-semibold text-white mb-4">Write a New Post</h2>
-        
+
         {/* Post type selector */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
           {BLOG_TYPES.map(t => (
@@ -95,7 +138,7 @@ export default function BlogPage() {
             />
           </div>
           <div>
-            <label className="text-sm text-white/60 block mb-1.5">Topic (optional — we'll pick one if blank)</label>
+            <label className="text-sm text-white/60 block mb-1.5">Topic <span className="text-white/30">(optional — we&apos;ll pick one if blank)</span></label>
             <input
               type="text"
               value={topic}
@@ -106,74 +149,104 @@ export default function BlogPage() {
           </div>
         </div>
 
+        {error && (
+          <div className="mb-4 px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
+            {error}
+          </div>
+        )}
+
         <button
           onClick={handleGenerate}
           disabled={generating}
-          className="bg-[#FFD700] text-black font-semibold px-6 py-2.5 rounded-lg hover:bg-[#FFD700]/90 disabled:opacity-50 transition-all"
+          className="bg-[#FFD700] text-black font-semibold px-6 py-2.5 rounded-lg hover:bg-[#FFD700]/90 disabled:opacity-50 transition-all flex items-center gap-2"
         >
-          {generating ? 'Writing...' : 'Write My Blog Post'}
+          {generating ? (
+            <>
+              <span className="inline-block w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+              Writing your post…
+            </>
+          ) : (
+            'Write My Blog Post'
+          )}
         </button>
+        {generating && (
+          <p className="mt-2 text-xs text-white/30">Takes about 15-20 seconds — we&apos;re writing a full 800+ word post for you.</p>
+        )}
       </div>
 
       {/* Post list */}
-      <div className="space-y-4">
-        <h2 className="text-lg font-semibold text-white">Your Blog Posts</h2>
-        {posts.map(post => (
-          <div key={post.id} className="bg-[#111] border border-white/10 rounded-xl overflow-hidden">
-            <div
-              className="p-5 cursor-pointer hover:bg-white/[0.02] transition-colors"
-              onClick={() => setExpandedPost(expandedPost === post.id ? null : post.id)}
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1">
-                  <h3 className="text-white font-medium mb-1">{post.title}</h3>
-                  <div className="flex items-center gap-3 text-xs text-white/40">
-                    <span>📍 {post.city}</span>
-                    <span>📄 ~{post.wordCount} words</span>
-                    <span className={`px-2 py-0.5 rounded-full ${
-                      post.status === 'ready' ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'
-                    }`}>
-                      {post.status === 'ready' ? '✓ Ready to publish' : 'Draft'}
-                    </span>
+      {posts.length > 0 && (
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold text-white">Your Blog Posts</h2>
+          {posts.map(post => (
+            <div key={post.id} className="bg-[#111] border border-white/10 rounded-xl overflow-hidden">
+              <div
+                className="p-5 cursor-pointer hover:bg-white/[0.02] transition-colors"
+                onClick={() => setExpandedPost(expandedPost === post.id ? null : post.id)}
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <h3 className="text-white font-medium mb-1">{post.title}</h3>
+                    <div className="flex items-center gap-3 text-xs text-white/40 flex-wrap">
+                      {post.city && <span>📍 {post.city}</span>}
+                      <span>📄 ~{post.wordCount} words</span>
+                      <span className="px-2 py-0.5 rounded-full bg-green-500/20 text-green-400">
+                        ✓ Ready to publish
+                      </span>
+                    </div>
                   </div>
+                  <span className="text-white/30 text-lg">{expandedPost === post.id ? '▲' : '▼'}</span>
                 </div>
-                <span className="text-white/30 text-lg">{expandedPost === post.id ? '▲' : '▼'}</span>
               </div>
+
+              {expandedPost === post.id && (
+                <div className="border-t border-white/10 p-5">
+                  <p className="text-white/70 text-sm mb-4 leading-relaxed">{post.preview}</p>
+
+                  {post.faqs.length > 0 && (
+                    <div className="mb-4">
+                      <h4 className="text-sm font-medium text-[#FFD700] mb-2">FAQ Section (Schema Markup Included)</h4>
+                      {post.faqs.map((faq, i) => (
+                        <div key={i} className="mb-2 text-sm">
+                          <p className="text-white/80 font-medium">Q: {faq.q}</p>
+                          <p className="text-white/50 ml-4">A: {faq.a}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="flex gap-3 flex-wrap">
+                    <button
+                      onClick={() => copyHtml(post)}
+                      className="bg-[#FFD700] text-black font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#FFD700]/90 transition-colors"
+                    >
+                      {copiedId === post.id ? '✓ Copied!' : 'Copy HTML'}
+                    </button>
+                    <button
+                      onClick={() => downloadHtml(post)}
+                      className="border border-white/20 text-white/70 px-4 py-2 rounded-lg text-sm hover:bg-white/5 transition-colors"
+                    >
+                      Download
+                    </button>
+                  </div>
+                  <p className="mt-3 text-xs text-white/30">
+                    Paste this HTML into WordPress, Squarespace, Wix, or any page builder. FAQPage schema is included for rich results.
+                  </p>
+                </div>
+              )}
             </div>
+          ))}
+        </div>
+      )}
 
-            {expandedPost === post.id && (
-              <div className="border-t border-white/10 p-5">
-                <p className="text-white/70 text-sm mb-4 leading-relaxed">{post.preview}</p>
-
-                {/* FAQ section */}
-                {post.faqs.length > 0 && (
-                  <div className="mb-4">
-                    <h4 className="text-sm font-medium text-[#FFD700] mb-2">FAQ Section (Schema Markup Included)</h4>
-                    {post.faqs.map((faq, i) => (
-                      <div key={i} className="mb-2 text-sm">
-                        <p className="text-white/80 font-medium">Q: {faq.q}</p>
-                        <p className="text-white/50 ml-4">A: {faq.a}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                <div className="flex gap-3">
-                  <button className="bg-[#FFD700] text-black font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#FFD700]/90">
-                    Copy HTML
-                  </button>
-                  <button className="border border-white/20 text-white/70 px-4 py-2 rounded-lg text-sm hover:bg-white/5">
-                    Edit
-                  </button>
-                  <button className="border border-white/20 text-white/70 px-4 py-2 rounded-lg text-sm hover:bg-white/5">
-                    Download
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+      {/* Empty state */}
+      {posts.length === 0 && (
+        <div className="text-center py-12 text-white/30">
+          <p className="text-4xl mb-3">✍️</p>
+          <p className="text-sm">No posts yet — generate your first one above.</p>
+          <p className="text-xs mt-1">Each post is 800–1,000 words, locally optimized, and includes FAQ schema for AI search.</p>
+        </div>
+      )}
     </div>
   )
 }
