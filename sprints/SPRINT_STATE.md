@@ -1,11 +1,10 @@
 # Sprint State — LocalBeacon
 
-**Current Sprint:** 14
-**Theme:** Make It Demoable
-**Status:** CLOSED
-**Branch:** main
+**Current Sprint:** 15
+**Theme:** Done-For-You Delivery Pipeline
+**Status:** EXECUTING
+**Branch:** sprint/localbeacon/s15
 **Started:** 2026-03-18
-**Closed:** 2026-03-18
 
 ## History
 

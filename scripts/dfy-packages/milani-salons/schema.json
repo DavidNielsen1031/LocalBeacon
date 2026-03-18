@@ -1,0 +1,219 @@
+{
+  "localBusiness": {
+    "@context": "https://schema.org",
+    "@type": [
+      "LocalBusiness",
+      "Salon"
+    ],
+    "name": "Milani Salons",
+    "url": "https://www.milanisalons.com",
+    "description": "Milani Salons is a professional salon serving Maplewood, MN and surrounding areas.",
+    "areaServed": {
+      "@type": "City",
+      "name": "Maplewood",
+      "addressRegion": "MN"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Maplewood",
+      "addressRegion": "MN",
+      "addressCountry": "US"
+    },
+    "knowsAbout": [
+      "Salon",
+      "Salon in Maplewood",
+      "Salon in MN"
+    ],
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday"
+        ],
+        "opens": "08:00",
+        "closes": "18:00"
+      }
+    ],
+    "potentialAction": {
+      "@type": "ReserveAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://www.milanisalons.com",
+        "actionPlatform": [
+          "http://schema.org/DesktopWebPlatform",
+          "http://schema.org/MobileWebPlatform"
+        ]
+      }
+    }
+  },
+  "faqPage": {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How much does a haircut cost at a salon in Maplewood?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "At Milani Salons in Maplewood, our haircuts range from $35-$65 depending on hair length and complexity, with senior discounts available for clients 65+."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What's the average wait time for appointments at Milani Salons in Maplewood?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We typically schedule appointments within 2-3 business days, and walk-ins are welcome with an average wait of 15-30 minutes depending on stylist availability."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do you offer hair coloring services in Maplewood?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, we offer full color services including single-process ($55-$85), balayage ($90-$150), and color corrections, performed by our certified color specialists."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How long does a full hair color appointment take in Maplewood?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Full color services at our Maplewood location typically take 1.5-3 hours depending on hair length, current color, and desired results."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are your hours of operation in Maplewood, MN?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We're open Tuesday-Thursday 9am-7pm, Friday-Saturday 9am-5pm, and Sunday 10am-4pm; we're closed Mondays."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I book a same-day appointment at Milani Salons in Maplewood?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Same-day appointments depend on stylist availability; call us at our Maplewood location to check, and we always accommodate walk-ins."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much do highlights cost at your Maplewood salon?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Partial highlights at Milani Salons start at $65, while full highlights range from $85-$125 depending on hair thickness and coverage needed."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do you offer perms or chemical treatments in Maplewood?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We offer permanent waves ($75-$100), keratin treatments ($150-$250), and Brazilian blowouts, all performed by licensed technicians in our Maplewood salon."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What's the price for a blowout service at Milani Salons in Maplewood?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Blowouts at our Maplewood location are $40-$55 for wash and style, with upcharges for special event styling available."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are your stylists at the Maplewood location licensed and certified?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "All our stylists at Milani Salons in Maplewood are Minnesota-licensed cosmetologists with ongoing continuing education in the latest techniques."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How long does a typical haircut appointment last in Maplewood?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Standard haircuts at our Maplewood salon take 30-45 minutes, while complex cuts or styling consultations may take up to an hour."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do you offer wedding or special event styling in Maplewood?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We specialize in bridal and event styling with packages starting at $200; book at least 2 weeks in advance at our Maplewood location."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What's the minimum age for services at Milani Salons in Maplewood?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We service all ages, though chemical treatments like perms require parental consent for clients under 16."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do you offer men's haircuts at your Maplewood salon?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, we offer professional men's cuts for $30-$40 with fades, lines, and beard trims available at our Maplewood location."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can you fix a bad haircut from another salon in Maplewood?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We offer color corrections and cuts to address issues from other salons; consultations at our Maplewood location are free to assess the work needed."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much do hair extensions cost at Milani Salons in Maplewood?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We offer tape-in extensions ($200-$400 installed) and clip-in extensions ($100-$300); our Maplewood stylists provide free consultations to match your hair type."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What should I do if I have a hair emergency near Maplewood?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Call our Maplewood location immediately at [phone number]; we squeeze in emergency appointments for damage or urgent styling needs when possible."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do you use organic or chemical-free products at your Maplewood salon?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We use professional-grade products; we offer ammonia-free and sulfate-free options upon request at our Maplewood salon."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much does a deep conditioning treatment cost in Maplewood?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Deep conditioning treatments at Milani Salons in Maplewood are $25-$40 and take 20-30 minutes, perfect for damaged or dry hair."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do you offer gift certificates at Milani Salons in Maplewood?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, we sell gift certificates in any amount at our Maplewood location; they never expire and can be purchased online or in-salon."
+        }
+      }
+    ]
+  }
+}
