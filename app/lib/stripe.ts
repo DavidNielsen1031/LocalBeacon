@@ -26,7 +26,7 @@ export const PLANS = {
   DFY: {
     name: "Done-For-You",
     price: 499,
-    priceId: process.env.STRIPE_DFY_PRICE_ID || null,
+    priceId: process.env.STRIPE_DFY_PRICE_ID || "price_1TCRxpB0OqzCjZpvVebA66dn",
   },
 } as const;
 
