@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "vercel-build": "npm i @next/swc-linux-x64-gnu @next/swc-linux-x64-musl --no-save 2>/dev/null; next build"
+    "vercel-build": "next build"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",
