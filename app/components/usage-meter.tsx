@@ -24,14 +24,14 @@ export function UsageMeter() {
   if (!usage || usage.plan !== "free") return null;
 
   return (
-    <div className="bg-white/5 border border-white/10 rounded-lg p-4 mb-6">
+    <div className="bg-white border border-[#DFE6E9] rounded-lg p-4 mb-6">
       <div className="flex items-center justify-between mb-3">
-        <p className="text-white/60 text-xs font-semibold uppercase tracking-wider">
+        <p className="text-[#636E72] text-xs font-semibold uppercase tracking-wider">
           Your Monthly Limit
         </p>
         <Link
           href="/pricing"
-          className="text-[#FFD700] text-xs font-semibold hover:underline"
+          className="text-[#FF6B35] text-xs font-semibold hover:underline"
         >
           Upgrade →
         </Link>
@@ -67,15 +67,15 @@ function UsageBar({
   return (
     <div>
       <div className="flex items-center justify-between text-xs mb-1">
-        <span className="text-white/50">{label}</span>
-        <span className={atLimit ? "text-red-400 font-semibold" : "text-white/50"}>
+        <span className="text-[#636E72]">{label}</span>
+        <span className={atLimit ? "text-red-400 font-semibold" : "text-[#636E72]"}>
           {used}/{limit}
         </span>
       </div>
-      <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+      <div className="h-1.5 bg-white rounded-full overflow-hidden">
         <div
           className={`h-full rounded-full transition-all ${
-            atLimit ? "bg-red-500" : "bg-[#FFD700]"
+            atLimit ? "bg-red-500" : "bg-[#FF6B35]"
           }`}
           style={{ width: `${pct}%` }}
         />

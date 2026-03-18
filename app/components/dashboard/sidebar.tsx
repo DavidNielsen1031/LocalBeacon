@@ -6,22 +6,41 @@ import { UserButton } from "@clerk/nextjs";
 import { useState } from "react";
 import { useBusinessContext } from "@/components/business-context";
 import { AddClientWizard } from "@/components/add-client-wizard";
+import {
+  LayoutDashboard,
+  FileText,
+  Calendar,
+  Globe,
+  Star,
+  BookOpen,
+  Zap,
+  HelpCircle,
+  FileCode,
+  Activity,
+  Code,
+  Users,
+  BarChart3,
+  Settings,
+  Building2,
+  ChevronDown,
+  Plus,
+} from "lucide-react";
 
 const navItems = [
-  { href: "/dashboard", label: "Overview", icon: "🏠" },
-  { href: "/dashboard/posts", label: "GBP Posts", icon: "📍" },
-  { href: "/dashboard/queue", label: "Upcoming Posts", icon: "📅" },
-  { href: "/dashboard/pages", label: "Page Builder", icon: "🌐" },
-  { href: "/dashboard/reviews", label: "Reviews", icon: "⭐" },
-  { href: "/dashboard/blog", label: "Blog Posts", icon: "📝" },
-  { href: "/dashboard/ai-readiness", label: "AI Readiness", icon: "🤖" },
-  { href: "/dashboard/faq", label: "FAQ Builder", icon: "💬" },
-  { href: "/dashboard/llms-txt", label: "AI Discovery File", icon: "📄" },
-  { href: "/dashboard/audit", label: "Listing Health", icon: "🩺" },
-  { href: "/dashboard/schema", label: "Schema Markup", icon: "🔗" },
-  { href: "/dashboard/competitors", label: "Competitors", icon: "🏆" },
-  { href: "/dashboard/reports", label: "Your Monthly Report", icon: "📊" },
-  { href: "/dashboard/settings", label: "Settings", icon: "⚙️" },
+  { href: "/dashboard", label: "Overview", Icon: LayoutDashboard },
+  { href: "/dashboard/posts", label: "GBP Posts", Icon: FileText },
+  { href: "/dashboard/queue", label: "Upcoming Posts", Icon: Calendar },
+  { href: "/dashboard/pages", label: "Page Builder", Icon: Globe },
+  { href: "/dashboard/reviews", label: "Reviews", Icon: Star },
+  { href: "/dashboard/blog", label: "Blog Posts", Icon: BookOpen },
+  { href: "/dashboard/ai-readiness", label: "AI Readiness", Icon: Zap },
+  { href: "/dashboard/faq", label: "FAQ Builder", Icon: HelpCircle },
+  { href: "/dashboard/llms-txt", label: "AI Discovery File", Icon: FileCode },
+  { href: "/dashboard/audit", label: "Listing Health", Icon: Activity },
+  { href: "/dashboard/schema", label: "Schema Markup", Icon: Code },
+  { href: "/dashboard/competitors", label: "Competitors", Icon: Users },
+  { href: "/dashboard/reports", label: "Monthly Report", Icon: BarChart3 },
+  { href: "/dashboard/settings", label: "Settings", Icon: Settings },
 ];
 
 export default function DashboardSidebar() {
@@ -41,13 +60,13 @@ export default function DashboardSidebar() {
 
   return (
     <>
-      <aside className="w-64 min-h-screen bg-[#111] border-r border-white/10 flex flex-col">
+      <aside className="w-64 min-h-screen flex flex-col" style={{ backgroundColor: "#1B2A4A" }}>
         {/* Logo */}
         <div className="px-6 py-5 border-b border-white/10">
           <Link href="/" className="flex items-center gap-2">
-            <span className="text-xl">🔦</span>
-            <span className="font-bold text-[#FFD700] text-lg">
-              LocalBeacon.ai
+            <img src="/logo-192.png" alt="LocalBeacon" style={{ height: "32px", width: "32px" }} />
+            <span className="font-bold text-lg" style={{ color: "#FAFAF7" }}>
+              Local<span style={{ color: "#FF6B35" }}>Beacon</span>.ai
             </span>
           </Link>
         </div>
@@ -57,27 +76,25 @@ export default function DashboardSidebar() {
           <div className="px-3 py-3 border-b border-white/10">
             <button
               onClick={() => setShowSwitcher(!showSwitcher)}
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 transition-colors text-left"
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-left hover:bg-white/10"
+              style={{ backgroundColor: "rgba(255,255,255,0.05)" }}
             >
-              <span className="text-lg">🏢</span>
+              <Building2 size={18} className="text-white/60 shrink-0" />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-white truncate">
                   {activeBusiness?.name || "Select business"}
                 </p>
-                <p className="text-xs text-white/40 truncate">
+                <p className="text-xs truncate" style={{ color: "rgba(255,255,255,0.4)" }}>
                   {activeBusiness
                     ? `${activeBusiness.primary_city}, ${activeBusiness.primary_state}`
                     : "No business selected"}
                 </p>
               </div>
               {(hasMultipleBusinesses || canAddBusiness) && (
-                <span
-                  className={`text-white/40 text-xs transition-transform ${
-                    showSwitcher ? "rotate-180" : ""
-                  }`}
-                >
-                  ▾
-                </span>
+                <ChevronDown
+                  size={14}
+                  className={`shrink-0 transition-transform text-white/40 ${showSwitcher ? "rotate-180" : ""}`}
+                />
               )}
             </button>
 
@@ -93,13 +110,20 @@ export default function DashboardSidebar() {
                     }}
                     className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
                       biz.id === activeBusiness?.id
-                        ? "bg-[#FFD700]/10 text-[#FFD700] border border-[#FFD700]/20"
-                        : "text-white/60 hover:text-white hover:bg-white/5"
+                        ? "border"
+                        : "hover:bg-white/5"
                     }`}
+                    style={
+                      biz.id === activeBusiness?.id
+                        ? {
+                            backgroundColor: "rgba(255,107,53,0.1)",
+                            borderColor: "rgba(255,107,53,0.3)",
+                            color: "#FF6B35",
+                          }
+                        : { color: "rgba(255,255,255,0.6)" }
+                    }
                   >
-                    <span className="text-xs">
-                      {biz.id === activeBusiness?.id ? "●" : "○"}
-                    </span>
+                    <span className="text-xs">{biz.id === activeBusiness?.id ? "●" : "○"}</span>
                     <div className="flex-1 min-w-0 text-left">
                       <p className="truncate font-medium">{biz.name}</p>
                       <p className="text-xs opacity-60 truncate">
@@ -116,18 +140,25 @@ export default function DashboardSidebar() {
                       setShowSwitcher(false);
                       setShowWizard(true);
                     }}
-                    className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-[#FFD700]/70 hover:text-[#FFD700] hover:bg-[#FFD700]/5 transition-colors"
+                    className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors hover:bg-white/5"
+                    style={{ color: "rgba(255,107,53,0.7)" }}
+                    onMouseEnter={(e) =>
+                      ((e.currentTarget as HTMLButtonElement).style.color = "#FF6B35")
+                    }
+                    onMouseLeave={(e) =>
+                      ((e.currentTarget as HTMLButtonElement).style.color = "rgba(255,107,53,0.7)")
+                    }
                   >
-                    <span className="text-base">+</span>
+                    <Plus size={14} />
                     <span>Add Client</span>
                   </button>
                 ) : (
-                  <div className="px-3 py-2 text-xs text-white/30">
-                    {businessLimit} business{businessLimit === 1 ? "" : "es"} max
-                    on your plan.{" "}
+                  <div className="px-3 py-2 text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>
+                    {businessLimit} business{businessLimit === 1 ? "" : "es"} max on your plan.{" "}
                     <Link
                       href="/pricing"
-                      className="text-[#FFD700]/60 hover:text-[#FFD700] underline"
+                      className="underline hover:text-white/60"
+                      style={{ color: "rgba(255,107,53,0.6)" }}
                     >
                       Upgrade
                     </Link>
@@ -140,7 +171,7 @@ export default function DashboardSidebar() {
 
         {/* Nav */}
         <nav className="flex-1 px-3 py-4 overflow-y-auto">
-          <ul className="space-y-1">
+          <ul className="space-y-0.5">
             {navItems.map((item) => {
               const isActive =
                 item.href === "/dashboard"
@@ -152,12 +183,19 @@ export default function DashboardSidebar() {
                   <Link
                     href={item.href}
                     className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                      isActive
-                        ? "bg-[#FFD700]/10 text-[#FFD700] border border-[#FFD700]/20"
-                        : "text-white/60 hover:text-white hover:bg-white/5"
+                      isActive ? "border-l-2" : "hover:bg-white/10"
                     }`}
+                    style={
+                      isActive
+                        ? {
+                            backgroundColor: "rgba(255,107,53,0.12)",
+                            borderLeftColor: "#FF6B35",
+                            color: "#FF6B35",
+                          }
+                        : { color: "rgba(255,255,255,0.7)", borderLeft: "2px solid transparent" }
+                    }
                   >
-                    <span className="text-base">{item.icon}</span>
+                    <item.Icon size={16} className="shrink-0" />
                     {item.label}
                   </Link>
                 </li>
@@ -176,7 +214,9 @@ export default function DashboardSidebar() {
             }}
           />
           <div className="flex-1 min-w-0">
-            <p className="text-xs text-white/40 truncate">Signed in</p>
+            <p className="text-xs truncate" style={{ color: "rgba(255,255,255,0.4)" }}>
+              Signed in
+            </p>
           </div>
         </div>
       </aside>

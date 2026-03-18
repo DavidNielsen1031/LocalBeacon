@@ -16,6 +16,7 @@ import {
   ThumbsUp,
   ArrowRight,
   BookOpen,
+  TrendingUp,
 } from "lucide-react";
 import type { BlogPostMeta } from "@/lib/blog-shared";
 import { CATEGORY_LABELS } from "@/lib/blog-shared";
@@ -52,6 +53,12 @@ const outcomes = [
     title: "Know exactly what's bringing in calls",
     description:
       "See exactly how visible your business is to AI search engines with a 15-point audit and actionable recommendations.",
+  },
+  {
+    Icon: TrendingUp,
+    title: "Monthly Progress Reports",
+    description:
+      "See your score climb. Monthly re-scans track your improvement and show exactly what changed.",
   },
 ];
 
@@ -599,12 +606,12 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
               <span style={{ color: ORANGE }}>for you</span>
             </h2>
             <p style={{ color: SLATE, fontSize: "1.0625rem", maxWidth: "480px", margin: "0 auto", lineHeight: 1.6 }}>
-              Five things that bring in more customers. All run weekly.
+              Six things that bring in more customers. All run weekly.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {outcomes.map(({ Icon, title, description }, i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0">
+            {outcomes.map(({ Icon, title, description }) => (
               <div
                 key={title}
                 style={{
@@ -613,7 +620,7 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
                   padding: "28px 28px 28px 32px",
                   borderLeft: `4px solid ${ORANGE}`,
                   boxShadow: "0 1px 3px rgba(27,42,74,0.06), 0 1px 2px rgba(27,42,74,0.04)",
-                  ...(i === 4 ? { gridColumn: "span 1" } : {}),
+                  margin: "6px",
                 }}
               >
                 <div

@@ -131,8 +131,8 @@ export default async function ReportsPage() {
   return (
     <div className="flex-1 px-6 py-8 max-w-4xl">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white">Your Monthly Report</h1>
-        <p className="text-white/50 mt-1 text-sm">
+        <h1 className="text-2xl font-bold text-[#2D3436]">Your Monthly Report</h1>
+        <p className="text-[#636E72] mt-1 text-sm">
           {data?.monthName ?? 'This month'} — {data?.businessName ?? 'Your Business'}
         </p>
       </div>
@@ -142,11 +142,11 @@ export default async function ReportsPage() {
         {stats.map((stat) => {
           const delta = stat.prev !== null ? stat.value - stat.prev : null
           return (
-            <Card key={stat.label} className="bg-white/5 border-white/10">
+            <Card key={stat.label} className="bg-white border-[#DFE6E9]">
               <CardContent className="p-5 text-center">
                 <div className="text-2xl mb-2">{stat.icon}</div>
-                <p className="text-3xl font-bold text-white">{stat.value}</p>
-                <p className="text-xs text-white/40 mt-1">{stat.label}</p>
+                <p className="text-3xl font-bold text-[#2D3436]">{stat.value}</p>
+                <p className="text-xs text-[#636E72] mt-1">{stat.label}</p>
                 {delta !== null && delta !== 0 && (
                   <p className={`text-xs mt-1 font-semibold ${delta > 0 ? 'text-green-400' : 'text-red-400'}`}>
                     {delta > 0 ? `↑ ${delta} more` : `↓ ${Math.abs(delta)} fewer`} than last month
@@ -160,20 +160,20 @@ export default async function ReportsPage() {
 
       {/* AEO Score */}
       {data?.aeoScore !== null && data?.aeoScore !== undefined && (
-        <Card className="bg-white/5 border-white/10 mb-8">
+        <Card className="bg-white border-[#DFE6E9] mb-8">
           <CardContent className="p-6 flex items-center gap-6">
             <div className="text-center">
               <div className="text-5xl font-extrabold text-[#00B894]">
                 {data.aeoScore}
               </div>
-              <div className="text-xs text-white/40 mt-1">out of 100</div>
+              <div className="text-xs text-[#636E72] mt-1">out of 100</div>
             </div>
             <div>
-              <h3 className="text-white font-semibold mb-1">AI Readiness Score</h3>
-              <p className="text-white/50 text-sm">
+              <h3 className="text-[#1B2A4A] font-semibold mb-1">AI Readiness Score</h3>
+              <p className="text-[#636E72] text-sm">
                 How visible your business is to AI search engines like ChatGPT, Perplexity, and Google AI.
                 {data.aeoDate && (
-                  <span className="text-white/30">
+                  <span className="text-[#636E72]/60">
                     {' '}Last scanned {new Date(data.aeoDate).toLocaleDateString()}.
                   </span>
                 )}
@@ -185,10 +185,10 @@ export default async function ReportsPage() {
 
       {/* Empty state */}
       {(!data || (data.postsGenerated === 0 && data.pagesCreated === 0 && data.reviewsReplied === 0 && data.queuedTotal === 0)) && (
-        <Card className="bg-[#FFD700]/5 border-[#FFD700]/30">
+        <Card className="bg-[#FF6B35]/5 border-[#FF6B35]/30">
           <CardContent className="p-6 text-center">
-            <p className="text-white text-lg font-semibold mb-2">No activity yet this month</p>
-            <p className="text-white/50 text-sm mb-4">
+            <p className="text-[#2D3436] text-lg font-semibold mb-2">No activity yet this month</p>
+            <p className="text-[#636E72] text-sm mb-4">
               Start generating content and your monthly summary will appear here.
               You&apos;ll also receive this as an email on the 1st of each month.
             </p>
@@ -197,7 +197,7 @@ export default async function ReportsPage() {
       )}
 
       {/* Email note */}
-      <p className="text-white/30 text-xs text-center mt-8">
+      <p className="text-[#636E72]/60 text-xs text-center mt-8">
         This summary is emailed to you on the 1st of each month.
       </p>
     </div>

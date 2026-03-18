@@ -163,13 +163,13 @@ export function AddClientWizard({ open, onOpenChange, onComplete }: AddClientWiz
   return (
     <Dialog open={open} onOpenChange={loading ? undefined : onOpenChange}>
       <DialogContent
-        className="bg-[#111] border border-white/10 text-white max-w-lg p-0 overflow-hidden"
+        className="bg-white border border-[#DFE6E9] text-[#2D3436] max-w-lg p-0 overflow-hidden"
         showCloseButton={!loading}
       >
         {/* Progress bar */}
-        <div className="h-1 w-full bg-white/10">
+        <div className="h-1 w-full bg-white">
           <div
-            className="h-full bg-[#FFD700] transition-all duration-300"
+            className="h-full bg-[#FF6B35] transition-all duration-300"
             style={{ width: `${(step / TOTAL_STEPS) * 100}%` }}
           />
         </div>
@@ -177,16 +177,16 @@ export function AddClientWizard({ open, onOpenChange, onComplete }: AddClientWiz
         <div className="p-6 flex flex-col gap-6">
           <DialogHeader>
             <div className="flex items-center justify-between">
-              <DialogTitle className="text-white text-xl font-semibold">
+              <DialogTitle className="text-[#1B2A4A] text-xl font-semibold">
                 {step === 1 && "Business Info"}
                 {step === 2 && "Location"}
                 {step === 3 && "Online Presence"}
               </DialogTitle>
-              <span className="text-xs text-white/40 font-mono">
+              <span className="text-xs text-[#636E72] font-mono">
                 Step {step}/{TOTAL_STEPS}
               </span>
             </div>
-            <p className="text-white/50 text-sm">
+            <p className="text-[#636E72] text-sm">
               {step === 1 && "Tell us about the client's business."}
               {step === 2 && "Where is the business located?"}
               {step === 3 && "How can customers find this business online?"}
@@ -198,28 +198,28 @@ export function AddClientWizard({ open, onOpenChange, onComplete }: AddClientWiz
             {step === 1 && (
               <>
                 <div className="flex flex-col gap-1.5">
-                  <Label className="text-white/70 text-sm">
-                    Business Name <span className="text-[#FFD700]">*</span>
+                  <Label className="text-[#2D3436] text-sm">
+                    Business Name <span className="text-[#FF6B35]">*</span>
                   </Label>
                   <Input
                     value={form.name}
                     onChange={(e) => set("name", e.target.value)}
                     placeholder="e.g. Apex Plumbing LLC"
-                    className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-[#FFD700]/50 focus:ring-[#FFD700]/20"
+                    className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/60 focus:border-[#FF6B35]/50 focus:ring-[#FF6B35]/20"
                     autoFocus
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <Label className="text-white/70 text-sm">Category</Label>
+                  <Label className="text-[#2D3436] text-sm">Category</Label>
                   <select
                     value={form.category}
                     onChange={(e) => set("category", e.target.value)}
-                    className="w-full h-9 rounded-md border border-white/10 bg-white/5 px-3 py-1 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FFD700]/50 focus:ring-2 focus:ring-[#FFD700]/20"
+                    className="w-full h-9 rounded-md border border-[#DFE6E9] bg-white px-3 py-1 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50 focus:ring-2 focus:ring-[#FF6B35]/20"
                   >
-                    <option value="" className="bg-[#111]">Select a category…</option>
+                    <option value="" className="bg-white">Select a category…</option>
                     {CATEGORIES.map((cat) => (
-                      <option key={cat} value={cat} className="bg-[#111]">
+                      <option key={cat} value={cat} className="bg-white">
                         {cat}
                       </option>
                     ))}
@@ -227,9 +227,9 @@ export function AddClientWizard({ open, onOpenChange, onComplete }: AddClientWiz
                 </div>
 
                 {form.category && form.category !== "Other" && (
-                  <div className="rounded-md border border-[#FFD700]/20 bg-[#FFD700]/5 px-3 py-2">
-                    <p className="text-xs text-white/50 mb-1">Auto-populated specialties</p>
-                    <p className="text-xs text-[#FFD700]/80">{SPECIALTIES_MAP[form.category]}</p>
+                  <div className="rounded-md border border-[#FF6B35]/20 bg-[#FF6B35]/5 px-3 py-2">
+                    <p className="text-xs text-[#636E72] mb-1">Auto-populated specialties</p>
+                    <p className="text-xs text-[#FF6B35]/80">{SPECIALTIES_MAP[form.category]}</p>
                   </div>
                 )}
               </>
@@ -238,61 +238,61 @@ export function AddClientWizard({ open, onOpenChange, onComplete }: AddClientWiz
             {step === 2 && (
               <>
                 <div className="flex flex-col gap-1.5">
-                  <Label className="text-white/70 text-sm">Street Address</Label>
+                  <Label className="text-[#2D3436] text-sm">Street Address</Label>
                   <Input
                     value={form.address}
                     onChange={(e) => set("address", e.target.value)}
                     placeholder="123 Main St"
-                    className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-[#FFD700]/50 focus:ring-[#FFD700]/20"
+                    className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/60 focus:border-[#FF6B35]/50 focus:ring-[#FF6B35]/20"
                     autoFocus
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div className="flex flex-col gap-1.5">
-                    <Label className="text-white/70 text-sm">
-                      City <span className="text-[#FFD700]">*</span>
+                    <Label className="text-[#2D3436] text-sm">
+                      City <span className="text-[#FF6B35]">*</span>
                     </Label>
                     <Input
                       value={form.city}
                       onChange={(e) => set("city", e.target.value)}
                       placeholder="Minneapolis"
-                      className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-[#FFD700]/50 focus:ring-[#FFD700]/20"
+                      className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/60 focus:border-[#FF6B35]/50 focus:ring-[#FF6B35]/20"
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <Label className="text-white/70 text-sm">
-                      State <span className="text-[#FFD700]">*</span>
+                    <Label className="text-[#2D3436] text-sm">
+                      State <span className="text-[#FF6B35]">*</span>
                     </Label>
                     <Input
                       value={form.state}
                       onChange={(e) => set("state", e.target.value)}
                       placeholder="MN"
                       maxLength={2}
-                      className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-[#FFD700]/50 focus:ring-[#FFD700]/20"
+                      className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/60 focus:border-[#FF6B35]/50 focus:ring-[#FF6B35]/20"
                     />
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <Label className="text-white/70 text-sm">ZIP Code</Label>
+                  <Label className="text-[#2D3436] text-sm">ZIP Code</Label>
                   <Input
                     value={form.zip}
                     onChange={(e) => set("zip", e.target.value)}
                     placeholder="55401"
-                    className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-[#FFD700]/50 focus:ring-[#FFD700]/20"
+                    className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/60 focus:border-[#FF6B35]/50 focus:ring-[#FF6B35]/20"
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <Label className="text-white/70 text-sm">Service Areas</Label>
+                  <Label className="text-[#2D3436] text-sm">Service Areas</Label>
                   <Input
                     value={form.service_areas}
                     onChange={(e) => set("service_areas", e.target.value)}
                     placeholder="Apple Valley, Burnsville, Lakeville"
-                    className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-[#FFD700]/50 focus:ring-[#FFD700]/20"
+                    className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/60 focus:border-[#FF6B35]/50 focus:ring-[#FF6B35]/20"
                   />
-                  <p className="text-xs text-white/30">Comma-separated cities</p>
+                  <p className="text-xs text-[#636E72]/60">Comma-separated cities</p>
                 </div>
               </>
             )}
@@ -300,36 +300,36 @@ export function AddClientWizard({ open, onOpenChange, onComplete }: AddClientWiz
             {step === 3 && (
               <>
                 <div className="flex flex-col gap-1.5">
-                  <Label className="text-white/70 text-sm">Website URL</Label>
+                  <Label className="text-[#2D3436] text-sm">Website URL</Label>
                   <Input
                     value={form.website}
                     onChange={(e) => set("website", e.target.value)}
                     placeholder="https://example.com"
                     type="url"
-                    className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-[#FFD700]/50 focus:ring-[#FFD700]/20"
+                    className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/60 focus:border-[#FF6B35]/50 focus:ring-[#FF6B35]/20"
                     autoFocus
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <Label className="text-white/70 text-sm">Google Business Listing URL</Label>
+                  <Label className="text-[#2D3436] text-sm">Google Business Listing URL</Label>
                   <Input
                     value={form.google_listing}
                     onChange={(e) => set("google_listing", e.target.value)}
                     placeholder="https://maps.google.com/..."
                     type="url"
-                    className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-[#FFD700]/50 focus:ring-[#FFD700]/20"
+                    className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/60 focus:border-[#FF6B35]/50 focus:ring-[#FF6B35]/20"
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <Label className="text-white/70 text-sm">Phone</Label>
+                  <Label className="text-[#2D3436] text-sm">Phone</Label>
                   <Input
                     value={form.phone}
                     onChange={(e) => set("phone", e.target.value)}
                     placeholder="(612) 555-0100"
                     type="tel"
-                    className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-[#FFD700]/50 focus:ring-[#FFD700]/20"
+                    className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/60 focus:border-[#FF6B35]/50 focus:ring-[#FF6B35]/20"
                   />
                 </div>
               </>
@@ -343,12 +343,12 @@ export function AddClientWizard({ open, onOpenChange, onComplete }: AddClientWiz
           </div>
 
           {/* Footer navigation */}
-          <div className="flex items-center justify-between pt-2 border-t border-white/10">
+          <div className="flex items-center justify-between pt-2 border-t border-[#DFE6E9]">
             <Button
               variant="ghost"
               onClick={handleBack}
               disabled={step === 1 || loading}
-              className="text-white/60 hover:text-white hover:bg-white/10 disabled:opacity-30"
+              className="text-[#636E72] hover:text-[#1B2A4A] hover:bg-[#DFE6E9]/50 disabled:opacity-30"
             >
               Back
             </Button>
@@ -358,7 +358,7 @@ export function AddClientWizard({ open, onOpenChange, onComplete }: AddClientWiz
                 <div
                   key={i}
                   className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                    i + 1 === step ? "bg-[#FFD700]" : i + 1 < step ? "bg-[#FFD700]/50" : "bg-white/20"
+                    i + 1 === step ? "bg-[#FF6B35]" : i + 1 < step ? "bg-[#FF6B35]/50" : "bg-white/20"
                   }`}
                 />
               ))}
@@ -368,7 +368,7 @@ export function AddClientWizard({ open, onOpenChange, onComplete }: AddClientWiz
               <Button
                 onClick={handleNext}
                 disabled={!canAdvance()}
-                className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold disabled:opacity-40"
+                className="bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold disabled:opacity-40"
               >
                 Next
               </Button>
@@ -376,7 +376,7 @@ export function AddClientWizard({ open, onOpenChange, onComplete }: AddClientWiz
               <Button
                 onClick={handleFinish}
                 disabled={loading}
-                className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold disabled:opacity-40 min-w-[80px]"
+                className="bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold disabled:opacity-40 min-w-[80px]"
               >
                 {loading ? (
                   <span className="flex items-center gap-2">

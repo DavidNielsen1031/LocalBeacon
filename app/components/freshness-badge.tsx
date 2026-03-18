@@ -13,12 +13,12 @@ export function FreshnessBadge({ daysSinceLastPost, status, lastPostDate }: Fres
   // "No posts yet" state
   if (status === 'none' || daysSinceLastPost === null) {
     return (
-      <div className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-white/60">
+      <div className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-[#DFE6E9] text-sm text-[#636E72]">
         <span>📭</span>
         <span>No posts yet —</span>
         <Link
           href="/dashboard/queue"
-          className="text-[#FFD700] hover:underline font-medium"
+          className="text-[#FF6B35] hover:underline font-medium"
         >
           generate your first!
         </Link>

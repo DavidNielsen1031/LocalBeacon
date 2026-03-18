@@ -40,12 +40,12 @@ function ScoreRing({ score }: { score: number }) {
   const radius = 58
   const circumference = 2 * Math.PI * radius
   const offset = circumference - (score / 100) * circumference
-  const color = score >= 80 ? '#22c55e' : score >= 50 ? '#FFD700' : '#ef4444'
+  const color = score >= 80 ? '#22c55e' : score >= 50 ? '#FF6B35' : '#ef4444'
 
   return (
     <div className="relative w-36 h-36">
       <svg className="w-full h-full -rotate-90" viewBox="0 0 128 128">
-        <circle cx="64" cy="64" r={radius} fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="8" />
+        <circle cx="64" cy="64" r={radius} fill="none" stroke="rgba(27,42,74,0.1)" strokeWidth="8" />
         <circle
           cx="64" cy="64" r={radius} fill="none" stroke={color} strokeWidth="8"
           strokeDasharray={circumference} strokeDashoffset={offset}
@@ -53,8 +53,8 @@ function ScoreRing({ score }: { score: number }) {
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-4xl font-extrabold text-white">{score}</span>
-        <span className="text-xs text-white/50">out of 100</span>
+        <span className="text-4xl font-extrabold text-[#2D3436]">{score}</span>
+        <span className="text-xs text-[#636E72]">out of 100</span>
       </div>
     </div>
   )
@@ -81,24 +81,24 @@ function TrendChart({ scans }: { scans: HistoryScan[] }) {
   const firstScore = sorted[0].score
   const lastScore = sorted[sorted.length - 1].score
   const delta = lastScore - firstScore
-  const deltaColor = delta > 0 ? 'text-green-400' : delta < 0 ? 'text-red-400' : 'text-white/40'
+  const deltaColor = delta > 0 ? 'text-green-400' : delta < 0 ? 'text-red-400' : 'text-[#636E72]'
 
   return (
-    <Card className="bg-white/5 border-white/10">
+    <Card className="bg-white border-[#DFE6E9]">
       <CardContent className="p-5">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-sm font-semibold text-white">Score History</h3>
+          <h3 className="text-sm font-semibold text-[#2D3436]">Score History</h3>
           <span className={`text-sm font-bold ${deltaColor}`}>
             {delta > 0 ? `+${delta}` : delta} pts
           </span>
         </div>
         <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-20">
-          <path d={pathD} fill="none" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d={pathD} fill="none" stroke="#FF6B35" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           {points.map((p, i) => (
-            <circle key={i} cx={p.x} cy={p.y} r="3" fill="#FFD700" />
+            <circle key={i} cx={p.x} cy={p.y} r="3" fill="#FF6B35" />
           ))}
         </svg>
-        <div className="flex justify-between text-xs text-white/30 mt-1">
+        <div className="flex justify-between text-xs text-[#636E72]/60 mt-1">
           <span>{points[0].date}</span>
           <span>{scans.length} scans</span>
           <span>{points[points.length - 1].date}</span>
@@ -180,16 +180,16 @@ export default function AIReadinessPage() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-white">AI Readiness Score</h1>
-        <p className="text-white/50 mt-1">
+        <h1 className="text-2xl font-bold text-[#2D3436]">AI Readiness Score</h1>
+        <p className="text-[#636E72] mt-1">
           Check if AI assistants like ChatGPT, Siri, and Perplexity can find and recommend your business.
         </p>
       </div>
 
       {/* URL Input */}
-      <Card className="bg-white/5 border-white/10">
+      <Card className="bg-white border-[#DFE6E9]">
         <CardContent className="p-6">
-          <label className="block text-sm font-medium text-white/70 mb-2">
+          <label className="block text-sm font-medium text-[#2D3436] mb-2">
             Enter your website URL
           </label>
           <div className="flex gap-3">
@@ -199,12 +199,12 @@ export default function AIReadinessPage() {
               onChange={(e) => setUrl(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleScan()}
               placeholder="example.com or https://example.com"
-              className="flex-1 bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:border-[#FFD700]/50 focus:ring-1 focus:ring-[#FFD700]/30"
+              className="flex-1 bg-white border border-[#DFE6E9] rounded-lg px-4 py-3 text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50 focus:ring-1 focus:ring-[#FF6B35]/30"
             />
             <Button
               onClick={handleScan}
               disabled={loading || !url.trim()}
-              className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold px-8"
+              className="bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold px-8"
             >
               {loading ? 'Scanning...' : 'Scan'}
             </Button>
@@ -216,9 +216,9 @@ export default function AIReadinessPage() {
       {/* Loading state */}
       {loading && (
         <div className="text-center py-12">
-          <div className="inline-block w-8 h-8 border-2 border-[#FFD700]/30 border-t-[#FFD700] rounded-full animate-spin mb-4" />
-          <p className="text-white/50">Scanning {url}...</p>
-          <p className="text-white/30 text-sm mt-1">Checking 15 AI visibility signals</p>
+          <div className="inline-block w-8 h-8 border-2 border-[#FF6B35]/30 border-t-[#FF6B35] rounded-full animate-spin mb-4" />
+          <p className="text-[#636E72]">Scanning {url}...</p>
+          <p className="text-[#636E72]/60 text-sm mt-1">Checking 15 AI visibility signals</p>
         </div>
       )}
 
@@ -226,7 +226,7 @@ export default function AIReadinessPage() {
       {result && grade && (
         <>
           {/* Score overview */}
-          <Card className="bg-white/5 border-white/10">
+          <Card className="bg-white border-[#DFE6E9]">
             <CardContent className="p-8">
               <div className="flex flex-col md:flex-row items-center gap-8">
                 <ScoreRing score={result.score} />
@@ -235,19 +235,19 @@ export default function AIReadinessPage() {
                     <span className="text-2xl">{grade.emoji}</span>
                     <span className={`text-2xl font-bold ${grade.color}`}>{grade.label}</span>
                   </div>
-                  <p className="text-white/60 mb-4">{grade.message}</p>
+                  <p className="text-[#636E72] mb-4">{grade.message}</p>
                   <div className="flex gap-6 justify-center md:justify-start">
                     <div className="text-center">
                       <span className="text-2xl font-bold text-green-400">{result.passed}</span>
-                      <p className="text-xs text-white/40">Passed</p>
+                      <p className="text-xs text-[#636E72]">Passed</p>
                     </div>
                     <div className="text-center">
                       <span className="text-2xl font-bold text-red-400">{result.failed}</span>
-                      <p className="text-xs text-white/40">Need Fixing</p>
+                      <p className="text-xs text-[#636E72]">Need Fixing</p>
                     </div>
                     <div className="text-center">
-                      <span className="text-2xl font-bold text-white/60">{result.total}</span>
-                      <p className="text-xs text-white/40">Total Checks</p>
+                      <span className="text-2xl font-bold text-[#636E72]">{result.total}</span>
+                      <p className="text-xs text-[#636E72]">Total Checks</p>
                     </div>
                   </div>
                 </div>
@@ -261,7 +261,7 @@ export default function AIReadinessPage() {
           {/* Failed checks first */}
           {result.checks.filter(c => !c.passed).length > 0 && (
             <div>
-              <h2 className="text-lg font-bold text-white mb-4">
+              <h2 className="text-lg font-bold text-[#2D3436] mb-4">
                 🔧 What to Fix ({result.checks.filter(c => !c.passed).length} items)
               </h2>
               <div className="space-y-3">
@@ -274,17 +274,17 @@ export default function AIReadinessPage() {
                         <div className="flex items-start gap-3">
                           <span className="text-red-400 mt-0.5 text-lg">✗</span>
                           <div className="flex-1">
-                            <h3 className="font-semibold text-white">{check.label}</h3>
-                            <p className="text-white/50 text-sm mt-1">{check.description}</p>
+                            <h3 className="font-semibold text-[#2D3436]">{check.label}</h3>
+                            <p className="text-[#636E72] text-sm mt-1">{check.description}</p>
                             <p className="text-red-300/70 text-sm mt-2">
                               <span className="font-medium">Status:</span> {check.details}
                             </p>
-                            <div className="mt-3 bg-white/5 rounded-lg p-3">
-                              <p className="text-[#FFD700] text-sm font-medium">How to fix:</p>
-                              <p className="text-white/60 text-sm mt-1">{check.fix}</p>
+                            <div className="mt-3 bg-white rounded-lg p-3">
+                              <p className="text-[#FF6B35] text-sm font-medium">How to fix:</p>
+                              <p className="text-[#636E72] text-sm mt-1">{check.fix}</p>
                             </div>
                           </div>
-                          <span className="text-xs text-white/30 bg-white/5 px-2 py-1 rounded">
+                          <span className="text-xs text-[#636E72]/60 bg-white px-2 py-1 rounded">
                             Impact: {check.weight >= 8 ? 'High' : check.weight >= 6 ? 'Medium' : 'Low'}
                           </span>
                         </div>
@@ -298,7 +298,7 @@ export default function AIReadinessPage() {
           {/* Passed checks */}
           {result.checks.filter(c => c.passed).length > 0 && (
             <div>
-              <h2 className="text-lg font-bold text-white mb-4">
+              <h2 className="text-lg font-bold text-[#2D3436] mb-4">
                 ✅ What&apos;s Working ({result.checks.filter(c => c.passed).length} items)
               </h2>
               <div className="space-y-2">
@@ -311,8 +311,8 @@ export default function AIReadinessPage() {
                         <div className="flex items-center gap-3">
                           <span className="text-green-400 text-lg">✓</span>
                           <div className="flex-1">
-                            <h3 className="font-medium text-white text-sm">{check.label}</h3>
-                            <p className="text-white/40 text-xs mt-0.5">{check.details}</p>
+                            <h3 className="font-medium text-[#2D3436] text-sm">{check.label}</h3>
+                            <p className="text-[#636E72] text-xs mt-0.5">{check.details}</p>
                           </div>
                         </div>
                       </CardContent>
@@ -326,7 +326,7 @@ export default function AIReadinessPage() {
           <AeoRecommendations recommendations={recommendations} />
 
           {/* Scanned timestamp */}
-          <p className="text-white/20 text-xs text-center">
+          <p className="text-[#636E72]/40 text-xs text-center">
             Scanned {new Date(result.scannedAt).toLocaleString()} · {result.url}
           </p>
         </>
@@ -336,8 +336,8 @@ export default function AIReadinessPage() {
       {!result && !loading && (
         <div className="text-center py-16">
           <span className="text-5xl mb-4 block">🔍</span>
-          <h2 className="text-xl font-bold text-white mb-2">Check Your AI Visibility</h2>
-          <p className="text-white/50 max-w-md mx-auto mb-6">
+          <h2 className="text-xl font-bold text-[#2D3436] mb-2">Check Your AI Visibility</h2>
+          <p className="text-[#636E72] max-w-md mx-auto mb-6">
             Enter any website URL above to see how visible it is to AI search engines like ChatGPT, Claude, Perplexity, and Google AI.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
@@ -345,7 +345,7 @@ export default function AIReadinessPage() {
               <button
                 key={suggestion}
                 onClick={() => suggestion === 'localbeacon.ai' ? setUrl('localbeacon.ai') : null}
-                className="text-xs text-white/30 bg-white/5 px-3 py-1.5 rounded-full hover:bg-white/10 transition-colors"
+                className="text-xs text-[#636E72]/60 bg-white px-3 py-1.5 rounded-full hover:bg-white transition-colors"
               >
                 Try: {suggestion}
               </button>

@@ -186,26 +186,26 @@ export default function SchemaPage() {
   return (
     <div className="p-6 md:p-8 max-w-5xl">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white mb-2">Schema Markup</h1>
-        <p className="text-white/50">Copy these code snippets into your website to help Google understand your business better. Just paste into your site footer.</p>
+        <h1 className="text-2xl font-bold text-[#2D3436] mb-2">Schema Markup</h1>
+        <p className="text-[#636E72]">Copy these code snippets into your website to help Google understand your business better. Just paste into your site footer.</p>
       </div>
 
       {isDemo && (
-        <div className="bg-[#FFD700]/10 border border-[#FFD700]/30 rounded-xl p-4 mb-6">
-          <p className="text-[#FFD700] text-sm font-medium">👋 Demo mode — showing example data</p>
-          <p className="text-white/50 text-xs mt-1">Add your business in Settings to generate schema markup personalized to your actual business.</p>
+        <div className="bg-[#FF6B35]/10 border border-[#FF6B35]/30 rounded-xl p-4 mb-6">
+          <p className="text-[#FF6B35] text-sm font-medium">👋 Demo mode — showing example data</p>
+          <p className="text-[#636E72] text-xs mt-1">Add your business in Settings to generate schema markup personalized to your actual business.</p>
         </div>
       )}
 
       {/* What is this */}
-      <div className="bg-[#111] border border-[#FFD700]/20 rounded-xl p-5 mb-8">
-        <h2 className="text-[#FFD700] font-semibold mb-2">💡 What is Schema Markup?</h2>
-        <p className="text-white/60 text-sm leading-relaxed">
+      <div className="bg-white border border-[#FF6B35]/20 rounded-xl p-5 mb-8">
+        <h2 className="text-[#FF6B35] font-semibold mb-2">💡 What is Schema Markup?</h2>
+        <p className="text-[#636E72] text-sm leading-relaxed">
           Schema markup is a small piece of code that tells Google exactly what your business does, where you&apos;re located,
           and what services you offer. It&apos;s like giving Google a cheat sheet about your business. Businesses with schema markup
-          can get <span className="text-white">rich results</span> in search — showing your rating, hours, and services right in the search listing.
+          can get <span className="text-[#1B2A4A] font-semibold">rich results</span> in search — showing your rating, hours, and services right in the search listing.
           <br /><br />
-          <span className="text-white/40">How to use it:</span> Copy the code below and paste it into your website&apos;s footer (or ask your web person to do it). That&apos;s it — one time, and you&apos;re done.
+          <span className="text-[#636E72]">How to use it:</span> Copy the code below and paste it into your website&apos;s footer (or ask your web person to do it). That&apos;s it — one time, and you&apos;re done.
         </p>
       </div>
 
@@ -217,8 +217,8 @@ export default function SchemaPage() {
             onClick={() => setActiveTab(key)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
               activeTab === key
-                ? 'bg-[#FFD700]/10 text-[#FFD700] border border-[#FFD700]/30'
-                : 'text-white/50 border border-white/10 hover:border-white/20'
+                ? 'bg-[#FF6B35]/10 text-[#FF6B35] border border-[#FF6B35]/30'
+                : 'text-[#636E72] border border-[#DFE6E9] hover:border-[#DFE6E9]'
             }`}
           >
             {schemas[key].label}
@@ -227,15 +227,15 @@ export default function SchemaPage() {
       </div>
 
       {/* Schema display */}
-      <div className="bg-[#111] border border-white/10 rounded-xl overflow-hidden">
-        <div className="flex items-center justify-between p-4 border-b border-white/10">
+      <div className="bg-white border border-[#DFE6E9] rounded-xl overflow-hidden">
+        <div className="flex items-center justify-between p-4 border-b border-[#DFE6E9]">
           <div>
-            <h3 className="text-white font-medium">{active.label} Schema</h3>
-            <p className="text-white/40 text-xs mt-0.5">{active.desc}</p>
+            <h3 className="text-[#1B2A4A] font-medium">{active.label} Schema</h3>
+            <p className="text-[#636E72] text-xs mt-0.5">{active.desc}</p>
           </div>
           <button
             onClick={() => handleCopy(activeTab)}
-            className="bg-[#FFD700] text-black font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#FFD700]/90 transition-all"
+            className="bg-[#FF6B35] text-black font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#FF6B35]/90 transition-all"
           >
             {copied === activeTab ? '✓ Copied!' : 'Copy Code'}
           </button>
@@ -247,7 +247,7 @@ export default function SchemaPage() {
 
       {/* Google preview */}
       <div className="mt-8">
-        <h2 className="text-lg font-semibold text-white mb-3">How Google Will See You</h2>
+        <h2 className="text-lg font-semibold text-[#2D3436] mb-3">How Google Will See You</h2>
         <div className="bg-white rounded-xl p-5 max-w-lg">
           <div className="text-[#1a0dab] text-lg font-medium hover:underline cursor-pointer">
             {biz.name} – {biz.primary_city}

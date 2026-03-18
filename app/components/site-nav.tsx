@@ -37,17 +37,18 @@ export function SiteNav() {
       />
       <div
         style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}
-        className="flex items-center justify-between h-20"
+        className="flex items-center justify-between h-16 md:h-20"
       >
-        <Link href="/" style={{ textDecoration: "none" }} className="flex items-center gap-2">
-          <img src="/logo-192.png" alt="LocalBeacon" style={{ height: "56px", width: "56px" }} />
+        <Link href="/" style={{ textDecoration: "none" }} className="flex items-center gap-1.5 md:gap-2 shrink-0">
+          <img src="/logo-192.png" alt="LocalBeacon" style={{ height: "36px", width: "36px" }} className="md:w-14 md:h-14" />
           <span
             style={{
               fontWeight: 800,
-              fontSize: "1.25rem",
               color: NAVY,
               letterSpacing: "-0.02em",
+              whiteSpace: "nowrap",
             }}
+            className="text-base md:text-xl"
           >
             Local<span style={{ color: ORANGE }}>Beacon</span>.ai
           </span>
@@ -78,20 +79,19 @@ export function SiteNav() {
           ))}
         </div>
 
-        <Link href="/sign-up" style={{ textDecoration: "none" }}>
+        <Link href="/sign-up" style={{ textDecoration: "none" }} className="shrink-0">
           <button
             style={{
               backgroundColor: ORANGE,
               color: "#fff",
               fontWeight: 700,
-              fontSize: "0.9375rem",
-              padding: "10px 22px",
               borderRadius: "8px",
               border: "none",
               cursor: "pointer",
               boxShadow: "0 4px 14px rgba(255,107,53,0.3)",
               transition: "opacity 0.15s",
             }}
+            className="text-xs md:text-[0.9375rem] px-3 py-1.5 md:px-[22px] md:py-[10px]"
             onMouseEnter={(e) => ((e.target as HTMLElement).style.opacity = "0.88")}
             onMouseLeave={(e) => ((e.target as HTMLElement).style.opacity = "1")}
           >

@@ -99,7 +99,7 @@ export function QueueActions({
         <Button
           onClick={handleGenerate}
           disabled={generating || !businessId}
-          className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold"
+          className="bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold"
         >
           {generating ? 'Writing…' : "Write My Post For This Week"}
         </Button>
@@ -107,7 +107,7 @@ export function QueueActions({
           <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-sm max-w-sm">
             <p className="text-red-400">{error}</p>
             {error.includes('Upgrade') && (
-              <a href="/pricing" className="text-[#FFD700] font-semibold text-xs hover:underline mt-1 inline-block">
+              <a href="/pricing" className="text-[#FF6B35] font-semibold text-xs hover:underline mt-1 inline-block">
                 View Plans →
               </a>
             )}
@@ -122,16 +122,16 @@ export function QueueActions({
     <div className="flex flex-col gap-2 w-full">
       {/* Expand/collapse full content */}
       {expanded && (
-        <div className="bg-white/5 border border-white/10 rounded-lg p-4 mb-2">
-          <p className="text-xs text-white/40 mb-1 font-semibold">{title || 'Your Post'}</p>
+        <div className="bg-white border border-[#DFE6E9] rounded-lg p-4 mb-2">
+          <p className="text-xs text-[#636E72] mb-1 font-semibold">{title || 'Your Post'}</p>
           {editMode ? (
             <textarea
               value={editText}
               onChange={(e) => setEditText(e.target.value)}
-              className="w-full bg-black/50 border border-white/20 rounded-lg p-3 text-white text-sm min-h-[120px] focus:outline-none focus:border-[#FFD700]/50"
+              className="w-full bg-white0 border border-[#DFE6E9] rounded-lg p-3 text-[#2D3436] text-sm min-h-[120px] focus:outline-none focus:border-[#FF6B35]/50"
             />
           ) : (
-            <p className="text-white/80 text-sm whitespace-pre-wrap">{content}</p>
+            <p className="text-[#2D3436] text-sm whitespace-pre-wrap">{content}</p>
           )}
         </div>
       )}
@@ -141,7 +141,7 @@ export function QueueActions({
           size="sm"
           variant="outline"
           onClick={() => { setExpanded(!expanded); if (!expanded) setEditText(content ?? '') }}
-          className="border-white/20 text-white/70 hover:text-white hover:border-white/40 text-xs"
+          className="border-[#DFE6E9] text-[#2D3436] hover:text-[#1B2A4A] hover:border-[#1B2A4A]/30 text-xs"
         >
           {expanded ? '▲ Collapse' : '▼ Read Full Post'}
         </Button>
@@ -151,7 +151,7 @@ export function QueueActions({
             size="sm"
             variant="outline"
             onClick={() => setEditMode(!editMode)}
-            className="border-white/20 text-white/70 hover:text-white hover:border-white/40 text-xs"
+            className="border-[#DFE6E9] text-[#2D3436] hover:text-[#1B2A4A] hover:border-[#1B2A4A]/30 text-xs"
           >
             {editMode ? '👁 Preview' : '✏️ Edit Before Copying'}
           </Button>
@@ -161,7 +161,7 @@ export function QueueActions({
           size="sm"
           variant="outline"
           onClick={handleCopy}
-          className="border-white/20 text-white/70 hover:text-white hover:border-white/40 text-xs"
+          className="border-[#DFE6E9] text-[#2D3436] hover:text-[#1B2A4A] hover:border-[#1B2A4A]/30 text-xs"
         >
           {copying ? '✅ Copied!' : '📋 Copy Text'}
         </Button>
@@ -183,7 +183,7 @@ export function QueueActions({
         <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-2 text-xs">
           <p className="text-red-400">{error}</p>
           {error.includes('Upgrade') && (
-            <a href="/pricing" className="text-[#FFD700] font-semibold hover:underline mt-1 inline-block">
+            <a href="/pricing" className="text-[#FF6B35] font-semibold hover:underline mt-1 inline-block">
               View Plans →
             </a>
           )}

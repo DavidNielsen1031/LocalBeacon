@@ -59,20 +59,20 @@ export default function AuditPage() {
   return (
     <div className="p-6 md:p-8 max-w-5xl">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white mb-2">Google Listing Health</h1>
-        <p className="text-white/50">See how complete your Google listing is — and what to fix to show up higher in search.</p>
+        <h1 className="text-2xl font-bold text-[#2D3436] mb-2">Google Listing Health</h1>
+        <p className="text-[#636E72]">See how complete your Google listing is — and what to fix to show up higher in search.</p>
       </div>
 
       {/* Score card */}
-      <div className={`bg-[#111] border ${scoreBg} rounded-xl p-8 mb-8 text-center`}>
+      <div className={`bg-white border ${scoreBg} rounded-xl p-8 mb-8 text-center`}>
         <div className={`text-6xl font-bold ${scoreColor} mb-2`}>{score}</div>
-        <div className="text-white/50 text-lg mb-4">out of 100</div>
+        <div className="text-[#636E72] text-lg mb-4">out of 100</div>
         <div className="flex justify-center gap-6 text-sm">
-          <span className="text-white/60">✅ {completed} complete</span>
-          <span className="text-white/60">⬜ {total - completed} remaining</span>
+          <span className="text-[#636E72]">✅ {completed} complete</span>
+          <span className="text-[#636E72]">⬜ {total - completed} remaining</span>
         </div>
         {score < 80 && (
-          <p className="text-white/40 text-sm mt-4 max-w-md mx-auto">
+          <p className="text-[#636E72] text-sm mt-4 max-w-md mx-auto">
             {score < 50
               ? "Your listing needs attention. Complete the high-impact items below to start showing up in more searches."
               : "You're getting there! Focus on the remaining items to maximize your visibility."
@@ -86,17 +86,17 @@ export default function AuditPage() {
 
       {/* Priority breakdown */}
       <div className="grid grid-cols-3 gap-4 mb-8">
-        <div className="bg-[#111] border border-white/10 rounded-xl p-4 text-center">
+        <div className="bg-white border border-[#DFE6E9] rounded-xl p-4 text-center">
           <div className="text-red-400 text-sm font-medium mb-1">🔴 High Impact</div>
-          <div className="text-white text-xl font-bold">{highCompleted}/{highItems.length}</div>
+          <div className="text-[#2D3436] text-xl font-bold">{highCompleted}/{highItems.length}</div>
         </div>
-        <div className="bg-[#111] border border-white/10 rounded-xl p-4 text-center">
+        <div className="bg-white border border-[#DFE6E9] rounded-xl p-4 text-center">
           <div className="text-yellow-400 text-sm font-medium mb-1">🟡 Medium Impact</div>
-          <div className="text-white text-xl font-bold">{medCompleted}/{mediumItems.length}</div>
+          <div className="text-[#2D3436] text-xl font-bold">{medCompleted}/{mediumItems.length}</div>
         </div>
-        <div className="bg-[#111] border border-white/10 rounded-xl p-4 text-center">
+        <div className="bg-white border border-[#DFE6E9] rounded-xl p-4 text-center">
           <div className="text-blue-400 text-sm font-medium mb-1">🔵 Nice to Have</div>
-          <div className="text-white text-xl font-bold">{lowItems.filter(i => i.completed).length}/{lowItems.length}</div>
+          <div className="text-[#2D3436] text-xl font-bold">{lowItems.filter(i => i.completed).length}/{lowItems.length}</div>
         </div>
       </div>
 
@@ -107,26 +107,26 @@ export default function AuditPage() {
         { title: '🔵 Nice to Have', items: lowItems, color: 'border-blue-500/20' },
       ].map(section => (
         <div key={section.title} className="mb-6">
-          <h2 className="text-lg font-semibold text-white mb-3">{section.title}</h2>
-          <div className={`bg-[#111] border ${section.color} rounded-xl overflow-hidden divide-y divide-white/5`}>
+          <h2 className="text-lg font-semibold text-[#2D3436] mb-3">{section.title}</h2>
+          <div className={`bg-white border ${section.color} rounded-xl overflow-hidden divide-y divide-white/5`}>
             {section.items.map(item => (
               <div
                 key={item.id}
-                className="flex items-start gap-4 p-4 hover:bg-white/[0.02] cursor-pointer transition-colors"
+                className="flex items-start gap-4 p-4 hover:bg-[#FAFAF7] cursor-pointer transition-colors"
                 onClick={() => toggleItem(item.id)}
               >
                 <div className={`w-6 h-6 rounded-md border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${
                   item.completed
                     ? 'bg-green-500/20 border-green-500/50 text-green-400'
-                    : 'border-white/20 text-transparent hover:border-white/40'
+                    : 'border-[#DFE6E9] text-transparent hover:border-white/40'
                 }`}>
                   {item.completed && '✓'}
                 </div>
                 <div className="flex-1">
-                  <span className={`text-sm font-medium ${item.completed ? 'text-white/40 line-through' : 'text-white'}`}>
+                  <span className={`text-sm font-medium ${item.completed ? 'text-[#636E72] line-through' : 'text-[#1B2A4A]'}`}>
                     {item.label}
                   </span>
-                  <p className="text-xs text-white/30 mt-0.5">{item.description}</p>
+                  <p className="text-xs text-[#636E72]/60 mt-0.5">{item.description}</p>
                 </div>
               </div>
             ))}

@@ -8,6 +8,16 @@ import Link from "next/link";
 import { useBusinessContext } from "@/components/business-context";
 import { FreshnessBadge } from "@/components/freshness-badge";
 import { useEffect, useState } from "react";
+import {
+  FileText,
+  Globe,
+  Star,
+  Zap,
+  Link as LinkIcon,
+  PenLine,
+  BarChart3,
+  FileDown,
+} from "lucide-react";
 
 interface DashboardData {
   postsCount: number;
@@ -43,7 +53,7 @@ export default function DashboardPage() {
     }
 
     setLoading(true);
-    setData(null); // Clear stale data immediately to prevent flash of wrong business data
+    setData(null);
     fetch(`/api/businesses/${activeBusinessId}/dashboard`)
       .then((res) => (res.ok ? res.json() : null))
       .then((d) => setData(d))
@@ -53,30 +63,36 @@ export default function DashboardPage() {
 
   const stats = hasBusiness && data
     ? [
-        { label: "Google Posts", value: String(data.postsCount), sub: "posts created", icon: "📍", href: "/dashboard/posts" },
-        { label: "City Pages", value: String(data.pagesCount), sub: "cities covered", icon: "🌐", href: "/dashboard/pages" },
-        { label: "Reviews", value: String(data.reviewsCount), sub: "replies drafted", icon: "⭐", href: "/dashboard/reviews" },
-        { label: "AI Readiness", value: data.aeoScore !== null ? `${data.aeoScore}` : "—", sub: data.aeoScore !== null ? "out of 100" : "run your first scan", icon: "🤖", href: "/dashboard/ai-readiness" },
+        { label: "Google Posts", value: String(data.postsCount), sub: "posts created", Icon: FileText, href: "/dashboard/posts" },
+        { label: "City Pages", value: String(data.pagesCount), sub: "cities covered", Icon: Globe, href: "/dashboard/pages" },
+        { label: "Reviews", value: String(data.reviewsCount), sub: "replies drafted", Icon: Star, href: "/dashboard/reviews" },
+        { label: "AI Readiness", value: data.aeoScore !== null ? `${data.aeoScore}` : "—", sub: data.aeoScore !== null ? "out of 100" : "run your first scan", Icon: Zap, href: "/dashboard/ai-readiness" },
       ]
     : [
-        { label: "Google Posts", value: "—", sub: "connect listing to start", icon: "📍", href: "/onboarding" },
-        { label: "City Pages", value: "—", sub: "set up your service areas", icon: "🌐", href: "/onboarding" },
-        { label: "Reviews", value: "—", sub: "we'll draft replies for you", icon: "⭐", href: "/onboarding" },
-        { label: "AI Readiness", value: "—", sub: "scan your website", icon: "🤖", href: "/dashboard/ai-readiness" },
+        { label: "Google Posts", value: "—", sub: "connect listing to start", Icon: FileText, href: "/onboarding" },
+        { label: "City Pages", value: "—", sub: "set up your service areas", Icon: Globe, href: "/onboarding" },
+        { label: "Reviews", value: "—", sub: "we'll draft replies for you", Icon: Star, href: "/onboarding" },
+        { label: "AI Readiness", value: "—", sub: "scan your website", Icon: Zap, href: "/dashboard/ai-readiness" },
       ];
+
+  const activityIconMap: Record<string, typeof FileText> = {
+    gbp_post: FileText,
+    city_page: Globe,
+    review_reply: Star,
+  };
 
   const activity = hasBusiness && data && data.recentItems.length > 0
     ? data.recentItems.map((item) => ({
-        icon: item.type === "gbp_post" ? "📝" : item.type === "city_page" ? "🌐" : item.type === "review_reply" ? "⭐" : "📄",
+        Icon: activityIconMap[item.type] ?? FileText,
         text: item.title || `${item.type.replace("_", " ")} created`,
         time: new Date(item.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
         action: item.type === "gbp_post" ? "/dashboard/posts" : item.type === "city_page" ? "/dashboard/pages" : "/dashboard/reviews",
       }))
     : [
-        { icon: "🔗", text: "Connect your Google listing to get started", time: "First step", action: "/onboarding" },
-        { icon: "📝", text: "Generate your first Google post", time: "Step 2", action: "/dashboard/posts" },
-        { icon: "🌐", text: "Build city pages for areas you serve", time: "Step 3", action: "/dashboard/pages" },
-        { icon: "🤖", text: "Check your AI Readiness score", time: "Step 4", action: "/dashboard/ai-readiness" },
+        { Icon: LinkIcon, text: "Connect your Google listing to get started", time: "First step", action: "/onboarding" },
+        { Icon: PenLine, text: "Generate your first Google post", time: "Step 2", action: "/dashboard/posts" },
+        { Icon: Globe, text: "Build city pages for areas you serve", time: "Step 3", action: "/dashboard/pages" },
+        { Icon: Zap, text: "Check your AI Readiness score", time: "Step 4", action: "/dashboard/ai-readiness" },
       ];
 
   return (
@@ -84,26 +100,33 @@ export default function DashboardPage() {
       {/* Welcome banner */}
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-2xl">🔦</span>
-          <Badge className="bg-[#FFD700]/10 text-[#FFD700] border-[#FFD700]/30 text-xs">
+          <Badge
+            className="text-xs border"
+            style={{
+              backgroundColor: "rgba(255,107,53,0.1)",
+              color: "#FF6B35",
+              borderColor: "rgba(255,107,53,0.3)",
+            }}
+          >
             {plan === "agency" ? "Agency Plan" : plan === "solo" ? "Solo Plan" : "Free Plan"}
           </Badge>
         </div>
         {hasBusiness ? (
           <>
-            <h1 className="text-3xl font-bold text-white">
+            <h1 className="text-3xl font-bold" style={{ color: "#1B2A4A" }}>
               Welcome back, {firstName}!
             </h1>
-            <p className="text-white/50 mt-1">
-              Here&apos;s what&apos;s happening with <strong className="text-white">{activeBusiness.name}</strong>.
+            <p className="mt-1" style={{ color: "#636E72" }}>
+              Here&apos;s what&apos;s happening with{" "}
+              <strong style={{ color: "#1B2A4A" }}>{activeBusiness.name}</strong>.
             </p>
           </>
         ) : (
           <>
-            <h1 className="text-3xl font-bold text-white">
+            <h1 className="text-3xl font-bold" style={{ color: "#1B2A4A" }}>
               Welcome, {firstName}! Let&apos;s get you set up.
             </h1>
-            <p className="text-white/50 mt-1">
+            <p className="mt-1" style={{ color: "#636E72" }}>
               Connect your Google listing and we&apos;ll start writing posts, pages, and review replies for your business.
             </p>
           </>
@@ -122,16 +145,24 @@ export default function DashboardPage() {
 
       {/* Setup CTA — only show if no business */}
       {!hasBusiness && (
-        <Card className="bg-[#FFD700]/5 border-[#FFD700]/30 mb-8">
+        <Card
+          className="mb-8 border"
+          style={{ backgroundColor: "rgba(255,107,53,0.05)", borderColor: "rgba(255,107,53,0.2)" }}
+        >
           <CardContent className="p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
-              <h3 className="text-white font-bold text-lg mb-1">Connect your Google listing</h3>
-              <p className="text-white/50 text-sm">
+              <h3 className="font-bold text-lg mb-1" style={{ color: "#1B2A4A" }}>
+                Connect your Google listing
+              </h3>
+              <p className="text-sm" style={{ color: "#636E72" }}>
                 It takes 2 minutes. We&apos;ll auto-detect your business info and write your first posts immediately.
               </p>
             </div>
             <Link href="/onboarding">
-              <Button className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold whitespace-nowrap px-6">
+              <Button
+                className="font-semibold whitespace-nowrap px-6 text-white"
+                style={{ backgroundColor: "#FF6B35" }}
+              >
                 Connect Now →
               </Button>
             </Link>
@@ -142,7 +173,9 @@ export default function DashboardPage() {
       {/* Loading state */}
       {loading && hasBusiness && (
         <div className="flex items-center justify-center py-12">
-          <div className="text-white/40 text-sm">Loading dashboard...</div>
+          <div className="text-sm" style={{ color: "#636E72" }}>
+            Loading dashboard...
+          </div>
         </div>
       )}
 
@@ -152,14 +185,26 @@ export default function DashboardPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
             {stats.map((stat) => (
               <Link key={stat.label} href={stat.href}>
-                <Card className="bg-white/5 border-white/10 hover:border-[#FFD700]/30 transition-colors cursor-pointer h-full">
+                <Card
+                  className="bg-white rounded-xl border shadow-sm hover:shadow-md transition-shadow cursor-pointer h-full"
+                  style={{ borderColor: "#DFE6E9" }}
+                >
                   <CardContent className="p-5">
-                    <div className="text-2xl mb-2">{stat.icon}</div>
-                    <p className="text-xs text-white/50 uppercase tracking-wider font-medium mb-1">
+                    <div
+                      className="inline-flex items-center justify-center w-10 h-10 rounded-lg mb-3"
+                      style={{ backgroundColor: "rgba(255,107,53,0.1)" }}
+                    >
+                      <stat.Icon size={18} style={{ color: "#FF6B35" }} />
+                    </div>
+                    <p className="text-xs uppercase tracking-wider font-medium mb-1" style={{ color: "#636E72" }}>
                       {stat.label}
                     </p>
-                    <p className="text-3xl font-bold text-white">{stat.value}</p>
-                    <p className="text-xs text-white/40 mt-1">{stat.sub}</p>
+                    <p className="text-3xl font-bold" style={{ color: "#1B2A4A" }}>
+                      {stat.value}
+                    </p>
+                    <p className="text-xs mt-1" style={{ color: "#636E72" }}>
+                      {stat.sub}
+                    </p>
                   </CardContent>
                 </Card>
               </Link>
@@ -168,23 +213,38 @@ export default function DashboardPage() {
 
           {/* Activity Feed */}
           <div className="mb-10">
-            <h2 className="text-lg font-semibold text-white mb-4">
+            <h2 className="text-lg font-semibold mb-4" style={{ color: "#1B2A4A" }}>
               {hasBusiness && data && data.recentItems.length > 0 ? "Recent Activity" : "Getting Started"}
             </h2>
             <div className="space-y-3">
               {activity.map((item, i) => (
                 <div
                   key={i}
-                  className="flex items-center gap-4 p-4 rounded-lg border transition-colors bg-white/5 border-white/10 hover:border-[#FFD700]/30 cursor-pointer"
+                  className="flex items-center gap-4 p-4 rounded-xl border transition-colors bg-white cursor-pointer hover:shadow-sm"
+                  style={{ borderColor: "#DFE6E9" }}
                 >
-                  <span className="text-xl">{item.icon}</span>
-                  <div className="flex-1">
-                    <p className="text-sm text-white">{item.text}</p>
+                  <div
+                    className="inline-flex items-center justify-center w-8 h-8 rounded-lg shrink-0"
+                    style={{ backgroundColor: "rgba(255,107,53,0.08)" }}
+                  >
+                    <item.Icon size={15} style={{ color: "#FF6B35" }} />
                   </div>
-                  <span className="text-xs text-white/30">{item.time}</span>
+                  <div className="flex-1">
+                    <p className="text-sm" style={{ color: "#2D3436" }}>
+                      {item.text}
+                    </p>
+                  </div>
+                  <span className="text-xs" style={{ color: "#636E72" }}>
+                    {item.time}
+                  </span>
                   {item.action && (
                     <Link href={item.action}>
-                      <Button size="sm" variant="ghost" className="text-[#FFD700] hover:text-[#FFD700]/80 text-xs">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="text-xs"
+                        style={{ color: "#FF6B35" }}
+                      >
                         →
                       </Button>
                     </Link>
@@ -197,19 +257,33 @@ export default function DashboardPage() {
           {/* Download Report */}
           {hasBusiness && (
             <div className="mb-10">
-              <Card className="bg-white/5 border-white/10">
+              <Card
+                className="bg-white rounded-xl border shadow-sm"
+                style={{ borderColor: "#DFE6E9" }}
+              >
                 <CardContent className="p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <div>
-                    <h3 className="text-white font-semibold text-sm mb-1">📄 Monthly Visibility Report</h3>
-                    <p className="text-white/40 text-xs">
-                      Download a PDF report for {activeBusiness?.name}. Share with clients or keep for your records.
-                    </p>
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="inline-flex items-center justify-center w-9 h-9 rounded-lg"
+                      style={{ backgroundColor: "rgba(255,107,53,0.1)" }}
+                    >
+                      <FileDown size={16} style={{ color: "#FF6B35" }} />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-sm" style={{ color: "#1B2A4A" }}>
+                        Monthly Visibility Report
+                      </h3>
+                      <p className="text-xs" style={{ color: "#636E72" }}>
+                        Download a PDF report for {activeBusiness?.name}. Share with clients or keep for your records.
+                      </p>
+                    </div>
                   </div>
-                  <a
-                    href={`/api/reports/pdf?businessId=${activeBusinessId}`}
-                    download
-                  >
-                    <Button size="sm" className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold whitespace-nowrap px-6 text-xs">
+                  <a href={`/api/reports/pdf?businessId=${activeBusinessId}`} download>
+                    <Button
+                      size="sm"
+                      className="font-semibold whitespace-nowrap px-6 text-xs text-white"
+                      style={{ backgroundColor: "#FF6B35" }}
+                    >
                       Download Report
                     </Button>
                   </a>
@@ -220,7 +294,9 @@ export default function DashboardPage() {
 
           {/* Quick Actions */}
           <div>
-            <h2 className="text-lg font-semibold text-white mb-4">Quick Actions</h2>
+            <h2 className="text-lg font-semibold mb-4" style={{ color: "#1B2A4A" }}>
+              Quick Actions
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {[
                 {
@@ -228,32 +304,49 @@ export default function DashboardPage() {
                   description: hasBusiness
                     ? "Create fresh Google post drafts for your business."
                     : "Connect your Google listing and we'll write posts for you.",
-                  icon: "📝",
+                  Icon: PenLine,
                   href: hasBusiness ? "/dashboard/posts" : "/onboarding",
                   cta: hasBusiness ? "Write Posts" : "Get Started",
                 },
                 {
                   title: "Build a City Page",
                   description: "Create a local page to target searches in a specific city or neighborhood.",
-                  icon: "🌐",
+                  Icon: Globe,
                   href: "/dashboard/pages",
                   cta: "Build Page",
                 },
                 {
                   title: "Check AI Readiness",
                   description: "Scan any URL and see how visible it is to AI search engines like ChatGPT.",
-                  icon: "🤖",
+                  Icon: Zap,
                   href: "/dashboard/ai-readiness",
                   cta: "Run Scan",
                 },
               ].map((action) => (
-                <Card key={action.title} className="bg-white/5 border-white/10 flex flex-col">
+                <Card
+                  key={action.title}
+                  className="bg-white rounded-xl border shadow-sm flex flex-col"
+                  style={{ borderColor: "#DFE6E9" }}
+                >
                   <CardContent className="p-5 flex-1 flex flex-col">
-                    <div className="text-2xl mb-2">{action.icon}</div>
-                    <h3 className="text-white font-semibold text-sm mb-1">{action.title}</h3>
-                    <p className="text-white/40 text-xs mb-4 flex-1">{action.description}</p>
+                    <div
+                      className="inline-flex items-center justify-center w-10 h-10 rounded-lg mb-3"
+                      style={{ backgroundColor: "rgba(255,107,53,0.1)" }}
+                    >
+                      <action.Icon size={18} style={{ color: "#FF6B35" }} />
+                    </div>
+                    <h3 className="font-semibold text-sm mb-1" style={{ color: "#1B2A4A" }}>
+                      {action.title}
+                    </h3>
+                    <p className="text-xs mb-4 flex-1" style={{ color: "#636E72" }}>
+                      {action.description}
+                    </p>
                     <Link href={action.href}>
-                      <Button size="sm" className="w-full bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold text-xs">
+                      <Button
+                        size="sm"
+                        className="w-full font-semibold text-xs text-white"
+                        style={{ backgroundColor: "#FF6B35" }}
+                      >
                         {action.cta}
                       </Button>
                     </Link>
@@ -262,6 +355,45 @@ export default function DashboardPage() {
               ))}
             </div>
           </div>
+
+          {/* Monthly Report widget (extra) */}
+          {hasBusiness && (
+            <div className="mt-10">
+              <Card
+                className="bg-white rounded-xl border shadow-sm"
+                style={{ borderColor: "#DFE6E9" }}
+              >
+                <CardContent className="p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="inline-flex items-center justify-center w-9 h-9 rounded-lg"
+                      style={{ backgroundColor: "rgba(255,107,53,0.1)" }}
+                    >
+                      <BarChart3 size={16} style={{ color: "#FF6B35" }} />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-sm" style={{ color: "#1B2A4A" }}>
+                        View Monthly Progress Report
+                      </h3>
+                      <p className="text-xs" style={{ color: "#636E72" }}>
+                        See your score over time and track what's improving.
+                      </p>
+                    </div>
+                  </div>
+                  <Link href="/dashboard/reports">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="font-semibold whitespace-nowrap px-6 text-xs"
+                      style={{ borderColor: "#FF6B35", color: "#FF6B35" }}
+                    >
+                      View Report
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </div>
+          )}
         </>
       )}
     </div>

@@ -101,8 +101,8 @@ export default function ReviewsPage() {
     <div className="flex-1 px-6 py-8 max-w-5xl">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-white">Review Responses</h1>
-          <p className="text-white/50 text-sm mt-1">We draft professional responses to your Google reviews</p>
+          <h1 className="text-2xl font-bold text-[#2D3436]">Review Responses</h1>
+          <p className="text-[#636E72] text-sm mt-1">We draft professional responses to your Google reviews</p>
         </div>
         <Badge className="bg-amber-500/10 text-amber-400 border-amber-500/30 text-xs">
           Manual mode · GBP sync coming soon
@@ -111,22 +111,22 @@ export default function ReviewsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Input form */}
-        <Card className="bg-white/5 border-white/10 h-fit">
+        <Card className="bg-white border-[#DFE6E9] h-fit">
           <CardHeader className="pb-3">
-            <CardTitle className="text-white text-base">Paste a Review</CardTitle>
+            <CardTitle className="text-[#2D3436] text-base">Paste a Review</CardTitle>
           </CardHeader>
           <CardContent className="space-y-5">
             <div>
-              <Label className="text-white/70 mb-2 block text-sm">Reviewer Name <span className="text-white/30">(optional)</span></Label>
+              <Label className="text-[#2D3436] mb-2 block text-sm">Reviewer Name <span className="text-[#636E72]/60">(optional)</span></Label>
               <Input
                 placeholder="e.g. John D."
                 value={author}
                 onChange={e => setAuthor(e.target.value)}
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/30"
+                className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/60"
               />
             </div>
             <div>
-              <Label className="text-white/70 mb-2 block text-sm">Star Rating</Label>
+              <Label className="text-[#2D3436] mb-2 block text-sm">Star Rating</Label>
               <div className="flex gap-2">
                 {STAR_RATINGS.map(star => (
                   <button
@@ -139,23 +139,23 @@ export default function ReviewsPage() {
                     ⭐
                   </button>
                 ))}
-                <span className="text-white/40 text-sm self-center ml-1">{rating}/5</span>
+                <span className="text-[#636E72] text-sm self-center ml-1">{rating}/5</span>
               </div>
             </div>
             <div>
-              <Label className="text-white/70 mb-2 block text-sm">Review Text *</Label>
+              <Label className="text-[#2D3436] mb-2 block text-sm">Review Text *</Label>
               <textarea
                 placeholder="Paste the full review text here..."
                 value={comment}
                 onChange={e => setComment(e.target.value)}
                 rows={5}
-                className="w-full bg-white/5 border border-white/10 text-white placeholder:text-white/30 rounded-md px-3 py-2 text-sm focus:border-[#FFD700]/50 focus:outline-none resize-none"
+                className="w-full bg-white border border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/60 rounded-md px-3 py-2 text-sm focus:border-[#FF6B35]/50 focus:outline-none resize-none"
               />
             </div>
             <Button
               onClick={draft}
               disabled={!comment.trim() || loading}
-              className="w-full bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold"
+              className="w-full bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold"
             >
               {loading ? (
                 <span className="flex items-center gap-2"><span className="animate-spin">⟳</span> Drafting...</span>
@@ -167,38 +167,38 @@ export default function ReviewsPage() {
         {/* Response output */}
         <div className="space-y-4">
           {response ? (
-            <Card className="bg-white/5 border-[#FFD700]/30">
+            <Card className="bg-white border-[#FF6B35]/30">
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-white text-base">Your Response</CardTitle>
+                  <CardTitle className="text-[#2D3436] text-base">Your Response</CardTitle>
                   <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/30 text-xs">Ready to copy</Badge>
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-white/80 text-sm leading-relaxed mb-5">{response}</p>
+                <p className="text-[#2D3436] text-sm leading-relaxed mb-5">{response}</p>
                 <div className="flex gap-2">
                   <Button
                     size="sm"
                     variant="outline"
                     onClick={draft}
-                    className="border-white/10 text-white/50 hover:bg-white/5 text-xs flex-1"
+                    className="border-[#DFE6E9] text-[#636E72] hover:bg-white text-xs flex-1"
                   >
                     ↻ Regenerate
                   </Button>
                   <Button
                     size="sm"
                     onClick={copy}
-                    className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold text-xs flex-1"
+                    className="bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold text-xs flex-1"
                   >
                     {copied ? '✓ Copied!' : 'Copy Response'}
                   </Button>
                 </div>
-                <p className="text-white/30 text-xs mt-4 text-center">
+                <p className="text-[#636E72]/60 text-xs mt-4 text-center">
                   Paste this response directly into Google Maps on your business profile
                 </p>
                 <button
                   onClick={resetForm}
-                  className="text-white/20 text-xs mt-2 w-full text-center hover:text-white/40"
+                  className="text-[#636E72]/40 text-xs mt-2 w-full text-center hover:text-[#636E72]"
                 >
                   ← Start a new review
                 </button>
@@ -208,7 +208,7 @@ export default function ReviewsPage() {
             <div className="h-full flex items-center justify-center py-16 text-center">
               <div>
                 <div className="text-4xl mb-3">⭐</div>
-                <p className="text-white/30 text-sm">Your drafted response will appear here</p>
+                <p className="text-[#636E72]/60 text-sm">Your drafted response will appear here</p>
               </div>
             </div>
           )}
@@ -218,18 +218,18 @@ export default function ReviewsPage() {
       {/* History */}
       {history.length > 0 && (
         <div className="mt-10">
-          <h2 className="text-lg font-semibold text-white mb-4">Recent Responses</h2>
+          <h2 className="text-lg font-semibold text-[#2D3436] mb-4">Recent Responses</h2>
           <div className="space-y-3">
             {history.map(item => (
-              <Card key={item.id} className="bg-white/5 border-white/10">
+              <Card key={item.id} className="bg-white border-[#DFE6E9]">
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-white font-medium text-sm">{item.author}</span>
+                    <span className="text-[#1B2A4A] font-medium text-sm">{item.author}</span>
                     <span className="text-yellow-400 text-xs">{'⭐'.repeat(item.rating)}</span>
-                    <span className="text-white/30 text-xs ml-auto">{item.timestamp}</span>
+                    <span className="text-[#636E72]/60 text-xs ml-auto">{item.timestamp}</span>
                   </div>
-                  <p className="text-white/40 text-xs italic mb-2 line-clamp-1">&ldquo;{item.comment}&rdquo;</p>
-                  <p className="text-white/60 text-xs line-clamp-2">{item.response}</p>
+                  <p className="text-[#636E72] text-xs italic mb-2 line-clamp-1">&ldquo;{item.comment}&rdquo;</p>
+                  <p className="text-[#636E72] text-xs line-clamp-2">{item.response}</p>
                 </CardContent>
               </Card>
             ))}

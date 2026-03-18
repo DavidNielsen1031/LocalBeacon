@@ -82,15 +82,15 @@ export default function CompetitorsPage() {
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-white">Competitor Comparison</h1>
-        <p className="text-white/50 text-sm mt-1">
+        <h1 className="text-2xl font-bold text-[#2D3436]">Competitor Comparison</h1>
+        <p className="text-[#636E72] text-sm mt-1">
           See how your AI visibility stacks up against your competitors
         </p>
       </div>
 
       {/* Your site */}
-      <div className="bg-white/5 border border-white/10 rounded-xl p-5 mb-6">
-        <h2 className="text-sm font-medium text-white/70 mb-3">Your website</h2>
+      <div className="bg-white border border-[#DFE6E9] rounded-xl p-5 mb-6">
+        <h2 className="text-sm font-medium text-[#2D3436] mb-3">Your website</h2>
         {!myResult ? (
           <div className="flex gap-3">
             <input
@@ -98,13 +98,13 @@ export default function CompetitorsPage() {
               value={myUrl}
               onChange={(e) => setMyUrl(e.target.value)}
               placeholder="Enter your website URL"
-              className="flex-1 px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-[#FFD700]/50"
+              className="flex-1 px-4 py-2.5 rounded-lg bg-white border border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50"
               onKeyDown={(e) => e.key === 'Enter' && scanMySite()}
             />
             <button
               onClick={scanMySite}
               disabled={myLoading || !myUrl.trim()}
-              className="px-5 py-2.5 bg-[#FFD700] text-black font-semibold rounded-lg hover:bg-[#FFD700]/90 disabled:opacity-50 text-sm"
+              className="px-5 py-2.5 bg-[#FF6B35] text-black font-semibold rounded-lg hover:bg-[#FF6B35]/90 disabled:opacity-50 text-sm"
             >
               {myLoading ? 'Scanning...' : 'Scan'}
             </button>
@@ -113,19 +113,19 @@ export default function CompetitorsPage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div
-                className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold"
+                className="w-12 h-12 rounded-full flex items-center justify-center text-[#2D3436] font-bold"
                 style={{ backgroundColor: getGrade(myResult.score).color }}
               >
                 {myResult.score}
               </div>
               <div>
-                <p className="text-white font-medium">{myResult.url.replace(/^https?:\/\//, '').split('/')[0]}</p>
-                <p className="text-white/40 text-xs">{myResult.passed}/{myResult.total} signals passing</p>
+                <p className="text-[#1B2A4A] font-medium">{myResult.url.replace(/^https?:\/\//, '').split('/')[0]}</p>
+                <p className="text-[#636E72] text-xs">{myResult.passed}/{myResult.total} signals passing</p>
               </div>
             </div>
             <button
               onClick={() => setMyResult(null)}
-              className="text-xs text-white/30 hover:text-white/60"
+              className="text-xs text-[#636E72]/60 hover:text-[#636E72]"
             >
               Rescan
             </button>
@@ -134,10 +134,10 @@ export default function CompetitorsPage() {
       </div>
 
       {/* Add competitor */}
-      <div className="bg-white/5 border border-white/10 rounded-xl p-5 mb-6">
+      <div className="bg-white border border-[#DFE6E9] rounded-xl p-5 mb-6">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-medium text-white/70">Competitors</h2>
-          <span className="text-xs text-white/30">{competitors.length}/3</span>
+          <h2 className="text-sm font-medium text-[#2D3436]">Competitors</h2>
+          <span className="text-xs text-[#636E72]/60">{competitors.length}/3</span>
         </div>
 
         {competitors.length < 3 && (
@@ -147,13 +147,13 @@ export default function CompetitorsPage() {
               value={newUrl}
               onChange={(e) => setNewUrl(e.target.value)}
               placeholder="Add a competitor's website"
-              className="flex-1 px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-[#FFD700]/50"
+              className="flex-1 px-4 py-2.5 rounded-lg bg-white border border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50"
               onKeyDown={(e) => e.key === 'Enter' && addCompetitor()}
             />
             <button
               onClick={addCompetitor}
               disabled={!newUrl.trim()}
-              className="px-5 py-2.5 bg-white/10 text-white font-medium rounded-lg hover:bg-white/15 disabled:opacity-50 text-sm"
+              className="px-5 py-2.5 bg-white text-[#2D3436] font-medium rounded-lg hover:bg-white/15 disabled:opacity-50 text-sm"
             >
               + Add
             </button>
@@ -161,7 +161,7 @@ export default function CompetitorsPage() {
         )}
 
         {competitors.length === 0 && (
-          <p className="text-white/30 text-sm text-center py-4">
+          <p className="text-[#636E72]/60 text-sm text-center py-4">
             Add up to 3 competitors to compare AI readiness scores
           </p>
         )}
@@ -169,40 +169,40 @@ export default function CompetitorsPage() {
         {/* Competitor list */}
         <div className="space-y-3">
           {competitors.map((comp) => (
-            <div key={comp.url} className="flex items-center justify-between p-3 rounded-lg bg-white/[0.02] border border-white/5">
+            <div key={comp.url} className="flex items-center justify-between p-3 rounded-lg bg-[#FAFAF7] border border-[#DFE6E9]">
               {comp.loading ? (
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-white/10 animate-pulse" />
+                  <div className="w-10 h-10 rounded-full bg-white animate-pulse" />
                   <div>
-                    <p className="text-white/60 text-sm">{comp.url.replace(/^https?:\/\//, '').split('/')[0]}</p>
-                    <p className="text-white/30 text-xs">Scanning...</p>
+                    <p className="text-[#636E72] text-sm">{comp.url.replace(/^https?:\/\//, '').split('/')[0]}</p>
+                    <p className="text-[#636E72]/60 text-xs">Scanning...</p>
                   </div>
                 </div>
               ) : comp.result ? (
                 <div className="flex items-center gap-3">
                   <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm"
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-[#2D3436] font-bold text-sm"
                     style={{ backgroundColor: getGrade(comp.result.score).color }}
                   >
                     {comp.result.score}
                   </div>
                   <div>
-                    <p className="text-white text-sm">{comp.result.url.replace(/^https?:\/\//, '').split('/')[0]}</p>
-                    <p className="text-white/40 text-xs">{comp.result.passed}/{comp.result.total} signals</p>
+                    <p className="text-[#2D3436] text-sm">{comp.result.url.replace(/^https?:\/\//, '').split('/')[0]}</p>
+                    <p className="text-[#636E72] text-xs">{comp.result.passed}/{comp.result.total} signals</p>
                   </div>
                 </div>
               ) : (
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 text-sm">✗</div>
                   <div>
-                    <p className="text-white/60 text-sm">{comp.url.replace(/^https?:\/\//, '').split('/')[0]}</p>
+                    <p className="text-[#636E72] text-sm">{comp.url.replace(/^https?:\/\//, '').split('/')[0]}</p>
                     <p className="text-red-400/60 text-xs">Could not scan</p>
                   </div>
                 </div>
               )}
               <button
                 onClick={() => removeCompetitor(comp.url)}
-                className="text-white/20 hover:text-red-400 text-sm"
+                className="text-[#636E72]/40 hover:text-red-400 text-sm"
               >
                 ✕
               </button>
@@ -213,16 +213,16 @@ export default function CompetitorsPage() {
 
       {/* Comparison table */}
       {myResult && competitors.some(c => c.result) && (
-        <div className="bg-white/5 border border-white/10 rounded-xl p-5">
-          <h2 className="text-sm font-medium text-white/70 mb-4">Signal-by-signal comparison</h2>
+        <div className="bg-white border border-[#DFE6E9] rounded-xl p-5">
+          <h2 className="text-sm font-medium text-[#2D3436] mb-4">Signal-by-signal comparison</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-white/10">
-                  <th className="text-left py-2 text-white/40 font-medium">Signal</th>
-                  <th className="text-center py-2 text-[#FFD700] font-medium">You</th>
+                <tr className="border-b border-[#DFE6E9]">
+                  <th className="text-left py-2 text-[#636E72] font-medium">Signal</th>
+                  <th className="text-center py-2 text-[#FF6B35] font-medium">You</th>
                   {competitors.filter(c => c.result).map((comp) => (
-                    <th key={comp.url} className="text-center py-2 text-white/40 font-medium">
+                    <th key={comp.url} className="text-center py-2 text-[#636E72] font-medium">
                       {comp.url.replace(/^https?:\/\//, '').split('/')[0].slice(0, 15)}
                     </th>
                   ))}
@@ -230,8 +230,8 @@ export default function CompetitorsPage() {
               </thead>
               <tbody>
                 {myResult.checks.map((check) => (
-                  <tr key={check.id} className="border-b border-white/5">
-                    <td className="py-2 text-white/70">{check.label}</td>
+                  <tr key={check.id} className="border-b border-[#DFE6E9]">
+                    <td className="py-2 text-[#2D3436]">{check.label}</td>
                     <td className="text-center">{check.passed ? '✅' : '❌'}</td>
                     {competitors.filter(c => c.result).map((comp) => {
                       const compCheck = comp.result!.checks.find(c => c.id === check.id)
@@ -244,7 +244,7 @@ export default function CompetitorsPage() {
                   </tr>
                 ))}
                 <tr className="font-bold">
-                  <td className="py-2 text-white">Total Score</td>
+                  <td className="py-2 text-[#2D3436]">Total Score</td>
                   <td className="text-center" style={{ color: getGrade(myResult.score).color }}>{myResult.score}</td>
                   {competitors.filter(c => c.result).map((comp) => (
                     <td key={comp.url} className="text-center" style={{ color: getGrade(comp.result!.score).color }}>
@@ -260,12 +260,12 @@ export default function CompetitorsPage() {
 
       {/* CTA */}
       <div className="mt-6 text-center">
-        <p className="text-white/30 text-xs mb-2">
+        <p className="text-[#636E72]/60 text-xs mb-2">
           Want to share your score comparison with a prospect?
         </p>
         <Link
           href="/check"
-          className="text-[#FFD700] text-sm hover:underline"
+          className="text-[#FF6B35] text-sm hover:underline"
         >
           Use the free public checker →
         </Link>

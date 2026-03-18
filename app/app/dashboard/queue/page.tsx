@@ -70,8 +70,8 @@ export default async function QueuePage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-white">Your Upcoming Posts</h1>
-          <p className="text-white/50 text-sm mt-1">
+          <h1 className="text-2xl font-bold text-[#2D3436]">Your Upcoming Posts</h1>
+          <p className="text-[#636E72] text-sm mt-1">
             Posts we&apos;ve written for your Google listing — ready to copy and publish
           </p>
         </div>
@@ -93,11 +93,11 @@ export default async function QueuePage() {
 
       {/* List */}
       {items.length === 0 ? (
-        <Card className="bg-[#111] border-white/10">
+        <Card className="bg-white border-[#DFE6E9]">
           <CardContent className="py-16 text-center">
             <div className="text-4xl mb-4">📅</div>
-            <p className="text-white/60 text-lg mb-2">No posts queued yet.</p>
-            <p className="text-white/40 text-sm mb-6">
+            <p className="text-[#636E72] text-lg mb-2">No posts queued yet.</p>
+            <p className="text-[#636E72] text-sm mb-6">
               Generate your first weekly post!
             </p>
             <QueueActions businessId={business?.id ?? null} variant="empty" />
@@ -106,22 +106,22 @@ export default async function QueuePage() {
       ) : (
         <div className="space-y-4">
           {items.map((item) => (
-            <Card key={item.id} className="bg-[#111] border-white/10">
+            <Card key={item.id} className="bg-white border-[#DFE6E9]">
               <CardContent className="p-5">
                 {/* Title + meta */}
                 <div className="flex items-start justify-between gap-4 mb-2">
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-white truncate">
+                    <p className="font-semibold text-[#2D3436] truncate">
                       {item.title || 'Untitled Post'}
                     </p>
-                    <p className="text-white/50 text-sm mt-1 line-clamp-2">
+                    <p className="text-[#636E72] text-sm mt-1 line-clamp-2">
                       {item.content.slice(0, 100)}
                       {item.content.length > 100 ? '…' : ''}
                     </p>
                   </div>
                   <div className="flex items-center gap-3 flex-shrink-0">
                     <StatusBadge status={item.status} />
-                    <span className="text-white/30 text-xs">
+                    <span className="text-[#636E72]/60 text-xs">
                       📅 {formatDate(item.scheduled_for)}
                     </span>
                   </div>
@@ -155,13 +155,13 @@ function StatusBadge({ status }: { status: QueueItem['status'] }) {
   }
   if (status === 'ready') {
     return (
-      <Badge className="bg-yellow-500/20 text-[#FFD700] border-yellow-500/30 text-xs">
+      <Badge className="bg-yellow-500/20 text-[#FF6B35] border-yellow-500/30 text-xs">
         🟡 Ready
       </Badge>
     )
   }
   return (
-    <Badge className="bg-white/10 text-white/50 border-white/10 text-xs">
+    <Badge className="bg-white text-[#636E72] border-[#DFE6E9] text-xs">
       Draft
     </Badge>
   )

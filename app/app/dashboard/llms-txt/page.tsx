@@ -91,103 +91,103 @@ export default function LlmsTxtPage() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-white">AI Discovery File</h1>
-        <p className="text-white/50 mt-1">
+        <h1 className="text-2xl font-bold text-[#2D3436]">AI Discovery File</h1>
+        <p className="text-[#636E72] mt-1">
           Generate an llms.txt file that tells AI assistants about your business. Upload it to your website and AI search engines will know how to recommend you.
         </p>
       </div>
 
       {/* What is this */}
-      <Card className="bg-[#FFD700]/5 border-[#FFD700]/20">
+      <Card className="bg-[#FF6B35]/5 border-[#FF6B35]/20">
         <CardContent className="p-5">
-          <h3 className="font-semibold text-[#FFD700] text-sm mb-2">💡 What is an llms.txt file?</h3>
-          <p className="text-white/60 text-sm">
+          <h3 className="font-semibold text-[#FF6B35] text-sm mb-2">💡 What is an llms.txt file?</h3>
+          <p className="text-[#636E72] text-sm">
             Think of it as a business card for AI. When ChatGPT, Claude, Perplexity, or Google AI searches the web, they look for this file to quickly understand what your business does, where you operate, and what services you offer. Without it, AI has to guess — and it usually guesses wrong or skips you entirely.
           </p>
         </CardContent>
       </Card>
 
       {/* Form */}
-      <Card className="bg-white/5 border-white/10">
+      <Card className="bg-white border-[#DFE6E9]">
         <CardContent className="p-6 space-y-4">
-          <h3 className="font-semibold text-white text-sm">Business Details</h3>
+          <h3 className="font-semibold text-[#2D3436] text-sm">Business Details</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-white/50 mb-1">Business Name *</label>
+              <label className="block text-xs font-medium text-[#636E72] mb-1">Business Name *</label>
               <input type="text" value={businessName} onChange={(e) => setBusinessName(e.target.value)}
-                placeholder="Thompson Plumbing" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FFD700]/50" />
+                placeholder="Thompson Plumbing" className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-white/50 mb-1">Business Type *</label>
+              <label className="block text-xs font-medium text-[#636E72] mb-1">Business Type *</label>
               <select value={category} onChange={(e) => setCategory(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-[#FFD700]/50">
-                <option value="" className="bg-[#111]">Select...</option>
-                {categories.map(cat => <option key={cat} value={cat} className="bg-[#111]">{cat}</option>)}
+                className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] focus:outline-none focus:border-[#FF6B35]/50">
+                <option value="" className="bg-white">Select...</option>
+                {categories.map(cat => <option key={cat} value={cat} className="bg-white">{cat}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-white/50 mb-1">City *</label>
+              <label className="block text-xs font-medium text-[#636E72] mb-1">City *</label>
               <input type="text" value={city} onChange={(e) => setCity(e.target.value)}
-                placeholder="Burnsville" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FFD700]/50" />
+                placeholder="Burnsville" className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-white/50 mb-1">State *</label>
+              <label className="block text-xs font-medium text-[#636E72] mb-1">State *</label>
               <input type="text" value={state} onChange={(e) => setState(e.target.value)}
-                placeholder="MN" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FFD700]/50" />
+                placeholder="MN" className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-white/50 mb-1">Phone</label>
+              <label className="block text-xs font-medium text-[#636E72] mb-1">Phone</label>
               <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)}
-                placeholder="(952) 555-1234" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FFD700]/50" />
+                placeholder="(952) 555-1234" className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-white/50 mb-1">Website</label>
+              <label className="block text-xs font-medium text-[#636E72] mb-1">Website</label>
               <input type="text" value={website} onChange={(e) => setWebsite(e.target.value)}
-                placeholder="https://thompsonplumbing.com" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FFD700]/50" />
+                placeholder="https://thompsonplumbing.com" className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-white/50 mb-1">Address</label>
+              <label className="block text-xs font-medium text-[#636E72] mb-1">Address</label>
               <input type="text" value={address} onChange={(e) => setAddress(e.target.value)}
-                placeholder="123 Main St, Burnsville, MN 55337" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FFD700]/50" />
+                placeholder="123 Main St, Burnsville, MN 55337" className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-white/50 mb-1">Hours</label>
+              <label className="block text-xs font-medium text-[#636E72] mb-1">Hours</label>
               <input type="text" value={hours} onChange={(e) => setHours(e.target.value)}
-                placeholder="Mon-Fri 7AM-6PM, Sat 8AM-2PM" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FFD700]/50" />
+                placeholder="Mon-Fri 7AM-6PM, Sat 8AM-2PM" className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50" />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-white/50 mb-1">Services (comma-separated)</label>
+            <label className="block text-xs font-medium text-[#636E72] mb-1">Services (comma-separated)</label>
             <input type="text" value={services} onChange={(e) => setServices(e.target.value)}
-              placeholder="Water heater repair, drain cleaning, sewer line replacement, faucet installation" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FFD700]/50" />
+              placeholder="Water heater repair, drain cleaning, sewer line replacement, faucet installation" className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50" />
           </div>
           <div>
-            <label className="block text-xs font-medium text-white/50 mb-1">Service Areas (comma-separated cities)</label>
+            <label className="block text-xs font-medium text-[#636E72] mb-1">Service Areas (comma-separated cities)</label>
             <input type="text" value={serviceAreas} onChange={(e) => setServiceAreas(e.target.value)}
-              placeholder="Apple Valley, Eagan, Lakeville, Prior Lake, Savage" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FFD700]/50" />
+              placeholder="Apple Valley, Eagan, Lakeville, Prior Lake, Savage" className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50" />
           </div>
           <div>
-            <label className="block text-xs font-medium text-white/50 mb-1">Business Description (optional)</label>
+            <label className="block text-xs font-medium text-[#636E72] mb-1">Business Description (optional)</label>
             <textarea value={description} onChange={(e) => setDescription(e.target.value)}
               rows={2} placeholder="Family-owned plumbing company serving the south metro since 2005..."
-              className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FFD700]/50" />
+              className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50" />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-white/50 mb-1">Google Review Rating</label>
+              <label className="block text-xs font-medium text-[#636E72] mb-1">Google Review Rating</label>
               <input type="text" value={reviewRating} onChange={(e) => setReviewRating(e.target.value)}
-                placeholder="4.8" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FFD700]/50" />
+                placeholder="4.8" className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-white/50 mb-1">Number of Reviews</label>
+              <label className="block text-xs font-medium text-[#636E72] mb-1">Number of Reviews</label>
               <input type="text" value={reviewCount} onChange={(e) => setReviewCount(e.target.value)}
-                placeholder="127" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FFD700]/50" />
+                placeholder="127" className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50" />
             </div>
           </div>
 
           <Button onClick={handleGenerate} disabled={loading || !businessName || !category || !city || !state}
-            className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold">
+            className="bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold">
             {loading ? 'Generating...' : 'Generate AI Discovery File'}
           </Button>
         </CardContent>
@@ -197,59 +197,59 @@ export default function LlmsTxtPage() {
       {result && (
         <>
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-bold text-white">Your llms.txt File</h2>
+            <h2 className="text-lg font-bold text-[#2D3436]">Your llms.txt File</h2>
             <div className="flex gap-2">
               <Button variant="outline" size="sm" onClick={handleCopy}
-                className="border-white/20 text-white/70 hover:text-white">
+                className="border-[#DFE6E9] text-[#2D3436] hover:text-[#1B2A4A]">
                 {copied ? '✓ Copied!' : 'Copy'}
               </Button>
               <Button onClick={handleDownload}
-                className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold" size="sm">
+                className="bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold" size="sm">
                 ⬇ Download llms.txt
               </Button>
             </div>
           </div>
 
-          <Card className="bg-white/5 border-white/10">
+          <Card className="bg-white border-[#DFE6E9]">
             <CardContent className="p-5">
-              <pre className="bg-black/50 rounded-lg p-4 overflow-x-auto text-sm text-green-400 whitespace-pre-wrap">
+              <pre className="bg-white0 rounded-lg p-4 overflow-x-auto text-sm text-green-400 whitespace-pre-wrap">
                 {result.content}
               </pre>
-              <p className="text-white/30 text-xs mt-3">{result.byteSize} bytes — well under the 2KB recommended size</p>
+              <p className="text-[#636E72]/60 text-xs mt-3">{result.byteSize} bytes — well under the 2KB recommended size</p>
             </CardContent>
           </Card>
 
           {/* Platform-specific instructions */}
-          <Card className="bg-[#FFD700]/5 border-[#FFD700]/20">
+          <Card className="bg-[#FF6B35]/5 border-[#FF6B35]/20">
             <CardContent className="p-5">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-semibold text-[#FFD700] text-sm">📋 How to add this to your website</h3>
+                <h3 className="font-semibold text-[#FF6B35] text-sm">📋 How to add this to your website</h3>
                 <select
                   value={platform}
                   onChange={(e) => setPlatform(e.target.value as Platform)}
-                  className="bg-white/5 border border-white/10 rounded px-2 py-1 text-xs text-white focus:outline-none focus:border-[#FFD700]/50"
+                  className="bg-white border border-[#DFE6E9] rounded px-2 py-1 text-xs text-[#2D3436] focus:outline-none focus:border-[#FF6B35]/50"
                 >
                   {getAllPlatforms().map(p => (
-                    <option key={p.id} value={p.id} className="bg-[#111]">{p.name}</option>
+                    <option key={p.id} value={p.id} className="bg-white">{p.name}</option>
                   ))}
                 </select>
               </div>
-              <ol className="text-white/60 text-sm space-y-2 list-decimal list-inside">
+              <ol className="text-[#636E72] text-sm space-y-2 list-decimal list-inside">
                 {getInstructions(platform).llmsTxt.map((step, i) => (
                   <li key={i}>{step}</li>
                 ))}
               </ol>
               {getInstructions(platform).pitfalls.length > 0 && (
-                <div className="mt-3 pt-3 border-t border-white/10">
-                  <p className="text-white/40 text-xs font-medium mb-1">⚠️ Watch out for:</p>
-                  <ul className="text-white/40 text-xs space-y-1 list-disc list-inside">
+                <div className="mt-3 pt-3 border-t border-[#DFE6E9]">
+                  <p className="text-[#636E72] text-xs font-medium mb-1">⚠️ Watch out for:</p>
+                  <ul className="text-[#636E72] text-xs space-y-1 list-disc list-inside">
                     {getInstructions(platform).pitfalls.map((p, i) => (
                       <li key={i}>{p}</li>
                     ))}
                   </ul>
                 </div>
               )}
-              <p className="text-white/40 text-xs mt-4">
+              <p className="text-[#636E72] text-xs mt-4">
                 AI search engines typically discover new llms.txt files within 1-4 weeks of deployment.
               </p>
             </CardContent>
@@ -261,8 +261,8 @@ export default function LlmsTxtPage() {
       {!result && !loading && (
         <div className="text-center py-12">
           <span className="text-5xl mb-4 block">📄</span>
-          <h2 className="text-xl font-bold text-white mb-2">Your AI Business Card</h2>
-          <p className="text-white/50 max-w-lg mx-auto">
+          <h2 className="text-xl font-bold text-[#2D3436] mb-2">Your AI Business Card</h2>
+          <p className="text-[#636E72] max-w-lg mx-auto">
             Fill in your business details above and we&apos;ll generate a file that tells ChatGPT, Claude, Perplexity, and Google AI exactly who you are and what you do. One file, all AI assistants.
           </p>
         </div>

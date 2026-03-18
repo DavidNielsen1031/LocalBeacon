@@ -98,13 +98,13 @@ export default function BlogPage() {
   return (
     <div className="p-6 md:p-8 max-w-5xl">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white mb-2">Blog Posts</h1>
-        <p className="text-white/50">We write locally-optimized blog posts that rank on Google and bring in new customers.</p>
+        <h1 className="text-2xl font-bold text-[#2D3436] mb-2">Blog Posts</h1>
+        <p className="text-[#636E72]">We write locally-optimized blog posts that rank on Google and bring in new customers.</p>
       </div>
 
       {/* Generator */}
-      <div className="bg-[#111] border border-white/10 rounded-xl p-6 mb-8">
-        <h2 className="text-lg font-semibold text-white mb-4">Write a New Post</h2>
+      <div className="bg-white border border-[#DFE6E9] rounded-xl p-6 mb-8">
+        <h2 className="text-lg font-semibold text-[#2D3436] mb-4">Write a New Post</h2>
 
         {/* Post type selector */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
@@ -114,37 +114,37 @@ export default function BlogPage() {
               onClick={() => setSelectedType(t.value)}
               className={`p-3 rounded-lg border text-left transition-all ${
                 selectedType === t.value
-                  ? 'border-[#FFD700]/50 bg-[#FFD700]/10'
-                  : 'border-white/10 hover:border-white/20'
+                  ? 'border-[#FF6B35]/50 bg-[#FF6B35]/10'
+                  : 'border-[#DFE6E9] hover:border-[#DFE6E9]'
               }`}
             >
-              <span className={`text-sm font-medium ${selectedType === t.value ? 'text-[#FFD700]' : 'text-white'}`}>
+              <span className={`text-sm font-medium ${selectedType === t.value ? 'text-[#FF6B35]' : 'text-[#2D3436]'}`}>
                 {t.label}
               </span>
-              <p className="text-xs text-white/40 mt-1">{t.desc}</p>
+              <p className="text-xs text-[#636E72] mt-1">{t.desc}</p>
             </button>
           ))}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
           <div>
-            <label className="text-sm text-white/60 block mb-1.5">City or neighborhood</label>
+            <label className="text-sm text-[#636E72] block mb-1.5">City or neighborhood</label>
             <input
               type="text"
               value={city}
               onChange={e => setCity(e.target.value)}
               placeholder="e.g. Burnsville, Apple Valley"
-              className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2.5 text-white placeholder:text-white/30 focus:border-[#FFD700]/50 focus:outline-none"
+              className="w-full bg-white0 border border-[#DFE6E9] rounded-lg px-4 py-2.5 text-[#2D3436] placeholder:text-[#636E72]/60 focus:border-[#FF6B35]/50 focus:outline-none"
             />
           </div>
           <div>
-            <label className="text-sm text-white/60 block mb-1.5">Topic <span className="text-white/30">(optional — we&apos;ll pick one if blank)</span></label>
+            <label className="text-sm text-[#636E72] block mb-1.5">Topic <span className="text-[#636E72]/60">(optional — we&apos;ll pick one if blank)</span></label>
             <input
               type="text"
               value={topic}
               onChange={e => setTopic(e.target.value)}
               placeholder="e.g. water heater maintenance, teeth whitening"
-              className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2.5 text-white placeholder:text-white/30 focus:border-[#FFD700]/50 focus:outline-none"
+              className="w-full bg-white0 border border-[#DFE6E9] rounded-lg px-4 py-2.5 text-[#2D3436] placeholder:text-[#636E72]/60 focus:border-[#FF6B35]/50 focus:outline-none"
             />
           </div>
         </div>
@@ -158,7 +158,7 @@ export default function BlogPage() {
         <button
           onClick={handleGenerate}
           disabled={generating}
-          className="bg-[#FFD700] text-black font-semibold px-6 py-2.5 rounded-lg hover:bg-[#FFD700]/90 disabled:opacity-50 transition-all flex items-center gap-2"
+          className="bg-[#FF6B35] text-black font-semibold px-6 py-2.5 rounded-lg hover:bg-[#FF6B35]/90 disabled:opacity-50 transition-all flex items-center gap-2"
         >
           {generating ? (
             <>
@@ -170,24 +170,24 @@ export default function BlogPage() {
           )}
         </button>
         {generating && (
-          <p className="mt-2 text-xs text-white/30">Takes about 15-20 seconds — we&apos;re writing a full 800+ word post for you.</p>
+          <p className="mt-2 text-xs text-[#636E72]/60">Takes about 15-20 seconds — we&apos;re writing a full 800+ word post for you.</p>
         )}
       </div>
 
       {/* Post list */}
       {posts.length > 0 && (
         <div className="space-y-4">
-          <h2 className="text-lg font-semibold text-white">Your Blog Posts</h2>
+          <h2 className="text-lg font-semibold text-[#2D3436]">Your Blog Posts</h2>
           {posts.map(post => (
-            <div key={post.id} className="bg-[#111] border border-white/10 rounded-xl overflow-hidden">
+            <div key={post.id} className="bg-white border border-[#DFE6E9] rounded-xl overflow-hidden">
               <div
-                className="p-5 cursor-pointer hover:bg-white/[0.02] transition-colors"
+                className="p-5 cursor-pointer hover:bg-[#FAFAF7] transition-colors"
                 onClick={() => setExpandedPost(expandedPost === post.id ? null : post.id)}
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
-                    <h3 className="text-white font-medium mb-1">{post.title}</h3>
-                    <div className="flex items-center gap-3 text-xs text-white/40 flex-wrap">
+                    <h3 className="text-[#1B2A4A] font-medium mb-1">{post.title}</h3>
+                    <div className="flex items-center gap-3 text-xs text-[#636E72] flex-wrap">
                       {post.city && <span>📍 {post.city}</span>}
                       <span>📄 ~{post.wordCount} words</span>
                       <span className="px-2 py-0.5 rounded-full bg-green-500/20 text-green-400">
@@ -195,21 +195,21 @@ export default function BlogPage() {
                       </span>
                     </div>
                   </div>
-                  <span className="text-white/30 text-lg">{expandedPost === post.id ? '▲' : '▼'}</span>
+                  <span className="text-[#636E72]/60 text-lg">{expandedPost === post.id ? '▲' : '▼'}</span>
                 </div>
               </div>
 
               {expandedPost === post.id && (
-                <div className="border-t border-white/10 p-5">
-                  <p className="text-white/70 text-sm mb-4 leading-relaxed">{post.preview}</p>
+                <div className="border-t border-[#DFE6E9] p-5">
+                  <p className="text-[#2D3436] text-sm mb-4 leading-relaxed">{post.preview}</p>
 
                   {post.faqs.length > 0 && (
                     <div className="mb-4">
-                      <h4 className="text-sm font-medium text-[#FFD700] mb-2">FAQ Section (Schema Markup Included)</h4>
+                      <h4 className="text-sm font-medium text-[#FF6B35] mb-2">FAQ Section (Schema Markup Included)</h4>
                       {post.faqs.map((faq, i) => (
                         <div key={i} className="mb-2 text-sm">
-                          <p className="text-white/80 font-medium">Q: {faq.q}</p>
-                          <p className="text-white/50 ml-4">A: {faq.a}</p>
+                          <p className="text-[#2D3436] font-medium">Q: {faq.q}</p>
+                          <p className="text-[#636E72] ml-4">A: {faq.a}</p>
                         </div>
                       ))}
                     </div>
@@ -218,18 +218,18 @@ export default function BlogPage() {
                   <div className="flex gap-3 flex-wrap">
                     <button
                       onClick={() => copyHtml(post)}
-                      className="bg-[#FFD700] text-black font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#FFD700]/90 transition-colors"
+                      className="bg-[#FF6B35] text-black font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#FF6B35]/90 transition-colors"
                     >
                       {copiedId === post.id ? '✓ Copied!' : 'Copy HTML'}
                     </button>
                     <button
                       onClick={() => downloadHtml(post)}
-                      className="border border-white/20 text-white/70 px-4 py-2 rounded-lg text-sm hover:bg-white/5 transition-colors"
+                      className="border border-[#DFE6E9] text-[#2D3436] px-4 py-2 rounded-lg text-sm hover:bg-white transition-colors"
                     >
                       Download
                     </button>
                   </div>
-                  <p className="mt-3 text-xs text-white/30">
+                  <p className="mt-3 text-xs text-[#636E72]/60">
                     Paste this HTML into WordPress, Squarespace, Wix, or any page builder. FAQPage schema is included for rich results.
                   </p>
                 </div>
@@ -241,7 +241,7 @@ export default function BlogPage() {
 
       {/* Empty state */}
       {posts.length === 0 && (
-        <div className="text-center py-12 text-white/30">
+        <div className="text-center py-12 text-[#636E72]/60">
           <p className="text-4xl mb-3">✍️</p>
           <p className="text-sm">No posts yet — generate your first one above.</p>
           <p className="text-xs mt-1">Each post is 800–1,000 words, locally optimized, and includes FAQ schema for AI search.</p>

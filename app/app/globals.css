@@ -48,6 +48,15 @@
 }
 
 :root {
+  /* LocalBeacon brand tokens */
+  --lb-navy: #1B2A4A;
+  --lb-orange: #FF6B35;
+  --lb-warm-white: #FAFAF7;
+  --lb-cream: #F5F0E8;
+  --lb-charcoal: #2D3436;
+  --lb-slate: #636E72;
+  --lb-mist: #DFE6E9;
+
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

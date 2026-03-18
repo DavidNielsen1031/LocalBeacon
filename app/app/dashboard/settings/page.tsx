@@ -76,129 +76,129 @@ export default function SettingsPage() {
   return (
     <div className="flex-1 px-6 py-8 max-w-3xl">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white">Settings</h1>
-        <p className="text-white/50 mt-1 text-sm">
+        <h1 className="text-2xl font-bold text-[#2D3436]">Settings</h1>
+        <p className="text-[#636E72] mt-1 text-sm">
           Your business details are used to personalize all generated content.
         </p>
       </div>
 
       {/* Business Info */}
-      <Card className="bg-white/5 border-white/10 mb-6">
+      <Card className="bg-white border-[#DFE6E9] mb-6">
         <CardHeader>
-          <CardTitle className="text-white text-base">Business Information</CardTitle>
+          <CardTitle className="text-[#2D3436] text-base">Business Information</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <Label className="text-white/70 text-sm mb-1.5 block">Business Name</Label>
+            <Label className="text-[#2D3436] text-sm mb-1.5 block">Business Name</Label>
             <Input
               value={form.name}
               onChange={(e) => update("name", e.target.value)}
               placeholder="Mike's Plumbing"
-              className="bg-white/5 border-white/20 text-white placeholder:text-white/30"
+              className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/60"
               disabled={loading}
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label className="text-white/70 text-sm mb-1.5 block">Phone</Label>
+              <Label className="text-[#2D3436] text-sm mb-1.5 block">Phone</Label>
               <Input
                 value={form.phone}
                 onChange={(e) => update("phone", e.target.value)}
                 placeholder="(555) 123-4567"
-                className="bg-white/5 border-white/20 text-white placeholder:text-white/30"
+                className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/60"
                 disabled={loading}
               />
             </div>
             <div>
-              <Label className="text-white/70 text-sm mb-1.5 block">Website</Label>
+              <Label className="text-[#2D3436] text-sm mb-1.5 block">Website</Label>
               <Input
                 value={form.website}
                 onChange={(e) => update("website", e.target.value)}
                 placeholder="https://yourbusiness.com"
-                className="bg-white/5 border-white/20 text-white placeholder:text-white/30"
+                className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/60"
                 disabled={loading}
               />
             </div>
           </div>
           <div>
-            <Label className="text-white/70 text-sm mb-1.5 block">Street Address</Label>
+            <Label className="text-[#2D3436] text-sm mb-1.5 block">Street Address</Label>
             <Input
               value={form.address}
               onChange={(e) => update("address", e.target.value)}
               placeholder="123 Main St"
-              className="bg-white/5 border-white/20 text-white placeholder:text-white/30"
+              className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/60"
               disabled={loading}
             />
           </div>
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <Label className="text-white/70 text-sm mb-1.5 block">City</Label>
+              <Label className="text-[#2D3436] text-sm mb-1.5 block">City</Label>
               <Input
                 value={form.city}
                 onChange={(e) => update("city", e.target.value)}
                 placeholder="Denver"
-                className="bg-white/5 border-white/20 text-white placeholder:text-white/30"
+                className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/60"
                 disabled={loading}
               />
             </div>
             <div>
-              <Label className="text-white/70 text-sm mb-1.5 block">State</Label>
+              <Label className="text-[#2D3436] text-sm mb-1.5 block">State</Label>
               <Input
                 value={form.state}
                 onChange={(e) => update("state", e.target.value)}
                 placeholder="CO"
-                className="bg-white/5 border-white/20 text-white placeholder:text-white/30"
+                className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/60"
                 disabled={loading}
               />
             </div>
             <div>
-              <Label className="text-white/70 text-sm mb-1.5 block">ZIP</Label>
+              <Label className="text-[#2D3436] text-sm mb-1.5 block">ZIP</Label>
               <Input
                 value={form.zip}
                 onChange={(e) => update("zip", e.target.value)}
                 placeholder="80202"
-                className="bg-white/5 border-white/20 text-white placeholder:text-white/30"
+                className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/60"
                 disabled={loading}
               />
             </div>
           </div>
           <div>
-            <Label className="text-white/70 text-sm mb-1.5 block">Business Description</Label>
+            <Label className="text-[#2D3436] text-sm mb-1.5 block">Business Description</Label>
             <Textarea
               value={form.description}
               onChange={(e) => update("description", e.target.value)}
               placeholder="Describe what your business does, who you serve, and what makes you different..."
-              className="bg-white/5 border-white/20 text-white placeholder:text-white/30 min-h-[80px]"
+              className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/60 min-h-[80px]"
               disabled={loading}
             />
           </div>
           <div>
-            <Label className="text-white/70 text-sm mb-1.5 block">Service Areas</Label>
+            <Label className="text-[#2D3436] text-sm mb-1.5 block">Service Areas</Label>
             <Input
               value={form.service_areas}
               onChange={(e) => update("service_areas", e.target.value)}
               placeholder="Denver, Lakewood, Aurora, Arvada"
-              className="bg-white/5 border-white/20 text-white placeholder:text-white/30"
+              className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/60"
               disabled={loading}
             />
-            <p className="text-white/30 text-xs mt-1">Comma-separated cities or neighborhoods</p>
+            <p className="text-[#636E72]/60 text-xs mt-1">Comma-separated cities or neighborhoods</p>
           </div>
           <div>
-            <Label className="text-white/70 text-sm mb-1.5 block">Specialties</Label>
+            <Label className="text-[#2D3436] text-sm mb-1.5 block">Specialties</Label>
             <Input
               value={form.specialties}
               onChange={(e) => update("specialties", e.target.value)}
               placeholder="Emergency plumbing, drain cleaning, water heater installation"
-              className="bg-white/5 border-white/20 text-white placeholder:text-white/30"
+              className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/60"
               disabled={loading}
             />
-            <p className="text-white/30 text-xs mt-1">Comma-separated services you offer</p>
+            <p className="text-[#636E72]/60 text-xs mt-1">Comma-separated services you offer</p>
           </div>
           <div className="flex items-center gap-3">
             <Button
               onClick={handleSave}
               disabled={saving || loading}
-              className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold text-sm"
+              className="bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold text-sm"
             >
               {saving ? "Saving..." : "Save Changes"}
             </Button>
@@ -210,21 +210,21 @@ export default function SettingsPage() {
       </Card>
 
       {/* Subscription */}
-      <Card className="bg-white/5 border-white/10">
+      <Card className="bg-white border-[#DFE6E9]">
         <CardHeader>
-          <CardTitle className="text-white text-base flex items-center gap-2">
+          <CardTitle className="text-[#2D3436] text-base flex items-center gap-2">
             Subscription
-            <Badge className="bg-white/10 text-white/60 border-white/20 text-xs">
+            <Badge className="bg-white text-[#636E72] border-[#DFE6E9] text-xs">
               Free Plan
             </Badge>
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-white/50 text-sm mb-4">
+          <p className="text-[#636E72] text-sm mb-4">
             You are on the Free plan. Upgrade to unlock unlimited post drafts, AI review replies,
             and full AI Readiness recommendations.
           </p>
-          <Button className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold text-sm">
+          <Button className="bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold text-sm">
             Upgrade to Solo — $49/month
           </Button>
         </CardContent>
