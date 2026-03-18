@@ -57,6 +57,25 @@ const plans = [
     href: "/sign-up",
     highlight: false,
   },
+  {
+    name: "Done-For-You",
+    price: "$499",
+    period: "/month",
+    tagline: "We handle everything — you just watch your score climb.",
+    outcomes: [
+      "Everything in Agency — unlimited",
+      "We generate AND implement all fixes",
+      "Schema markup installed on your site",
+      "llms.txt file deployed to your domain",
+      "15-25 localized FAQs with schema",
+      "Weekly blog posts published",
+      "Monthly progress report with score tracking",
+      "Dedicated onboarding call",
+    ],
+    cta: "Start Done-For-You — $499/mo",
+    href: "/sign-up",
+    highlight: false,
+  },
 ];
 
 const faqs = [
@@ -93,7 +112,7 @@ const faqs = [
 export default function PricingPage() {
   const [loading, setLoading] = useState<string | null>(null);
 
-  const handleCheckout = async (plan: "SOLO" | "AGENCY") => {
+  const handleCheckout = async (plan: "SOLO" | "AGENCY" | "DFY") => {
     setLoading(plan);
     try {
       const res = await fetch("/api/checkout", {
@@ -167,7 +186,7 @@ export default function PricingPage() {
 
       {/* Plans */}
       <section className="px-6 pb-20">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {plans.map(plan => (
             <Card key={plan.name} className={`relative flex flex-col ${
               plan.highlight
@@ -202,7 +221,9 @@ export default function PricingPage() {
                   </Link>
                 ) : (
                   <Button
-                    onClick={() => handleCheckout(plan.name === "Solo" ? "SOLO" : "AGENCY")}
+                    onClick={() => handleCheckout(
+                      plan.name === "Solo" ? "SOLO" : plan.name === "Agency" ? "AGENCY" : "DFY"
+                    )}
                     disabled={loading !== null}
                     className={`w-full font-semibold h-12 text-base ${
                       plan.highlight
@@ -211,7 +232,7 @@ export default function PricingPage() {
                     }`}
                     variant={plan.highlight ? "default" : "outline"}
                   >
-                    {loading === (plan.name === "Solo" ? "SOLO" : "AGENCY") ? "Redirecting to checkout..." : plan.cta}
+                    {loading ? "Redirecting to checkout..." : plan.cta}
                   </Button>
                 )}
                 {plan.name === "Free" && (

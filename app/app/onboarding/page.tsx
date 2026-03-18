@@ -99,11 +99,30 @@ export default function OnboardingPage() {
   }
 
   const handleStep3Continue = async (plan: string) => {
-    if (plan !== 'free') {
-      // TODO: Stripe checkout — for now continue on free
-    }
+    // Save business first regardless of plan
     setLoading(true)
     const businessId = await saveBusiness()
+
+    if (plan !== 'free') {
+      // Redirect to Stripe checkout
+      try {
+        const planKey = plan === 'solo' ? 'SOLO' : plan === 'agency' ? 'AGENCY' : 'DFY'
+        const res = await fetch('/api/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ plan: planKey }),
+        })
+        const data = await res.json()
+        if (data.url) {
+          window.location.href = data.url
+          return
+        }
+      } catch {
+        // Fall through to free flow if checkout fails
+      }
+    }
+
+    // Free plan: generate first post and continue
     const post = await generateFirstPost(businessId)
     setGeneratedPost(post)
     setLoading(false)

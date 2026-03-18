@@ -5,6 +5,13 @@
 
 set -euo pipefail
 
+# Discord posting helper
+OPENCLAW="/opt/homebrew/bin/openclaw"
+DISCORD_LOCALBEACON="1477439794819633274"
+post_discord() {
+  $OPENCLAW message action=send channel=discord target="$DISCORD_LOCALBEACON" message="$1" 2>/dev/null || true
+}
+
 SITE_URL="https://localbeacon.ai"
 API_URL="https://localbeacon.ai/api/ai-readiness"
 SCORE_FILE="/Users/clawdbot/.openclaw/workspace/products/localbeacon/aeo-score-history.json"
@@ -69,6 +76,7 @@ if [ "$PREV_SCORE" != "unknown" ] && [ "$SCORE" -lt "$PREV_SCORE" ] 2>/dev/null;
   echo "Failing checks: $FAILING"
   echo ""
   echo "ALERT: LocalBeacon AEO score regressed from $PREV_SCORE to $SCORE. Failing: $FAILING"
+  post_discord "🚨 AEO REGRESSION: Score dropped $PREV_SCORE → $SCORE (-$DIFF). Failing: $FAILING"
 fi
 
 # Alert if not 100
