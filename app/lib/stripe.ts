@@ -23,4 +23,9 @@ export const PLANS = {
     price: 99,
     priceId: process.env.STRIPE_AGENCY_PRICE_ID || "price_1T6LhxB0OqzCjZpvcNk2NQUO",
   },
+  DFY: {
+    name: "Done-For-You",
+    price: 499,
+    priceId: process.env.STRIPE_DFY_PRICE_ID || null,
+  },
 } as const;

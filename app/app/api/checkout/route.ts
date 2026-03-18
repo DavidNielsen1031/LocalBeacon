@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json()
-  const { plan } = body as { plan: 'SOLO' | 'AGENCY' }
+  const { plan } = body as { plan: 'SOLO' | 'AGENCY' | 'DFY' }
 
   const planConfig = PLANS[plan]
   if (!planConfig || !planConfig.priceId) {
