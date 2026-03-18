@@ -75,6 +75,7 @@ const plans = [
     cta: "Start Done-For-You — $499/mo",
     href: "/sign-up",
     highlight: false,
+    premium: true,
   },
 ];
 
@@ -191,11 +192,18 @@ export default function PricingPage() {
             <Card key={plan.name} className={`relative flex flex-col ${
               plan.highlight
                 ? "bg-[#FFD700]/10 border-[#FFD700] shadow-lg shadow-[#FFD700]/10"
+                : (plan as any).premium
+                ? "bg-gradient-to-b from-[#FFD700]/5 to-[#B8860B]/10 border-[#B8860B] shadow-lg shadow-[#B8860B]/20"
                 : "bg-white/5 border-white/10"
             }`}>
               {plan.highlight && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                   <Badge className="bg-[#FFD700] text-black font-bold px-4">Most Popular</Badge>
+                </div>
+              )}
+              {(plan as any).premium && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                  <Badge className="bg-gradient-to-r from-[#B8860B] to-[#FFD700] text-black font-bold px-4">White Glove</Badge>
                 </div>
               )}
               <CardContent className="p-6 pt-8 flex-1 flex flex-col">
@@ -228,9 +236,11 @@ export default function PricingPage() {
                     className={`w-full font-semibold h-12 text-base ${
                       plan.highlight
                         ? "bg-[#FFD700] text-black hover:bg-[#FFD700]/90"
+                        : (plan as any).premium
+                        ? "bg-gradient-to-r from-[#B8860B] to-[#FFD700] text-black hover:from-[#DAA520] hover:to-[#FFD700] shadow-md shadow-[#B8860B]/30"
                         : "border border-white/20 bg-transparent text-white hover:bg-white/10"
                     }`}
-                    variant={plan.highlight ? "default" : "outline"}
+                    variant={plan.highlight || (plan as any).premium ? "default" : "outline"}
                   >
                     {loading ? "Redirecting to checkout..." : plan.cta}
                   </Button>
