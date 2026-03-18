@@ -105,6 +105,19 @@
 
 ## 📋 Next — Backlog (Prioritized)
 
+### 🔥 Sprint 13 Retro — Must Fix Before Outbound
+- [ ] **Fix Stripe DFY `|| null` crash** — startup env validation for all Stripe vars
+- [ ] **Build real unsubscribe mechanism** — Resend unsubscribe headers + suppression list
+- [ ] **Add "advertisement" disclosure** to cold email template
+- [ ] **Replace PDF attachment with tracked link** to hosted report page
+- [ ] **Test PDF on 3 failing sites** — 30, 50, 70 scores
+- [ ] **Consolidate duplicate send-outreach.ts** — pick canonical location, delete other
+- [ ] **Fix path alias resolution** for standalone scripts
+- [ ] **Add env var `LOCALBEACON_API_URL`** — stop hardcoding production URL in prospect.ts
+- [ ] **Use sending subdomain** — `outreach.perpetualagility.com` for cold email
+- [ ] **Resolve SWC/lockfile deploy issue** — clean merge sprint branch to main
+- [ ] **Test batch of 20 cold emails** — fix compliance first, send 20, measure before scaling
+
 ### High Priority
 - [ ] **Expo Vendor Registration** — Register for Ramsey EDA Business Expo (Apr 25). ST19 form + $75 check. Deadline: Apr 10. Booth plan: `expo/BOOTH-PLAN.md`
 - [ ] **Booth Banner Design** — 33"x80" retractable banner for expo. Black/gold, QR code, tagline.

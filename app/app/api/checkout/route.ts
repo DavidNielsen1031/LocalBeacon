@@ -15,8 +15,11 @@ export async function POST(req: NextRequest) {
   const { plan } = body as { plan: 'SOLO' | 'AGENCY' | 'DFY' }
 
   const planConfig = PLANS[plan]
-  if (!planConfig || !planConfig.priceId) {
+  if (!planConfig) {
     return NextResponse.json({ error: 'Invalid plan' }, { status: 400 })
+  }
+  if (!planConfig.priceId) {
+    return NextResponse.json({ error: `${planConfig.name} plan is not yet available. Please contact support@localbeacon.ai` }, { status: 400 })
   }
 
   try {

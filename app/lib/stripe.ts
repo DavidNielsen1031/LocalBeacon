@@ -29,3 +29,13 @@ export const PLANS = {
     priceId: process.env.STRIPE_DFY_PRICE_ID || null,
   },
 } as const;
+
+// Startup validation — log warnings for missing config (non-fatal)
+if (typeof window === "undefined") {
+  if (!process.env.STRIPE_SECRET_KEY) {
+    console.warn("[stripe] STRIPE_SECRET_KEY not set — payments disabled");
+  }
+  if (!process.env.STRIPE_DFY_PRICE_ID) {
+    console.warn("[stripe] STRIPE_DFY_PRICE_ID not set — DFY plan unavailable");
+  }
+}
