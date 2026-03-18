@@ -345,12 +345,13 @@ function renderChecks(
     doc.setFillColor(...hexToRgb(borderColor))
     doc.rect(margin, y, 3, checkH, 'F')
 
-    // Status icon text
-    const icon = check.passed ? '✓' : '✗'
-    doc.setTextColor(...hexToRgb(borderColor))
-    doc.setFontSize(11)
+    // Status badge
+    doc.setFillColor(...hexToRgb(borderColor))
+    doc.roundedRect(margin + 4, y + 2, 10, 6, 1, 1, 'F')
+    doc.setTextColor(...hexToRgb(WHITE))
+    doc.setFontSize(6)
     doc.setFont('helvetica', 'bold')
-    doc.text(icon, margin + 7, y + 8)
+    doc.text(check.passed ? 'PASS' : 'FAIL', margin + 9, y + 6.5, { align: 'center' })
 
     // Label
     doc.setTextColor(...hexToRgb(DARK_GRAY))
@@ -529,17 +530,32 @@ function renderComparisonTable(
 ): number {
   let y = startY
 
+  // Better column proportions: Label 48%, Target 22%, Competitor 22%, Status 8%
+  const labelW = contentW * 0.48
+  const badgeColW = contentW * 0.20
+  const statusColW = contentW * 0.10
+  const targetBadgeX = margin + labelW + badgeColW * 0.5
+  const compBadgeX = margin + labelW + badgeColW + badgeColW * 0.5
+  const statusX = margin + labelW + badgeColW * 2 + statusColW * 0.5
+
+  // Short name helper
+  const shortName = (n: string, max: number) => n.length > max ? n.substring(0, max - 1) + '.' : n
+
   // Column headers
   doc.setFillColor(...hexToRgb(LIGHT_GRAY))
-  doc.rect(margin, y, contentW, 8, 'F')
+  doc.rect(margin, y, contentW, 9, 'F')
+  doc.setDrawColor(...hexToRgb(MID_GRAY))
+  doc.setLineWidth(0.1)
+  doc.line(margin, y + 9, margin + contentW, y + 9)
 
   doc.setTextColor(...hexToRgb(NAVY))
-  doc.setFontSize(8)
+  doc.setFontSize(7.5)
   doc.setFont('helvetica', 'bold')
-  doc.text('Check', margin + 4, y + 5.5)
-  doc.text(targetName.substring(0, 20), col1X + colW * 0.45, y + 5.5, { align: 'center' })
-  doc.text(competitorName.substring(0, 20), col2X + colW * 0.45, y + 5.5, { align: 'center' })
-  y += 11
+  doc.text('Check', margin + 4, y + 6)
+  doc.text(shortName(targetName, 16), targetBadgeX, y + 6, { align: 'center' })
+  doc.text(shortName(competitorName, 16), compBadgeX, y + 6, { align: 'center' })
+  doc.text('Status', statusX, y + 6, { align: 'center' })
+  y += 12
 
   // Build a map of competitor checks by id
   const compChecks = new Map(competitor.checks.map(c => [c.id, c]))
@@ -548,94 +564,114 @@ function renderComparisonTable(
   const sorted = [...target.checks].sort((a, b) => {
     const ca = compChecks.get(a.id)
     const cb = compChecks.get(b.id)
-    // Target loses: target failed, competitor passed → show first
     const aLosing = !a.passed && ca?.passed
     const bLosing = !b.passed && cb?.passed
     if (aLosing && !bLosing) return -1
     if (!aLosing && bLosing) return 1
-    // Both failed or both passed → sort by weight
     return b.weight - a.weight
   })
 
   const footerH = 20
   let alt = false
 
+  const renderTableHeader = () => {
+    doc.setFillColor(...hexToRgb(NAVY))
+    doc.rect(margin, y, contentW, 9, 'F')
+    doc.setTextColor(...hexToRgb(GOLD))
+    doc.setFontSize(10)
+    doc.setFont('helvetica', 'bold')
+    doc.text('Check-by-Check Comparison (continued)', margin + 4, y + 6)
+    y += 13
+
+    doc.setFillColor(...hexToRgb(LIGHT_GRAY))
+    doc.rect(margin, y, contentW, 9, 'F')
+    doc.setTextColor(...hexToRgb(NAVY))
+    doc.setFontSize(7.5)
+    doc.setFont('helvetica', 'bold')
+    doc.text('Check', margin + 4, y + 6)
+    doc.text(shortName(targetName, 16), targetBadgeX, y + 6, { align: 'center' })
+    doc.text(shortName(competitorName, 16), compBadgeX, y + 6, { align: 'center' })
+    doc.text('Status', statusX, y + 6, { align: 'center' })
+    y += 12
+  }
+
   for (const check of sorted) {
     const compCheck = compChecks.get(check.id)
     const targetLosing = !check.passed && compCheck?.passed
     const targetWinning = check.passed && !compCheck?.passed
 
-    // Row height
-    const rowH = 10
+    // Two-line rows for labels that wrap
+    const labelLines = doc.splitTextToSize(check.label, labelW - 6)
+    const rowH = labelLines.length > 1 ? 13 : 10
 
     if (y + rowH > pageH - footerH - margin) {
       doc.addPage()
       y = 20
-      // Re-render table header
-      doc.setFillColor(...hexToRgb(NAVY))
-      doc.rect(margin, y, contentW, 9, 'F')
-      doc.setTextColor(...hexToRgb(GOLD))
-      doc.setFontSize(10)
-      doc.setFont('helvetica', 'bold')
-      doc.text('Check-by-Check Comparison (continued)', margin + 4, y + 6)
-      y += 14
-
-      doc.setFillColor(...hexToRgb(LIGHT_GRAY))
-      doc.rect(margin, y, contentW, 8, 'F')
-      doc.setTextColor(...hexToRgb(NAVY))
-      doc.setFontSize(8)
-      doc.setFont('helvetica', 'bold')
-      doc.text('Check', margin + 4, y + 5.5)
-      doc.text(targetName.substring(0, 20), col1X + colW * 0.45, y + 5.5, { align: 'center' })
-      doc.text(competitorName.substring(0, 20), col2X + colW * 0.45, y + 5.5, { align: 'center' })
-      y += 11
+      renderTableHeader()
       alt = false
     }
 
     // Row background
     if (targetLosing) {
-      doc.setFillColor(255, 240, 240)
+      doc.setFillColor(255, 238, 238)
     } else if (targetWinning) {
-      doc.setFillColor(240, 253, 244)
+      doc.setFillColor(238, 253, 244)
     } else {
-      doc.setFillColor(alt ? 249 : 255, alt ? 250 : 255, alt ? 251 : 255)
+      doc.setFillColor(alt ? 248 : 255, alt ? 249 : 255, alt ? 253 : 255)
     }
     doc.rect(margin, y, contentW, rowH, 'F')
 
-    // Check label
+    // Left accent for losing rows
+    if (targetLosing) {
+      doc.setFillColor(...hexToRgb(RED))
+      doc.rect(margin, y, 2, rowH, 'F')
+    }
+
+    // Check label (wraps if needed)
     doc.setTextColor(...hexToRgb(DARK_GRAY))
     doc.setFontSize(7.5)
     doc.setFont('helvetica', targetLosing ? 'bold' : 'normal')
-    const labelLines = doc.splitTextToSize(check.label, colW - 2)
-    doc.text(labelLines[0], margin + 4, y + 6.5)
+    doc.text(labelLines.slice(0, 2), margin + 4, y + 6)
 
-    // Target status
-    const tIcon = check.passed ? '✓' : '✗'
-    const tColor = check.passed ? GREEN : RED
-    doc.setTextColor(...hexToRgb(tColor))
-    doc.setFontSize(9)
+    const badgeY = rowH > 10 ? y + rowH / 2 - 2.5 : y + 2
+
+    // Target badge
+    const tLabel = check.passed ? 'PASS' : 'FAIL'
+    const tBg = check.passed ? GREEN : RED
+    doc.setFillColor(...hexToRgb(tBg))
+    doc.roundedRect(targetBadgeX - 9, badgeY, 18, 6, 1, 1, 'F')
+    doc.setTextColor(...hexToRgb(WHITE))
+    doc.setFontSize(6.5)
     doc.setFont('helvetica', 'bold')
-    doc.text(tIcon, col1X + colW * 0.45, y + 6.5, { align: 'center' })
+    doc.text(tLabel, targetBadgeX, badgeY + 4.5, { align: 'center' })
 
-    // Competitor status
+    // Competitor badge
     if (compCheck) {
-      const cIcon = compCheck.passed ? '✓' : '✗'
-      const cColor = compCheck.passed ? GREEN : RED
-      doc.setTextColor(...hexToRgb(cColor))
-      doc.text(cIcon, col2X + colW * 0.45, y + 6.5, { align: 'center' })
+      const cLabel = compCheck.passed ? 'PASS' : 'FAIL'
+      const cBg = compCheck.passed ? GREEN : RED
+      doc.setFillColor(...hexToRgb(cBg))
+      doc.roundedRect(compBadgeX - 9, badgeY, 18, 6, 1, 1, 'F')
+      doc.setTextColor(...hexToRgb(WHITE))
+      doc.setFontSize(6.5)
+      doc.setFont('helvetica', 'bold')
+      doc.text(cLabel, compBadgeX, badgeY + 4.5, { align: 'center' })
     }
 
-    // Losing indicator
+    // Status indicator
     if (targetLosing) {
-      doc.setTextColor(...hexToRgb(RED))
-      doc.setFontSize(6.5)
+      doc.setFillColor(...hexToRgb(RED))
+      doc.roundedRect(statusX - 8, badgeY, 16, 6, 1, 1, 'F')
+      doc.setTextColor(...hexToRgb(WHITE))
+      doc.setFontSize(6)
       doc.setFont('helvetica', 'bold')
-      doc.text('← You lose here', pageW - margin - 28, y + 6.5)
+      doc.text('GAP', statusX, badgeY + 4.5, { align: 'center' })
     } else if (targetWinning) {
-      doc.setTextColor(...hexToRgb(GREEN))
-      doc.setFontSize(6.5)
+      doc.setFillColor(...hexToRgb(GREEN))
+      doc.roundedRect(statusX - 8, badgeY, 16, 6, 1, 1, 'F')
+      doc.setTextColor(...hexToRgb(WHITE))
+      doc.setFontSize(6)
       doc.setFont('helvetica', 'bold')
-      doc.text('← You win here', pageW - margin - 28, y + 6.5)
+      doc.text('WIN', statusX, badgeY + 4.5, { align: 'center' })
     }
 
     y += rowH + 1
@@ -677,7 +713,7 @@ function renderComparisonTable(
       doc.setTextColor(...hexToRgb(DARK_GRAY))
       doc.setFontSize(9)
       doc.setFont('helvetica', 'bold')
-      doc.text(`✗  ${check.label}`, margin + 7, y + 7)
+      doc.text(check.label, margin + 7, y + 7)
 
       if (check.fix) {
         doc.setFillColor(...hexToRgb('#FEF3C7'))

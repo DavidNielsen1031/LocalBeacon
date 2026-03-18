@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your AI Visibility Report — LocalBeacon</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f5f6fa;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color: #1B2A4A;
+    }
+    .wrapper {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 32px 16px;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .header {
+      background-color: #1B2A4A;
+      padding: 28px 36px;
+    }
+    .header-brand {
+      font-size: 20px;
+      font-weight: 700;
+      color: #FFD700;
+      letter-spacing: 0.5px;
+    }
+    .header-tagline {
+      font-size: 13px;
+      color: #8896AB;
+      margin-top: 4px;
+    }
+    .body {
+      padding: 36px;
+    }
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1B2A4A;
+      margin: 0 0 16px;
+      line-height: 1.3;
+    }
+    p {
+      font-size: 15px;
+      line-height: 1.65;
+      color: #374151;
+      margin: 0 0 16px;
+    }
+    .score-block {
+      display: flex;
+      gap: 16px;
+      margin: 28px 0;
+      flex-wrap: wrap;
+    }
+    .score-card {
+      flex: 1;
+      min-width: 180px;
+      border-radius: 8px;
+      padding: 20px 24px;
+      text-align: center;
+    }
+    .score-card.yours {
+      background: #FEF2F2;
+      border: 2px solid #EF4444;
+    }
+    .score-card.theirs {
+      background: #F0FDF4;
+      border: 2px solid #22C55E;
+    }
+    .score-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #8896AB;
+      margin-bottom: 8px;
+    }
+    .score-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1B2A4A;
+      margin-bottom: 8px;
+    }
+    .score-number {
+      font-size: 42px;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .score-number.low { color: #EF4444; }
+    .score-number.high { color: #22C55E; }
+    .score-out-of {
+      font-size: 13px;
+      color: #8896AB;
+      margin-top: 4px;
+    }
+    .failures-block {
+      background: #F5F6FA;
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin: 24px 0;
+    }
+    .failures-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #8896AB;
+      margin-bottom: 12px;
+    }
+    .failure-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: #374151;
+    }
+    .failure-item:last-child { margin-bottom: 0; }
+    .failure-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #EF4444;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+    .cta-block {
+      text-align: center;
+      margin: 32px 0 8px;
+    }
+    .cta-button {
+      display: inline-block;
+      background-color: #FFD700;
+      color: #1B2A4A;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      padding: 14px 32px;
+      border-radius: 6px;
+      letter-spacing: 0.2px;
+    }
+    .cta-sub {
+      font-size: 13px;
+      color: #8896AB;
+      margin-top: 10px;
+      text-align: center;
+    }
+    .footer {
+      padding: 24px 36px;
+      border-top: 1px solid #E5E7EB;
+      text-align: center;
+    }
+    .footer p {
+      font-size: 12px;
+      color: #9CA3AF;
+      margin: 0 0 4px;
+    }
+    .footer a {
+      color: #6B7280;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="card">
+
+      <!-- Header -->
+      <div class="header">
+        <div class="header-brand">📍 LocalBeacon</div>
+        <div class="header-tagline">AI Visibility Intelligence for Local Businesses</div>
+      </div>
+
+      <!-- Body -->
+      <div class="body">
+        <h1>Hi {{BUSINESS_NAME}} — we scanned your AI visibility.</h1>
+
+        <p>
+          When someone in {{CITY}} asks ChatGPT, Google Gemini, or Siri to recommend a business like yours,
+          does your name come up? We ran an AEO (Answer Engine Optimization) scan on your business,
+          and the results are worth your attention.
+        </p>
+
+        <!-- Score comparison -->
+        <div class="score-block">
+          <div class="score-card yours">
+            <div class="score-label">Your Score</div>
+            <div class="score-name">{{BUSINESS_NAME}}</div>
+            <div class="score-number low">{{AEO_SCORE}}</div>
+            <div class="score-out-of">out of 100</div>
+          </div>
+          <div class="score-card theirs">
+            <div class="score-label">Competitor</div>
+            <div class="score-name">{{COMPETITOR_NAME}}</div>
+            <div class="score-number high">{{COMPETITOR_SCORE}}</div>
+            <div class="score-out-of">out of 100</div>
+          </div>
+        </div>
+
+        <p>
+          Your competitor is already showing up in AI search results. Every week that gap stays open,
+          they're capturing customers who never even see your name.
+        </p>
+
+        <!-- Top failures -->
+        <div class="failures-block">
+          <div class="failures-title">Top issues we found on your site</div>
+          {{TOP_FAILURES}}
+        </div>
+
+        <p>
+          The good news: these are fixable. We've put together a full breakdown — what's wrong,
+          why it matters for AI visibility, and exactly what to do about it.
+        </p>
+
+        <p>
+          The report is attached to this email as a PDF. It includes your full score breakdown,
+          the competitor comparison, and prioritized recommendations.
+        </p>
+
+        <!-- CTA -->
+        <div class="cta-block">
+          <a class="cta-button" href="https://localbeacon.ai/check">See your full report →</a>
+          <p class="cta-sub">Free. No credit card. Instant results.</p>
+        </div>
+
+        <p style="font-size:14px; color:#6B7280;">
+          Questions? Just reply to this email — a real person will respond.
+        </p>
+      </div>
+
+      <!-- Footer (CAN-SPAM compliant) -->
+      <div class="footer">
+        <p>
+          Sent by <strong>LocalBeacon.ai</strong> — AI visibility intelligence for local businesses.<br />
+          Perpetual Agility LLC, Burnsville, MN 55337
+        </p>
+        <p>
+          You're receiving this because we analyzed your business's AI visibility.<br />
+          Reply <strong>'unsubscribe'</strong> to stop receiving these emails.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
