@@ -39,24 +39,7 @@ const plans = [
     href: "/sign-up",
     highlight: true,
   },
-  {
-    name: "Agency",
-    price: "$99",
-    period: "/month",
-    tagline: "Everything in Solo — built for agencies managing clients.",
-    outcomes: [
-      "Everything in Solo — unlimited",
-      "Multi-client dashboard — manage all clients in one place",
-      "White-label PDF reports with your branding",
-      "Client onboarding wizard",
-      "Unlimited business locations",
-      "FAQ builder with schema markup",
-      "Priority email support",
-    ],
-    cta: "Start Agency — $99/mo",
-    href: "/sign-up",
-    highlight: false,
-  },
+
   {
     name: "Done-For-You",
     price: "$499",
@@ -105,8 +88,8 @@ const faqs = [
     a: "BrightLocal focuses on rank tracking and citations. LocalBeacon focuses on content creation — we write your Google posts, build local city pages, draft review responses, and optimize your business for AI search engines. Different tools for different needs.",
   },
   {
-    q: "What if I manage multiple clients? (Agency plan)",
-    a: "The Agency plan includes a multi-client dashboard where you manage all your clients from one screen. Switch between clients instantly, generate content for each one, and download white-label PDF reports with your own branding. Add unlimited client businesses to your account.",
+    q: "What does 'Done-For-You' mean exactly?",
+    a: "We do all the work — install schema markup, deploy your llms.txt file, write and publish blog posts, generate localized FAQs, and send you a monthly progress report. You don't need to touch anything. Just watch your AI visibility score climb.",
   },
 ];
 
@@ -187,7 +170,7 @@ export default function PricingPage() {
 
       {/* Plans */}
       <section className="px-6 pb-20">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
           {plans.map(plan => (
             <Card key={plan.name} className={`relative flex flex-col ${
               plan.highlight
@@ -230,7 +213,7 @@ export default function PricingPage() {
                 ) : (
                   <Button
                     onClick={() => handleCheckout(
-                      plan.name === "Solo" ? "SOLO" : plan.name === "Agency" ? "AGENCY" : "DFY"
+                      plan.name === "Solo" ? "SOLO" : "DFY"
                     )}
                     disabled={loading !== null}
                     className={`w-full font-semibold h-12 text-base ${

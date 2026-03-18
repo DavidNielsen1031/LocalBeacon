@@ -106,22 +106,24 @@ const plans = [
     highlight: true,
   },
   {
-    name: "Agency",
-    price: "$99",
+    name: "Done-For-You",
+    price: "$499",
     period: "/month",
-    tagline: "Everything in Solo — built for agencies managing clients.",
+    tagline: "We handle everything — you just watch your score climb.",
     features: [
       "Everything in Solo — unlimited",
-      "Unlimited content generation",
-      "Multi-client dashboard — manage all your clients",
-      "White-label PDF reports for each client",
-      "Client onboarding wizard",
-      "FAQ builder with schema markup",
-      "Priority email support",
+      "We generate AND implement all fixes",
+      "Schema markup installed on your site",
+      "llms.txt file deployed to your domain",
+      "15-25 localized FAQs with schema",
+      "Weekly blog posts published",
+      "Monthly progress report with score tracking",
+      "Dedicated onboarding call",
     ],
-    cta: "Start Agency — $99/mo",
+    cta: "Start Done-For-You — $499/mo",
     href: "/sign-up",
     highlight: false,
+    premium: true,
   },
 ];
 
@@ -926,96 +928,6 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
         </div>
       </section>
 
-      {/* ── Agency Section ── */}
-      <section style={{ backgroundColor: CREAM, padding: "80px 24px" }}>
-        <div style={{ maxWidth: "1000px", margin: "0 auto", textAlign: "center" }}>
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              backgroundColor: `${ORANGE}15`,
-              borderRadius: "9999px",
-              padding: "6px 16px",
-              marginBottom: "20px",
-            }}
-          >
-            <span style={{ color: ORANGE, fontWeight: 600, fontSize: "0.8125rem" }}>
-              For agencies &amp; freelancers
-            </span>
-          </div>
-          <h2
-            style={{
-              fontWeight: 800,
-              fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)",
-              color: NAVY,
-              letterSpacing: "-0.02em",
-              marginBottom: "16px",
-            }}
-          >
-            Managing multiple clients?
-          </h2>
-          <p style={{ color: SLATE, fontSize: "1.0625rem", lineHeight: 1.65, maxWidth: "640px", margin: "0 auto 40px" }}>
-            One dashboard for all your clients. Generate content, download branded reports, and onboard new clients in 60 seconds.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6" style={{ marginBottom: "36px" }}>
-            {[
-              {
-                emoji: "🏢",
-                title: "Multi-Client Dashboard",
-                desc: "Switch between clients instantly. Each gets their own content, settings, and AI readiness history.",
-              },
-              {
-                emoji: "📄",
-                title: "White-Label Reports",
-                desc: "Download branded PDF reports with your logo. Send to clients monthly — no extra work.",
-              },
-              {
-                emoji: "⚡",
-                title: "60-Second Onboarding",
-                desc: "Add a new client in 3 steps. We pre-populate their services based on industry.",
-              },
-            ].map(({ emoji, title, desc }) => (
-              <div
-                key={title}
-                style={{
-                  backgroundColor: "#fff",
-                  borderRadius: "12px",
-                  padding: "28px 28px 28px 32px",
-                  borderLeft: `4px solid ${ORANGE}`,
-                  boxShadow: "0 1px 3px rgba(27,42,74,0.06)",
-                  textAlign: "left",
-                }}
-              >
-                <p style={{ fontSize: "1.75rem", marginBottom: "12px" }}>{emoji}</p>
-                <h3 style={{ fontWeight: 700, color: NAVY, fontSize: "1.0625rem", marginBottom: "8px" }}>
-                  {title}
-                </h3>
-                <p style={{ color: SLATE, fontSize: "0.9375rem", lineHeight: 1.65 }}>{desc}</p>
-              </div>
-            ))}
-          </div>
-
-          <Link href="/sign-up" style={{ textDecoration: "none" }}>
-            <button
-              style={{
-                backgroundColor: ORANGE,
-                color: "#fff",
-                fontWeight: 700,
-                fontSize: "1.0625rem",
-                padding: "14px 28px",
-                borderRadius: "8px",
-                border: "none",
-                cursor: "pointer",
-                boxShadow: "0 4px 14px rgba(255,107,53,0.3)",
-              }}
-            >
-              Start Agency — $99/mo
-            </button>
-          </Link>
-        </div>
-      </section>
-
       {/* ── Why We Built This ── */}
       <section style={{ backgroundColor: CREAM, padding: "80px 24px", borderTop: `1px solid ${MIST}` }}>
         <div style={{ maxWidth: "800px", margin: "0 auto", textAlign: "center" }}>
@@ -1112,10 +1024,13 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
                   backgroundColor: "#fff",
                   borderRadius: "12px",
                   padding: "32px",
-                  border: plan.highlight ? `2px solid ${ORANGE}` : `1px solid ${MIST}`,
+                  border: plan.highlight ? `2px solid ${ORANGE}` : (plan as any).premium ? `2px solid #B8860B` : `1px solid ${MIST}`,
                   boxShadow: plan.highlight
                     ? "0 10px 30px rgba(255,107,53,0.12)"
+                    : (plan as any).premium
+                    ? "0 10px 30px rgba(184,134,11,0.15)"
                     : "0 1px 3px rgba(27,42,74,0.06)",
+                  background: (plan as any).premium ? "linear-gradient(180deg, #FFFDF5 0%, #FFF8E7 100%)" : "#fff",
                   position: "relative",
                   display: "flex",
                   flexDirection: "column",
@@ -1138,6 +1053,25 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
                     }}
                   >
                     Most Popular
+                  </div>
+                )}
+                {(plan as any).premium && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "-14px",
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      background: "linear-gradient(90deg, #B8860B, #FFD700)",
+                      color: "#000",
+                      fontWeight: 700,
+                      fontSize: "0.75rem",
+                      borderRadius: "9999px",
+                      padding: "4px 16px",
+                      letterSpacing: "0.04em",
+                    }}
+                  >
+                    White Glove
                   </div>
                 )}
 
@@ -1181,10 +1115,11 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
                       fontWeight: 700,
                       fontSize: "0.9375rem",
                       cursor: "pointer",
-                      border: plan.highlight ? "none" : `2px solid ${NAVY}`,
-                      backgroundColor: plan.highlight ? ORANGE : "transparent",
-                      color: plan.highlight ? "#fff" : NAVY,
-                      boxShadow: plan.highlight ? "0 4px 14px rgba(255,107,53,0.3)" : "none",
+                      border: plan.highlight || (plan as any).premium ? "none" : `2px solid ${NAVY}`,
+                      backgroundColor: plan.highlight ? ORANGE : (plan as any).premium ? "#B8860B" : "transparent",
+                      background: (plan as any).premium ? "linear-gradient(90deg, #B8860B, #DAA520)" : undefined,
+                      color: plan.highlight || (plan as any).premium ? "#fff" : NAVY,
+                      boxShadow: plan.highlight ? "0 4px 14px rgba(255,107,53,0.3)" : (plan as any).premium ? "0 4px 14px rgba(184,134,11,0.3)" : "none",
                       transition: "opacity 0.15s",
                     }}
                   >
