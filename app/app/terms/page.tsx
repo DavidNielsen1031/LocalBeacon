@@ -12,7 +12,7 @@ export default function TermsPage() {
       <nav className="border-b border-white/10 px-6 py-4">
         <div className="max-w-3xl mx-auto">
           <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl">🔦</span>
+            <img src="/logo-192.png" alt="LocalBeacon" style={{ height: "36px", width: "36px" }} />
             <span className="text-xl font-bold text-[#FFD700]">LocalBeacon.ai</span>
           </Link>
         </div>
