@@ -8,7 +8,12 @@ import { NextResponse } from 'next/server'
  * Called by OpenClaw cron every Monday 9 AM CST.
  * Also callable manually for testing.
  */
-export async function POST() {
+export async function POST(req: Request) {
+  const cronSecret = process.env.CRON_SECRET
+  if (!cronSecret || req.headers.get('authorization') !== `Bearer ${cronSecret}`) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   const supabase = createServerClient()
   if (!supabase) {
     return NextResponse.json({ error: 'Database not configured' }, { status: 503 })

@@ -21,6 +21,22 @@ export async function PATCH(
   const supabase = createServerClient()
   if (!supabase) return NextResponse.json({ error: 'Database not configured' }, { status: 503 })
 
+  // Verify ownership: content_queue item must belong to a business owned by the authenticated user
+  const { data: queueItem, error: fetchError } = await supabase
+    .from('content_queue')
+    .select('id, business_id, businesses!inner(user_id)')
+    .eq('id', id)
+    .single()
+
+  if (fetchError || !queueItem) {
+    return NextResponse.json({ error: 'Post not found' }, { status: 404 })
+  }
+
+  const business = queueItem.businesses as any
+  if (business?.user_id !== userId) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
   const { data, error } = await supabase
     .from('content_queue')
     .update({ status })

@@ -2,8 +2,23 @@ export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@/lib/supabase'
 import { sendAeoReportEmail } from '@/lib/email'
+import { rateLimit } from '@/lib/rate-limit'
+
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+}
 
 export async function POST(req: NextRequest) {
+  // Rate limiting: 5 requests per minute per IP
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || req.headers.get('x-real-ip') || 'unknown'
+  if (!rateLimit(ip, 5, 60_000)) {
+    return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
+  }
+
   const { email, url_scanned, score, checks } = await req.json()
 
   if (!email || !url_scanned) {
@@ -54,11 +69,19 @@ export async function POST(req: NextRequest) {
 
   // Send the AEO report email (best-effort, don't block response)
   if (checks && Array.isArray(checks) && score != null) {
+    // Sanitize checks to prevent XSS in email HTML
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const sanitizedChecks = checks.map((c: any) => ({
+      ...c,
+      label: typeof c.label === 'string' ? escapeHtml(c.label) : '',
+      details: typeof c.details === 'string' ? escapeHtml(c.details) : '',
+      fix: typeof c.fix === 'string' ? escapeHtml(c.fix) : '',
+    }))
     sendAeoReportEmail({
       to: email,
       url: url_scanned,
       score,
-      checks,
+      checks: sanitizedChecks,
     }).then(result => {
       console.log(JSON.stringify({
         event: result.success ? 'aeo_report_email_sent' : 'aeo_report_email_failed',

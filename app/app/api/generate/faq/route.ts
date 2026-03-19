@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json() as FaqRequest
   const { businessName, category, city, state, services = [], count = 20 } = body
+  const safeCount = Math.min(Math.max(count || 15, 1), 30)
 
   if (!businessName || !category || !city || !state) {
     return NextResponse.json({ error: 'Business name, category, city, and state are required' }, { status: 400 })
@@ -27,7 +28,7 @@ export async function POST(req: NextRequest) {
     ? `Services offered: ${services.join(', ')}`
     : `Common services for a ${category}`
 
-  const prompt = `Generate exactly ${count} FAQ questions and answers for a local business website. These FAQs must be optimized for AI search engines (ChatGPT, Perplexity, Google AI Overviews) to cite.
+  const prompt = `Generate exactly ${safeCount} FAQ questions and answers for a local business website. These FAQs must be optimized for AI search engines (ChatGPT, Perplexity, Google AI Overviews) to cite.
 
 Business: ${businessName}
 Category: ${category}

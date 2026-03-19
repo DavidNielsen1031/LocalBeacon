@@ -47,15 +47,19 @@ export async function POST(req: NextRequest) {
   const supabase = createServerClient()
   if (!supabase) return NextResponse.json({ error: 'Database not configured' }, { status: 503 })
 
-  // Fetch business
+  // Fetch business and verify ownership
   const { data: business, error: bizError } = await supabase
     .from('businesses')
-    .select('id, name, category, primary_city')
+    .select('id, name, category, primary_city, user_id')
     .eq('id', business_id)
     .single()
 
   if (bizError || !business) {
     return NextResponse.json({ error: 'Business not found' }, { status: 404 })
+  }
+
+  if (business.user_id !== userId) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
   const businessName = business.name || 'Your Business'

@@ -7,7 +7,12 @@ import { NextResponse } from 'next/server'
  * Send monthly content summary emails to all users.
  * Called by OpenClaw cron on 1st of each month 9 AM CST.
  */
-export async function POST() {
+export async function POST(req: Request) {
+  const cronSecret = process.env.CRON_SECRET
+  if (!cronSecret || req.headers.get('authorization') !== `Bearer ${cronSecret}`) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   const supabase = createServerClient()
   if (!supabase) {
     return NextResponse.json({ error: 'Database not configured' }, { status: 503 })
@@ -32,59 +37,65 @@ export async function POST() {
   const errors: string[] = []
 
   for (const business of businesses) {
-    const user = (business as any).users
-    const email = user?.email
-    if (!email) continue
+    try {
+      const user = (business as any).users
+      const email = user?.email
+      if (!email) continue
 
-    // Count content items from last month
-    const { count: postsCount } = await supabase
-      .from('content_items')
-      .select('*', { count: 'exact', head: true })
-      .eq('business_id', business.id)
-      .eq('type', 'gbp_post')
-      .gte('created_at', lastMonth.toISOString())
-      .lte('created_at', lastMonthEnd.toISOString())
+      // Count content items from last month
+      const { count: postsCount } = await supabase
+        .from('content_items')
+        .select('*', { count: 'exact', head: true })
+        .eq('business_id', business.id)
+        .eq('type', 'gbp_post')
+        .gte('created_at', lastMonth.toISOString())
+        .lte('created_at', lastMonthEnd.toISOString())
 
-    const { count: pagesCount } = await supabase
-      .from('content_items')
-      .select('*', { count: 'exact', head: true })
-      .eq('business_id', business.id)
-      .eq('type', 'city_page')
-      .gte('created_at', lastMonth.toISOString())
-      .lte('created_at', lastMonthEnd.toISOString())
+      const { count: pagesCount } = await supabase
+        .from('content_items')
+        .select('*', { count: 'exact', head: true })
+        .eq('business_id', business.id)
+        .eq('type', 'city_page')
+        .gte('created_at', lastMonth.toISOString())
+        .lte('created_at', lastMonthEnd.toISOString())
 
-    const { count: reviewsCount } = await supabase
-      .from('content_items')
-      .select('*', { count: 'exact', head: true })
-      .eq('business_id', business.id)
-      .eq('type', 'review_reply')
-      .gte('created_at', lastMonth.toISOString())
-      .lte('created_at', lastMonthEnd.toISOString())
+      const { count: reviewsCount } = await supabase
+        .from('content_items')
+        .select('*', { count: 'exact', head: true })
+        .eq('business_id', business.id)
+        .eq('type', 'review_reply')
+        .gte('created_at', lastMonth.toISOString())
+        .lte('created_at', lastMonthEnd.toISOString())
 
-    // Get latest AEO scan
-    const { data: aeoScan } = await supabase
-      .from('aeo_scans')
-      .select('score')
-      .eq('business_id', business.id)
-      .order('scanned_at', { ascending: false })
-      .limit(1)
-      .single()
+      // Get latest AEO scan
+      const { data: aeoScan } = await supabase
+        .from('aeo_scans')
+        .select('score')
+        .eq('business_id', business.id)
+        .order('scanned_at', { ascending: false })
+        .limit(1)
+        .single()
 
-    const result = await sendMonthlyReportEmail({
-      to: email,
-      businessName: business.name || 'Your Business',
-      postsGenerated: postsCount ?? 0,
-      pagesCreated: pagesCount ?? 0,
-      reviewsReplied: reviewsCount ?? 0,
-      aeoScore: aeoScan?.score ?? null,
-      dashboardUrl: 'https://localbeacon.ai',
-      month: monthName,
-    })
+      const result = await sendMonthlyReportEmail({
+        to: email,
+        businessName: business.name || 'Your Business',
+        postsGenerated: postsCount ?? 0,
+        pagesCreated: pagesCount ?? 0,
+        reviewsReplied: reviewsCount ?? 0,
+        aeoScore: aeoScan?.score ?? null,
+        dashboardUrl: 'https://localbeacon.ai',
+        month: monthName,
+      })
 
-    if (result.success) {
-      sent++
-    } else {
-      errors.push(`${email}: ${result.error}`)
+      if (result.success) {
+        sent++
+      } else {
+        errors.push(`${email}: ${result.error}`)
+      }
+    } catch (err) {
+      const errMsg = err instanceof Error ? err.message : 'unknown error'
+      console.error(`monthly-report: error processing business ${business.id}: ${errMsg}`)
+      errors.push(`business ${business.id}: ${errMsg}`)
     }
   }
 

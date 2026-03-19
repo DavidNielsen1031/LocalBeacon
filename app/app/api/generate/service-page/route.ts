@@ -113,6 +113,24 @@ export async function POST(req: NextRequest) {
 
   if (!target_city) return NextResponse.json({ error: 'target_city is required' }, { status: 400 })
 
+  // Verify business ownership if business_id provided
+  if (business_id) {
+    const supabase = createServerClient()
+    if (supabase) {
+      const { data: biz, error: bizErr } = await supabase
+        .from('businesses')
+        .select('user_id')
+        .eq('id', business_id)
+        .single()
+      if (bizErr || !biz) {
+        return NextResponse.json({ error: 'Business not found' }, { status: 404 })
+      }
+      if (biz.user_id !== userId) {
+        return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+      }
+    }
+  }
+
   // Enrich prompt with business context from Settings if available
   const bizCtx = await getBusinessContext(userId)
   const contextBlock = bizCtx
