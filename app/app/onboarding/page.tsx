@@ -158,7 +158,7 @@ function OnboardingContent() {
     }
   }
 
-  const steps = ['Business Info', 'Service Areas', 'Choose Plan', 'First Post']
+  const steps = ['Business Info', 'Service Areas', 'Choose Plan', 'First Post', "What's Next"]
 
   return (
     <div className="min-h-screen bg-[#FAFAF7] flex flex-col items-center px-4 py-12">
@@ -335,9 +335,9 @@ function OnboardingContent() {
                   cta: 'Start Solo →',
                 },
                 {
-                  plan: 'dfy', name: 'Done-For-You', price: '$499/mo', badge: 'White Glove',
-                  features: ['Everything unlimited', 'We implement all fixes', 'Schema + llms.txt deployed', 'Monthly progress reports', 'Dedicated onboarding call'],
-                  cta: 'Start Done-For-You →',
+                  plan: 'dfy', name: 'DFY Setup', price: '$499 one-time', badge: 'White Glove',
+                  features: ['Schema markup generator — copy & paste ready', 'AI Discovery File generator — ready to deploy', '15-25 localized FAQs written for your business', 'Full AEO audit with prioritized fixes'],
+                  cta: 'Get DFY Setup — $499 →',
                 },
               ].map(({ plan, name, price, badge, features, cta }) => (
                 <Card
@@ -428,6 +428,76 @@ function OnboardingContent() {
                 📱 To post: Open <strong className="text-[#1B2A4A]">Google Maps</strong> → find your business → <strong className="text-[#1B2A4A]">Add post</strong> → paste this content
               </p>
             </div>
+            <Button
+              onClick={() => goToStep(5)}
+              className="w-full bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold h-11"
+            >
+              See What's Next →
+            </Button>
+          </div>
+        )}
+
+        {/* Step 5: What's Next */}
+        {step === 5 && (
+          <div>
+            <div className="text-center mb-8">
+              <div className="text-5xl mb-4">🚀</div>
+              <h1 className="text-2xl font-bold text-[#1B2A4A] mb-2">You&apos;re all set!</h1>
+              <p className="text-[#636E72]">Here&apos;s everything you can do to boost your AI visibility.</p>
+            </div>
+
+            <div className="space-y-3 mb-8">
+              {/* Completed */}
+              <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-lg">
+                <span className="text-green-500 text-xl flex-shrink-0">✅</span>
+                <div>
+                  <p className="text-[#1B2A4A] font-semibold text-sm">Business profile created</p>
+                  <p className="text-[#636E72] text-xs">Your business info is saved and ready to use</p>
+                </div>
+              </div>
+
+              {/* Next steps */}
+              {[
+                {
+                  href: '/dashboard/ai-readiness',
+                  emoji: '🔍',
+                  title: 'Run your AI Readiness scan',
+                  desc: 'See how visible your business is to ChatGPT, Perplexity & Google AI',
+                },
+                {
+                  href: '/dashboard/llms-txt',
+                  emoji: '📄',
+                  title: 'Generate your llms.txt file',
+                  desc: 'Help AI search engines discover and recommend your business',
+                },
+                {
+                  href: '/dashboard/audit',
+                  emoji: '🏥',
+                  title: 'Check your listing health',
+                  desc: 'Find gaps in your Google Business Profile and local citations',
+                },
+                {
+                  href: '/dashboard',
+                  emoji: '📊',
+                  title: 'View your dashboard',
+                  desc: 'See all your generated content and manage your local presence',
+                },
+              ].map(({ href, emoji, title, desc }) => (
+                <a
+                  key={href}
+                  href={href}
+                  className="flex items-center gap-3 p-4 bg-white border border-[#DFE6E9] rounded-lg hover:border-[#FF6B35]/50 hover:bg-[#FFF8F0] transition-colors group"
+                >
+                  <span className="text-xl flex-shrink-0">{emoji}</span>
+                  <div className="flex-1">
+                    <p className="text-[#1B2A4A] font-semibold text-sm group-hover:text-[#FF6B35] transition-colors">{title}</p>
+                    <p className="text-[#636E72] text-xs">{desc}</p>
+                  </div>
+                  <span className="text-[#FF6B35] text-lg flex-shrink-0">→</span>
+                </a>
+              ))}
+            </div>
+
             <Button
               onClick={() => router.push('/dashboard')}
               className="w-full bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold h-11"

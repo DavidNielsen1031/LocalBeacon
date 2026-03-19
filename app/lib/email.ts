@@ -4,7 +4,7 @@ const resend = process.env.RESEND_API_KEY
   ? new Resend(process.env.RESEND_API_KEY)
   : null
 
-const FROM_EMAIL = 'LocalBeacon <hello@perpetualagility.com>'
+const FROM_EMAIL = 'LocalBeacon <hello@localbeacon.ai>'
 
 interface WeeklyEmailData {
   to: string
@@ -205,6 +205,84 @@ export async function sendAeoReportEmail(data: AeoReportEmailData) {
     return { success: true, id: result.data?.id }
   } catch (error) {
     console.error('[email] Failed to send AEO report email:', error)
+    return { success: false, error: String(error) }
+  }
+}
+
+export async function sendWelcomeEmail(data: { to: string; name: string }) {
+  if (!resend) {
+    console.log('[email] Resend not configured, skipping welcome email')
+    return { success: false, error: 'Resend not configured' }
+  }
+
+  try {
+    const result = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: data.to,
+      subject: `Welcome to LocalBeacon, ${data.name}! 🔦`,
+      html: `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #2D3436; background: #FAFAF7;">
+  <div style="text-align: center; margin-bottom: 32px;">
+    <h2 style="color: #1B2A4A; margin: 0 0 4px;">🔦 LocalBeacon</h2>
+    <p style="color: #636E72; font-size: 14px; margin: 0;">AI visibility for local businesses</p>
+  </div>
+
+  <div style="background: white; border-radius: 12px; border: 1px solid #DFE6E9; padding: 32px; margin-bottom: 24px;">
+    <h1 style="color: #1B2A4A; font-size: 22px; margin: 0 0 8px;">Welcome aboard, ${data.name}!</h1>
+    <p style="color: #636E72; font-size: 15px; line-height: 1.6; margin: 0 0 24px;">
+      You're all set. LocalBeacon will help your business show up when customers search on Google, ChatGPT, and beyond.
+    </p>
+
+    <p style="color: #1B2A4A; font-weight: 700; font-size: 15px; margin: 0 0 16px;">Here's what to do next:</p>
+
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; align-items: flex-start; gap: 12px; background: #FFF8F0; border-radius: 8px; padding: 14px;">
+        <span style="font-size: 20px; flex-shrink: 0;">🔍</span>
+        <div>
+          <p style="color: #1B2A4A; font-weight: 600; font-size: 14px; margin: 0 0 2px;">1. Run your free AI Readiness scan</p>
+          <p style="color: #636E72; font-size: 13px; margin: 0;">See how visible your business is to AI search engines. Takes 10 seconds.</p>
+        </div>
+      </div>
+      <div style="display: flex; align-items: flex-start; gap: 12px; background: #FFF8F0; border-radius: 8px; padding: 14px;">
+        <span style="font-size: 20px; flex-shrink: 0;">🏪</span>
+        <div>
+          <p style="color: #1B2A4A; font-weight: 600; font-size: 14px; margin: 0 0 2px;">2. Set up your business profile</p>
+          <p style="color: #636E72; font-size: 13px; margin: 0;">Add your details so we can write locally-targeted content for your area.</p>
+        </div>
+      </div>
+      <div style="display: flex; align-items: flex-start; gap: 12px; background: #FFF8F0; border-radius: 8px; padding: 14px;">
+        <span style="font-size: 20px; flex-shrink: 0;">📝</span>
+        <div>
+          <p style="color: #1B2A4A; font-weight: 600; font-size: 14px; margin: 0 0 2px;">3. Generate your first Google post</p>
+          <p style="color: #636E72; font-size: 13px; margin: 0;">AI writes a post about your business — copy it to Google in 30 seconds.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 28px;">
+      <a href="https://localbeacon.ai/dashboard"
+         style="display: inline-block; background: #FF6B35; color: white; font-weight: 700; padding: 13px 32px; border-radius: 8px; text-decoration: none; font-size: 15px;">
+        Go to Your Dashboard →
+      </a>
+    </div>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid #DFE6E9; margin: 24px 0;">
+  <p style="color: #636E72; font-size: 12px; text-align: center; line-height: 1.6;">
+    You're receiving this because you signed up at <a href="https://localbeacon.ai" style="color: #FF6B35;">LocalBeacon.ai</a>.<br>
+    Perpetual Agility LLC · Burnsville, MN 55337<br>
+    <a href="https://localbeacon.ai/dashboard/settings" style="color: #B2BEC3; font-size: 11px;">Unsubscribe</a>
+  </p>
+</body>
+</html>`,
+    })
+
+    return { success: true, id: result.data?.id }
+  } catch (error) {
+    console.error('[email] Failed to send welcome email:', error)
     return { success: false, error: String(error) }
   }
 }

@@ -1,7 +1,8 @@
 export const dynamic = 'force-dynamic'
-import { auth } from '@clerk/nextjs/server'
+import { auth, currentUser } from '@clerk/nextjs/server'
 import { createServerClient } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
+import { sendWelcomeEmail } from '@/lib/email'
 
 export async function POST(req: NextRequest) {
   const { userId } = await auth()
@@ -135,6 +136,20 @@ export async function POST(req: NextRequest) {
     .single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+
+  // Send welcome email for newly created businesses
+  try {
+    const clerkUser = await currentUser()
+    const userEmail = clerkUser?.emailAddresses?.[0]?.emailAddress
+    const userName = clerkUser?.firstName || business.name || 'there'
+    if (userEmail) {
+      await sendWelcomeEmail({ to: userEmail, name: userName })
+    }
+  } catch (emailErr) {
+    console.error('[businesses] Failed to send welcome email:', emailErr)
+    // Non-fatal — don't block the response
+  }
+
   return NextResponse.json({ business, id: business.id })
 }
 

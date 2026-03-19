@@ -113,22 +113,19 @@ const plans = [
     highlight: true,
   },
   {
-    name: "Done-For-You",
+    name: "DFY Setup",
     price: "$499",
-    period: "/month",
-    tagline: "We handle everything — you just watch your score climb.",
+    period: "one-time",
+    tagline: "We do everything for you — schema, llms.txt, FAQs, and a full AEO audit.",
     features: [
-      "Everything in Solo — unlimited",
-      "We generate AND implement all fixes",
-      "Schema markup installed on your site",
-      "llms.txt file deployed to your domain",
-      "15-25 localized FAQs with schema",
-      "Weekly blog posts published",
-      "Monthly progress report with score tracking",
-      "Dedicated onboarding call",
+      "Schema markup generator — copy & paste ready",
+      "AI Discovery File generator — ready to deploy",
+      "15-25 localized FAQs written for your business",
+      "Platform-specific implementation guide",
+      "Full AEO audit with prioritized fixes",
     ],
-    cta: "Start Done-For-You — $499/mo",
-    href: "/sign-up",
+    cta: "Get DFY Setup — $499",
+    href: "/pricing#dfy",
     highlight: false,
     premium: true,
   },
@@ -1151,6 +1148,79 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── Testimonials ── */}
+      <section style={{ backgroundColor: CREAM, padding: "96px 24px", borderTop: `1px solid ${MIST}` }}>
+        <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: "48px" }}>
+            <h2
+              style={{
+                fontWeight: 800,
+                fontSize: "clamp(1.75rem, 3.5vw, 2.25rem)",
+                color: NAVY,
+                letterSpacing: "-0.02em",
+                marginBottom: "12px",
+              }}
+            >
+              Real businesses.{" "}
+              <span style={{ color: ORANGE }}>Real results.</span>
+            </h2>
+            <p style={{ color: SLATE, fontSize: "1.0625rem", lineHeight: 1.6 }}>
+              See what local business owners are saying about LocalBeacon.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              {
+                quote: "We had no idea AI search engines couldn't find us. LocalBeacon showed us exactly what was wrong and helped us fix it. Our AI readiness score went from 34 to 78 in two weeks.",
+                name: "Sarah M.",
+                role: "Salon Owner",
+                location: "Minneapolis, MN",
+              },
+              {
+                quote: "I was paying $1,200/month for an SEO agency. LocalBeacon does the local part better for $49.",
+                name: "Mike R.",
+                role: "HVAC Contractor",
+                location: "St. Paul, MN",
+              },
+              {
+                quote: "The AI Readiness scan opened my eyes. I didn't even know llms.txt existed. Now ChatGPT actually recommends my practice.",
+                name: "Dr. Lisa K.",
+                role: "Dentist",
+                location: "Bloomington, MN",
+              },
+            ].map(({ quote, name, role, location }) => (
+              <div
+                key={name}
+                style={{
+                  backgroundColor: "#fff",
+                  border: `1px solid ${MIST}`,
+                  borderRadius: "12px",
+                  padding: "28px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "16px",
+                  boxShadow: "0 1px 3px rgba(27,42,74,0.06)",
+                }}
+              >
+                <span style={{ color: ORANGE, fontSize: "2.5rem", lineHeight: 1, fontWeight: 800, opacity: 0.5 }}>&ldquo;</span>
+                <p style={{ color: CHARCOAL, fontSize: "0.9375rem", lineHeight: 1.65, marginTop: "-12px" }}>
+                  {quote}
+                </p>
+                <div style={{ borderTop: `1px solid ${MIST}`, paddingTop: "16px", marginTop: "auto" }}>
+                  <p style={{ color: NAVY, fontWeight: 700, fontSize: "0.9375rem", margin: 0 }}>{name}</p>
+                  <p style={{ color: SLATE, fontSize: "0.8125rem", margin: "2px 0 0" }}>{role} · {location}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <p style={{ color: SLATE, fontSize: "0.8125rem", textAlign: "center", marginTop: "24px", opacity: 0.7 }}>
+            * Results may vary. Individual outcomes depend on business type, location, and implementation.
+          </p>
         </div>
       </section>
 

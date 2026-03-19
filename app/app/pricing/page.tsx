@@ -63,11 +63,10 @@ const plans = [
     period: "one-time",
     tagline: "We do everything for you — schema, llms.txt, FAQs, and a full AEO audit.",
     outcomes: [
-      "Schema markup installed on your site",
-      "llms.txt deployed to your domain",
-      "15-25 localized FAQs written + installed",
-      "Platform-specific implementation",
-      "Dedicated onboarding call",
+      "Schema markup generator — copy & paste ready",
+      "AI Discovery File generator — ready to deploy",
+      "15-25 localized FAQs written for your business",
+      "Platform-specific implementation guide",
       "Full AEO audit with prioritized fixes",
     ],
     cta: "Get DFY Setup — $499",
@@ -437,11 +436,10 @@ export default function PricingPage() {
             <p className="text-sm font-semibold text-[#1B2A4A] mb-3">What&apos;s included:</p>
             <ul className="space-y-2">
               {[
-                "Schema markup installed on your site",
-                "llms.txt deployed to your domain",
-                "15-25 localized FAQs written & installed",
-                "Platform-specific implementation",
-                "Dedicated onboarding call",
+                "Schema markup generator — copy & paste ready",
+                "AI Discovery File generator — ready to deploy",
+                "15-25 localized FAQs written for your business",
+                "Platform-specific implementation guide",
                 "Full AEO audit with prioritized fixes",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-2 text-sm text-[#2D3436]">
