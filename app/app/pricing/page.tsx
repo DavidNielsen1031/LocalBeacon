@@ -80,27 +80,6 @@ const plans = [
     premium: true,
     plan: "DFY" as const,
   },
-  {
-    name: "Managed",
-    price: "$99",
-    period: "/month",
-    tagline: "Ongoing AI visibility management — we handle the content, you run your business.",
-    outcomes: [
-      "Everything in Solo — unlimited",
-      "Unlimited blog posts per month",
-      "Unlimited city/service pages",
-      "Unlimited business locations",
-      "Schema & llms.txt monitored — regenerated quarterly, alerts if removed",
-      "5 competitor comparisons",
-      "Monthly progress report with score trends",
-      "Priority email support (24-hour response)",
-    ],
-    cta: "Start Managed — $99/mo",
-    href: null,
-    highlight: false,
-    managed: true,
-    plan: "AGENCY" as const,
-  },
 ];
 
 const faqs = [
@@ -127,10 +106,6 @@ const faqs = [
   {
     q: "What does 'Done-For-You Setup' include?",
     a: "A 30-minute live call where we learn your business, generate your schema markup, llms.txt file, and 15-25 custom FAQs — then walk you through installing everything on your specific platform (WordPress, Squarespace, Webflow, or Wix). You also get a full AEO audit with a prioritized list of fixes, plus 1 month of Solo included so you can keep generating content right away.",
-  },
-  {
-    q: "Do I need DFY Setup before Managed?",
-    a: "Not required, but recommended. DFY Setup gets your foundation in place (schema, llms.txt, FAQs) in one call. Managed then keeps everything running — unlimited content, quarterly refreshes, monitoring, and priority support. You can also start with Solo and upgrade to Managed anytime.",
   },
 ];
 
@@ -203,10 +178,9 @@ export default function PricingPage() {
 
       {/* Plans */}
       <section className="px-6 pb-20">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
           {plans.map((plan) => {
             const isDfy = (plan as { premium?: boolean }).premium;
-            const isManaged = (plan as { managed?: boolean }).managed;
 
             return (
               <Card
@@ -249,16 +223,7 @@ export default function PricingPage() {
                     </Badge>
                   </div>
                 )}
-                {isManaged && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <Badge
-                      className="font-medium px-4"
-                      style={{ background: "#F0EDE8", color: SLATE, border: "1px solid #DFE6E9" }}
-                    >
-                      After DFY setup
-                    </Badge>
-                  </div>
-                )}
+
                 <CardContent className="p-6 pt-8 flex-1 flex flex-col">
                   <p className="text-sm uppercase tracking-wider font-semibold" style={{ color: SLATE }}>
                     {plan.name}
