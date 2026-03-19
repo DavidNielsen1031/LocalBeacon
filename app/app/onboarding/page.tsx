@@ -80,7 +80,6 @@ export default function OnboardingPage() {
         }),
       })
       const json = await res.json()
-      // Ensure we have content — fall back to mock if API failed
       if (!json.title && !json.body) {
         return {
           title: `${data.name} — Trusted ${data.category} in ${data.primary_city}`,
@@ -99,14 +98,12 @@ export default function OnboardingPage() {
   }
 
   const handleStep3Continue = async (plan: string) => {
-    // Save business first regardless of plan
     setLoading(true)
     const businessId = await saveBusiness()
 
     if (plan !== 'free') {
-      // Redirect to Stripe checkout
       try {
-        const planKey = plan === 'solo' ? 'SOLO' : plan === 'agency' ? 'AGENCY' : 'DFY'
+        const planKey = plan === 'solo' ? 'SOLO' : 'DFY'
         const res = await fetch('/api/checkout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -122,7 +119,6 @@ export default function OnboardingPage() {
       }
     }
 
-    // Free plan: generate first post and continue
     const post = await generateFirstPost(businessId)
     setGeneratedPost(post)
     setLoading(false)
@@ -140,11 +136,11 @@ export default function OnboardingPage() {
   const steps = ['Business Info', 'Service Areas', 'Choose Plan', 'First Post']
 
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center px-4 py-12">
+    <div className="min-h-screen bg-[#FAFAF7] flex flex-col items-center px-4 py-12">
       {/* Logo */}
       <div className="flex items-center gap-2 mb-10">
         <span className="text-2xl">🔦</span>
-        <span className="text-white font-bold text-xl">LocalBeacon.ai</span>
+        <span className="text-[#1B2A4A] font-bold text-xl">LocalBeacon.ai</span>
       </div>
 
       {/* Progress */}
@@ -152,14 +148,14 @@ export default function OnboardingPage() {
         {steps.map((s, i) => (
           <div key={s} className="flex items-center gap-2">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${
-              i + 1 === step ? 'bg-[#FFD700] text-black' :
-              i + 1 < step ? 'bg-[#FFD700]/30 text-[#FFD700]' :
-              'bg-white/10 text-white/30'
+              i + 1 === step ? 'bg-[#FF6B35] text-white' :
+              i + 1 < step ? 'bg-[#FF6B35]/20 text-[#FF6B35]' :
+              'bg-[#DFE6E9] text-[#636E72]'
             }`}>
               {i + 1 < step ? '✓' : i + 1}
             </div>
-            <span className={`text-sm hidden sm:block ${i + 1 === step ? 'text-white' : 'text-white/30'}`}>{s}</span>
-            {i < steps.length - 1 && <div className="w-8 h-px bg-white/10 mx-1" />}
+            <span className={`text-sm hidden sm:block ${i + 1 === step ? 'text-[#1B2A4A]' : 'text-[#636E72]'}`}>{s}</span>
+            {i < steps.length - 1 && <div className="w-8 h-px bg-[#DFE6E9] mx-1" />}
           </div>
         ))}
       </div>
@@ -168,74 +164,74 @@ export default function OnboardingPage() {
         {/* Step 1: Business Basics */}
         {step === 1 && (
           <div>
-            <h1 className="text-2xl font-bold text-white mb-2">Tell us about your business</h1>
-            <p className="text-white/50 mb-8">We&apos;ll use this to generate locally-targeted content.</p>
+            <h1 className="text-2xl font-bold text-[#1B2A4A] mb-2">Tell us about your business</h1>
+            <p className="text-[#636E72] mb-8">We&apos;ll use this to generate locally-targeted content.</p>
             <div className="space-y-5">
               <div>
-                <Label className="text-white/70 mb-2 block">Business Name *</Label>
+                <Label className="text-[#2D3436] mb-2 block">Business Name *</Label>
                 <Input
                   placeholder="e.g. Johnson Plumbing & Heating"
                   value={data.name}
                   onChange={e => update('name', e.target.value)}
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-[#FFD700]/50"
+                  className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/50 focus:border-[#FF6B35]/50"
                 />
               </div>
               <div>
-                <Label className="text-white/70 mb-2 block">Business Type *</Label>
+                <Label className="text-[#2D3436] mb-2 block">Business Type *</Label>
                 <select
                   value={data.category}
                   onChange={e => update('category', e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 text-white rounded-md px-3 py-2 focus:border-[#FFD700]/50 focus:outline-none"
+                  className="w-full bg-white border border-[#DFE6E9] text-[#2D3436] rounded-md px-3 py-2 focus:border-[#FF6B35]/50 focus:outline-none"
                 >
-                  <option value="" className="bg-zinc-900">Select your business type...</option>
+                  <option value="">Select your business type...</option>
                   {BUSINESS_CATEGORIES.map(c => (
-                    <option key={c} value={c} className="bg-zinc-900">{c}</option>
+                    <option key={c} value={c}>{c}</option>
                   ))}
                 </select>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-white/70 mb-2 block">City *</Label>
+                  <Label className="text-[#2D3436] mb-2 block">City *</Label>
                   <Input
                     placeholder="e.g. Burnsville"
                     value={data.primary_city}
                     onChange={e => update('primary_city', e.target.value)}
-                    className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-[#FFD700]/50"
+                    className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/50 focus:border-[#FF6B35]/50"
                   />
                 </div>
                 <div>
-                  <Label className="text-white/70 mb-2 block">State *</Label>
+                  <Label className="text-[#2D3436] mb-2 block">State *</Label>
                   <Input
                     placeholder="e.g. MN"
                     maxLength={2}
                     value={data.primary_state}
                     onChange={e => update('primary_state', e.target.value.toUpperCase())}
-                    className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-[#FFD700]/50"
+                    className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/50 focus:border-[#FF6B35]/50"
                   />
                 </div>
               </div>
               <div>
-                <Label className="text-white/70 mb-2 block">Phone Number</Label>
+                <Label className="text-[#2D3436] mb-2 block">Phone Number</Label>
                 <Input
                   placeholder="e.g. (612) 555-0100"
                   value={data.phone}
                   onChange={e => update('phone', e.target.value)}
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-[#FFD700]/50"
+                  className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/50 focus:border-[#FF6B35]/50"
                 />
               </div>
               <div>
-                <Label className="text-white/70 mb-2 block">Website <span className="text-white/30">(optional)</span></Label>
+                <Label className="text-[#2D3436] mb-2 block">Website <span className="text-[#636E72]">(optional)</span></Label>
                 <Input
                   placeholder="e.g. https://johnsonplumbing.com"
                   value={data.website}
                   onChange={e => update('website', e.target.value)}
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-[#FFD700]/50"
+                  className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/50 focus:border-[#FF6B35]/50"
                 />
               </div>
               <Button
                 onClick={() => setStep(2)}
                 disabled={!data.name || !data.category || !data.primary_city || !data.primary_state}
-                className="w-full bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold h-11 mt-2"
+                className="w-full bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold h-11 mt-2"
               >
                 Continue →
               </Button>
@@ -246,8 +242,8 @@ export default function OnboardingPage() {
         {/* Step 2: Service Areas */}
         {step === 2 && (
           <div>
-            <h1 className="text-2xl font-bold text-white mb-2">Where do you serve?</h1>
-            <p className="text-white/50 mb-8">Add cities and neighborhoods you cover. We&apos;ll create local pages for each one.</p>
+            <h1 className="text-2xl font-bold text-[#1B2A4A] mb-2">Where do you serve?</h1>
+            <p className="text-[#636E72] mb-8">Add cities and neighborhoods you cover. We&apos;ll create local pages for each one.</p>
             <div className="space-y-4">
               <div className="flex gap-2">
                 <Input
@@ -255,18 +251,18 @@ export default function OnboardingPage() {
                   value={areaInput}
                   onChange={e => setAreaInput(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && addArea()}
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-[#FFD700]/50"
+                  className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/50 focus:border-[#FF6B35]/50"
                 />
-                <Button onClick={addArea} variant="outline" className="border-white/10 text-white hover:bg-white/5 shrink-0">
+                <Button onClick={addArea} variant="outline" className="border-[#DFE6E9] text-[#1B2A4A] hover:bg-[#DFE6E9]/50 shrink-0">
                   Add
                 </Button>
               </div>
               {data.service_areas.length > 0 && (
-                <div className="flex flex-wrap gap-2 p-4 bg-white/5 rounded-lg border border-white/10">
+                <div className="flex flex-wrap gap-2 p-4 bg-white rounded-lg border border-[#DFE6E9]">
                   {data.service_areas.map(area => (
                     <Badge
                       key={area}
-                      className="bg-[#FFD700]/10 text-[#FFD700] border-[#FFD700]/30 cursor-pointer hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/30 transition-colors"
+                      className="bg-[#FF6B35]/10 text-[#FF6B35] border-[#FF6B35]/30 cursor-pointer hover:bg-red-500/10 hover:text-red-500 hover:border-red-500/30 transition-colors"
                       onClick={() => removeArea(area)}
                     >
                       {area} ×
@@ -275,13 +271,13 @@ export default function OnboardingPage() {
                 </div>
               )}
               {data.service_areas.length === 0 && (
-                <p className="text-white/30 text-sm text-center py-4">No service areas added yet. We&apos;ll default to {data.primary_city}.</p>
+                <p className="text-[#636E72] text-sm text-center py-4">No service areas added yet. We&apos;ll default to {data.primary_city}.</p>
               )}
               <div className="flex gap-3 pt-2">
-                <Button onClick={() => setStep(1)} variant="outline" className="border-white/10 text-white/50 hover:bg-white/5 flex-1">
+                <Button onClick={() => setStep(1)} variant="outline" className="border-[#DFE6E9] text-[#636E72] hover:bg-[#DFE6E9]/50 flex-1">
                   ← Back
                 </Button>
-                <Button onClick={() => setStep(3)} className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold flex-1">
+                <Button onClick={() => setStep(3)} className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold flex-1">
                   Continue →
                 </Button>
               </div>
@@ -292,8 +288,8 @@ export default function OnboardingPage() {
         {/* Step 3: Plan Selection */}
         {step === 3 && (
           <div>
-            <h1 className="text-2xl font-bold text-white mb-2">Choose your plan</h1>
-            <p className="text-white/50 mb-8">Start free, upgrade anytime.</p>
+            <h1 className="text-2xl font-bold text-[#1B2A4A] mb-2">Choose your plan</h1>
+            <p className="text-[#636E72] mb-8">Start free, upgrade anytime.</p>
             <div className="space-y-3">
               {[
                 {
@@ -307,40 +303,50 @@ export default function OnboardingPage() {
                   cta: 'Start Solo →',
                 },
                 {
-                  plan: 'agency', name: 'Agency', price: '$99/mo', badge: null,
-                  features: ['Everything unlimited', 'Multi-client dashboard', 'White-label reports', 'Priority support'],
-                  cta: 'Start Agency →',
+                  plan: 'dfy', name: 'Done-For-You', price: '$499/mo', badge: 'White Glove',
+                  features: ['Everything unlimited', 'We implement all fixes', 'Schema + llms.txt deployed', 'Monthly progress reports', 'Dedicated onboarding call'],
+                  cta: 'Start Done-For-You →',
                 },
               ].map(({ plan, name, price, badge, features, cta }) => (
                 <Card
                   key={plan}
                   className={`border cursor-pointer transition-all ${
                     plan === 'solo'
-                      ? 'border-[#FFD700]/50 bg-[#FFD700]/5'
-                      : 'border-white/10 bg-white/5 hover:border-white/20'
+                      ? 'border-[#FF6B35]/50 bg-[#FF6B35]/5'
+                      : plan === 'dfy'
+                      ? 'border-[#B8860B]/50 bg-gradient-to-b from-[#FFFDF5] to-[#FFF8E7]'
+                      : 'border-[#DFE6E9] bg-white hover:border-[#DFE6E9]'
                   }`}
                   onClick={() => handleStep3Continue(plan)}
                 >
                   <CardContent className="p-5">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-2">
-                        <span className="text-white font-bold text-lg">{name}</span>
-                        {badge && <Badge className="bg-[#FFD700]/20 text-[#FFD700] border-[#FFD700]/30 text-xs">{badge}</Badge>}
+                        <span className="text-[#1B2A4A] font-bold text-lg">{name}</span>
+                        {badge && (
+                          <Badge className={`text-xs ${
+                            plan === 'dfy'
+                              ? 'bg-gradient-to-r from-[#B8860B] to-[#FFD700] text-black border-0'
+                              : 'bg-[#FF6B35]/10 text-[#FF6B35] border-[#FF6B35]/30'
+                          }`}>{badge}</Badge>
+                        )}
                       </div>
-                      <span className="text-[#FFD700] font-bold">{price}</span>
+                      <span className={`font-bold ${plan === 'dfy' ? 'text-[#B8860B]' : 'text-[#FF6B35]'}`}>{price}</span>
                     </div>
                     <ul className="space-y-1">
                       {features.map(f => (
-                        <li key={f} className="text-white/60 text-sm flex items-center gap-2">
-                          <span className="text-[#FFD700]">✓</span> {f}
+                        <li key={f} className="text-[#636E72] text-sm flex items-center gap-2">
+                          <span className="text-[#FF6B35]">✓</span> {f}
                         </li>
                       ))}
                     </ul>
                     <Button
                       className={`w-full mt-4 font-semibold ${
                         plan === 'solo'
-                          ? 'bg-[#FFD700] text-black hover:bg-[#FFD700]/90'
-                          : 'bg-white/10 text-white hover:bg-white/15'
+                          ? 'bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90'
+                          : plan === 'dfy'
+                          ? 'bg-gradient-to-r from-[#B8860B] to-[#DAA520] text-white hover:from-[#DAA520] hover:to-[#FFD700]'
+                          : 'bg-[#DFE6E9] text-[#1B2A4A] hover:bg-[#DFE6E9]/80'
                       }`}
                       disabled={loading}
                     >
@@ -350,7 +356,7 @@ export default function OnboardingPage() {
                 </Card>
               ))}
             </div>
-            <button onClick={() => setStep(2)} className="text-white/30 text-sm mt-4 w-full text-center hover:text-white/50">
+            <button onClick={() => setStep(2)} className="text-[#636E72] text-sm mt-4 w-full text-center hover:text-[#2D3436]">
               ← Back
             </button>
           </div>
@@ -361,23 +367,23 @@ export default function OnboardingPage() {
           <div>
             <div className="text-center mb-8">
               <div className="text-5xl mb-4">🎉</div>
-              <h1 className="text-2xl font-bold text-white mb-2">Your first Google post is ready!</h1>
-              <p className="text-white/50">Copy it and paste it into your Google Business Profile right now.</p>
+              <h1 className="text-2xl font-bold text-[#1B2A4A] mb-2">Your first Google post is ready!</h1>
+              <p className="text-[#636E72]">Copy it and paste it into your Google Business Profile right now.</p>
             </div>
             {generatedPost && (
-              <Card className="bg-white/5 border-[#FFD700]/30 mb-6">
+              <Card className="bg-white border-[#FF6B35]/30 mb-6">
                 <CardContent className="p-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <Badge className="bg-[#FFD700]/10 text-[#FFD700] border-[#FFD700]/30 text-xs">GBP Post — Draft</Badge>
+                    <Badge className="bg-[#FF6B35]/10 text-[#FF6B35] border-[#FF6B35]/30 text-xs">GBP Post — Draft</Badge>
                   </div>
-                  <h3 className="text-white font-semibold text-base mb-3">{generatedPost.title}</h3>
-                  <p className="text-white/70 text-sm leading-relaxed whitespace-pre-line">{generatedPost.body}</p>
-                  <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
-                    <span className="text-white/30 text-xs">CTA: {generatedPost.call_to_action}</span>
+                  <h3 className="text-[#1B2A4A] font-semibold text-base mb-3">{generatedPost.title}</h3>
+                  <p className="text-[#636E72] text-sm leading-relaxed whitespace-pre-line">{generatedPost.body}</p>
+                  <div className="mt-4 pt-4 border-t border-[#DFE6E9] flex items-center justify-between">
+                    <span className="text-[#636E72]/50 text-xs">CTA: {generatedPost.call_to_action}</span>
                     <Button
                       size="sm"
                       onClick={copyPost}
-                      className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold text-xs"
+                      className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold text-xs"
                     >
                       {copied ? '✓ Copied!' : 'Copy to Clipboard'}
                     </Button>
@@ -385,14 +391,14 @@ export default function OnboardingPage() {
                 </CardContent>
               </Card>
             )}
-            <div className="bg-white/5 border border-white/10 rounded-lg p-4 mb-6">
-              <p className="text-white/50 text-sm text-center">
-                📱 To post: Open <strong className="text-white">Google Maps</strong> → find your business → <strong className="text-white">Add post</strong> → paste this content
+            <div className="bg-white border border-[#DFE6E9] rounded-lg p-4 mb-6">
+              <p className="text-[#636E72] text-sm text-center">
+                📱 To post: Open <strong className="text-[#1B2A4A]">Google Maps</strong> → find your business → <strong className="text-[#1B2A4A]">Add post</strong> → paste this content
               </p>
             </div>
             <Button
               onClick={() => router.push('/dashboard')}
-              className="w-full bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold h-11"
+              className="w-full bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold h-11"
             >
               Go to Dashboard →
             </Button>
