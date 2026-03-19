@@ -18,3 +18,4 @@
 
 ---
 *Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*
+- S21: EXECUTING (Monitoring — scan history, visibility cron, DFY booking, welcome email)

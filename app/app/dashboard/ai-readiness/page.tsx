@@ -37,6 +37,53 @@ interface HistoryScan {
   failed: number
   rules_version: string
   scanned_at: string
+  checks?: Array<{ id: string; passed: boolean }>
+}
+
+interface VisibilityStatus {
+  schema: boolean | null // null = unknown
+  llms: boolean | null
+  lastChecked: string | null
+}
+
+function VisibilityStatusBadges({ status }: { status: VisibilityStatus }) {
+  if (status.schema === null && status.llms === null) return null
+
+  const badges = [
+    {
+      label: 'Schema Markup',
+      active: status.schema,
+      icon: status.schema ? '✓' : '✗',
+    },
+    {
+      label: 'llms.txt',
+      active: status.llms,
+      icon: status.llms ? '✓' : '✗',
+    },
+  ]
+
+  return (
+    <div className="flex flex-wrap gap-2 mt-3">
+      {badges.map(b => (
+        <span
+          key={b.label}
+          className={`inline-flex items-center gap-1 text-xs px-3 py-1 rounded-full font-medium border ${
+            b.active
+              ? 'bg-green-500/10 text-green-600 border-green-500/20'
+              : 'bg-red-500/10 text-red-500 border-red-500/20'
+          }`}
+        >
+          <span>{b.icon}</span>
+          {b.label}
+        </span>
+      ))}
+      {status.lastChecked && (
+        <span className="text-xs text-[#636E72]/50 self-center">
+          Last monitored {new Date(status.lastChecked).toLocaleDateString()}
+        </span>
+      )}
+    </div>
+  )
 }
 
 function ScoreRing({ score }: { score: number }) {
@@ -126,15 +173,33 @@ export default function AIReadinessPage() {
   const [result, setResult] = useState<ScanResult | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [history, setHistory] = useState<HistoryScan[]>([])
+  const [visibilityStatus, setVisibilityStatus] = useState<VisibilityStatus>({
+    schema: null,
+    llms: null,
+    lastChecked: null,
+  })
 
   const fetchHistory = async (scanUrl: string) => {
     try {
       let normalized = scanUrl.trim()
       if (!normalized.startsWith('http')) normalized = `https://${normalized}`
       normalized = normalized.replace(/\/+$/, '')
-      const res = await fetch(`/api/ai-readiness?url=${encodeURIComponent(normalized)}`)
+      const res = await fetch(`/api/ai-readiness?url=${encodeURIComponent(normalized)}&limit=12`)
       const data = await res.json()
-      if (data.scans) setHistory(data.scans)
+      if (data.scans) {
+        setHistory(data.scans)
+        // Derive visibility status from the most recent full scan
+        const latestWithChecks = data.scans.find((s: HistoryScan) => s.checks && s.checks.length > 0)
+        if (latestWithChecks?.checks) {
+          const schemaCheck = latestWithChecks.checks.find((c: { id: string; passed: boolean }) => c.id === 'schema_markup')
+          const llmsCheck = latestWithChecks.checks.find((c: { id: string; passed: boolean }) => c.id === 'llms_txt')
+          setVisibilityStatus({
+            schema: schemaCheck?.passed ?? null,
+            llms: llmsCheck?.passed ?? null,
+            lastChecked: latestWithChecks.scanned_at,
+          })
+        }
+      }
     } catch {
       // History is non-critical
     }
@@ -276,6 +341,19 @@ export default function AIReadinessPage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Visibility status badges (schema / llms.txt monitoring) */}
+          {(visibilityStatus.schema !== null || visibilityStatus.llms !== null) && (
+            <Card className="bg-white border-[#DFE6E9]">
+              <CardContent className="p-5">
+                <h3 className="text-sm font-semibold text-[#2D3436] mb-1">Visibility Signals</h3>
+                <p className="text-xs text-[#636E72] mb-2">
+                  Key signals monitored weekly for Solo users
+                </p>
+                <VisibilityStatusBadges status={visibilityStatus} />
+              </CardContent>
+            </Card>
+          )}
 
           {/* Trend chart */}
           {history.length >= 2 && <TrendChart scans={history} />}

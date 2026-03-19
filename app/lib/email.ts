@@ -287,6 +287,95 @@ export async function sendWelcomeEmail(data: { to: string; name: string }) {
   }
 }
 
+interface VisibilityAlertData {
+  to: string
+  businessName: string
+  website: string
+  schemaDisappeared: boolean
+  llmsDisappeared: boolean
+}
+
+export async function sendVisibilityAlert(data: VisibilityAlertData) {
+  if (!resend) {
+    console.log('[email] Resend not configured, skipping visibility alert')
+    return { success: false, error: 'Resend not configured' }
+  }
+
+  const missing: string[] = []
+  if (data.schemaDisappeared) missing.push('Schema markup (JSON-LD)')
+  if (data.llmsDisappeared) missing.push('llms.txt')
+  const missingList = missing.map(m => `<li style="margin-bottom: 4px;">${m}</li>`).join('')
+  const domain = data.website.replace(/^https?:\/\//, '').split('/')[0]
+
+  try {
+    const result = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: data.to,
+      subject: `⚠️ AI visibility issue detected — ${data.businessName}`,
+      html: `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #2D3436; background: #FAFAF7;">
+  <div style="text-align: center; margin-bottom: 32px;">
+    <h2 style="color: #1B2A4A; margin: 0 0 4px;">🔦 LocalBeacon</h2>
+    <p style="color: #636E72; font-size: 14px; margin: 0;">Visibility Monitor Alert</p>
+  </div>
+
+  <div style="background: #FFF5F3; border: 1px solid #F5C6BC; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+    <h2 style="color: #C0392B; margin: 0 0 8px; font-size: 18px;">⚠️ AI visibility signals went missing</h2>
+    <p style="color: #2D3436; font-size: 15px; margin: 0 0 16px;">
+      Our weekly scan detected that <strong>${data.businessName}</strong> (${domain}) is now missing signals that were previously detected:
+    </p>
+    <ul style="color: #C0392B; font-size: 14px; margin: 0; padding-left: 20px; line-height: 1.8;">
+      ${missingList}
+    </ul>
+    <p style="color: #636E72; font-size: 13px; margin-top: 12px;">
+      These signals help AI assistants like ChatGPT, Perplexity, and Google AI find and recommend your business. Missing them can reduce your AI visibility.
+    </p>
+  </div>
+
+  <div style="background: white; border-radius: 12px; border: 1px solid #DFE6E9; padding: 20px; margin-bottom: 24px;">
+    <h3 style="color: #1B2A4A; font-size: 15px; margin: 0 0 12px;">What to do</h3>
+    ${data.schemaDisappeared ? `
+    <div style="margin-bottom: 12px;">
+      <strong style="color: #1B2A4A; font-size: 14px;">Schema markup removed:</strong>
+      <p style="color: #636E72; font-size: 13px; margin: 4px 0 0;">
+        Check if a website update removed your JSON-LD schema block. You can restore it from your LocalBeacon dashboard under Schema Settings.
+      </p>
+    </div>` : ''}
+    ${data.llmsDisappeared ? `
+    <div style="margin-bottom: 12px;">
+      <strong style="color: #1B2A4A; font-size: 14px;">llms.txt removed:</strong>
+      <p style="color: #636E72; font-size: 13px; margin: 4px 0 0;">
+        Your llms.txt file (${data.website}/llms.txt) is no longer accessible. Re-upload it from your LocalBeacon dashboard.
+      </p>
+    </div>` : ''}
+  </div>
+
+  <div style="text-align: center; margin-bottom: 24px;">
+    <a href="https://localbeacon.ai/dashboard/ai-readiness"
+       style="display: inline-block; background: #FF6B35; color: white; font-weight: 700; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-size: 15px;">
+      Run a Full Scan →
+    </a>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid #DFE6E9; margin: 24px 0;">
+  <p style="color: #636E72; font-size: 12px; text-align: center; line-height: 1.6;">
+    You're receiving this monitoring alert because you're on a LocalBeacon Solo or Agency plan.<br>
+    <a href="https://localbeacon.ai/dashboard/settings" style="color: #B2BEC3; font-size: 11px;">Manage notification preferences</a>
+  </p>
+</body>
+</html>`,
+    })
+
+    return { success: true, id: result.data?.id }
+  } catch (error) {
+    console.error('[email] Failed to send visibility alert:', error)
+    return { success: false, error: String(error) }
+  }
+}
+
 export async function sendMonthlyReportEmail(data: MonthlyEmailData) {
   if (!resend) {
     console.log('[email] Resend not configured, skipping monthly email')

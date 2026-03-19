@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useBusinessContext } from "@/components/business-context";
 import { FreshnessBadge } from "@/components/freshness-badge";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   FileText,
   Globe,
@@ -17,6 +18,7 @@ import {
   PenLine,
   BarChart3,
   FileDown,
+  CalendarCheck,
 } from "lucide-react";
 
 interface DashboardData {
@@ -41,10 +43,36 @@ export default function DashboardPage() {
   const { activeBusiness, activeBusinessId, plan } = useBusinessContext();
   const firstName = user?.firstName ?? "there";
   const hasBusiness = !!activeBusiness;
+  const searchParams = useSearchParams();
 
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // S21-03: DFY success banner
+  const [dfySuccess, setDfySuccess] = useState(false);
+  const [dfyBannerDismissed, setDfyBannerDismissed] = useState(false);
+  const bookingUrl = process.env.NEXT_PUBLIC_BOOKING_URL ?? null;
+
+  // S21-04: Welcome email on first visit
+  const userInitRef = useRef(false);
+
+  useEffect(() => {
+    // Detect ?upgraded=dfy query param
+    if (searchParams.get("upgraded") === "dfy") {
+      setDfySuccess(true);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    // Call user init once per session (sends welcome email for new users)
+    if (!userInitRef.current && user?.id) {
+      userInitRef.current = true;
+      fetch("/api/user/init", { method: "POST" }).catch(() => {
+        // best-effort, ignore errors
+      });
+    }
+  }, [user?.id]);
 
   useEffect(() => {
     if (!activeBusinessId) {
@@ -102,6 +130,54 @@ export default function DashboardPage() {
   return (
     <div className="flex-1 px-6 py-8 max-w-6xl">
       {error && <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-4 mb-4">{error}</div>}
+
+      {/* S21-03: DFY success banner */}
+      {dfySuccess && !dfyBannerDismissed && (
+        <div
+          className="mb-6 rounded-xl border overflow-hidden"
+          style={{ backgroundColor: 'rgba(34,197,94,0.06)', borderColor: 'rgba(34,197,94,0.3)' }}
+        >
+          <div className="px-5 py-4">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <CalendarCheck size={22} className="mt-0.5 shrink-0" style={{ color: '#16a34a' }} />
+                <div>
+                  <h3 className="font-bold text-base mb-1" style={{ color: '#15803d' }}>
+                    🎉 Welcome to LocalBeacon Done-For-You!
+                  </h3>
+                  <p className="text-sm mb-3" style={{ color: '#2D3436' }}>
+                    Your DFY plan is active. Book your onboarding call so our team can get to work on your AI visibility.
+                  </p>
+                  {bookingUrl ? (
+                    <a
+                      href={bookingUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 font-semibold text-sm text-white px-5 py-2.5 rounded-lg transition-colors"
+                      style={{ backgroundColor: '#16a34a' }}
+                    >
+                      <CalendarCheck size={15} />
+                      Book Your Onboarding Call →
+                    </a>
+                  ) : (
+                    <p className="text-sm font-medium" style={{ color: '#636E72' }}>
+                      Our team will reach out within 1 business day to schedule your onboarding call.
+                    </p>
+                  )}
+                </div>
+              </div>
+              <button
+                onClick={() => setDfyBannerDismissed(true)}
+                className="text-xs shrink-0 mt-0.5"
+                style={{ color: '#636E72' }}
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Free plan upgrade banner */}
       {plan === 'free' && !upgradeBannerDismissed && (
         <div

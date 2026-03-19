@@ -506,7 +506,19 @@ export async function POST(req: NextRequest) {
   try {
     const supabase = createServerClient()
     if (supabase) {
+      // Resolve user's internal UUID from Clerk ID
+      let userUuid: string | null = null
+      if (userId) {
+        const { data: userRow } = await supabase
+          .from('users')
+          .select('id')
+          .eq('clerk_id', userId)
+          .single()
+        userUuid = userRow?.id ?? null
+      }
+
       await supabase.from('aeo_scans').insert({
+        user_id: userUuid,
         url: baseUrl,
         score,
         passed,
@@ -541,7 +553,8 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   const url = req.nextUrl.searchParams.get('url')
-  const limit = Math.min(parseInt(req.nextUrl.searchParams.get('limit') || '20'), 100)
+  // Solo users can see up to 12 scans; free users just the latest 1
+  const requestedLimit = Math.min(parseInt(req.nextUrl.searchParams.get('limit') || '20'), 100)
 
   if (!url) {
     return NextResponse.json({ error: 'url query parameter is required' }, { status: 400 })
@@ -552,9 +565,24 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Database not configured' }, { status: 503 })
   }
 
+  // Determine plan to gate history depth
+  const { userId } = await auth()
+  let plan = 'free'
+  if (userId) {
+    const { data: userRow } = await supabase
+      .from('users')
+      .select('plan')
+      .eq('clerk_id', userId)
+      .single()
+    plan = userRow?.plan ?? 'free'
+  }
+
+  // Free plan: show only the latest 1 scan; solo/agency: up to 12
+  const limit = plan === 'free' ? 1 : Math.min(requestedLimit, 12)
+
   const { data, error } = await supabase
     .from('aeo_scans')
-    .select('id, url, score, passed, failed, rules_version, scanned_at')
+    .select('id, url, score, passed, failed, rules_version, scanned_at, checks')
     .eq('url', url.replace(/\/+$/, ''))
     .order('scanned_at', { ascending: false })
     .limit(limit)
@@ -568,5 +596,6 @@ export async function GET(req: NextRequest) {
     url,
     scans: data || [],
     total: data?.length || 0,
+    plan,
   })
 }
