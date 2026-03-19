@@ -5,6 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 
+const ORANGE = "#FF6B35";
+const NAVY = "#1B2A4A";
+const WARM_WHITE = "#FAFAF7";
+const SLATE = "#636E72";
+
 const plans = [
   {
     name: "Free",
@@ -143,16 +148,19 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen" style={{ background: WARM_WHITE, color: NAVY }}>
       {/* Nav */}
-      <nav className="border-b border-white/10 px-6 py-4">
+      <nav className="border-b border-black/5 px-6 py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <span className="text-2xl">🔦</span>
-            <span className="text-xl font-bold text-[#FFD700]">LocalBeacon.ai</span>
+            <span className="text-xl font-bold" style={{ color: NAVY }}>LocalBeacon.ai</span>
           </Link>
           <Link href="/sign-up">
-            <Button className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold">
+            <Button
+              className="font-semibold text-white"
+              style={{ background: ORANGE }}
+            >
               Connect Your Google Listing
             </Button>
           </Link>
@@ -161,29 +169,32 @@ export default function PricingPage() {
 
       {/* Header */}
       <section className="px-6 pt-20 pb-8 text-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
-          More calls for less than <span className="text-[#FFD700]">$2/day</span>
+        <h1 className="text-4xl md:text-5xl font-extrabold mb-4" style={{ color: NAVY }}>
+          More calls for less than <span style={{ color: ORANGE }}>$2/day</span>
         </h1>
-        <p className="text-white/50 text-lg max-w-xl mx-auto mb-8">
+        <p className="text-lg max-w-xl mx-auto mb-8" style={{ color: SLATE }}>
           Start free. Upgrade when you see the results. No contracts, cancel anytime.
         </p>
 
         {/* Comparison callout */}
-        <div className="inline-flex flex-wrap items-center justify-center gap-3 bg-white/5 border border-white/10 rounded-full px-6 py-3 text-sm mb-4">
-          <span className="text-white/40">Compare:</span>
+        <div
+          className="inline-flex flex-wrap items-center justify-center gap-3 rounded-full px-6 py-3 text-sm mb-4"
+          style={{ background: "white", border: "1px solid #DFE6E9" }}
+        >
+          <span style={{ color: SLATE }}>Compare:</span>
           <div className="flex items-center gap-1.5">
-            <span className="text-white/60">SEO Agency</span>
-            <span className="line-through text-white/30">$800–1,500/mo</span>
+            <span style={{ color: SLATE }}>SEO Agency</span>
+            <span className="line-through" style={{ color: "#B2BEC3" }}>$800–1,500/mo</span>
           </div>
-          <span className="text-white/20">|</span>
+          <span style={{ color: "#DFE6E9" }}>|</span>
           <div className="flex items-center gap-1.5">
-            <span className="text-white/60">BrightLocal</span>
-            <span className="line-through text-white/30">$39–59/mo</span>
+            <span style={{ color: SLATE }}>BrightLocal</span>
+            <span className="line-through" style={{ color: "#B2BEC3" }}>$39–59/mo</span>
           </div>
-          <span className="text-white/20">|</span>
+          <span style={{ color: "#DFE6E9" }}>|</span>
           <div className="flex items-center gap-1.5">
-            <span className="text-[#FFD700] font-bold">LocalBeacon</span>
-            <span className="text-[#FFD700] font-bold">$49/mo</span>
+            <span className="font-bold" style={{ color: ORANGE }}>LocalBeacon</span>
+            <span className="font-bold" style={{ color: ORANGE }}>$49/mo</span>
           </div>
         </div>
       </section>
@@ -199,48 +210,70 @@ export default function PricingPage() {
               <Card
                 key={plan.name}
                 id={isDfy ? "dfy" : undefined}
-                className={`relative flex flex-col ${
-                  plan.highlight
-                    ? "bg-[#FFD700]/10 border-[#FFD700] shadow-lg shadow-[#FFD700]/10"
+                className="relative flex flex-col"
+                style={{
+                  background: isDfy
+                    ? "linear-gradient(180deg, #FFFDF5, #FFF8E7)"
+                    : "white",
+                  border: plan.highlight
+                    ? `2px solid ${ORANGE}`
                     : isDfy
-                    ? "bg-gradient-to-b from-[#FFFDF5]/10 to-[#FFF8E7]/10 border-[#D4A017] shadow-lg shadow-[#D4A017]/20"
-                    : isManaged
-                    ? "bg-white/5 border-white/20"
-                    : "bg-white/5 border-white/10"
-                }`}
+                    ? "2px solid #D4A017"
+                    : "1px solid #DFE6E9",
+                  boxShadow: plan.highlight
+                    ? `0 4px 24px ${ORANGE}20`
+                    : isDfy
+                    ? "0 4px 24px #D4A01720"
+                    : "0 1px 3px rgba(0,0,0,0.04)",
+                }}
               >
                 {plan.highlight && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <Badge className="bg-[#FFD700] text-black font-bold px-4">Most Popular</Badge>
+                    <Badge
+                      className="font-bold px-4 text-white"
+                      style={{ background: ORANGE }}
+                    >
+                      Most Popular
+                    </Badge>
                   </div>
                 )}
                 {isDfy && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <Badge className="bg-gradient-to-r from-[#B8860B] to-[#FFD700] text-black font-bold px-4">
+                    <Badge
+                      className="font-bold px-4 text-white"
+                      style={{ background: "linear-gradient(90deg, #B8860B, #D4A017)" }}
+                    >
                       White Glove
                     </Badge>
                   </div>
                 )}
                 {isManaged && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <Badge className="bg-white/10 text-white/70 border border-white/20 font-medium px-4">
+                    <Badge
+                      className="font-medium px-4"
+                      style={{ background: "#F0EDE8", color: SLATE, border: "1px solid #DFE6E9" }}
+                    >
                       After DFY setup
                     </Badge>
                   </div>
                 )}
                 <CardContent className="p-6 pt-8 flex-1 flex flex-col">
-                  <p className="text-sm text-white/50 uppercase tracking-wider font-semibold">{plan.name}</p>
+                  <p className="text-sm uppercase tracking-wider font-semibold" style={{ color: SLATE }}>
+                    {plan.name}
+                  </p>
                   <div className="flex items-baseline gap-1 mt-2 mb-1">
-                    <span className="text-5xl font-extrabold text-white">{plan.price}</span>
-                    <span className="text-white/50 text-sm">{plan.period}</span>
+                    <span className="text-5xl font-extrabold" style={{ color: NAVY }}>
+                      {plan.price}
+                    </span>
+                    <span className="text-sm" style={{ color: SLATE }}>{plan.period}</span>
                   </div>
-                  <p className="text-white/60 text-sm mb-6">{plan.tagline}</p>
+                  <p className="text-sm mb-6" style={{ color: SLATE }}>{plan.tagline}</p>
                   <ul className="space-y-3 mb-8 flex-1">
                     {plan.outcomes.map((o) => (
-                      <li key={o} className="flex items-start gap-2 text-sm text-white/80">
+                      <li key={o} className="flex items-start gap-2 text-sm" style={{ color: "#2D3436" }}>
                         <span
                           className="mt-0.5 shrink-0 font-bold"
-                          style={{ color: isDfy ? "#D4A017" : "#FFD700" }}
+                          style={{ color: isDfy ? "#B8860B" : ORANGE }}
                         >
                           ✓
                         </span>
@@ -252,8 +285,9 @@ export default function PricingPage() {
                   {plan.name === "Free" ? (
                     <Link href={plan.href!}>
                       <Button
-                        className="w-full font-semibold h-12 text-base border border-white/20 bg-transparent text-white hover:bg-white/10"
+                        className="w-full font-semibold h-12 text-base"
                         variant="outline"
+                        style={{ border: `1px solid #DFE6E9`, color: NAVY }}
                       >
                         {plan.cta}
                       </Button>
@@ -262,28 +296,27 @@ export default function PricingPage() {
                     <Button
                       onClick={() => plan.plan && handleCheckout(plan.plan)}
                       disabled={loading !== null}
-                      className={`w-full font-semibold h-12 text-base ${
-                        plan.highlight
-                          ? "bg-[#FFD700] text-black hover:bg-[#FFD700]/90"
+                      className="w-full font-semibold h-12 text-base text-white"
+                      style={{
+                        background: plan.highlight
+                          ? ORANGE
                           : isDfy
-                          ? "text-black hover:opacity-90 shadow-md shadow-[#B8860B]/30"
-                          : "border border-white/20 bg-transparent text-white hover:bg-white/10"
-                      }`}
-                      style={
-                        isDfy
-                          ? { background: "linear-gradient(90deg, #B8860B 0%, #FFD700 100%)" }
-                          : undefined
-                      }
-                      variant={plan.highlight || isDfy ? "default" : "outline"}
+                          ? "linear-gradient(90deg, #B8860B, #D4A017)"
+                          : NAVY,
+                      }}
                     >
                       {loading === plan.plan ? "Redirecting to checkout..." : plan.cta}
                     </Button>
                   )}
                   {plan.name === "Free" && (
-                    <p className="text-white/30 text-xs text-center mt-2">No credit card required</p>
+                    <p className="text-xs text-center mt-2" style={{ color: "#B2BEC3" }}>
+                      No credit card required
+                    </p>
                   )}
                   {isDfy && (
-                    <p className="text-white/30 text-xs text-center mt-2">One-time payment, not a subscription</p>
+                    <p className="text-xs text-center mt-2" style={{ color: "#B2BEC3" }}>
+                      One-time payment, not a subscription
+                    </p>
                   )}
                 </CardContent>
               </Card>
@@ -293,9 +326,11 @@ export default function PricingPage() {
       </section>
 
       {/* What you get section */}
-      <section className="px-6 py-16 bg-white/[0.02] border-t border-white/10">
+      <section className="px-6 py-16" style={{ background: "white", borderTop: "1px solid #DFE6E9" }}>
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-2xl font-bold mb-8">Everything included — no hidden fees</h2>
+          <h2 className="text-2xl font-bold mb-8" style={{ color: NAVY }}>
+            Everything included — no hidden fees
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-left">
             {[
               { emoji: "📝", label: "AI-written Google posts" },
@@ -308,9 +343,13 @@ export default function PricingPage() {
               { emoji: "📱", label: "Works on mobile" },
               { emoji: "🔍", label: "Listing health audit" },
             ].map((f) => (
-              <div key={f.label} className="flex items-center gap-3 p-3 rounded-lg bg-white/5">
+              <div
+                key={f.label}
+                className="flex items-center gap-3 p-3 rounded-lg"
+                style={{ background: WARM_WHITE }}
+              >
                 <span className="text-xl">{f.emoji}</span>
-                <span className="text-white/70 text-sm">{f.label}</span>
+                <span className="text-sm" style={{ color: "#2D3436" }}>{f.label}</span>
               </div>
             ))}
           </div>
@@ -318,16 +357,16 @@ export default function PricingPage() {
       </section>
 
       {/* FAQ */}
-      <section className="px-6 py-20">
+      <section className="px-6 py-20" style={{ background: WARM_WHITE }}>
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">
-            Frequently asked <span className="text-[#FFD700]">questions</span>
+          <h2 className="text-3xl font-bold text-center mb-12" style={{ color: NAVY }}>
+            Frequently asked <span style={{ color: ORANGE }}>questions</span>
           </h2>
           <div className="space-y-6">
             {faqs.map((faq) => (
-              <div key={faq.q} className="border-b border-white/10 pb-6">
-                <h3 className="text-white font-semibold text-base mb-2">{faq.q}</h3>
-                <p className="text-white/50 text-sm leading-relaxed">{faq.a}</p>
+              <div key={faq.q} className="pb-6" style={{ borderBottom: "1px solid #DFE6E9" }}>
+                <h3 className="font-semibold text-base mb-2" style={{ color: NAVY }}>{faq.q}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: SLATE }}>{faq.a}</p>
               </div>
             ))}
           </div>
@@ -335,16 +374,17 @@ export default function PricingPage() {
       </section>
 
       {/* Bottom CTA */}
-      <section className="px-6 py-16 border-t border-white/10">
+      <section className="px-6 py-16" style={{ background: "white", borderTop: "1px solid #DFE6E9" }}>
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-2xl font-bold mb-4">Ready to get more calls?</h2>
-          <p className="text-white/50 mb-6">
+          <h2 className="text-2xl font-bold mb-4" style={{ color: NAVY }}>Ready to get more calls?</h2>
+          <p className="mb-6" style={{ color: SLATE }}>
             Connect your Google listing and see your first posts in under 2 minutes.
           </p>
           <Link href="/sign-up">
             <Button
               size="lg"
-              className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-bold text-lg px-10 py-6"
+              className="font-bold text-lg px-10 py-6 text-white"
+              style={{ background: ORANGE }}
             >
               Connect Your Google Listing — Free
             </Button>
@@ -353,13 +393,13 @@ export default function PricingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="px-6 py-8 border-t border-white/10">
+      <footer className="px-6 py-8" style={{ borderTop: "1px solid #DFE6E9" }}>
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <Link href="/" className="flex items-center gap-2">
             <span className="text-xl">🔦</span>
-            <span className="font-bold text-[#FFD700]">LocalBeacon.ai</span>
+            <span className="font-bold" style={{ color: NAVY }}>LocalBeacon.ai</span>
           </Link>
-          <p className="text-white/30 text-xs">
+          <p className="text-xs" style={{ color: "#B2BEC3" }}>
             © {new Date().getFullYear()} LocalBeacon. All rights reserved.
           </p>
         </div>
