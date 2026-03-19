@@ -1,17 +1,23 @@
 import { SignIn } from "@clerk/nextjs";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function SignInPage() {
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-center px-4">
+    <div className="min-h-screen bg-[#FAFAF7] flex flex-col items-center justify-center px-4">
       <div className="mb-8 text-center">
         <Link href="/" className="flex items-center gap-2 justify-center mb-4">
-          <span className="text-3xl">🔦</span>
-          <span className="text-2xl font-bold text-[#FFD700]">
+          <Image
+            src="/logo-48.png"
+            alt="LocalBeacon"
+            width={32}
+            height={32}
+          />
+          <span className="text-2xl font-bold text-[#1B2A4A]">
             LocalBeacon.ai
           </span>
         </Link>
-        <p className="text-white/50 text-sm">
+        <p className="text-[#1B2A4A]/50 text-sm">
           Your local business, always visible.
         </p>
       </div>
@@ -19,22 +25,22 @@ export default function SignInPage() {
         appearance={{
           elements: {
             rootBox: "w-full max-w-md",
-            card: "bg-[#111] border border-white/10 shadow-xl",
-            headerTitle: "text-white",
-            headerSubtitle: "text-white/60",
-            formFieldLabel: "text-white/70",
+            card: "bg-white border border-gray-200 shadow-xl",
+            headerTitle: "text-[#1B2A4A]",
+            headerSubtitle: "text-[#1B2A4A]/60",
+            formFieldLabel: "text-[#1B2A4A]/70",
             formFieldInput:
-              "bg-white/5 border-white/20 text-white placeholder:text-white/50 focus:border-[#FFD700]/50",
+              "bg-gray-50 border-gray-200 text-[#1B2A4A] placeholder:text-gray-400 focus:border-[#FF6B35]/50",
             formButtonPrimary:
-              "bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold",
-            footerActionLink: "text-[#FFD700] hover:text-[#FFD700]/80",
-            identityPreviewText: "text-white",
-            identityPreviewEditButton: "text-[#FFD700]",
-            dividerLine: "bg-white/10",
-            dividerText: "text-white/70",
+              "bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold",
+            footerActionLink: "text-[#FF6B35] hover:text-[#FF6B35]/80",
+            identityPreviewText: "text-[#1B2A4A]",
+            identityPreviewEditButton: "text-[#FF6B35]",
+            dividerLine: "bg-gray-200",
+            dividerText: "text-gray-400",
             socialButtonsBlockButton:
-              "bg-white/5 border-white/20 text-white hover:bg-white/10",
-            socialButtonsBlockButtonText: "text-white",
+              "bg-gray-50 border-gray-200 text-[#1B2A4A] hover:bg-gray-100",
+            socialButtonsBlockButtonText: "text-[#1B2A4A]",
           },
         }}
       />
