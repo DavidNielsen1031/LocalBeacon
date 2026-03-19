@@ -1,6 +1,7 @@
 'use client'
 export const dynamic = 'force-dynamic'
 import { useState } from 'react'
+import { posthog } from '@/lib/posthog'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { getAllPlatforms, getInstructions, type Platform } from '@/lib/deployment-instructions'
@@ -58,6 +59,7 @@ export default function LlmsTxtPage() {
       })
       const data = await res.json()
       setResult(data)
+      try { posthog.capture('tool_used', { tool: 'llms-txt' }) } catch {}
     } catch {
       // fallback
     } finally {

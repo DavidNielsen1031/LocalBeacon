@@ -1,6 +1,7 @@
 'use client'
 export const dynamic = 'force-dynamic'
 import { useState, useEffect, useMemo } from 'react'
+import { posthog } from '@/lib/posthog'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { getRecommendations } from '@/lib/aeo-recommendations'
@@ -157,6 +158,8 @@ export default function AIReadinessPage() {
         setError(data.error)
       } else {
         setResult(data)
+        // Analytics: tool used
+        try { posthog.capture('tool_used', { tool: 'ai-readiness' }) } catch {}
         // Fetch history after scan completes (includes the new scan)
         fetchHistory(url)
       }

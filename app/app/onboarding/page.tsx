@@ -1,6 +1,7 @@
 'use client'
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { posthog } from '@/lib/posthog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -29,21 +30,45 @@ interface GeneratedPost {
   call_to_action: string
 }
 
-export default function OnboardingPage() {
+function OnboardingContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [areaInput, setAreaInput] = useState('')
   const [generatedPost, setGeneratedPost] = useState<GeneratedPost | null>(null)
   const [copied, setCopied] = useState(false)
+  const [prefillScore, setPrefillScore] = useState<number | null>(null)
 
   const [data, setData] = useState<BusinessData>({
     name: '', category: '', primary_city: '', primary_state: '',
     phone: '', website: '', service_areas: [],
   })
 
+  // Pre-fill from /check query params
+  useEffect(() => {
+    const urlParam = searchParams.get('url')
+    const emailParam = searchParams.get('email')
+    const scoreParam = searchParams.get('score')
+    if (urlParam || emailParam) {
+      setData(prev => ({
+        ...prev,
+        website: urlParam || prev.website,
+      }))
+    }
+    if (scoreParam) {
+      const parsed = parseInt(scoreParam, 10)
+      if (!isNaN(parsed)) setPrefillScore(parsed)
+    }
+  }, [searchParams])
+
   const update = (field: keyof BusinessData, value: string) =>
     setData(prev => ({ ...prev, [field]: value }))
+
+  const goToStep = (s: number) => {
+    setStep(s)
+    try { posthog.capture('onboarding_step', { step: s }) } catch {}
+  }
 
   const addArea = () => {
     if (areaInput.trim() && !data.service_areas.includes(areaInput.trim())) {
@@ -122,7 +147,7 @@ export default function OnboardingPage() {
     const post = await generateFirstPost(businessId)
     setGeneratedPost(post)
     setLoading(false)
-    setStep(4)
+    goToStep(4)
   }
 
   const copyPost = () => {
@@ -165,7 +190,14 @@ export default function OnboardingPage() {
         {step === 1 && (
           <div>
             <h1 className="text-2xl font-bold text-[#1B2A4A] mb-2">Tell us about your business</h1>
-            <p className="text-[#636E72] mb-8">We&apos;ll use this to generate locally-targeted content.</p>
+            <div className="flex items-center gap-3 mb-8">
+              <p className="text-[#636E72]">We&apos;ll use this to generate locally-targeted content.</p>
+              {prefillScore !== null && (
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-[#FF6B35]/10 text-[#FF6B35] border border-[#FF6B35]/30">
+                  Score: {prefillScore}/100
+                </span>
+              )}
+            </div>
             <div className="space-y-5">
               <div>
                 <Label className="text-[#2D3436] mb-2 block">Business Name *</Label>
@@ -229,7 +261,7 @@ export default function OnboardingPage() {
                 />
               </div>
               <Button
-                onClick={() => setStep(2)}
+                onClick={() => goToStep(2)}
                 disabled={!data.name || !data.category || !data.primary_city || !data.primary_state}
                 className="w-full bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold h-11 mt-2"
               >
@@ -274,10 +306,10 @@ export default function OnboardingPage() {
                 <p className="text-[#636E72] text-sm text-center py-4">No service areas added yet. We&apos;ll default to {data.primary_city}.</p>
               )}
               <div className="flex gap-3 pt-2">
-                <Button onClick={() => setStep(1)} variant="outline" className="border-[#DFE6E9] text-[#636E72] hover:bg-[#DFE6E9]/50 flex-1">
+                <Button onClick={() => goToStep(1)} variant="outline" className="border-[#DFE6E9] text-[#636E72] hover:bg-[#DFE6E9]/50 flex-1">
                   ← Back
                 </Button>
-                <Button onClick={() => setStep(3)} className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold flex-1">
+                <Button onClick={() => goToStep(3)} className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold flex-1">
                   Continue →
                 </Button>
               </div>
@@ -356,7 +388,7 @@ export default function OnboardingPage() {
                 </Card>
               ))}
             </div>
-            <button onClick={() => setStep(2)} className="text-[#636E72] text-sm mt-4 w-full text-center hover:text-[#2D3436]">
+            <button onClick={() => goToStep(2)} className="text-[#636E72] text-sm mt-4 w-full text-center hover:text-[#2D3436]">
               ← Back
             </button>
           </div>
@@ -406,5 +438,14 @@ export default function OnboardingPage() {
         )}
       </div>
     </div>
+  )
+}
+
+
+export default function OnboardingPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#FAFAF7] flex items-center justify-center"><span className="text-[#636E72]">Loading...</span></div>}>
+      <OnboardingContent />
+    </Suspense>
   )
 }

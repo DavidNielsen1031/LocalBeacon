@@ -1,11 +1,10 @@
 # Sprint State — LocalBeacon
 
-**Current Sprint:** 18
-**Theme:** Pricing Restructure + Tier Gating + DFY Upsells
-**Status:** CLOSED
-**Branch:** main (hotfix flow — rapid iteration with David live)
+**Current Sprint:** 19
+**Theme:** Analytics + Onboarding Polish + Design Review
+**Status:** EXECUTING
+**Branch:** main (rapid iteration — David approved)
 **Started:** 2026-03-18
-**Closed:** 2026-03-18
 
 ## History
 

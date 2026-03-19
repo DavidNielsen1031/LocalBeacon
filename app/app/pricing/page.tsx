@@ -4,6 +4,15 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { posthog } from "@/lib/posthog";
 
 const ORANGE = "#FF6B35";
 const NAVY = "#1B2A4A";
@@ -121,8 +130,11 @@ const faqs = [
 
 export default function PricingPage() {
   const [loading, setLoading] = useState<string | null>(null);
+  const [showDfyConfirm, setShowDfyConfirm] = useState(false);
 
   const handleCheckout = async (plan: "SOLO" | "AGENCY" | "DFY") => {
+    // Analytics: checkout clicked
+    try { posthog.capture('checkout_clicked', { plan }) } catch {}
     setLoading(plan);
     try {
       const mode = plan === "DFY" ? "payment" : "subscription";
@@ -294,7 +306,14 @@ export default function PricingPage() {
                     </Link>
                   ) : (
                     <Button
-                      onClick={() => plan.plan && handleCheckout(plan.plan)}
+                      onClick={() => {
+                        if (!plan.plan) return;
+                        if ((plan as any).premium) {
+                          setShowDfyConfirm(true);
+                        } else {
+                          handleCheckout(plan.plan);
+                        }
+                      }}
                       disabled={loading !== null}
                       className="w-full font-semibold h-12 text-base text-white"
                       style={{
@@ -404,6 +423,55 @@ export default function PricingPage() {
           </p>
         </div>
       </footer>
+
+      {/* DFY Confirmation Dialog */}
+      <Dialog open={showDfyConfirm} onOpenChange={setShowDfyConfirm}>
+        <DialogContent className="max-w-md bg-white">
+          <DialogHeader>
+            <DialogTitle className="text-[#1B2A4A] text-xl font-bold">Confirm DFY Setup Purchase</DialogTitle>
+            <DialogDescription className="text-[#636E72] mt-2">
+              You&apos;re about to purchase the Done-For-You Setup for $499 (one-time payment).
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <p className="text-sm font-semibold text-[#1B2A4A] mb-3">What&apos;s included:</p>
+            <ul className="space-y-2">
+              {[
+                "Schema markup installed on your site",
+                "llms.txt deployed to your domain",
+                "15-25 localized FAQs written & installed",
+                "Platform-specific implementation",
+                "Dedicated onboarding call",
+                "Full AEO audit with prioritized fixes",
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-2 text-sm text-[#2D3436]">
+                  <span className="text-[#FF6B35] font-bold mt-0.5">✓</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <DialogFooter className="flex gap-3">
+            <Button
+              variant="outline"
+              onClick={() => setShowDfyConfirm(false)}
+              className="flex-1 border-[#DFE6E9] text-[#636E72]"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                setShowDfyConfirm(false);
+                handleCheckout("DFY");
+              }}
+              className="flex-1 font-semibold text-white"
+              style={{ background: ORANGE }}
+            >
+              Continue to Checkout
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

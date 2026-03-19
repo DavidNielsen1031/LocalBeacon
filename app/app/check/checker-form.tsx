@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { posthog } from '@/lib/posthog'
 
 interface CheckResult {
   id: string
@@ -106,6 +107,8 @@ export function CheckerForm() {
       const data: ScanResult = await res.json()
       setResult(data)
       recordScan()
+      // Analytics: scan completed
+      try { posthog.capture('scan_completed', { url: data.url, score: data.score }) } catch {}
 
       // If competitor URL provided, scan that too
       if (showCompetitor && competitorUrl.trim()) {
@@ -132,6 +135,8 @@ export function CheckerForm() {
     if (!email.trim() || !result) return
 
     setEmailSaving(true)
+    // Analytics: email submitted
+    try { posthog.capture('email_submitted', { url: result.url, score: result.score }) } catch {}
     try {
       await fetch('/api/leads', {
         method: 'POST',
@@ -430,7 +435,7 @@ export function CheckerForm() {
               LocalBeacon handles your local marketing — we fix your AI visibility and keep it growing.
             </p>
             <a
-              href="/sign-up"
+              href={`/sign-up?url=${encodeURIComponent(result.url)}&score=${result.score}${email ? `&email=${encodeURIComponent(email)}` : ''}`}
               className="inline-block px-8 py-3 bg-[#FF6B35] text-white font-semibold rounded-lg hover:bg-[#FF6B35]/90 transition-colors"
             >
               Start Free →

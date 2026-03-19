@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans, Fraunces } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { PostHogProvider } from "@/components/posthog-provider";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -96,7 +97,9 @@ export default function RootLayout({
         className={`${dmSans.variable} ${fraunces.variable} antialiased`}
         style={{ backgroundColor: "#FAFAF7", color: "#2D3436", fontFamily: "var(--font-dm-sans), sans-serif" }}
       >
-        {children}
+        <PostHogProvider>
+          {children}
+        </PostHogProvider>
       </body>
     </html>
   );

@@ -50,12 +50,15 @@ export default async function DashboardLayout({
       initialActiveId={businesses[0]?.id || null}
       plan={plan}
     >
-      <div className="flex min-h-screen bg-[#FAFAF7] text-[#2D3436]">
-        <DashboardSidebar />
-        <main className="flex-1 flex flex-col min-h-screen">
-          <DegradedBanner />
-          {children}
-        </main>
+      <div className="min-h-screen bg-[#FAFAF7] text-[#2D3436]">
+        {/* The sidebar renders the mobile sticky top bar + desktop aside */}
+        <div className="flex flex-col md:flex-row min-h-screen">
+          <DashboardSidebar />
+          <main className="flex-1 flex flex-col min-h-0 min-w-0">
+            <DegradedBanner />
+            {children}
+          </main>
+        </div>
       </div>
     </BusinessProvider>
   );

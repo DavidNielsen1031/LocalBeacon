@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 import { useState } from 'react'
 import { useBusinessContext } from '@/components/business-context'
 import { UpgradeGate } from '@/components/upgrade-gate'
+import { posthog } from '@/lib/posthog'
 
 function generateLocalBusinessSchema(biz: {
   name: string
@@ -182,7 +183,10 @@ export default function SchemaPage() {
     navigator.clipboard.writeText(scriptTag)
     setCopied(type)
     setTimeout(() => setCopied(null), 2000)
+    try { posthog.capture('tool_used', { tool: 'schema' }) } catch {}
   }
+
+
 
   return (
     <div className="p-6 md:p-8 max-w-5xl">
