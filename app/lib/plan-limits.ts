@@ -6,6 +6,12 @@ export interface PlanLimits {
   postsPerMonth: number | null  // null = unlimited
   cityPages: number | null
   locations: number | null
+  scansPerMonth: number | null
+  faqGenerations: number | null
+  reviewResponses: number | null
+  competitors: number | null
+  blogPosts: number | null
+  monthlyReports: boolean
 }
 
 export interface UsageCheck {
@@ -18,10 +24,49 @@ export interface UsageCheck {
 }
 
 const PLAN_LIMITS: Record<PlanTier, PlanLimits> = {
-  free: { postsPerMonth: 5, cityPages: 3, locations: 1 },
-  solo: { postsPerMonth: null, cityPages: 10, locations: 3 },
-  agency: { postsPerMonth: null, cityPages: null, locations: null },
+  free: {
+    postsPerMonth: 5,
+    cityPages: 3,
+    locations: 1,
+    scansPerMonth: 1,
+    faqGenerations: 1,
+    reviewResponses: 3,
+    competitors: 1,
+    blogPosts: 0,
+    monthlyReports: false,
+  },
+  solo: {
+    postsPerMonth: null,
+    cityPages: 10,
+    locations: 3,
+    scansPerMonth: null,
+    faqGenerations: null,
+    reviewResponses: null,
+    competitors: 5,
+    blogPosts: 4,
+    monthlyReports: true,
+  },
+  agency: {
+    postsPerMonth: null,
+    cityPages: null,
+    locations: null,
+    scansPerMonth: null,
+    faqGenerations: null,
+    reviewResponses: null,
+    competitors: 10,
+    blogPosts: null,
+    monthlyReports: true,
+  },
 }
+
+export type ContentType =
+  | 'gbp_post'
+  | 'city_page'
+  | 'review_reply'
+  | 'blog_post'
+  | 'faq'
+  | 'aeo_scan'
+  | 'competitor_scan'
 
 /**
  * Get the user's current plan tier from Supabase.
@@ -49,7 +94,7 @@ export async function getUserPlan(clerkUserId: string): Promise<PlanTier> {
  */
 async function getMonthlyUsage(
   userId: string,
-  type: 'gbp_post' | 'city_page' | 'review_reply' | 'blog_post' | 'faq'
+  type: ContentType
 ): Promise<number> {
   const supabase = createServerClient()
   if (!supabase) return 0
@@ -78,6 +123,16 @@ async function getMonthlyUsage(
   startOfMonth.setDate(1)
   startOfMonth.setHours(0, 0, 0, 0)
 
+  // AEO scans live in a separate table
+  if (type === 'aeo_scan') {
+    const { count } = await supabase
+      .from('aeo_scans')
+      .select('*', { count: 'exact', head: true })
+      .eq('business_id', business.id)
+      .gte('created_at', startOfMonth.toISOString())
+    return count ?? 0
+  }
+
   const { count } = await supabase
     .from('content_items')
     .select('*', { count: 'exact', head: true })
@@ -89,21 +144,53 @@ async function getMonthlyUsage(
 }
 
 /**
+ * Map a ContentType to the relevant PlanLimits key.
+ */
+function getLimitKey(contentType: ContentType): keyof PlanLimits | null {
+  switch (contentType) {
+    case 'gbp_post':      return 'postsPerMonth'
+    case 'city_page':     return 'cityPages'
+    case 'review_reply':  return 'reviewResponses'
+    case 'blog_post':     return 'blogPosts'
+    case 'faq':           return 'faqGenerations'
+    case 'aeo_scan':      return 'scansPerMonth'
+    case 'competitor_scan': return 'competitors'
+    default:              return null
+  }
+}
+
+/**
  * Check if the user can generate a specific content type.
  * Returns usage info including whether the action is allowed.
  */
 export async function checkUsage(
   clerkUserId: string,
-  contentType: 'gbp_post' | 'city_page'
+  contentType: ContentType
 ): Promise<UsageCheck> {
   const plan = await getUserPlan(clerkUserId)
   const limits = PLAN_LIMITS[plan]
   
-  const limitKey = contentType === 'gbp_post' ? 'postsPerMonth' : 'cityPages'
-  const limit = limits[limitKey]
+  const limitKey = getLimitKey(contentType)
+  if (!limitKey) {
+    return { allowed: true, plan, limit: null, used: 0, remaining: null, upgradeUrl: '/pricing' }
+  }
+
+  const limitValue = limits[limitKey]
+
+  // Boolean limits (monthlyReports)
+  if (typeof limitValue === 'boolean') {
+    return {
+      allowed: limitValue,
+      plan,
+      limit: limitValue ? null : 0,
+      used: 0,
+      remaining: null,
+      upgradeUrl: '/pricing',
+    }
+  }
 
   // Unlimited plan
-  if (limit === null) {
+  if (limitValue === null) {
     return {
       allowed: true,
       plan,
@@ -114,13 +201,25 @@ export async function checkUsage(
     }
   }
 
+  // Zero limit (feature not available on this plan at all)
+  if (limitValue === 0) {
+    return {
+      allowed: false,
+      plan,
+      limit: 0,
+      used: 0,
+      remaining: 0,
+      upgradeUrl: '/pricing',
+    }
+  }
+
   const used = await getMonthlyUsage(clerkUserId, contentType)
-  const remaining = Math.max(0, limit - used)
+  const remaining = Math.max(0, limitValue - used)
 
   return {
-    allowed: used < limit,
+    allowed: used < limitValue,
     plan,
-    limit,
+    limit: limitValue,
     used,
     remaining,
     upgradeUrl: '/pricing',
@@ -133,7 +232,7 @@ export async function checkUsage(
  */
 export async function enforceLimits(
   clerkUserId: string,
-  contentType: 'gbp_post' | 'city_page'
+  contentType: ContentType
 ): Promise<{ error: string; limit: number; used: number; plan: string; upgrade_url: string } | null> {
   const usage = await checkUsage(clerkUserId, contentType)
   
@@ -141,9 +240,17 @@ export async function enforceLimits(
 
   return {
     error: 'limit_reached',
-    limit: usage.limit!,
+    limit: usage.limit ?? 0,
     used: usage.used,
     plan: usage.plan,
     upgrade_url: usage.upgradeUrl,
   }
+}
+
+/**
+ * Get the plan limits object for a given tier.
+ * Useful for client-side display of limits.
+ */
+export function getPlanLimits(plan: PlanTier): PlanLimits {
+  return PLAN_LIMITS[plan]
 }

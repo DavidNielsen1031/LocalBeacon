@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { getAllPlatforms, getInstructions, type Platform } from '@/lib/deployment-instructions'
+import { useBusinessContext } from '@/components/business-context'
+import { UpgradeGate } from '@/components/upgrade-gate'
 
 interface LlmsTxtResult {
   content: string
@@ -13,6 +15,7 @@ interface LlmsTxtResult {
 }
 
 export default function LlmsTxtPage() {
+  const { plan } = useBusinessContext()
   const [businessName, setBusinessName] = useState('')
   const [category, setCategory] = useState('')
   const [city, setCity] = useState('')
@@ -195,7 +198,15 @@ export default function LlmsTxtPage() {
 
       {/* Result */}
       {result && (
-        <>
+        <UpgradeGate
+          feature="llms.txt Generator"
+          currentPlan={plan}
+          requiredPlan="solo"
+          previewMode="blur"
+          suggestDfy={true}
+          dfyContext="We'll deploy this file to your website for you."
+        >
+          <div>
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-bold text-[#2D3436]">Your llms.txt File</h2>
             <div className="flex gap-2">
@@ -254,7 +265,8 @@ export default function LlmsTxtPage() {
               </p>
             </CardContent>
           </Card>
-        </>
+          </div>
+        </UpgradeGate>
       )}
 
       {/* Empty state */}

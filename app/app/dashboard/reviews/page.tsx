@@ -8,6 +8,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Star } from 'lucide-react'
 import { EmptyState } from '@/components/empty-state'
+import { useBusinessContext } from '@/components/business-context'
+import { UpgradeGate } from '@/components/upgrade-gate'
 
 const STAR_RATINGS = [1, 2, 3, 4, 5]
 
@@ -21,6 +23,7 @@ interface DraftedResponse {
 }
 
 export default function ReviewsPage() {
+  const { plan } = useBusinessContext()
   const [author, setAuthor] = useState('')
   const [rating, setRating] = useState(5)
   const [comment, setComment] = useState('')
@@ -99,6 +102,8 @@ export default function ReviewsPage() {
     setResponse('')
   }
 
+  const reviewDraftCount = history.filter(h => !h.id.startsWith('demo-')).length
+
   return (
     <div className="flex-1 px-6 py-8 max-w-5xl">
       <div className="flex items-center justify-between mb-8">
@@ -110,6 +115,19 @@ export default function ReviewsPage() {
           Manual mode · GBP sync coming soon
         </Badge>
       </div>
+
+      {plan === 'free' && (
+        <UpgradeGate
+          feature="Review Responses"
+          currentPlan={plan}
+          requiredPlan="solo"
+          previewMode="limit"
+          usageCount={reviewDraftCount}
+          usageLimit={3}
+        >
+          <span />
+        </UpgradeGate>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Input form */}

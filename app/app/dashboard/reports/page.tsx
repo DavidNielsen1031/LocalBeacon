@@ -2,8 +2,9 @@ export const dynamic = 'force-dynamic'
 import { auth } from '@clerk/nextjs/server'
 import { createServerClient } from '@/lib/supabase'
 import { Card, CardContent } from '@/components/ui/card'
-import { BarChart3 } from 'lucide-react'
+import { BarChart3, Lock } from 'lucide-react'
 import { EmptyState } from '@/components/empty-state'
+import Link from 'next/link'
 
 async function getMonthlyData(clerkUserId: string) {
   const supabase = createServerClient()
@@ -11,7 +12,7 @@ async function getMonthlyData(clerkUserId: string) {
 
   const { data: user } = await supabase
     .from('users')
-    .select('id')
+    .select('id, plan')
     .eq('clerk_id', clerkUserId)
     .single()
 
@@ -115,12 +116,52 @@ async function getMonthlyData(clerkUserId: string) {
     aeoScore: aeoScan?.score ?? null,
     aeoDate: aeoScan?.scanned_at ?? null,
     monthName: now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
+    plan: (user.plan || 'free').toLowerCase() as 'free' | 'solo' | 'agency',
   }
 }
 
 export default async function ReportsPage() {
   const { userId } = await auth()
   const data = userId ? await getMonthlyData(userId) : null
+  const plan = data?.plan ?? 'free'
+
+  // Free plan: lock the whole reports page
+  if (plan === 'free') {
+    return (
+      <div className="flex-1 px-6 py-8 max-w-4xl">
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-[#2D3436]">Monthly Reports</h1>
+          <p className="text-[#636E72] mt-1 text-sm">Track your progress over time</p>
+        </div>
+        <div
+          className="rounded-xl border p-10 flex flex-col items-center text-center"
+          style={{ backgroundColor: '#FAFAF7', borderColor: '#DFE6E9' }}
+        >
+          <div
+            className="w-14 h-14 rounded-full flex items-center justify-center mb-4"
+            style={{ backgroundColor: 'rgba(255,107,53,0.12)' }}
+          >
+            <Lock size={24} style={{ color: '#FF6B35' }} />
+          </div>
+          <h3 className="text-base font-bold mb-1" style={{ color: '#1B2A4A' }}>
+            Monthly Reports
+          </h3>
+          <p className="text-sm mb-1" style={{ color: '#636E72' }}>Available on Solo plan</p>
+          <p className="text-xs mb-5" style={{ color: '#636E72' }}>
+            Upgrade to unlock monthly progress reports and track your AI visibility score over time.
+          </p>
+          <Link href="/pricing">
+            <button
+              className="rounded-lg px-6 py-2.5 text-sm font-bold text-white transition-opacity hover:opacity-90"
+              style={{ backgroundColor: '#FF6B35' }}
+            >
+              Upgrade — $49/mo →
+            </button>
+          </Link>
+        </div>
+      </div>
+    )
+  }
 
   const stats = [
     { label: 'Google Posts', value: data?.postsGenerated ?? 0, prev: data?.prevPosts ?? 0, icon: '📝' },

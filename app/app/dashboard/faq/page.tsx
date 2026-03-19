@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { getAllPlatforms, getInstructions, type Platform } from '@/lib/deployment-instructions'
+import { useBusinessContext } from '@/components/business-context'
+import { UpgradeGate } from '@/components/upgrade-gate'
 
 interface Faq {
   question: string
@@ -18,6 +20,7 @@ interface FaqResult {
 }
 
 export default function FaqBuilderPage() {
+  const { plan } = useBusinessContext()
   const [businessName, setBusinessName] = useState('')
   const [category, setCategory] = useState('')
   const [city, setCity] = useState('')
@@ -87,6 +90,21 @@ export default function FaqBuilderPage() {
           Generate FAQ content that AI search engines love to cite. When someone asks ChatGPT about your service, these answers show up.
         </p>
       </div>
+
+      {plan === 'free' && (
+        <UpgradeGate
+          feature="FAQ Generator"
+          currentPlan={plan}
+          requiredPlan="solo"
+          previewMode="limit"
+          usageCount={result ? 1 : 0}
+          usageLimit={1}
+          suggestDfy={true}
+          dfyContext="Want these installed on your site with proper schema markup?"
+        >
+          <span />
+        </UpgradeGate>
+      )}
 
       {/* Input form */}
       <Card className="bg-white border-[#DFE6E9]">

@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { FileText } from 'lucide-react'
 import { EmptyState } from '@/components/empty-state'
+import { useBusinessContext } from '@/components/business-context'
+import { UpgradeGate } from '@/components/upgrade-gate'
 
 const POST_TYPES = [
   { value: 'whats_new', label: "What's New", emoji: '📢' },
@@ -79,6 +81,7 @@ const STATUS_STYLES: Record<PostStatus, { bg: string; text: string; label: strin
 }
 
 export default function PostsPage() {
+  const { plan } = useBusinessContext()
   const [postType, setPostType] = useState('whats_new')
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<GeneratedPost | null>(null)
@@ -138,6 +141,8 @@ export default function PostsPage() {
   const drafts = posts.filter(p => p.status === 'draft').length
   const published = posts.filter(p => p.status === 'published').length
 
+  const publishedPostCount = posts.filter(p => p.status === 'published').length
+
   return (
     <div className="flex-1 px-6 py-8 max-w-4xl">
       <div className="flex items-center justify-between mb-6">
@@ -149,6 +154,19 @@ export default function PostsPage() {
           {posts.length} / 5 this week (Free)
         </Badge>
       </div>
+
+      {plan === 'free' && (
+        <UpgradeGate
+          feature="Google Posts"
+          currentPlan={plan}
+          requiredPlan="solo"
+          previewMode="limit"
+          usageCount={publishedPostCount}
+          usageLimit={5}
+        >
+          <span />
+        </UpgradeGate>
+      )}
 
       {/* Pipeline stats */}
       <div className="grid grid-cols-3 gap-3 mb-6">

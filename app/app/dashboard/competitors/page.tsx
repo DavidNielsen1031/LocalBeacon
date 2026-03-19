@@ -4,6 +4,8 @@ import { useState, useCallback } from 'react'
 import Link from 'next/link'
 import { Users } from 'lucide-react'
 import { EmptyState } from '@/components/empty-state'
+import { useBusinessContext } from '@/components/business-context'
+import { UpgradeGate } from '@/components/upgrade-gate'
 
 interface CheckResult {
   id: string
@@ -36,6 +38,7 @@ function getGrade(score: number): { letter: string; color: string } {
 }
 
 export default function CompetitorsPage() {
+  const { plan } = useBusinessContext()
   const [competitors, setCompetitors] = useState<CompetitorEntry[]>([])
   const [newUrl, setNewUrl] = useState('')
   const [myResult, setMyResult] = useState<ScanResult | null>(null)
@@ -89,6 +92,19 @@ export default function CompetitorsPage() {
           See how your AI visibility stacks up against your competitors
         </p>
       </div>
+
+      {plan === 'free' && (
+        <UpgradeGate
+          feature="Competitor Analysis"
+          currentPlan={plan}
+          requiredPlan="solo"
+          previewMode="limit"
+          usageCount={competitors.length}
+          usageLimit={1}
+        >
+          <span />
+        </UpgradeGate>
+      )}
 
       {/* Your site */}
       <div className="bg-white border border-[#DFE6E9] rounded-xl p-5 mb-6">

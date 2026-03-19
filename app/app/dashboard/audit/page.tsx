@@ -1,6 +1,8 @@
 'use client'
 export const dynamic = 'force-dynamic'
 import { useState } from 'react'
+import { useBusinessContext } from '@/components/business-context'
+import { UpgradeGate } from '@/components/upgrade-gate'
 
 interface AuditItem {
   id: string
@@ -34,6 +36,7 @@ const AUDIT_ITEMS: AuditItem[] = [
 ]
 
 export default function AuditPage() {
+  const { plan } = useBusinessContext()
   const [items, setItems] = useState(AUDIT_ITEMS)
 
   const toggleItem = (id: string) => {
@@ -101,38 +104,49 @@ export default function AuditPage() {
       </div>
 
       {/* Checklist sections */}
-      {[
-        { title: '🔴 Fix These First (Biggest Impact)', items: highItems, color: 'border-red-500/20' },
-        { title: '🟡 Important Improvements', items: mediumItems, color: 'border-yellow-500/20' },
-        { title: '🔵 Nice to Have', items: lowItems, color: 'border-blue-500/20' },
-      ].map(section => (
-        <div key={section.title} className="mb-6">
-          <h2 className="text-lg font-semibold text-[#2D3436] mb-3">{section.title}</h2>
-          <div className={`bg-white border ${section.color} rounded-xl overflow-hidden divide-y divide-white/5`}>
-            {section.items.map(item => (
-              <div
-                key={item.id}
-                className="flex items-start gap-4 p-4 hover:bg-[#FAFAF7] cursor-pointer transition-colors"
-                onClick={() => toggleItem(item.id)}
-              >
-                <div className={`w-6 h-6 rounded-md border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${
-                  item.completed
-                    ? 'bg-green-500/20 border-green-500/50 text-green-400'
-                    : 'border-[#DFE6E9] text-transparent hover:border-white/40'
-                }`}>
-                  {item.completed && '✓'}
-                </div>
-                <div className="flex-1">
-                  <span className={`text-sm font-medium ${item.completed ? 'text-[#636E72] line-through' : 'text-[#1B2A4A]'}`}>
-                    {item.label}
-                  </span>
-                  <p className="text-xs text-[#636E72]/60 mt-0.5">{item.description}</p>
-                </div>
+      <UpgradeGate
+        feature="Detailed Recommendations"
+        currentPlan={plan}
+        requiredPlan="solo"
+        previewMode="blur"
+        suggestDfy={true}
+        dfyContext="Fixing all of this yourself? We fix everything in 48 hours."
+      >
+        <div>
+          {[
+            { title: '🔴 Fix These First (Biggest Impact)', items: highItems, color: 'border-red-500/20' },
+            { title: '🟡 Important Improvements', items: mediumItems, color: 'border-yellow-500/20' },
+            { title: '🔵 Nice to Have', items: lowItems, color: 'border-blue-500/20' },
+          ].map(section => (
+            <div key={section.title} className="mb-6">
+              <h2 className="text-lg font-semibold text-[#2D3436] mb-3">{section.title}</h2>
+              <div className={`bg-white border ${section.color} rounded-xl overflow-hidden divide-y divide-white/5`}>
+                {section.items.map(item => (
+                  <div
+                    key={item.id}
+                    className="flex items-start gap-4 p-4 hover:bg-[#FAFAF7] cursor-pointer transition-colors"
+                    onClick={() => toggleItem(item.id)}
+                  >
+                    <div className={`w-6 h-6 rounded-md border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${
+                      item.completed
+                        ? 'bg-green-500/20 border-green-500/50 text-green-400'
+                        : 'border-[#DFE6E9] text-transparent hover:border-white/40'
+                    }`}>
+                      {item.completed && '✓'}
+                    </div>
+                    <div className="flex-1">
+                      <span className={`text-sm font-medium ${item.completed ? 'text-[#636E72] line-through' : 'text-[#1B2A4A]'}`}>
+                        {item.label}
+                      </span>
+                      <p className="text-xs text-[#636E72]/60 mt-0.5">{item.description}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-      ))}
+      </UpgradeGate>
     </div>
   )
 }

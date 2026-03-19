@@ -2,6 +2,7 @@
 export const dynamic = 'force-dynamic'
 import { useState } from 'react'
 import { useBusinessContext } from '@/components/business-context'
+import { UpgradeGate } from '@/components/upgrade-gate'
 
 function generateLocalBusinessSchema(biz: {
   name: string
@@ -144,7 +145,7 @@ const DEMO_BUSINESS = {
 export default function SchemaPage() {
   const [copied, setCopied] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<'business' | 'faq' | 'services'>('business')
-  const { activeBusiness } = useBusinessContext()
+  const { activeBusiness, plan } = useBusinessContext()
 
   // Use real business data if available, fall back to demo
   const biz = activeBusiness
@@ -227,23 +228,32 @@ export default function SchemaPage() {
       </div>
 
       {/* Schema display */}
-      <div className="bg-white border border-[#DFE6E9] rounded-xl overflow-hidden">
-        <div className="flex items-center justify-between p-4 border-b border-[#DFE6E9]">
-          <div>
-            <h3 className="text-[#1B2A4A] font-medium">{active.label} Schema</h3>
-            <p className="text-[#636E72] text-xs mt-0.5">{active.desc}</p>
+      <UpgradeGate
+        feature="Schema Markup Generator"
+        currentPlan={plan}
+        requiredPlan="solo"
+        previewMode="blur"
+        suggestDfy={true}
+        dfyContext="Don't want to touch code? Our team installs this for you."
+      >
+        <div className="bg-white border border-[#DFE6E9] rounded-xl overflow-hidden">
+          <div className="flex items-center justify-between p-4 border-b border-[#DFE6E9]">
+            <div>
+              <h3 className="text-[#1B2A4A] font-medium">{active.label} Schema</h3>
+              <p className="text-[#636E72] text-xs mt-0.5">{active.desc}</p>
+            </div>
+            <button
+              onClick={() => handleCopy(activeTab)}
+              className="bg-[#FF6B35] text-black font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#FF6B35]/90 transition-all"
+            >
+              {copied === activeTab ? '✓ Copied!' : 'Copy Code'}
+            </button>
           </div>
-          <button
-            onClick={() => handleCopy(activeTab)}
-            className="bg-[#FF6B35] text-black font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#FF6B35]/90 transition-all"
-          >
-            {copied === activeTab ? '✓ Copied!' : 'Copy Code'}
-          </button>
+          <pre className="p-4 text-sm text-green-400/80 overflow-x-auto leading-relaxed" style={{ maxHeight: '400px' }}>
+            <code>{scriptTag}</code>
+          </pre>
         </div>
-        <pre className="p-4 text-sm text-green-400/80 overflow-x-auto leading-relaxed" style={{ maxHeight: '400px' }}>
-          <code>{scriptTag}</code>
-        </pre>
-      </div>
+      </UpgradeGate>
 
       {/* Google preview */}
       <div className="mt-8">

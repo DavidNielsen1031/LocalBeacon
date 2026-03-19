@@ -95,8 +95,32 @@ export default function DashboardPage() {
         { Icon: Zap, text: "Check your AI Readiness score", time: "Step 4", action: "/dashboard/ai-readiness" },
       ];
 
+  const [upgradeBannerDismissed, setUpgradeBannerDismissed] = useState(false)
+
   return (
     <div className="flex-1 px-6 py-8 max-w-6xl">
+      {/* Free plan upgrade banner */}
+      {plan === 'free' && !upgradeBannerDismissed && (
+        <div
+          className="mb-6 rounded-xl border flex items-center justify-between gap-4 px-5 py-3"
+          style={{ backgroundColor: 'rgba(255,107,53,0.06)', borderColor: 'rgba(255,107,53,0.25)' }}
+        >
+          <p className="text-sm" style={{ color: '#2D3436' }}>
+            You&apos;re on the <strong>Free plan</strong>. Upgrade to Solo for unlimited access —{' '}
+            <a href="/pricing" className="font-bold underline" style={{ color: '#FF6B35' }}>
+              $49/mo →
+            </a>
+          </p>
+          <button
+            onClick={() => setUpgradeBannerDismissed(true)}
+            className="text-xs shrink-0"
+            style={{ color: '#636E72' }}
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       {/* Welcome banner */}
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-1">

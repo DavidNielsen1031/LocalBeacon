@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { getRecommendations } from '@/lib/aeo-recommendations'
 import { AeoRecommendations } from '@/components/aeo-recommendations'
+import { useBusinessContext } from '@/components/business-context'
+import { UpgradeGate } from '@/components/upgrade-gate'
 
 interface CheckResult {
   id: string
@@ -117,6 +119,7 @@ function getGradeLabel(score: number): { label: string; color: string; emoji: st
 }
 
 export default function AIReadinessPage() {
+  const { plan } = useBusinessContext()
   const [url, setUrl] = useState('')
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<ScanResult | null>(null)
@@ -185,6 +188,22 @@ export default function AIReadinessPage() {
           Check if AI assistants like ChatGPT, Siri, and Perplexity can find and recommend your business.
         </p>
       </div>
+
+      {plan === 'free' && (
+        <UpgradeGate
+          feature="AI Readiness Scans"
+          currentPlan={plan}
+          requiredPlan="solo"
+          previewMode="limit"
+          usageCount={history.length}
+          usageLimit={1}
+          suggestDfy={true}
+          dfyContext="Fixing all of this yourself? Our team handles it all."
+        >
+          {/* children intentionally empty — limit mode shows usage counter + allows content when under limit */}
+          <span />
+        </UpgradeGate>
+      )}
 
       {/* URL Input */}
       <Card className="bg-white border-[#DFE6E9]">

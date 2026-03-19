@@ -15,11 +15,13 @@ const plans = [
       "5 Google posts per month",
       "3 local city pages",
       "1 business location",
+      "1 AI Readiness scan/month",
       "Copy & post to Google yourself",
     ],
     cta: "Connect Your Google Listing",
     href: "/sign-up",
     highlight: false,
+    plan: null,
   },
   {
     name: "Solo",
@@ -29,36 +31,55 @@ const plans = [
     outcomes: [
       "Unlimited Google post drafts — generated weekly",
       "10 local city pages with SEO optimization",
-      "AI-written review replies",
-      "Blog post generator",
-      "AI Readiness score & recommendations",
+      "Unlimited AI-written review replies",
+      "Blog post generator (4/month)",
+      "Unlimited AI Readiness scans",
       "Schema markup & llms.txt generator",
+      "Monthly progress reports",
       "Up to 3 business locations",
     ],
     cta: "Start Solo — $49/mo",
-    href: "/sign-up",
+    href: null,
     highlight: true,
+    plan: "SOLO" as const,
   },
-
   {
-    name: "Done-For-You",
+    name: "DFY Setup",
     price: "$499",
-    period: "/month",
-    tagline: "We handle everything — you just watch your score climb.",
+    period: "one-time",
+    tagline: "We do everything for you — schema, llms.txt, FAQs, and a full AEO audit.",
     outcomes: [
-      "Everything in Agency — unlimited",
-      "We generate AND implement all fixes",
       "Schema markup installed on your site",
-      "llms.txt file deployed to your domain",
-      "15-25 localized FAQs with schema",
-      "Weekly blog posts published",
-      "Monthly progress report with score tracking",
+      "llms.txt deployed to your domain",
+      "15-25 localized FAQs written + installed",
+      "Platform-specific implementation",
       "Dedicated onboarding call",
+      "Full AEO audit with prioritized fixes",
     ],
-    cta: "Start Done-For-You — $499/mo",
-    href: "/sign-up",
+    cta: "Get DFY Setup — $499",
+    href: null,
     highlight: false,
     premium: true,
+    plan: "DFY" as const,
+  },
+  {
+    name: "Managed",
+    price: "$99",
+    period: "/month",
+    tagline: "After DFY setup — ongoing AI visibility management, done for you.",
+    outcomes: [
+      "Everything in Solo — unlimited",
+      "Weekly blog posts written & published",
+      "Monthly progress report sent to you",
+      "Schema markup kept up to date",
+      "llms.txt refreshed quarterly",
+      "Priority support",
+    ],
+    cta: "Get Managed — $99/mo",
+    href: null,
+    highlight: false,
+    managed: true,
+    plan: "AGENCY" as const,
   },
 ];
 
@@ -84,12 +105,12 @@ const faqs = [
     a: "Every piece of content is written specifically about your business, your services, and your local area — not generic templates. You can review and edit everything before it goes live. Most customers find it sounds better than what they'd write themselves.",
   },
   {
-    q: "How does LocalBeacon compare to BrightLocal?",
-    a: "BrightLocal focuses on rank tracking and citations. LocalBeacon focuses on content creation — we write your Google posts, build local city pages, draft review responses, and optimize your business for AI search engines. Different tools for different needs.",
-  },
-  {
     q: "What does 'Done-For-You' mean exactly?",
     a: "We do all the work — install schema markup, deploy your llms.txt file, write and publish blog posts, generate localized FAQs, and send you a monthly progress report. You don't need to touch anything. Just watch your AI visibility score climb.",
+  },
+  {
+    q: "Do I need DFY Setup before Managed?",
+    a: "Yes — Managed is designed for businesses that already have the foundational setup in place. DFY Setup gets everything installed correctly. Managed then keeps it running and improving month over month.",
   },
 ];
 
@@ -99,20 +120,19 @@ export default function PricingPage() {
   const handleCheckout = async (plan: "SOLO" | "AGENCY" | "DFY") => {
     setLoading(plan);
     try {
+      const mode = plan === "DFY" ? "payment" : "subscription";
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan }),
+        body: JSON.stringify({ plan, mode }),
       });
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
       } else if (data.error === "Unauthorized") {
-        // Not signed in — redirect to sign up first
         window.location.href = "/sign-up";
       } else {
         console.error("Checkout error:", data.error);
-        // Fallback to sign-up
         window.location.href = "/sign-up";
       }
     } catch {
@@ -170,70 +190,105 @@ export default function PricingPage() {
 
       {/* Plans */}
       <section className="px-6 pb-20">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-          {plans.map(plan => (
-            <Card key={plan.name} className={`relative flex flex-col ${
-              plan.highlight
-                ? "bg-[#FFD700]/10 border-[#FFD700] shadow-lg shadow-[#FFD700]/10"
-                : (plan as any).premium
-                ? "bg-gradient-to-b from-[#FFD700]/5 to-[#B8860B]/10 border-[#B8860B] shadow-lg shadow-[#B8860B]/20"
-                : "bg-white/5 border-white/10"
-            }`}>
-              {plan.highlight && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <Badge className="bg-[#FFD700] text-black font-bold px-4">Most Popular</Badge>
-                </div>
-              )}
-              {(plan as any).premium && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <Badge className="bg-gradient-to-r from-[#B8860B] to-[#FFD700] text-black font-bold px-4">White Glove</Badge>
-                </div>
-              )}
-              <CardContent className="p-6 pt-8 flex-1 flex flex-col">
-                <p className="text-sm text-white/50 uppercase tracking-wider font-semibold">{plan.name}</p>
-                <div className="flex items-baseline gap-1 mt-2 mb-1">
-                  <span className="text-5xl font-extrabold text-white">{plan.price}</span>
-                  <span className="text-white/50 text-sm">{plan.period}</span>
-                </div>
-                <p className="text-white/60 text-sm mb-6">{plan.tagline}</p>
-                <ul className="space-y-3 mb-8 flex-1">
-                  {plan.outcomes.map(o => (
-                    <li key={o} className="flex items-start gap-2 text-sm text-white/80">
-                      <span className="text-[#FFD700] mt-0.5 shrink-0">✓</span>
-                      {o}
-                    </li>
-                  ))}
-                </ul>
-                {plan.name === "Free" ? (
-                  <Link href={plan.href}>
-                    <Button className="w-full font-semibold h-12 text-base border border-white/20 bg-transparent text-white hover:bg-white/10" variant="outline">
-                      {plan.cta}
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {plans.map((plan) => {
+            const isDfy = (plan as any).premium;
+            const isManaged = (plan as any).managed;
+
+            return (
+              <Card
+                key={plan.name}
+                id={isDfy ? "dfy" : undefined}
+                className={`relative flex flex-col ${
+                  plan.highlight
+                    ? "bg-[#FFD700]/10 border-[#FFD700] shadow-lg shadow-[#FFD700]/10"
+                    : isDfy
+                    ? "bg-gradient-to-b from-[#FFFDF5]/10 to-[#FFF8E7]/10 border-[#D4A017] shadow-lg shadow-[#D4A017]/20"
+                    : isManaged
+                    ? "bg-white/5 border-white/20"
+                    : "bg-white/5 border-white/10"
+                }`}
+              >
+                {plan.highlight && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <Badge className="bg-[#FFD700] text-black font-bold px-4">Most Popular</Badge>
+                  </div>
+                )}
+                {isDfy && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <Badge className="bg-gradient-to-r from-[#B8860B] to-[#FFD700] text-black font-bold px-4">
+                      White Glove
+                    </Badge>
+                  </div>
+                )}
+                {isManaged && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <Badge className="bg-white/10 text-white/70 border border-white/20 font-medium px-4">
+                      After DFY setup
+                    </Badge>
+                  </div>
+                )}
+                <CardContent className="p-6 pt-8 flex-1 flex flex-col">
+                  <p className="text-sm text-white/50 uppercase tracking-wider font-semibold">{plan.name}</p>
+                  <div className="flex items-baseline gap-1 mt-2 mb-1">
+                    <span className="text-5xl font-extrabold text-white">{plan.price}</span>
+                    <span className="text-white/50 text-sm">{plan.period}</span>
+                  </div>
+                  <p className="text-white/60 text-sm mb-6">{plan.tagline}</p>
+                  <ul className="space-y-3 mb-8 flex-1">
+                    {plan.outcomes.map((o) => (
+                      <li key={o} className="flex items-start gap-2 text-sm text-white/80">
+                        <span
+                          className="mt-0.5 shrink-0 font-bold"
+                          style={{ color: isDfy ? "#D4A017" : "#FFD700" }}
+                        >
+                          ✓
+                        </span>
+                        {o}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {plan.name === "Free" ? (
+                    <Link href={plan.href!}>
+                      <Button
+                        className="w-full font-semibold h-12 text-base border border-white/20 bg-transparent text-white hover:bg-white/10"
+                        variant="outline"
+                      >
+                        {plan.cta}
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Button
+                      onClick={() => plan.plan && handleCheckout(plan.plan)}
+                      disabled={loading !== null}
+                      className={`w-full font-semibold h-12 text-base ${
+                        plan.highlight
+                          ? "bg-[#FFD700] text-black hover:bg-[#FFD700]/90"
+                          : isDfy
+                          ? "text-black hover:opacity-90 shadow-md shadow-[#B8860B]/30"
+                          : "border border-white/20 bg-transparent text-white hover:bg-white/10"
+                      }`}
+                      style={
+                        isDfy
+                          ? { background: "linear-gradient(90deg, #B8860B 0%, #FFD700 100%)" }
+                          : undefined
+                      }
+                      variant={plan.highlight || isDfy ? "default" : "outline"}
+                    >
+                      {loading === plan.plan ? "Redirecting to checkout..." : plan.cta}
                     </Button>
-                  </Link>
-                ) : (
-                  <Button
-                    onClick={() => handleCheckout(
-                      plan.name === "Solo" ? "SOLO" : "DFY"
-                    )}
-                    disabled={loading !== null}
-                    className={`w-full font-semibold h-12 text-base ${
-                      plan.highlight
-                        ? "bg-[#FFD700] text-black hover:bg-[#FFD700]/90"
-                        : (plan as any).premium
-                        ? "bg-gradient-to-r from-[#B8860B] to-[#FFD700] text-black hover:from-[#DAA520] hover:to-[#FFD700] shadow-md shadow-[#B8860B]/30"
-                        : "border border-white/20 bg-transparent text-white hover:bg-white/10"
-                    }`}
-                    variant={plan.highlight || (plan as any).premium ? "default" : "outline"}
-                  >
-                    {loading ? "Redirecting to checkout..." : plan.cta}
-                  </Button>
-                )}
-                {plan.name === "Free" && (
-                  <p className="text-white/30 text-xs text-center mt-2">No credit card required</p>
-                )}
-              </CardContent>
-            </Card>
-          ))}
+                  )}
+                  {plan.name === "Free" && (
+                    <p className="text-white/30 text-xs text-center mt-2">No credit card required</p>
+                  )}
+                  {isDfy && (
+                    <p className="text-white/30 text-xs text-center mt-2">One-time payment, not a subscription</p>
+                  )}
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       </section>
 
@@ -252,7 +307,7 @@ export default function PricingPage() {
               { emoji: "📋", label: "llms.txt generator" },
               { emoji: "📱", label: "Works on mobile" },
               { emoji: "🔍", label: "Listing health audit" },
-            ].map(f => (
+            ].map((f) => (
               <div key={f.label} className="flex items-center gap-3 p-3 rounded-lg bg-white/5">
                 <span className="text-xl">{f.emoji}</span>
                 <span className="text-white/70 text-sm">{f.label}</span>
@@ -269,7 +324,7 @@ export default function PricingPage() {
             Frequently asked <span className="text-[#FFD700]">questions</span>
           </h2>
           <div className="space-y-6">
-            {faqs.map(faq => (
+            {faqs.map((faq) => (
               <div key={faq.q} className="border-b border-white/10 pb-6">
                 <h3 className="text-white font-semibold text-base mb-2">{faq.q}</h3>
                 <p className="text-white/50 text-sm leading-relaxed">{faq.a}</p>
@@ -283,9 +338,14 @@ export default function PricingPage() {
       <section className="px-6 py-16 border-t border-white/10">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl font-bold mb-4">Ready to get more calls?</h2>
-          <p className="text-white/50 mb-6">Connect your Google listing and see your first posts in under 2 minutes.</p>
+          <p className="text-white/50 mb-6">
+            Connect your Google listing and see your first posts in under 2 minutes.
+          </p>
           <Link href="/sign-up">
-            <Button size="lg" className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-bold text-lg px-10 py-6">
+            <Button
+              size="lg"
+              className="bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-bold text-lg px-10 py-6"
+            >
               Connect Your Google Listing — Free
             </Button>
           </Link>
@@ -299,7 +359,9 @@ export default function PricingPage() {
             <span className="text-xl">🔦</span>
             <span className="font-bold text-[#FFD700]">LocalBeacon.ai</span>
           </Link>
-          <p className="text-white/30 text-xs">© {new Date().getFullYear()} LocalBeacon. All rights reserved.</p>
+          <p className="text-white/30 text-xs">
+            © {new Date().getFullYear()} LocalBeacon. All rights reserved.
+          </p>
         </div>
       </footer>
     </div>
