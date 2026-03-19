@@ -21,6 +21,7 @@ import {
 import type { BlogPostMeta } from "@/lib/blog-shared";
 import { CATEGORY_LABELS } from "@/lib/blog-shared";
 import { SiteFooter } from "@/components/site-footer";
+import { PLANS, PRICING_FAQS } from "@/lib/plans";
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -80,59 +81,8 @@ const withoutVsWith = {
   ],
 };
 
-const plans = [
-  {
-    name: "Free",
-    price: "$0",
-    period: "forever",
-    tagline: "See how visible your business is to AI — in 10 seconds.",
-    features: [
-      "1 AI Readiness scan per month",
-      "5 Google post drafts per month",
-      "3 review response drafts per month",
-      "Schema markup preview (read-only)",
-    ],
-    cta: "Connect Your Google Listing",
-    href: "/sign-up",
-    highlight: false,
-  },
-  {
-    name: "Solo",
-    price: "$49",
-    period: "/month",
-    tagline: "AI-written content for your local business, every week.",
-    features: [
-      "Unlimited Google post drafts — generated weekly",
-      "10 new city/service area pages per month",
-      "Unlimited AI-written review replies",
-      "Blog post generator (4/month)",
-      "Unlimited AI Readiness scans + monitoring",
-      "Schema markup & llms.txt generator",
-      "Monthly progress report",
-    ],
-    cta: "Start Solo — $49/mo",
-    href: "/sign-up",
-    highlight: true,
-  },
-  {
-    name: "DFY Setup",
-    price: "$499",
-    period: "one-time",
-    tagline: "We set up your entire AI visibility foundation — you just approve.",
-    features: [
-      "30-minute live onboarding call",
-      "15-25 custom FAQs for your business",
-      "Schema markup + live installation walkthrough",
-      "llms.txt + live deployment walkthrough",
-      "Full AEO audit with prioritized fixes",
-      "1 month of Solo included",
-    ],
-    cta: "Get DFY Setup — $499",
-    href: "/pricing#dfy",
-    highlight: false,
-    premium: true,
-  },
-];
+// Plans imported from lib/plans.ts — single source of truth
+const plans = PLANS;
 
 const faqs = [
   {
@@ -1128,7 +1078,7 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
                   ))}
                 </ul>
 
-                <Link href={plan.href} style={{ textDecoration: "none" }}>
+                <Link href={plan.href ?? (plan.premium ? "/pricing#dfy" : "/sign-up")} style={{ textDecoration: "none" }}>
                   <button
                     style={{
                       width: "100%",
@@ -1137,11 +1087,11 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
                       fontWeight: 700,
                       fontSize: "0.9375rem",
                       cursor: "pointer",
-                      border: plan.highlight || (plan as any).premium ? "none" : `2px solid ${NAVY}`,
-                      backgroundColor: plan.highlight ? ORANGE : (plan as any).premium ? "#B8860B" : "transparent",
-                      background: (plan as any).premium ? "linear-gradient(90deg, #B8860B, #DAA520)" : undefined,
-                      color: plan.highlight || (plan as any).premium ? "#fff" : NAVY,
-                      boxShadow: plan.highlight ? "0 4px 14px rgba(255,107,53,0.3)" : (plan as any).premium ? "0 4px 14px rgba(184,134,11,0.3)" : "none",
+                      border: plan.highlight || plan.premium ? "none" : `2px solid ${NAVY}`,
+                      backgroundColor: plan.highlight ? ORANGE : plan.premium ? "#B8860B" : "transparent",
+                      background: plan.premium ? "linear-gradient(90deg, #B8860B, #DAA520)" : undefined,
+                      color: plan.highlight || plan.premium ? "#fff" : NAVY,
+                      boxShadow: plan.highlight ? "0 4px 14px rgba(255,107,53,0.3)" : plan.premium ? "0 4px 14px rgba(184,134,11,0.3)" : "none",
                       transition: "opacity 0.15s",
                     }}
                   >

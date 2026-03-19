@@ -15,105 +15,18 @@ import {
 import { posthog } from "@/lib/posthog";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
+import { PLANS, PRICING_FAQS } from "@/lib/plans";
 
 const ORANGE = "#FF6B35";
 const NAVY = "#1B2A4A";
 const WARM_WHITE = "#FAFAF7";
 const SLATE = "#636E72";
 
-const plans = [
-  {
-    name: "Free",
-    price: "$0",
-    period: "forever",
-    tagline: "See how visible your business is to AI — in 10 seconds.",
-    outcomes: [
-      "1 AI Readiness scan per month",
-      "5 Google post drafts per month",
-      "3 review response drafts per month",
-      "1 business location",
-      "Schema & llms.txt preview",
-    ],
-    cta: "Check Your Score Free",
-    href: "/sign-up",
-    highlight: false,
-    plan: null,
-  },
-  {
-    name: "Solo",
-    price: "$49",
-    period: "/month",
-    tagline: "AI-written content for your local business, every week.",
-    outcomes: [
-      "Unlimited AI Readiness scans — track your progress",
-      "Unlimited Google post drafts — fresh content every week",
-      "Unlimited review response drafts",
-      "10 new city/service area pages per month",
-      "4 blog posts per month",
-      "Schema & llms.txt generator — create, monitor, alerts if missing",
-      "1 competitor comparison",
-      "Monthly progress report emailed to you",
-      "Up to 3 business locations",
-    ],
-    cta: "Start Solo — $49/mo",
-    href: null,
-    highlight: true,
-    plan: "SOLO" as const,
-  },
-  {
-    name: "DFY Setup",
-    price: "$499",
-    period: "one-time",
-    tagline: "We set up your entire AI visibility foundation — you just approve.",
-    outcomes: [
-      "30-minute live onboarding call — we learn your business",
-      "15-25 custom FAQs written for your services & area",
-      "Schema markup generated + live installation walkthrough",
-      "llms.txt generated + live deployment walkthrough",
-      "Full AEO audit with prioritized fix list",
-      "Platform-specific guides (WordPress, Squarespace, Webflow, Wix)",
-      "1 month of Solo included",
-    ],
-    cta: "Get DFY Setup — $499",
-    href: null,
-    highlight: false,
-    premium: true,
-    plan: "DFY" as const,
-  },
-];
-
-const faqs = [
-  {
-    q: "What if I don't have a Google listing yet?",
-    a: "No problem! We'll help you set one up during onboarding. It's free through Google and takes about 5 minutes. LocalBeacon works best with a Google Business Profile, but you can start building content immediately.",
-  },
-  {
-    q: "Can I cancel anytime?",
-    a: "Yes — no contracts, no cancellation fees. Cancel from your dashboard anytime and your subscription ends at the end of the billing period.",
-  },
-  {
-    q: "Will this work for my type of business?",
-    a: "LocalBeacon works for any local service business — plumbers, HVAC technicians, dentists, roofers, lawyers, electricians, landscapers, chiropractors, and more. If people search Google to find businesses like yours, LocalBeacon helps.",
-  },
-  {
-    q: "How is this different from hiring an SEO agency?",
-    a: "An agency charges $800-1,500/month and you wait weeks to see anything happen. LocalBeacon writes your Google posts, builds local pages, and drafts review replies — for $49/month. Your first content is generated within minutes of signing up.",
-  },
-  {
-    q: "Who writes the content? Will it sound generic?",
-    a: "Every piece of content is written specifically about your business, your services, and your local area — not generic templates. You can review and edit everything before it goes live. Most customers find it sounds better than what they'd write themselves.",
-  },
-  {
-    q: "What does 'Done-For-You Setup' include?",
-    a: "A 30-minute live call where we learn your business, generate your schema markup, llms.txt file, and 15-25 custom FAQs — then walk you through installing everything on your specific platform (WordPress, Squarespace, Webflow, or Wix). You also get a full AEO audit with a prioritized list of fixes, plus 1 month of Solo included so you can keep generating content right away.",
-  },
-];
-
 export default function PricingPage() {
   const [loading, setLoading] = useState<string | null>(null);
   const [showDfyConfirm, setShowDfyConfirm] = useState(false);
 
-  const handleCheckout = async (plan: "SOLO" | "AGENCY" | "DFY") => {
+  const handleCheckout = async (plan: "SOLO" | "DFY") => {
     // Analytics: checkout clicked
     try { posthog.capture('checkout_clicked', { plan }) } catch {}
     setLoading(plan);
@@ -179,8 +92,8 @@ export default function PricingPage() {
       {/* Plans */}
       <section className="px-6 pb-20">
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-          {plans.map((plan) => {
-            const isDfy = (plan as { premium?: boolean }).premium;
+          {PLANS.map((plan) => {
+            const isDfy = plan.premium;
 
             return (
               <Card
@@ -236,7 +149,7 @@ export default function PricingPage() {
                   </div>
                   <p className="text-sm mb-6" style={{ color: SLATE }}>{plan.tagline}</p>
                   <ul className="space-y-3 mb-8 flex-1">
-                    {plan.outcomes.map((o) => (
+                    {plan.features.map((o) => (
                       <li key={o} className="flex items-start gap-2 text-sm" style={{ color: "#2D3436" }}>
                         <span
                           className="mt-0.5 shrink-0 font-bold"
@@ -262,11 +175,11 @@ export default function PricingPage() {
                   ) : (
                     <Button
                       onClick={() => {
-                        if (!plan.plan) return;
-                        if ((plan as { premium?: boolean }).premium) {
+                        if (!plan.stripePlan) return;
+                        if (plan.premium) {
                           setShowDfyConfirm(true);
                         } else {
-                          handleCheckout(plan.plan);
+                          handleCheckout(plan.stripePlan);
                         }
                       }}
                       disabled={loading !== null}
@@ -279,7 +192,7 @@ export default function PricingPage() {
                           : NAVY,
                       }}
                     >
-                      {loading === plan.plan ? "Redirecting to checkout..." : plan.cta}
+                      {loading === plan.stripePlan ? "Redirecting to checkout..." : plan.cta}
                     </Button>
                   )}
                   {plan.name === "Free" && (
@@ -337,7 +250,7 @@ export default function PricingPage() {
             Frequently asked <span style={{ color: ORANGE }}>questions</span>
           </h2>
           <div className="space-y-6">
-            {faqs.map((faq) => (
+            {PRICING_FAQS.map((faq) => (
               <div key={faq.q} className="pb-6" style={{ borderBottom: "1px solid #DFE6E9" }}>
                 <h3 className="font-semibold text-base mb-2" style={{ color: NAVY }}>{faq.q}</h3>
                 <p className="text-sm leading-relaxed" style={{ color: SLATE }}>{faq.a}</p>
@@ -380,13 +293,7 @@ export default function PricingPage() {
           <div className="py-4">
             <p className="text-sm font-semibold text-[#1B2A4A] mb-3">What&apos;s included:</p>
             <ul className="space-y-2">
-              {[
-                "Schema markup generator — copy & paste ready",
-                "AI Discovery File generator — ready to deploy",
-                "15-25 localized FAQs written for your business",
-                "Platform-specific implementation guide",
-                "Full AEO audit with prioritized fixes",
-              ].map((item) => (
+              {(PLANS.find(p => p.stripePlan === 'DFY')?.features ?? []).map((item) => (
                 <li key={item} className="flex items-start gap-2 text-sm text-[#2D3436]">
                   <span className="text-[#FF6B35] font-bold mt-0.5">✓</span>
                   {item}

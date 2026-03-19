@@ -1,18 +1,20 @@
 # Sprint State — LocalBeacon
 
-current_sprint: 20
-current_sprint_name: "Close Backend Gaps"
-status: EXECUTING
-branch: main
-started: 2026-03-19
+**Current Sprint:** 12
+**Theme:** Distribution
+**Status:** EXECUTING
+**Branch:** sprint/localbeacon/s12
+**Started:** 2026-03-07
 
 ## History
-- S12: CLOSED (partial — persona panel done, expo stalled)
-- S13: CLOSED (CRM, PDF, Prospecting, Email Pipeline, Stripe)
-- S14: CLOSED (Production deploy, Clerk, email fix)
-- S15: CLOSED (Implementation guides)
-- S16: CLOSED (Light theme redesign)
-- S17: CLOSED (Onboarding + pricing DFY)
-- S18: CLOSED (Code review + security fixes + Day 2-3 fixes)
-- S19: CLOSED (PostHog, data continuity, mobile nav, DFY confirm)
-- S20: EXECUTING (Backend gaps — plan enforcement, DFY webhook, cron, cleanup)
+
+| Sprint | State | Opened | Closed | Review Artifact |
+|--------|-------|--------|--------|-----------------|
+| 8 | CLOSED | 2026-03-03 | 2026-03-03 | sprint-8-review-retro.md |
+| 9 | CLOSED | 2026-03-03 | 2026-03-03 | sprint-9-review-retro.md |
+| 10 | CLOSED | 2026-03-03 | 2026-03-04 | sprint-10-review-retro.md |
+| 11 | CLOSED | 2026-03-06 | 2026-03-07 | sprint-11-review-retro.md (pre-gate system, 30% process) |
+| 12 | PLANNING | 2026-03-07 | — | — |
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*
