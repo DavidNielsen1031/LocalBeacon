@@ -211,7 +211,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
     >
       <button
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between text-left gap-4 group"
+        className="w-full flex items-center justify-between text-left gap-4 group transition-colors duration-150"
         aria-expanded={open}
       >
         <span
@@ -614,6 +614,7 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
             {outcomes.map(({ Icon, title, description }) => (
               <div
                 key={title}
+                className="group"
                 style={{
                   backgroundColor: "#fff",
                   borderRadius: "12px",
@@ -621,6 +622,20 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
                   borderLeft: `4px solid ${ORANGE}`,
                   boxShadow: "0 1px 3px rgba(27,42,74,0.06), 0 1px 2px rgba(27,42,74,0.04)",
                   margin: "6px",
+                  transition: "all 0.2s ease",
+                  cursor: "default",
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLElement;
+                  el.style.transform = "translateY(-4px)";
+                  el.style.boxShadow = "0 8px 24px rgba(27,42,74,0.12)";
+                  el.style.borderLeftColor = ORANGE;
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLElement;
+                  el.style.transform = "translateY(0)";
+                  el.style.boxShadow = "0 1px 3px rgba(27,42,74,0.06), 0 1px 2px rgba(27,42,74,0.04)";
+                  el.style.borderLeftColor = ORANGE;
                 }}
               >
                 <div
@@ -628,14 +643,14 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
                     display: "inline-flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    width: "44px",
-                    height: "44px",
+                    width: "56px",
+                    height: "56px",
                     backgroundColor: `${ORANGE}15`,
-                    borderRadius: "10px",
+                    borderRadius: "50%",
                     marginBottom: "16px",
                   }}
                 >
-                  <Icon size={22} style={{ color: ORANGE }} />
+                  <Icon size={32} style={{ color: ORANGE }} />
                 </div>
                 <h3 style={{ fontWeight: 700, color: NAVY, fontSize: "1.0625rem", marginBottom: "8px" }}>
                   {title}

@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { FileText } from 'lucide-react'
+import { EmptyState } from '@/components/empty-state'
 
 const POST_TYPES = [
   { value: 'whats_new', label: "What's New", emoji: '📢' },
@@ -200,7 +202,7 @@ export default function PostsPage() {
             const style = STATUS_STYLES[post.status]
             const isEditing = editingId === post.id
             return (
-              <Card key={post.id} className={`bg-white border-[#DFE6E9] ${
+              <Card key={post.id} className={`bg-white border-[#DFE6E9] transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 ${
                 post.status === 'draft' ? 'border-l-2 border-l-[#FF6B35]/50' : ''
               } ${isEditing ? 'border-[#FF6B35]/30' : ''}`}>
                 <CardContent className="p-4">
@@ -288,9 +290,13 @@ export default function PostsPage() {
           })}
 
           {posts.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-[#636E72]/60 text-sm">No posts this week. Click &quot;+ Create Post&quot; to generate one.</p>
-            </div>
+            <EmptyState
+              icon={FileText}
+              title="No posts yet"
+              description="Generate your first Google post →"
+              actionLabel="+ Create Post"
+              onAction={() => setActiveTab('create')}
+            />
           )}
         </div>
       )}

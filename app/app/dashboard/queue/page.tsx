@@ -8,6 +8,8 @@ import { QueueActions } from './queue-actions'
 import { UsageMeter } from '@/components/usage-meter'
 import { getFreshness } from '@/lib/freshness'
 import { FreshnessBadge } from '@/components/freshness-badge'
+import { Calendar } from 'lucide-react'
+import { EmptyState } from '@/components/empty-state'
 
 interface QueueItem {
   id: string
@@ -94,19 +96,21 @@ export default async function QueuePage() {
       {/* List */}
       {items.length === 0 ? (
         <Card className="bg-white border-[#DFE6E9]">
-          <CardContent className="py-16 text-center">
-            <div className="text-4xl mb-4">📅</div>
-            <p className="text-[#636E72] text-lg mb-2">No posts queued yet.</p>
-            <p className="text-[#636E72] text-sm mb-6">
-              Generate your first weekly post!
-            </p>
-            <QueueActions businessId={business?.id ?? null} variant="empty" />
+          <CardContent className="py-4">
+            <EmptyState
+              icon={Calendar}
+              title="Nothing scheduled"
+              description="Posts you generate will appear here"
+            />
+            <div className="flex justify-center pb-4">
+              <QueueActions businessId={business?.id ?? null} variant="empty" />
+            </div>
           </CardContent>
         </Card>
       ) : (
         <div className="space-y-4">
           {items.map((item) => (
-            <Card key={item.id} className="bg-white border-[#DFE6E9]">
+            <Card key={item.id} className="bg-white border-[#DFE6E9] transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
               <CardContent className="p-5">
                 {/* Title + meta */}
                 <div className="flex items-start justify-between gap-4 mb-2">

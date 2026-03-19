@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
+import { Globe } from 'lucide-react'
+import { EmptyState } from '@/components/empty-state'
 
 interface ServicePage {
   city: string
@@ -123,23 +125,19 @@ export default function PagesPage() {
 
       {/* Pages grid */}
       {pages.length === 0 ? (
-        <div className="text-center py-20">
-          <div className="text-5xl mb-4">🌐</div>
-          <h3 className="text-[#1B2A4A] font-semibold mb-2">No pages yet</h3>
-          <p className="text-[#636E72] text-sm mb-6 max-w-sm mx-auto">
-            Create a service area page for each city you serve. Each page is uniquely written to rank for local searches.
-          </p>
-          <Button
-            onClick={() => setShowAdd(true)}
-            className="bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold"
-          >
-            + Add Your First City
-          </Button>
+        <div className="flex flex-col items-center">
+          <EmptyState
+            icon={Globe}
+            title="No city pages yet"
+            description="Build pages for areas you serve →"
+            actionLabel="+ Add Your First City"
+            onAction={() => setShowAdd(true)}
+          />
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {pages.map(page => (
-            <Card key={page.city} className="bg-white border-[#DFE6E9]">
+            <Card key={page.city} className="bg-white border-[#DFE6E9] transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-[#2D3436] text-base">{page.city}</CardTitle>

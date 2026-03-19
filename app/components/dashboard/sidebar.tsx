@@ -25,6 +25,7 @@ import {
   ChevronDown,
   Plus,
 } from "lucide-react";
+import { BeaconIcon } from "@/components/beacon-icon";
 
 const navItems = [
   { href: "/dashboard", label: "Overview", Icon: LayoutDashboard },
@@ -64,7 +65,7 @@ export default function DashboardSidebar() {
         {/* Logo */}
         <div className="px-6 py-5 border-b border-white/10">
           <Link href="/" className="flex items-center gap-2">
-            <img src="/logo-192.png" alt="LocalBeacon" style={{ height: "32px", width: "32px" }} />
+            <BeaconIcon size={32} />
             <span className="font-bold text-lg" style={{ color: "#FAFAF7" }}>
               Local<span style={{ color: "#FF6B35" }}>Beacon</span>.ai
             </span>
@@ -182,7 +183,7 @@ export default function DashboardSidebar() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 ${
                       isActive ? "border-l-2" : "hover:bg-white/10"
                     }`}
                     style={

@@ -2,6 +2,8 @@ export const dynamic = 'force-dynamic'
 import { auth } from '@clerk/nextjs/server'
 import { createServerClient } from '@/lib/supabase'
 import { Card, CardContent } from '@/components/ui/card'
+import { BarChart3 } from 'lucide-react'
+import { EmptyState } from '@/components/empty-state'
 
 async function getMonthlyData(clerkUserId: string) {
   const supabase = createServerClient()
@@ -142,7 +144,7 @@ export default async function ReportsPage() {
         {stats.map((stat) => {
           const delta = stat.prev !== null ? stat.value - stat.prev : null
           return (
-            <Card key={stat.label} className="bg-white border-[#DFE6E9]">
+            <Card key={stat.label} className="bg-white border-[#DFE6E9] transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
               <CardContent className="p-5 text-center">
                 <div className="text-2xl mb-2">{stat.icon}</div>
                 <p className="text-3xl font-bold text-[#2D3436]">{stat.value}</p>
@@ -185,13 +187,13 @@ export default async function ReportsPage() {
 
       {/* Empty state */}
       {(!data || (data.postsGenerated === 0 && data.pagesCreated === 0 && data.reviewsReplied === 0 && data.queuedTotal === 0)) && (
-        <Card className="bg-[#FF6B35]/5 border-[#FF6B35]/30">
-          <CardContent className="p-6 text-center">
-            <p className="text-[#2D3436] text-lg font-semibold mb-2">No activity yet this month</p>
-            <p className="text-[#636E72] text-sm mb-4">
-              Start generating content and your monthly summary will appear here.
-              You&apos;ll also receive this as an email on the 1st of each month.
-            </p>
+        <Card className="bg-white border-[#DFE6E9]">
+          <CardContent className="py-4">
+            <EmptyState
+              icon={BarChart3}
+              title="No reports yet"
+              description="Reports are generated monthly after your first scan"
+            />
           </CardContent>
         </Card>
       )}

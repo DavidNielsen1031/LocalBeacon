@@ -2,6 +2,8 @@
 export const dynamic = 'force-dynamic'
 import { useState } from 'react'
 import { useBusinessContext } from '@/components/business-context'
+import { BookOpen } from 'lucide-react'
+import { EmptyState } from '@/components/empty-state'
 
 const BLOG_TYPES = [
   { value: 'seasonal', label: 'Seasonal Tips', desc: 'Timely advice your customers are searching for right now' },
@@ -179,7 +181,7 @@ export default function BlogPage() {
         <div className="space-y-4">
           <h2 className="text-lg font-semibold text-[#2D3436]">Your Blog Posts</h2>
           {posts.map(post => (
-            <div key={post.id} className="bg-white border border-[#DFE6E9] rounded-xl overflow-hidden">
+            <div key={post.id} className="bg-white border border-[#DFE6E9] rounded-xl overflow-hidden transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
               <div
                 className="p-5 cursor-pointer hover:bg-[#FAFAF7] transition-colors"
                 onClick={() => setExpandedPost(expandedPost === post.id ? null : post.id)}
@@ -241,11 +243,11 @@ export default function BlogPage() {
 
       {/* Empty state */}
       {posts.length === 0 && (
-        <div className="text-center py-12 text-[#636E72]/60">
-          <p className="text-4xl mb-3">✍️</p>
-          <p className="text-sm">No posts yet — generate your first one above.</p>
-          <p className="text-xs mt-1">Each post is 800–1,000 words, locally optimized, and includes FAQ schema for AI search.</p>
-        </div>
+        <EmptyState
+          icon={BookOpen}
+          title="No blog posts yet"
+          description="Write your first blog post →"
+        />
       )}
     </div>
   )

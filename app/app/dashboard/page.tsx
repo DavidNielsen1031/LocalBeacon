@@ -186,23 +186,29 @@ export default function DashboardPage() {
             {stats.map((stat) => (
               <Link key={stat.label} href={stat.href}>
                 <Card
-                  className="bg-white rounded-xl border shadow-sm hover:shadow-md transition-shadow cursor-pointer h-full"
-                  style={{ borderColor: "#DFE6E9" }}
+                  className="rounded-xl border cursor-pointer h-full transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+                  style={{
+                    borderColor: "#DFE6E9",
+                    background: "linear-gradient(180deg, #ffffff 0%, #FAF8F5 100%)",
+                  }}
                 >
                   <CardContent className="p-5">
-                    <div
-                      className="inline-flex items-center justify-center w-10 h-10 rounded-lg mb-3"
-                      style={{ backgroundColor: "rgba(255,107,53,0.1)" }}
-                    >
-                      <stat.Icon size={18} style={{ color: "#FF6B35" }} />
+                    <div className="flex items-start justify-between mb-3">
+                      <div
+                        className="inline-flex items-center justify-center w-10 h-10 rounded-lg"
+                        style={{ backgroundColor: "rgba(255,107,53,0.1)" }}
+                      >
+                        <stat.Icon size={18} style={{ color: "#FF6B35" }} />
+                      </div>
+                      <stat.Icon size={14} style={{ color: "#DFE6E9" }} />
                     </div>
-                    <p className="text-xs uppercase tracking-wider font-medium mb-1" style={{ color: "#636E72" }}>
-                      {stat.label}
-                    </p>
-                    <p className="text-3xl font-bold" style={{ color: "#1B2A4A" }}>
+                    <p className="text-3xl font-bold mb-0.5" style={{ color: "#1B2A4A" }}>
                       {stat.value}
                     </p>
-                    <p className="text-xs mt-1" style={{ color: "#636E72" }}>
+                    <p className="text-xs uppercase tracking-wider font-medium" style={{ color: "#636E72" }}>
+                      {stat.label}
+                    </p>
+                    <p className="text-xs mt-1" style={{ color: "#636E72", opacity: 0.7 }}>
                       {stat.sub}
                     </p>
                   </CardContent>
@@ -220,7 +226,7 @@ export default function DashboardPage() {
               {activity.map((item, i) => (
                 <div
                   key={i}
-                  className="flex items-center gap-4 p-4 rounded-xl border transition-colors bg-white cursor-pointer hover:shadow-sm"
+                  className="flex items-center gap-4 p-4 rounded-xl border bg-white cursor-pointer transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
                   style={{ borderColor: "#DFE6E9" }}
                 >
                   <div
@@ -325,7 +331,7 @@ export default function DashboardPage() {
               ].map((action) => (
                 <Card
                   key={action.title}
-                  className="bg-white rounded-xl border shadow-sm flex flex-col"
+                  className="bg-white rounded-xl border flex flex-col transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
                   style={{ borderColor: "#DFE6E9" }}
                 >
                   <CardContent className="p-5 flex-1 flex flex-col">
@@ -344,7 +350,7 @@ export default function DashboardPage() {
                     <Link href={action.href}>
                       <Button
                         size="sm"
-                        className="w-full font-semibold text-xs text-white"
+                        className="w-full font-semibold text-xs text-white transition-all duration-200 active:scale-[0.98]"
                         style={{ backgroundColor: "#FF6B35" }}
                       >
                         {action.cta}

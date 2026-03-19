@@ -2,6 +2,8 @@
 
 import { useState, useCallback } from 'react'
 import Link from 'next/link'
+import { Users } from 'lucide-react'
+import { EmptyState } from '@/components/empty-state'
 
 interface CheckResult {
   id: string
@@ -161,15 +163,17 @@ export default function CompetitorsPage() {
         )}
 
         {competitors.length === 0 && (
-          <p className="text-[#636E72]/60 text-sm text-center py-4">
-            Add up to 3 competitors to compare AI readiness scores
-          </p>
+          <EmptyState
+            icon={Users}
+            title="No competitors tracked"
+            description="Add a competitor to compare scores →"
+          />
         )}
 
         {/* Competitor list */}
         <div className="space-y-3">
           {competitors.map((comp) => (
-            <div key={comp.url} className="flex items-center justify-between p-3 rounded-lg bg-[#FAFAF7] border border-[#DFE6E9]">
+            <div key={comp.url} className="flex items-center justify-between p-3 rounded-lg bg-[#FAFAF7] border border-[#DFE6E9] transition-all duration-200 hover:shadow-sm hover:-translate-y-0.5">
               {comp.loading ? (
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-white animate-pulse" />

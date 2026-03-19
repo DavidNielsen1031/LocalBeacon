@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Star } from 'lucide-react'
+import { EmptyState } from '@/components/empty-state'
 
 const STAR_RATINGS = [1, 2, 3, 4, 5]
 
@@ -205,11 +207,12 @@ export default function ReviewsPage() {
               </CardContent>
             </Card>
           ) : (
-            <div className="h-full flex items-center justify-center py-16 text-center">
-              <div>
-                <div className="text-4xl mb-3">⭐</div>
-                <p className="text-[#636E72]/60 text-sm">Your drafted response will appear here</p>
-              </div>
+            <div className="h-full flex items-center justify-center">
+              <EmptyState
+                icon={Star}
+                title="No reviews to respond to"
+                description="Connect your Google listing to see reviews"
+              />
             </div>
           )}
         </div>
@@ -221,7 +224,7 @@ export default function ReviewsPage() {
           <h2 className="text-lg font-semibold text-[#2D3436] mb-4">Recent Responses</h2>
           <div className="space-y-3">
             {history.map(item => (
-              <Card key={item.id} className="bg-white border-[#DFE6E9]">
+              <Card key={item.id} className="bg-white border-[#DFE6E9] transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-[#1B2A4A] font-medium text-sm">{item.author}</span>
