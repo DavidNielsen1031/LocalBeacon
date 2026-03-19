@@ -24,14 +24,14 @@ export default function SignUpPage() {
             headerSubtitle: "text-white/60",
             formFieldLabel: "text-white/70",
             formFieldInput:
-              "bg-white/5 border-white/20 text-white placeholder:text-white/30 focus:border-[#FFD700]/50",
+              "bg-white/5 border-white/20 text-white placeholder:text-white/50 focus:border-[#FFD700]/50",
             formButtonPrimary:
               "bg-[#FFD700] text-black hover:bg-[#FFD700]/90 font-semibold",
             footerActionLink: "text-[#FFD700] hover:text-[#FFD700]/80",
             identityPreviewText: "text-white",
             identityPreviewEditButton: "text-[#FFD700]",
             dividerLine: "bg-white/10",
-            dividerText: "text-white/40",
+            dividerText: "text-white/70",
             socialButtonsBlockButton:
               "bg-white/5 border-white/20 text-white hover:bg-white/10",
             socialButtonsBlockButtonText: "text-white",

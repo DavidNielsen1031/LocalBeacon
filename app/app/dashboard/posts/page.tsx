@@ -197,7 +197,7 @@ export default function PostsPage() {
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
             className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              activeTab === tab.key ? 'bg-[#FF6B35] text-black' : 'text-[#636E72] hover:text-[#2D3436]'
+              activeTab === tab.key ? 'bg-[#FF6B35] text-white' : 'text-[#636E72] hover:text-[#2D3436]'
             }`}
           >
             {tab.label}
@@ -262,7 +262,7 @@ export default function PostsPage() {
                         </Button>
                         <Button size="sm"
                           onClick={() => saveAndApprove(post.id)}
-                          className="bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold text-xs">
+                          className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold text-xs">
                           Save & Approve ✓
                         </Button>
                       </div>
@@ -283,7 +283,7 @@ export default function PostsPage() {
                             </Button>
                             <Button size="sm"
                               onClick={() => approvePost(post.id)}
-                              className="bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold text-xs">
+                              className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold text-xs">
                               Approve ✓
                             </Button>
                           </>
@@ -350,7 +350,7 @@ export default function PostsPage() {
               <Button
                 onClick={generate}
                 disabled={loading}
-                className="w-full mt-5 bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold h-11"
+                className="w-full mt-5 bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold h-11"
               >
                 {loading ? (
                   <span className="flex items-center gap-2">
@@ -372,7 +372,7 @@ export default function PostsPage() {
                       ↻ Try Again
                     </Button>
                     <Button size="sm" onClick={copy}
-                      className="bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold text-xs">
+                      className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold text-xs">
                       {copied ? '✓ Copied!' : 'Copy to Clipboard'}
                     </Button>
                   </div>

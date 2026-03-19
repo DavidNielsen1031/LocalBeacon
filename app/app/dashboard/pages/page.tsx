@@ -80,7 +80,7 @@ export default function PagesPage() {
           <Button
             onClick={() => setShowAdd(true)}
             disabled={pages.length >= 3}
-            className="bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold text-sm"
+            className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold text-sm"
           >
             + Add City
           </Button>
@@ -106,7 +106,7 @@ export default function PagesPage() {
             <Button
               onClick={generate}
               disabled={!cityInput.trim() || generating}
-              className="w-full bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold"
+              className="w-full bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold"
             >
               {generating ? (
                 <span className="flex items-center gap-2"><span className="animate-spin">⟳</span> Generating...</span>
@@ -161,7 +161,7 @@ export default function PagesPage() {
                   <Button
                     size="sm"
                     onClick={() => copyHtml(page)}
-                    className="bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold text-xs flex-1"
+                    className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold text-xs flex-1"
                   >
                     {copied === page.city ? '✓ Copied!' : 'Copy HTML'}
                   </Button>

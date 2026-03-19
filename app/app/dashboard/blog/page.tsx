@@ -162,7 +162,7 @@ export default function BlogPage() {
         <button
           onClick={handleGenerate}
           disabled={generating}
-          className="bg-[#FF6B35] text-black font-semibold px-6 py-2.5 rounded-lg hover:bg-[#FF6B35]/90 disabled:opacity-50 transition-all flex items-center gap-2"
+          className="bg-[#FF6B35] text-white font-semibold px-6 py-2.5 rounded-lg hover:bg-[#FF6B35]/90 disabled:opacity-50 transition-all flex items-center gap-2"
         >
           {generating ? (
             <>
@@ -222,7 +222,7 @@ export default function BlogPage() {
                   <div className="flex gap-3 flex-wrap">
                     <button
                       onClick={() => copyHtml(post)}
-                      className="bg-[#FF6B35] text-black font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#FF6B35]/90 transition-colors"
+                      className="bg-[#FF6B35] text-white font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#FF6B35]/90 transition-colors"
                     >
                       {copiedId === post.id ? '✓ Copied!' : 'Copy HTML'}
                     </button>

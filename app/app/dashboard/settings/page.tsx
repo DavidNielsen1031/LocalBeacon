@@ -208,7 +208,7 @@ export default function SettingsPage() {
             <Button
               onClick={handleSave}
               disabled={saving || loading}
-              className="bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold text-sm"
+              className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold text-sm"
             >
               {saving ? "Saving..." : "Save Changes"}
             </Button>
@@ -234,7 +234,7 @@ export default function SettingsPage() {
             You are on the Free plan. Upgrade to unlock unlimited post drafts, AI review replies,
             and full AI Readiness recommendations.
           </p>
-          <Button className="bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold text-sm">
+          <Button className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold text-sm">
             Upgrade to Solo — $49/month
           </Button>
         </CardContent>

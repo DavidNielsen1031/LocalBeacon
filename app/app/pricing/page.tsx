@@ -13,6 +13,8 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { posthog } from "@/lib/posthog";
+import { SiteNav } from "@/components/site-nav";
+import { SiteFooter } from "@/components/site-footer";
 
 const ORANGE = "#FF6B35";
 const NAVY = "#1B2A4A";
@@ -160,23 +162,7 @@ export default function PricingPage() {
 
   return (
     <div className="min-h-screen" style={{ background: WARM_WHITE, color: NAVY }}>
-      {/* Nav */}
-      <nav className="border-b border-black/5 px-6 py-4">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl">🔦</span>
-            <span className="text-xl font-bold" style={{ color: NAVY }}>LocalBeacon.ai</span>
-          </Link>
-          <Link href="/sign-up">
-            <Button
-              className="font-semibold text-white"
-              style={{ background: ORANGE }}
-            >
-              Connect Your Google Listing
-            </Button>
-          </Link>
-        </div>
-      </nav>
+      <SiteNav />
 
       {/* Header */}
       <section className="px-6 pt-20 pb-8 text-center">
@@ -214,8 +200,8 @@ export default function PricingPage() {
       <section className="px-6 pb-20">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {plans.map((plan) => {
-            const isDfy = (plan as any).premium;
-            const isManaged = (plan as any).managed;
+            const isDfy = (plan as { premium?: boolean }).premium;
+            const isManaged = (plan as { managed?: boolean }).managed;
 
             return (
               <Card
@@ -307,7 +293,7 @@ export default function PricingPage() {
                     <Button
                       onClick={() => {
                         if (!plan.plan) return;
-                        if ((plan as any).premium) {
+                        if ((plan as { premium?: boolean }).premium) {
                           setShowDfyConfirm(true);
                         } else {
                           handleCheckout(plan.plan);
@@ -410,18 +396,7 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="px-6 py-8" style={{ borderTop: "1px solid #DFE6E9" }}>
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-xl">🔦</span>
-            <span className="font-bold" style={{ color: NAVY }}>LocalBeacon.ai</span>
-          </Link>
-          <p className="text-xs" style={{ color: "#B2BEC3" }}>
-            © {new Date().getFullYear()} LocalBeacon. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      <SiteFooter />
 
       {/* DFY Confirmation Dialog */}
       <Dialog open={showDfyConfirm} onOpenChange={setShowDfyConfirm}>

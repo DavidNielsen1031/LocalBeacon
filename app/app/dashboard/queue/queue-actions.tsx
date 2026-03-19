@@ -99,7 +99,7 @@ export function QueueActions({
         <Button
           onClick={handleGenerate}
           disabled={generating || !businessId}
-          className="bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold"
+          className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold"
         >
           {generating ? 'Writing…' : "Write My Post For This Week"}
         </Button>

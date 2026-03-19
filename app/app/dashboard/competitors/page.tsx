@@ -126,7 +126,7 @@ export default function CompetitorsPage() {
             <button
               onClick={scanMySite}
               disabled={myLoading || !myUrl.trim()}
-              className="px-5 py-2.5 bg-[#FF6B35] text-black font-semibold rounded-lg hover:bg-[#FF6B35]/90 disabled:opacity-50 text-sm"
+              className="px-5 py-2.5 bg-[#FF6B35] text-white font-semibold rounded-lg hover:bg-[#FF6B35]/90 disabled:opacity-50 text-sm"
             >
               {myLoading ? 'Scanning...' : 'Scan'}
             </button>

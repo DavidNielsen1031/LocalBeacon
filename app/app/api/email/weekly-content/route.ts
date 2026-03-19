@@ -45,11 +45,12 @@ export async function POST(req: Request) {
   const errors: string[] = []
 
   for (const [, item] of byBusiness) {
-    const business = item.businesses as any
+    // Supabase infers a complex union type for nested joins; cast via unknown to access nested fields
+    const business = item.businesses as unknown as { name: string; user_id: string; users: { clerk_id: string; email: string } | null } | null
     const user = business?.users
     const email = user?.email
 
-    if (!email) continue
+    if (!email || !business) continue
 
     const result = await sendWeeklyContentEmail({
       to: email,

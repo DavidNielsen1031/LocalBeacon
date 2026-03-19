@@ -32,7 +32,8 @@ export async function PATCH(
     return NextResponse.json({ error: 'Post not found' }, { status: 404 })
   }
 
-  const business = queueItem.businesses as any
+  // Supabase infers a complex union type for joined tables; cast via unknown to access user_id
+  const business = queueItem.businesses as unknown as { user_id: string } | null
   if (business?.user_id !== userId) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }

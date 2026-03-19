@@ -7,6 +7,14 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog'
 
 const BUSINESS_CATEGORIES = [
   'Plumber', 'HVAC Technician', 'Dentist', 'Roofer', 'Lawyer',
@@ -39,6 +47,7 @@ function OnboardingContent() {
   const [generatedPost, setGeneratedPost] = useState<GeneratedPost | null>(null)
   const [copied, setCopied] = useState(false)
   const [prefillScore, setPrefillScore] = useState<number | null>(null)
+  const [showDfyDialog, setShowDfyDialog] = useState(false)
 
   const [data, setData] = useState<BusinessData>({
     name: '', category: '', primary_city: '', primary_state: '',
@@ -123,6 +132,12 @@ function OnboardingContent() {
   }
 
   const handleStep3Continue = async (plan: string) => {
+    // DFY requires confirmation before redirecting to Stripe
+    if (plan === 'dfy') {
+      setShowDfyDialog(true)
+      return
+    }
+
     setLoading(true)
     const businessId = await saveBusiness()
 
@@ -134,9 +149,9 @@ function OnboardingContent() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ plan: planKey }),
         })
-        const data = await res.json()
-        if (data.url) {
-          window.location.href = data.url
+        const json = await res.json()
+        if (json.url) {
+          window.location.href = json.url
           return
         }
       } catch {
@@ -148,6 +163,27 @@ function OnboardingContent() {
     setGeneratedPost(post)
     setLoading(false)
     goToStep(4)
+  }
+
+  const handleDfyConfirm = async () => {
+    setShowDfyDialog(false)
+    setLoading(true)
+    await saveBusiness()
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: 'DFY' }),
+      })
+      const json = await res.json()
+      if (json.url) {
+        window.location.href = json.url
+        return
+      }
+    } catch {
+      // Fall through
+    }
+    setLoading(false)
   }
 
   const copyPost = () => {
@@ -513,6 +549,33 @@ function OnboardingContent() {
           </div>
         )}
       </div>
+
+      {/* DFY Confirmation Dialog */}
+      <Dialog open={showDfyDialog} onOpenChange={setShowDfyDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm DFY Setup — $499</DialogTitle>
+            <DialogDescription>
+              You&apos;re about to start a $499 one-time DFY Setup. This includes schema markup, llms.txt, FAQs, and a full AEO audit — all implemented for you. Continue to checkout?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex gap-3">
+            <Button
+              variant="outline"
+              onClick={() => setShowDfyDialog(false)}
+              className="flex-1"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleDfyConfirm}
+              className="flex-1 bg-gradient-to-r from-[#B8860B] to-[#DAA520] text-white hover:from-[#DAA520] hover:to-[#FFD700] font-semibold"
+            >
+              Continue to Checkout →
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

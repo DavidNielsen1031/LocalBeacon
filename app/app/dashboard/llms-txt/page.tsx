@@ -195,7 +195,7 @@ export default function LlmsTxtPage() {
           </div>
 
           <Button onClick={handleGenerate} disabled={loading || !businessName || !category || !city || !state}
-            className="bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold">
+            className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold">
             {loading ? 'Generating...' : 'Generate AI Discovery File'}
           </Button>
         </CardContent>
@@ -220,7 +220,7 @@ export default function LlmsTxtPage() {
                 {copied ? '✓ Copied!' : 'Copy'}
               </Button>
               <Button onClick={handleDownload}
-                className="bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold" size="sm">
+                className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold" size="sm">
                 ⬇ Download llms.txt
               </Button>
             </div>

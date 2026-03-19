@@ -226,7 +226,7 @@ export default function AIReadinessPage() {
             <Button
               onClick={handleScan}
               disabled={loading || !url.trim()}
-              className="bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold px-8"
+              className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold px-8"
             >
               {loading ? 'Scanning...' : 'Scan'}
             </Button>

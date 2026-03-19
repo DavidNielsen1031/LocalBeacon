@@ -177,7 +177,7 @@ export default function FaqBuilderPage() {
           <Button
             onClick={handleGenerate}
             disabled={loading || !businessName || !category || !city || !state}
-            className="bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold"
+            className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold"
           >
             {loading ? 'Generating FAQs...' : 'Generate FAQ Page'}
           </Button>

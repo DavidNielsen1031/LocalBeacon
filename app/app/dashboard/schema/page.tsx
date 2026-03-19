@@ -241,6 +241,13 @@ export default function SchemaPage() {
         dfyContext="Don't want to touch code? Our team installs this for you."
       >
         <div className="bg-white border border-[#DFE6E9] rounded-xl overflow-hidden">
+          {isDemo && (
+            <div className="bg-yellow-50 border-b border-yellow-200 px-4 py-3">
+              <p className="text-yellow-800 text-sm font-medium">
+                ⚠️ This schema uses example data. Update the fields above with your real business information before copying to your website.
+              </p>
+            </div>
+          )}
           <div className="flex items-center justify-between p-4 border-b border-[#DFE6E9]">
             <div>
               <h3 className="text-[#1B2A4A] font-medium">{active.label} Schema</h3>
@@ -248,7 +255,7 @@ export default function SchemaPage() {
             </div>
             <button
               onClick={() => handleCopy(activeTab)}
-              className="bg-[#FF6B35] text-black font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#FF6B35]/90 transition-all"
+              className="bg-[#FF6B35] text-white font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#FF6B35]/90 transition-all"
             >
               {copied === activeTab ? '✓ Copied!' : 'Copy Code'}
             </button>

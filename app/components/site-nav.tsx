@@ -1,13 +1,24 @@
 "use client"
 
 import Link from "next/link"
+import { useState } from "react"
 
 const ORANGE = "#FF6B35"
 const NAVY = "#1B2A4A"
 const SLATE = "#636E72"
 const MIST = "#DFE6E9"
 
+const NAV_LINKS = [
+  { href: "/", label: "Home" },
+  { href: "/check", label: "Check Your Score" },
+  { href: "/pricing", label: "Pricing" },
+  { href: "/blog", label: "Blog" },
+  { href: "/sign-in", label: "Sign In" },
+]
+
 export function SiteNav() {
+  const [mobileOpen, setMobileOpen] = useState(false)
+
   return (
     <nav
       id="main-nav"
@@ -54,13 +65,9 @@ export function SiteNav() {
           </span>
         </Link>
 
+        {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-8">
-          {[
-            { href: "/check", label: "Free AI Check" },
-            { href: "/blog", label: "Blog" },
-            { href: "/pricing", label: "Pricing" },
-            { href: "/sign-in", label: "Sign In" },
-          ].map(({ href, label }) => (
+          {NAV_LINKS.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
@@ -79,26 +86,93 @@ export function SiteNav() {
           ))}
         </div>
 
-        <Link href="/sign-up" style={{ textDecoration: "none" }} className="shrink-0">
+        <div className="flex items-center gap-3">
+          <Link href="/sign-up" style={{ textDecoration: "none" }} className="shrink-0 hidden md:block">
+            <button
+              style={{
+                backgroundColor: ORANGE,
+                color: "#fff",
+                fontWeight: 700,
+                borderRadius: "8px",
+                border: "none",
+                cursor: "pointer",
+                boxShadow: "0 4px 14px rgba(255,107,53,0.3)",
+                transition: "opacity 0.15s",
+              }}
+              className="text-xs md:text-[0.9375rem] px-3 py-1.5 md:px-[22px] md:py-[10px]"
+              onMouseEnter={(e) => ((e.target as HTMLElement).style.opacity = "0.88")}
+              onMouseLeave={(e) => ((e.target as HTMLElement).style.opacity = "1")}
+            >
+              Get Started Free
+            </button>
+          </Link>
+
+          {/* Mobile hamburger */}
           <button
-            style={{
-              backgroundColor: ORANGE,
-              color: "#fff",
-              fontWeight: 700,
-              borderRadius: "8px",
-              border: "none",
-              cursor: "pointer",
-              boxShadow: "0 4px 14px rgba(255,107,53,0.3)",
-              transition: "opacity 0.15s",
-            }}
-            className="text-xs md:text-[0.9375rem] px-3 py-1.5 md:px-[22px] md:py-[10px]"
-            onMouseEnter={(e) => ((e.target as HTMLElement).style.opacity = "0.88")}
-            onMouseLeave={(e) => ((e.target as HTMLElement).style.opacity = "1")}
+            className="md:hidden flex flex-col gap-1.5 p-2 rounded-md hover:bg-gray-100 transition-colors"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle menu"
           >
-            Get Started Free
+            <span
+              className="block w-6 h-0.5 transition-all duration-200"
+              style={{
+                backgroundColor: NAVY,
+                transform: mobileOpen ? "translateY(8px) rotate(45deg)" : "none",
+              }}
+            />
+            <span
+              className="block w-6 h-0.5 transition-all duration-200"
+              style={{
+                backgroundColor: NAVY,
+                opacity: mobileOpen ? 0 : 1,
+              }}
+            />
+            <span
+              className="block w-6 h-0.5 transition-all duration-200"
+              style={{
+                backgroundColor: NAVY,
+                transform: mobileOpen ? "translateY(-8px) rotate(-45deg)" : "none",
+              }}
+            />
           </button>
-        </Link>
+        </div>
       </div>
+
+      {/* Mobile dropdown */}
+      {mobileOpen && (
+        <div
+          className="md:hidden border-t px-6 py-4 flex flex-col gap-4"
+          style={{ borderColor: MIST, backgroundColor: "#fff" }}
+        >
+          {NAV_LINKS.map(({ href, label }) => (
+            <Link
+              key={href}
+              href={href}
+              style={{ color: SLATE, fontWeight: 500, textDecoration: "none", fontSize: "1rem" }}
+              onClick={() => setMobileOpen(false)}
+            >
+              {label}
+            </Link>
+          ))}
+          <Link href="/sign-up" onClick={() => setMobileOpen(false)}>
+            <button
+              style={{
+                backgroundColor: ORANGE,
+                color: "#fff",
+                fontWeight: 700,
+                borderRadius: "8px",
+                border: "none",
+                cursor: "pointer",
+                width: "100%",
+                padding: "12px 0",
+                fontSize: "1rem",
+              }}
+            >
+              Get Started Free
+            </button>
+          </Link>
+        </div>
+      )}
     </nav>
   )
 }

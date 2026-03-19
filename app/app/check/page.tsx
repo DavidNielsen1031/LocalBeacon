@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { CheckerForm } from './checker-form'
+import { SiteNav } from '@/components/site-nav'
+import { SiteFooter } from '@/components/site-footer'
 
 export const metadata: Metadata = {
   title: 'Free AI Readiness Checker — How Visible Is Your Business to ChatGPT & Google AI?',
@@ -17,21 +19,7 @@ export const metadata: Metadata = {
 export default function CheckPage() {
   return (
     <div className="min-h-screen bg-[#FAFAF7]">
-      {/* Nav */}
-      <nav className="border-b border-black/5 bg-white/80 backdrop-blur-sm">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-          <a href="/" className="flex items-center gap-2">
-            <span className="text-2xl">🔦</span>
-            <span className="font-bold text-[#1B2A4A] text-lg font-[var(--font-fraunces)]">LocalBeacon</span>
-          </a>
-          <a
-            href="/sign-up"
-            className="text-sm font-medium text-[#1B2A4A] hover:text-[#FF6B35] transition-colors"
-          >
-            Sign in →
-          </a>
-        </div>
-      </nav>
+      <SiteNav />
 
       {/* Hero */}
       <section className="max-w-3xl mx-auto px-6 pt-16 pb-8 text-center">
@@ -123,10 +111,7 @@ export default function CheckPage() {
         </a>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-black/5 py-8 text-center text-sm text-[#1B2A4A]/30">
-        © 2026 LocalBeacon. All rights reserved.
-      </footer>
+      <SiteFooter />
     </div>
   )
 }

@@ -38,7 +38,8 @@ export async function POST(req: Request) {
 
   for (const business of businesses) {
     try {
-      const user = (business as any).users
+      // Supabase infers a complex union type for nested joins; cast via unknown to access nested fields
+      const user = (business as unknown as { users: { clerk_id: string; email: string } | null }).users
       const email = user?.email
       if (!email) continue
 

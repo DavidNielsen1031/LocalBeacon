@@ -180,7 +180,7 @@ export default function ReviewsPage() {
             <Button
               onClick={draft}
               disabled={!comment.trim() || loading}
-              className="w-full bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold"
+              className="w-full bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold"
             >
               {loading ? (
                 <span className="flex items-center gap-2"><span className="animate-spin">⟳</span> Drafting...</span>
@@ -213,7 +213,7 @@ export default function ReviewsPage() {
                   <Button
                     size="sm"
                     onClick={copy}
-                    className="bg-[#FF6B35] text-black hover:bg-[#FF6B35]/90 font-semibold text-xs flex-1"
+                    className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold text-xs flex-1"
                   >
                     {copied ? '✓ Copied!' : 'Copy Response'}
                   </Button>

@@ -20,7 +20,7 @@ export default function TermsPage() {
 
       <main className="max-w-3xl mx-auto px-6 py-12">
         <h1 className="text-3xl font-bold mb-2">Terms of Service</h1>
-        <p className="text-white/40 text-sm mb-8">Last updated: March 1, 2026</p>
+        <p className="text-white/70 text-sm mb-8">Last updated: March 1, 2026</p>
 
         <div className="space-y-8 text-white/70 text-sm leading-relaxed">
           <section>
@@ -118,7 +118,7 @@ export default function TermsPage() {
       </main>
 
       <footer className="px-6 py-8 border-t border-white/10">
-        <div className="max-w-3xl mx-auto flex items-center justify-between text-white/30 text-xs">
+        <div className="max-w-3xl mx-auto flex items-center justify-between text-white/60 text-xs">
           <Link href="/" className="hover:text-white/50">← Back to LocalBeacon.ai</Link>
           <Link href="/privacy" className="hover:text-white/50">Privacy Policy</Link>
         </div>
