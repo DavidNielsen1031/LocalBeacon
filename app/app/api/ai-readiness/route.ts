@@ -1,7 +1,9 @@
 export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
+import { auth } from '@clerk/nextjs/server'
 import { createServerClient } from '@/lib/supabase'
 import { rateLimit } from '@/lib/rate-limit'
+import { enforceLimits } from '@/lib/plan-limits'
 import rulesConfig from '@/lib/aeo-rules.json'
 
 interface CheckResult {
@@ -410,6 +412,15 @@ export async function POST(req: NextRequest) {
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || req.headers.get('x-real-ip') || 'unknown'
   if (!rateLimit(ip, 10, 60_000)) {
     return NextResponse.json({ error: 'Too many requests. Please wait before scanning again.' }, { status: 429 })
+  }
+
+  // Plan enforcement: dashboard scans require a paid plan (free plan gets 1/month via scansPerMonth limit)
+  const { userId } = await auth()
+  if (userId) {
+    const limitError = await enforceLimits(userId, 'aeo_scan')
+    if (limitError) {
+      return NextResponse.json(limitError, { status: 403 })
+    }
   }
 
   const { url } = await req.json() as { url: string }

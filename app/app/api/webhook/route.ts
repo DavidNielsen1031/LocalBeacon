@@ -44,16 +44,31 @@ export async function POST(req: NextRequest) {
       const plan = session.metadata?.plan?.toLowerCase() || "solo";
 
       if (clerkUserId && supabase) {
-        await supabase
-          .from("users")
-          .update({
-            plan: plan,
-            stripe_customer_id: session.customer as string,
-            stripe_subscription_id: session.subscription as string,
-          })
-          .eq("clerk_id", clerkUserId);
+        if (plan === "dfy") {
+          // DFY: one-time purchase — grant Solo access for 30 days
+          const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+          await supabase
+            .from("users")
+            .update({
+              plan: "solo",
+              plan_expires_at: expiresAt,
+              stripe_customer_id: session.customer as string,
+            })
+            .eq("clerk_id", clerkUserId);
+          console.log(`DFY checkout completed: ${session.id} — Solo access granted until ${expiresAt}, user: ${clerkUserId}`);
+        } else {
+          // Regular subscription (solo/agency)
+          await supabase
+            .from("users")
+            .update({
+              plan: plan,
+              stripe_customer_id: session.customer as string,
+              stripe_subscription_id: session.subscription as string,
+            })
+            .eq("clerk_id", clerkUserId);
+          console.log(`Checkout completed: ${session.id} — plan: ${plan}, user: ${clerkUserId}`);
+        }
       }
-      console.log(`Checkout completed: ${session.id} — plan: ${plan}, user: ${clerkUserId}`);
       break;
     }
 

@@ -12,6 +12,7 @@ export interface PlanLimits {
   competitors: number | null
   blogPosts: number | null
   monthlyReports: boolean
+  llmsTxt: number | null
 }
 
 export interface UsageCheck {
@@ -34,6 +35,7 @@ const PLAN_LIMITS: Record<PlanTier, PlanLimits> = {
     competitors: 1,
     blogPosts: 0,
     monthlyReports: false,
+    llmsTxt: 0,
   },
   solo: {
     postsPerMonth: null,
@@ -45,6 +47,7 @@ const PLAN_LIMITS: Record<PlanTier, PlanLimits> = {
     competitors: 5,
     blogPosts: 4,
     monthlyReports: true,
+    llmsTxt: null,
   },
   agency: {
     postsPerMonth: null,
@@ -56,6 +59,7 @@ const PLAN_LIMITS: Record<PlanTier, PlanLimits> = {
     competitors: 10,
     blogPosts: null,
     monthlyReports: true,
+    llmsTxt: null,
   },
 }
 
@@ -67,6 +71,7 @@ export type ContentType =
   | 'faq'
   | 'aeo_scan'
   | 'competitor_scan'
+  | 'llms_txt'
 
 /**
  * Get the user's current plan tier from Supabase.
@@ -78,12 +83,22 @@ export async function getUserPlan(clerkUserId: string): Promise<PlanTier> {
 
   const { data: user } = await supabase
     .from('users')
-    .select('plan')
+    .select('plan, plan_expires_at')
     .eq('clerk_id', clerkUserId)
     .single()
 
   if (!user?.plan) return 'free'
-  
+
+  // Check if the plan has expired (used for DFY 30-day Solo access)
+  if (user.plan_expires_at && new Date(user.plan_expires_at) < new Date()) {
+    // Plan expired — downgrade to free in DB (best-effort) and return free
+    await supabase
+      .from('users')
+      .update({ plan: 'free', plan_expires_at: null })
+      .eq('clerk_id', clerkUserId)
+    return 'free'
+  }
+
   const plan = user.plan.toLowerCase()
   if (plan === 'solo' || plan === 'agency') return plan
   return 'free'
@@ -155,6 +170,7 @@ function getLimitKey(contentType: ContentType): keyof PlanLimits | null {
     case 'faq':           return 'faqGenerations'
     case 'aeo_scan':      return 'scansPerMonth'
     case 'competitor_scan': return 'competitors'
+    case 'llms_txt':      return 'llmsTxt'
     default:              return null
   }
 }

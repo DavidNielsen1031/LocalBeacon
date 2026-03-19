@@ -22,6 +22,13 @@ export async function POST(req: NextRequest) {
   const { userId } = await auth()
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
+  // Plan enforcement: llms.txt generation is a paid feature (free = 0)
+  const { enforceLimits } = await import('@/lib/plan-limits')
+  const limitError = await enforceLimits(userId, 'llms_txt')
+  if (limitError) {
+    return NextResponse.json(limitError, { status: 403 })
+  }
+
   const body = await req.json() as LlmsTxtRequest
   const {
     businessName, category, city, state,

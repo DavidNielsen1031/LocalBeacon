@@ -39,6 +39,7 @@ function getGrade(score: number): { letter: string; color: string } {
 
 export default function CompetitorsPage() {
   const { plan } = useBusinessContext()
+  const maxCompetitors = plan === 'solo' ? 5 : plan === 'agency' ? 10 : 1
   const [competitors, setCompetitors] = useState<CompetitorEntry[]>([])
   const [newUrl, setNewUrl] = useState('')
   const [myResult, setMyResult] = useState<ScanResult | null>(null)
@@ -71,7 +72,7 @@ export default function CompetitorsPage() {
   }
 
   const addCompetitor = async () => {
-    if (!newUrl.trim() || competitors.length >= 3) return
+    if (!newUrl.trim() || competitors.length >= maxCompetitors) return
     const url = newUrl.trim()
     setNewUrl('')
     const entry: CompetitorEntry = { url, result: null, loading: true }
@@ -159,10 +160,12 @@ export default function CompetitorsPage() {
       <div className="bg-white border border-[#DFE6E9] rounded-xl p-5 mb-6">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-sm font-medium text-[#2D3436]">Competitors</h2>
-          <span className="text-xs text-[#636E72]/60">{competitors.length}/3</span>
+          <span className="text-xs text-[#636E72]/60">
+            {competitors.length} of {maxCompetitors} competitor{maxCompetitors > 1 ? 's' : ''}
+          </span>
         </div>
 
-        {competitors.length < 3 && (
+        {competitors.length < maxCompetitors && (
           <div className="flex gap-3 mb-4">
             <input
               type="url"

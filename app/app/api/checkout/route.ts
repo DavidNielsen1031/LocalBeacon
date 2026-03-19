@@ -12,7 +12,12 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json()
-  const { plan } = body as { plan: 'SOLO' | 'AGENCY' | 'DFY' }
+  const { plan } = body as { plan: 'SOLO' | 'DFY' }
+
+  // Agency plan has been retired — only Solo and DFY are available
+  if ((plan as string) === 'AGENCY') {
+    return NextResponse.json({ error: 'Agency plan is no longer available. Please select Solo.' }, { status: 400 })
+  }
 
   const planConfig = PLANS[plan]
   if (!planConfig) {
