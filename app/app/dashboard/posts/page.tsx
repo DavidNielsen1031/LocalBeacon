@@ -91,6 +91,7 @@ export default function PostsPage() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editTitle, setEditTitle] = useState('')
   const [editBody, setEditBody] = useState('')
+  const [error, setError] = useState<string | null>(null)
 
   const startEdit = (post: QueuedPost) => {
     setEditingId(post.id)
@@ -111,6 +112,7 @@ export default function PostsPage() {
   const generate = async () => {
     setLoading(true)
     setResult(null)
+    setError(null)
     try {
       const res = await fetch('/api/generate/gbp-post', {
         method: 'POST',
@@ -120,7 +122,7 @@ export default function PostsPage() {
       const data = await res.json()
       setResult(data)
     } catch {
-      // handle error silently
+      setError('Something went wrong. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -145,6 +147,7 @@ export default function PostsPage() {
 
   return (
     <div className="flex-1 px-6 py-8 max-w-4xl">
+      {error && <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-4 mb-4">{error}</div>}
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-[#2D3436]">Google Posts</h1>

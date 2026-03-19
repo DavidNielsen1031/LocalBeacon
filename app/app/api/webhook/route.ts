@@ -64,10 +64,15 @@ export async function POST(req: NextRequest) {
 
       if (clerkUserId && supabase) {
         if (status === "active") {
-          // Plan stays as-is
-        } else if (status === "past_due" || status === "unpaid") {
-          // Keep plan but flag status
-          console.log(`Subscription ${status} for user ${clerkUserId}`);
+          // Plan stays as-is — already set on checkout.session.completed
+          console.log(`Subscription active for user ${clerkUserId}`);
+        } else if (status === "past_due" || status === "unpaid" || status === "canceled") {
+          // Downgrade to free on payment failure or cancellation
+          await supabase
+            .from("users")
+            .update({ plan: "free" })
+            .eq("clerk_id", clerkUserId);
+          console.log(`Subscription ${status} — downgraded user ${clerkUserId} to free`);
         }
       }
       break;
@@ -92,7 +97,25 @@ export async function POST(req: NextRequest) {
 
     case "invoice.payment_failed": {
       const invoice = event.data.object as Stripe.Invoice;
-      console.log(`Payment failed for invoice: ${invoice.id}`);
+      console.log(`Payment failed for invoice: ${invoice.id}, customer: ${invoice.customer}`);
+
+      // Find user by Stripe customer ID and downgrade to free
+      if (invoice.customer && supabase) {
+        const customerId = typeof invoice.customer === 'string' ? invoice.customer : invoice.customer.id;
+        const { data: user } = await supabase
+          .from("users")
+          .select("clerk_id")
+          .eq("stripe_customer_id", customerId)
+          .single();
+
+        if (user?.clerk_id) {
+          await supabase
+            .from("users")
+            .update({ plan: "free" })
+            .eq("clerk_id", user.clerk_id);
+          console.log(`Payment failed — downgraded user ${user.clerk_id} to free`);
+        }
+      }
       break;
     }
 

@@ -130,23 +130,25 @@ export default function BlogPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
           <div>
-            <label className="text-sm text-[#636E72] block mb-1.5">City or neighborhood</label>
+            <label htmlFor="blog-city" className="text-sm text-[#636E72] block mb-1.5">City or neighborhood</label>
             <input
+              id="blog-city"
               type="text"
               value={city}
               onChange={e => setCity(e.target.value)}
               placeholder="e.g. Burnsville, Apple Valley"
-              className="w-full bg-white0 border border-[#DFE6E9] rounded-lg px-4 py-2.5 text-[#2D3436] placeholder:text-[#636E72]/60 focus:border-[#FF6B35]/50 focus:outline-none"
+              className="w-full bg-white border border-[#DFE6E9] rounded-lg px-4 py-2.5 text-[#2D3436] placeholder:text-[#636E72]/60 focus:border-[#FF6B35]/50 focus:outline-none"
             />
           </div>
           <div>
-            <label className="text-sm text-[#636E72] block mb-1.5">Topic <span className="text-[#636E72]/60">(optional — we&apos;ll pick one if blank)</span></label>
+            <label htmlFor="blog-topic" className="text-sm text-[#636E72] block mb-1.5">Topic <span className="text-[#636E72]/60">(optional — we&apos;ll pick one if blank)</span></label>
             <input
+              id="blog-topic"
               type="text"
               value={topic}
               onChange={e => setTopic(e.target.value)}
               placeholder="e.g. water heater maintenance, teeth whitening"
-              className="w-full bg-white0 border border-[#DFE6E9] rounded-lg px-4 py-2.5 text-[#2D3436] placeholder:text-[#636E72]/60 focus:border-[#FF6B35]/50 focus:outline-none"
+              className="w-full bg-white border border-[#DFE6E9] rounded-lg px-4 py-2.5 text-[#2D3436] placeholder:text-[#636E72]/60 focus:border-[#FF6B35]/50 focus:outline-none"
             />
           </div>
         </div>

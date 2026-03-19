@@ -44,6 +44,7 @@ export default function DashboardPage() {
 
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!activeBusinessId) {
@@ -54,10 +55,11 @@ export default function DashboardPage() {
 
     setLoading(true);
     setData(null);
+    setError(null);
     fetch(`/api/businesses/${activeBusinessId}/dashboard`)
       .then((res) => (res.ok ? res.json() : null))
       .then((d) => setData(d))
-      .catch(() => setData(null))
+      .catch(() => { setData(null); setError('Something went wrong. Please try again.') })
       .finally(() => setLoading(false));
   }, [activeBusinessId]);
 
@@ -99,6 +101,7 @@ export default function DashboardPage() {
 
   return (
     <div className="flex-1 px-6 py-8 max-w-6xl">
+      {error && <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-4 mb-4">{error}</div>}
       {/* Free plan upgrade banner */}
       {plan === 'free' && !upgradeBannerDismissed && (
         <div

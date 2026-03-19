@@ -36,10 +36,12 @@ export default function PagesPage() {
   const [showAdd, setShowAdd] = useState(false)
   const [previewPage, setPreviewPage] = useState<ServicePage | null>(null)
   const [copied, setCopied] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const generate = async () => {
     if (!cityInput.trim()) return
     setGenerating(true)
+    setError(null)
     try {
       const res = await fetch('/api/generate/service-page', {
         method: 'POST',
@@ -51,7 +53,7 @@ export default function PagesPage() {
       setCityInput('')
       setShowAdd(false)
     } catch {
-      // handle silently
+      setError('Something went wrong. Please try again.')
     } finally {
       setGenerating(false)
     }
@@ -65,6 +67,7 @@ export default function PagesPage() {
 
   return (
     <div className="flex-1 px-6 py-8 max-w-4xl">
+      {error && <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-4 mb-4">{error}</div>}
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-[#2D3436]">City Pages</h1>

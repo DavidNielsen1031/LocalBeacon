@@ -34,11 +34,13 @@ export default function LlmsTxtPage() {
   const [result, setResult] = useState<LlmsTxtResult | null>(null)
   const [copied, setCopied] = useState(false)
   const [platform, setPlatform] = useState<Platform>('generic')
+  const [error, setError] = useState<string | null>(null)
 
   const handleGenerate = async () => {
     if (!businessName || !category || !city || !state) return
     setLoading(true)
     setResult(null)
+    setError(null)
 
     try {
       const res = await fetch('/api/generate/llms-txt', {
@@ -61,7 +63,7 @@ export default function LlmsTxtPage() {
       setResult(data)
       try { posthog.capture('tool_used', { tool: 'llms-txt' }) } catch {}
     } catch {
-      // fallback
+      setError('Something went wrong. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -94,6 +96,7 @@ export default function LlmsTxtPage() {
 
   return (
     <div className="space-y-8">
+      {error && <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-4 mb-4">{error}</div>}
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-[#2D3436]">AI Discovery File</h1>
@@ -118,75 +121,75 @@ export default function LlmsTxtPage() {
           <h3 className="font-semibold text-[#2D3436] text-sm">Business Details</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-[#636E72] mb-1">Business Name *</label>
-              <input type="text" value={businessName} onChange={(e) => setBusinessName(e.target.value)}
+              <label htmlFor="llms-businessName" className="block text-xs font-medium text-[#636E72] mb-1">Business Name *</label>
+              <input id="llms-businessName" type="text" value={businessName} onChange={(e) => setBusinessName(e.target.value)}
                 placeholder="Thompson Plumbing" className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#636E72] mb-1">Business Type *</label>
-              <select value={category} onChange={(e) => setCategory(e.target.value)}
+              <label htmlFor="llms-category" className="block text-xs font-medium text-[#636E72] mb-1">Business Type *</label>
+              <select id="llms-category" value={category} onChange={(e) => setCategory(e.target.value)}
                 className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] focus:outline-none focus:border-[#FF6B35]/50">
                 <option value="" className="bg-white">Select...</option>
                 {categories.map(cat => <option key={cat} value={cat} className="bg-white">{cat}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#636E72] mb-1">City *</label>
-              <input type="text" value={city} onChange={(e) => setCity(e.target.value)}
+              <label htmlFor="llms-city" className="block text-xs font-medium text-[#636E72] mb-1">City *</label>
+              <input id="llms-city" type="text" value={city} onChange={(e) => setCity(e.target.value)}
                 placeholder="Burnsville" className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#636E72] mb-1">State *</label>
-              <input type="text" value={state} onChange={(e) => setState(e.target.value)}
+              <label htmlFor="llms-state" className="block text-xs font-medium text-[#636E72] mb-1">State *</label>
+              <input id="llms-state" type="text" value={state} onChange={(e) => setState(e.target.value)}
                 placeholder="MN" className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#636E72] mb-1">Phone</label>
-              <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)}
+              <label htmlFor="llms-phone" className="block text-xs font-medium text-[#636E72] mb-1">Phone</label>
+              <input id="llms-phone" type="text" value={phone} onChange={(e) => setPhone(e.target.value)}
                 placeholder="(952) 555-1234" className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#636E72] mb-1">Website</label>
-              <input type="text" value={website} onChange={(e) => setWebsite(e.target.value)}
+              <label htmlFor="llms-website" className="block text-xs font-medium text-[#636E72] mb-1">Website</label>
+              <input id="llms-website" type="text" value={website} onChange={(e) => setWebsite(e.target.value)}
                 placeholder="https://thompsonplumbing.com" className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#636E72] mb-1">Address</label>
-              <input type="text" value={address} onChange={(e) => setAddress(e.target.value)}
+              <label htmlFor="llms-address" className="block text-xs font-medium text-[#636E72] mb-1">Address</label>
+              <input id="llms-address" type="text" value={address} onChange={(e) => setAddress(e.target.value)}
                 placeholder="123 Main St, Burnsville, MN 55337" className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#636E72] mb-1">Hours</label>
-              <input type="text" value={hours} onChange={(e) => setHours(e.target.value)}
+              <label htmlFor="llms-hours" className="block text-xs font-medium text-[#636E72] mb-1">Hours</label>
+              <input id="llms-hours" type="text" value={hours} onChange={(e) => setHours(e.target.value)}
                 placeholder="Mon-Fri 7AM-6PM, Sat 8AM-2PM" className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50" />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-[#636E72] mb-1">Services (comma-separated)</label>
-            <input type="text" value={services} onChange={(e) => setServices(e.target.value)}
+            <label htmlFor="llms-services" className="block text-xs font-medium text-[#636E72] mb-1">Services (comma-separated)</label>
+            <input id="llms-services" type="text" value={services} onChange={(e) => setServices(e.target.value)}
               placeholder="Water heater repair, drain cleaning, sewer line replacement, faucet installation" className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50" />
           </div>
           <div>
-            <label className="block text-xs font-medium text-[#636E72] mb-1">Service Areas (comma-separated cities)</label>
-            <input type="text" value={serviceAreas} onChange={(e) => setServiceAreas(e.target.value)}
+            <label htmlFor="llms-serviceAreas" className="block text-xs font-medium text-[#636E72] mb-1">Service Areas (comma-separated cities)</label>
+            <input id="llms-serviceAreas" type="text" value={serviceAreas} onChange={(e) => setServiceAreas(e.target.value)}
               placeholder="Apple Valley, Eagan, Lakeville, Prior Lake, Savage" className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50" />
           </div>
           <div>
-            <label className="block text-xs font-medium text-[#636E72] mb-1">Business Description (optional)</label>
-            <textarea value={description} onChange={(e) => setDescription(e.target.value)}
+            <label htmlFor="llms-description" className="block text-xs font-medium text-[#636E72] mb-1">Business Description (optional)</label>
+            <textarea id="llms-description" value={description} onChange={(e) => setDescription(e.target.value)}
               rows={2} placeholder="Family-owned plumbing company serving the south metro since 2005..."
               className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50" />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-[#636E72] mb-1">Google Review Rating</label>
-              <input type="text" value={reviewRating} onChange={(e) => setReviewRating(e.target.value)}
+              <label htmlFor="llms-reviewRating" className="block text-xs font-medium text-[#636E72] mb-1">Google Review Rating</label>
+              <input id="llms-reviewRating" type="text" value={reviewRating} onChange={(e) => setReviewRating(e.target.value)}
                 placeholder="4.8" className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#636E72] mb-1">Number of Reviews</label>
-              <input type="text" value={reviewCount} onChange={(e) => setReviewCount(e.target.value)}
+              <label htmlFor="llms-reviewCount" className="block text-xs font-medium text-[#636E72] mb-1">Number of Reviews</label>
+              <input id="llms-reviewCount" type="text" value={reviewCount} onChange={(e) => setReviewCount(e.target.value)}
                 placeholder="127" className="w-full bg-white border border-[#DFE6E9] rounded-lg px-3 py-2 text-sm text-[#2D3436] placeholder:text-[#636E72]/60 focus:outline-none focus:border-[#FF6B35]/50" />
             </div>
           </div>
@@ -225,7 +228,7 @@ export default function LlmsTxtPage() {
 
           <Card className="bg-white border-[#DFE6E9]">
             <CardContent className="p-5">
-              <pre className="bg-white0 rounded-lg p-4 overflow-x-auto text-sm text-green-400 whitespace-pre-wrap">
+              <pre className="bg-white rounded-lg p-4 overflow-x-auto text-sm text-green-400 whitespace-pre-wrap">
                 {result.content}
               </pre>
               <p className="text-[#636E72]/60 text-xs mt-3">{result.byteSize} bytes — well under the 2KB recommended size</p>

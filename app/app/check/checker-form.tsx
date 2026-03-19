@@ -166,6 +166,7 @@ export function CheckerForm() {
           <div className="flex gap-3">
             <input
               type="url"
+              aria-label="Your website URL"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder="Enter your website URL (e.g. bobsplumbing.com)"
@@ -204,6 +205,7 @@ export function CheckerForm() {
             <div className="mt-3">
               <input
                 type="url"
+                aria-label="Competitor website URL"
                 value={competitorUrl}
                 onChange={(e) => setCompetitorUrl(e.target.value)}
                 placeholder="Competitor's website (optional)"
@@ -286,6 +288,7 @@ export function CheckerForm() {
             <form onSubmit={handleEmailSubmit} className="flex gap-2">
               <input
                 type="email"
+                aria-label="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Your email address"

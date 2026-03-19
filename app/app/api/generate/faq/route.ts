@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 import { auth } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
 import { generateText } from '@/lib/anthropic-client'
+import { enforceLimits } from '@/lib/plan-limits'
 
 interface FaqRequest {
   businessName: string
@@ -15,6 +16,10 @@ interface FaqRequest {
 export async function POST(req: NextRequest) {
   const { userId } = await auth()
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  // Check plan limits
+  const limitError = await enforceLimits(userId, 'faq')
+  if (limitError) return NextResponse.json({ ...limitError, error: 'Upgrade to Solo for unlimited FAQ generation', upgradeUrl: '/pricing' }, { status: 403 })
 
   const body = await req.json() as FaqRequest
   const { businessName, category, city, state, services = [], count = 20 } = body

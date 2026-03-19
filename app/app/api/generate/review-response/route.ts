@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 import { auth } from '@clerk/nextjs/server'
 import { generateText } from '@/lib/anthropic-client'
 import { getBusinessContext, buildPromptContext } from '@/lib/prompt-context'
+import { enforceLimits } from '@/lib/plan-limits'
 import { NextRequest, NextResponse } from 'next/server'
 
 const mockResponses: Record<number, (name: string, biz: string) => string> = {
@@ -23,6 +24,10 @@ const toneGuide: Record<number, string> = {
 export async function POST(req: NextRequest) {
   const { userId } = await auth()
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  // Check plan limits
+  const limitError = await enforceLimits(userId, 'review_reply')
+  if (limitError) return NextResponse.json({ ...limitError, error: 'Upgrade to Solo for unlimited review responses', upgradeUrl: '/pricing' }, { status: 403 })
 
   const body = await req.json()
   const {

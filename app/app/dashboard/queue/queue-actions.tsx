@@ -128,7 +128,7 @@ export function QueueActions({
             <textarea
               value={editText}
               onChange={(e) => setEditText(e.target.value)}
-              className="w-full bg-white0 border border-[#DFE6E9] rounded-lg p-3 text-[#2D3436] text-sm min-h-[120px] focus:outline-none focus:border-[#FF6B35]/50"
+              className="w-full bg-white border border-[#DFE6E9] rounded-lg p-3 text-[#2D3436] text-sm min-h-[120px] focus:outline-none focus:border-[#FF6B35]/50"
             />
           ) : (
             <p className="text-[#2D3436] text-sm whitespace-pre-wrap">{content}</p>

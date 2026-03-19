@@ -44,6 +44,7 @@ export default function CompetitorsPage() {
   const [myResult, setMyResult] = useState<ScanResult | null>(null)
   const [myUrl, setMyUrl] = useState('')
   const [myLoading, setMyLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const scanUrl = useCallback(async (url: string): Promise<ScanResult | null> => {
     try {
@@ -62,8 +63,10 @@ export default function CompetitorsPage() {
   const scanMySite = async () => {
     if (!myUrl.trim()) return
     setMyLoading(true)
+    setError(null)
     const result = await scanUrl(myUrl.trim())
     setMyResult(result)
+    if (!result) setError('Something went wrong. Please try again.')
     setMyLoading(false)
   }
 
@@ -86,6 +89,7 @@ export default function CompetitorsPage() {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
+      {error && <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-4 mb-4">{error}</div>}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-[#2D3436]">Competitor Comparison</h1>
         <p className="text-[#636E72] text-sm mt-1">

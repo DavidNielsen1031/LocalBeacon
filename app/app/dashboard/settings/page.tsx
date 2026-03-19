@@ -89,8 +89,9 @@ export default function SettingsPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <Label className="text-[#2D3436] text-sm mb-1.5 block">Business Name</Label>
+            <Label htmlFor="settings-name" className="text-[#2D3436] text-sm mb-1.5 block">Business Name</Label>
             <Input
+              id="settings-name"
               value={form.name}
               onChange={(e) => update("name", e.target.value)}
               placeholder="Mike's Plumbing"
@@ -100,8 +101,9 @@ export default function SettingsPage() {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label className="text-[#2D3436] text-sm mb-1.5 block">Phone</Label>
+              <Label htmlFor="settings-phone" className="text-[#2D3436] text-sm mb-1.5 block">Phone</Label>
               <Input
+                id="settings-phone"
                 value={form.phone}
                 onChange={(e) => update("phone", e.target.value)}
                 placeholder="(555) 123-4567"
@@ -110,8 +112,9 @@ export default function SettingsPage() {
               />
             </div>
             <div>
-              <Label className="text-[#2D3436] text-sm mb-1.5 block">Website</Label>
+              <Label htmlFor="settings-website" className="text-[#2D3436] text-sm mb-1.5 block">Website</Label>
               <Input
+                id="settings-website"
                 value={form.website}
                 onChange={(e) => update("website", e.target.value)}
                 placeholder="https://yourbusiness.com"
@@ -121,8 +124,9 @@ export default function SettingsPage() {
             </div>
           </div>
           <div>
-            <Label className="text-[#2D3436] text-sm mb-1.5 block">Street Address</Label>
+            <Label htmlFor="settings-address" className="text-[#2D3436] text-sm mb-1.5 block">Street Address</Label>
             <Input
+              id="settings-address"
               value={form.address}
               onChange={(e) => update("address", e.target.value)}
               placeholder="123 Main St"
@@ -132,8 +136,9 @@ export default function SettingsPage() {
           </div>
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <Label className="text-[#2D3436] text-sm mb-1.5 block">City</Label>
+              <Label htmlFor="settings-city" className="text-[#2D3436] text-sm mb-1.5 block">City</Label>
               <Input
+                id="settings-city"
                 value={form.city}
                 onChange={(e) => update("city", e.target.value)}
                 placeholder="Denver"
@@ -142,8 +147,9 @@ export default function SettingsPage() {
               />
             </div>
             <div>
-              <Label className="text-[#2D3436] text-sm mb-1.5 block">State</Label>
+              <Label htmlFor="settings-state" className="text-[#2D3436] text-sm mb-1.5 block">State</Label>
               <Input
+                id="settings-state"
                 value={form.state}
                 onChange={(e) => update("state", e.target.value)}
                 placeholder="CO"
@@ -152,8 +158,9 @@ export default function SettingsPage() {
               />
             </div>
             <div>
-              <Label className="text-[#2D3436] text-sm mb-1.5 block">ZIP</Label>
+              <Label htmlFor="settings-zip" className="text-[#2D3436] text-sm mb-1.5 block">ZIP</Label>
               <Input
+                id="settings-zip"
                 value={form.zip}
                 onChange={(e) => update("zip", e.target.value)}
                 placeholder="80202"
@@ -163,8 +170,9 @@ export default function SettingsPage() {
             </div>
           </div>
           <div>
-            <Label className="text-[#2D3436] text-sm mb-1.5 block">Business Description</Label>
+            <Label htmlFor="settings-description" className="text-[#2D3436] text-sm mb-1.5 block">Business Description</Label>
             <Textarea
+              id="settings-description"
               value={form.description}
               onChange={(e) => update("description", e.target.value)}
               placeholder="Describe what your business does, who you serve, and what makes you different..."
@@ -173,8 +181,9 @@ export default function SettingsPage() {
             />
           </div>
           <div>
-            <Label className="text-[#2D3436] text-sm mb-1.5 block">Service Areas</Label>
+            <Label htmlFor="settings-service-areas" className="text-[#2D3436] text-sm mb-1.5 block">Service Areas</Label>
             <Input
+              id="settings-service-areas"
               value={form.service_areas}
               onChange={(e) => update("service_areas", e.target.value)}
               placeholder="Denver, Lakewood, Aurora, Arvada"
@@ -184,8 +193,9 @@ export default function SettingsPage() {
             <p className="text-[#636E72]/60 text-xs mt-1">Comma-separated cities or neighborhoods</p>
           </div>
           <div>
-            <Label className="text-[#2D3436] text-sm mb-1.5 block">Specialties</Label>
+            <Label htmlFor="settings-specialties" className="text-[#2D3436] text-sm mb-1.5 block">Specialties</Label>
             <Input
+              id="settings-specialties"
               value={form.specialties}
               onChange={(e) => update("specialties", e.target.value)}
               placeholder="Emergency plumbing, drain cleaning, water heater installation"

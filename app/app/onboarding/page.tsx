@@ -200,8 +200,9 @@ function OnboardingContent() {
             </div>
             <div className="space-y-5">
               <div>
-                <Label className="text-[#2D3436] mb-2 block">Business Name *</Label>
+                <Label htmlFor="onboarding-name" className="text-[#2D3436] mb-2 block">Business Name *</Label>
                 <Input
+                  id="onboarding-name"
                   placeholder="e.g. Johnson Plumbing & Heating"
                   value={data.name}
                   onChange={e => update('name', e.target.value)}
@@ -209,8 +210,9 @@ function OnboardingContent() {
                 />
               </div>
               <div>
-                <Label className="text-[#2D3436] mb-2 block">Business Type *</Label>
+                <Label htmlFor="onboarding-category" className="text-[#2D3436] mb-2 block">Business Type *</Label>
                 <select
+                  id="onboarding-category"
                   value={data.category}
                   onChange={e => update('category', e.target.value)}
                   className="w-full bg-white border border-[#DFE6E9] text-[#2D3436] rounded-md px-3 py-2 focus:border-[#FF6B35]/50 focus:outline-none"
@@ -223,8 +225,9 @@ function OnboardingContent() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-[#2D3436] mb-2 block">City *</Label>
+                  <Label htmlFor="onboarding-city" className="text-[#2D3436] mb-2 block">City *</Label>
                   <Input
+                    id="onboarding-city"
                     placeholder="e.g. Burnsville"
                     value={data.primary_city}
                     onChange={e => update('primary_city', e.target.value)}
@@ -232,8 +235,9 @@ function OnboardingContent() {
                   />
                 </div>
                 <div>
-                  <Label className="text-[#2D3436] mb-2 block">State *</Label>
+                  <Label htmlFor="onboarding-state" className="text-[#2D3436] mb-2 block">State *</Label>
                   <Input
+                    id="onboarding-state"
                     placeholder="e.g. MN"
                     maxLength={2}
                     value={data.primary_state}
@@ -243,8 +247,9 @@ function OnboardingContent() {
                 </div>
               </div>
               <div>
-                <Label className="text-[#2D3436] mb-2 block">Phone Number</Label>
+                <Label htmlFor="onboarding-phone" className="text-[#2D3436] mb-2 block">Phone Number</Label>
                 <Input
+                  id="onboarding-phone"
                   placeholder="e.g. (612) 555-0100"
                   value={data.phone}
                   onChange={e => update('phone', e.target.value)}
@@ -252,8 +257,9 @@ function OnboardingContent() {
                 />
               </div>
               <div>
-                <Label className="text-[#2D3436] mb-2 block">Website <span className="text-[#636E72]">(optional)</span></Label>
+                <Label htmlFor="onboarding-website" className="text-[#2D3436] mb-2 block">Website <span className="text-[#636E72]">(optional)</span></Label>
                 <Input
+                  id="onboarding-website"
                   placeholder="e.g. https://johnsonplumbing.com"
                   value={data.website}
                   onChange={e => update('website', e.target.value)}

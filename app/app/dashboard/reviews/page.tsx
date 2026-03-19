@@ -30,6 +30,7 @@ export default function ReviewsPage() {
   const [loading, setLoading] = useState(false)
   const [response, setResponse] = useState('')
   const [copied, setCopied] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [history, setHistory] = useState<DraftedResponse[]>([
     {
       id: 'demo-1',
@@ -61,6 +62,7 @@ export default function ReviewsPage() {
     if (!comment.trim()) return
     setLoading(true)
     setResponse('')
+    setError(null)
     try {
       const res = await fetch('/api/generate/review-response', {
         method: 'POST',
@@ -83,7 +85,7 @@ export default function ReviewsPage() {
         timestamp: new Date().toLocaleDateString(),
       }, ...prev])
     } catch {
-      // handle silently
+      setError('Something went wrong. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -106,6 +108,7 @@ export default function ReviewsPage() {
 
   return (
     <div className="flex-1 px-6 py-8 max-w-5xl">
+      {error && <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-4 mb-4">{error}</div>}
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-[#2D3436]">Review Responses</h1>
@@ -137,8 +140,9 @@ export default function ReviewsPage() {
           </CardHeader>
           <CardContent className="space-y-5">
             <div>
-              <Label className="text-[#2D3436] mb-2 block text-sm">Reviewer Name <span className="text-[#636E72]/60">(optional)</span></Label>
+              <Label htmlFor="review-author" className="text-[#2D3436] mb-2 block text-sm">Reviewer Name <span className="text-[#636E72]/60">(optional)</span></Label>
               <Input
+                id="review-author"
                 placeholder="e.g. John D."
                 value={author}
                 onChange={e => setAuthor(e.target.value)}
@@ -163,8 +167,9 @@ export default function ReviewsPage() {
               </div>
             </div>
             <div>
-              <Label className="text-[#2D3436] mb-2 block text-sm">Review Text *</Label>
+              <Label htmlFor="review-comment" className="text-[#2D3436] mb-2 block text-sm">Review Text *</Label>
               <textarea
+                id="review-comment"
                 placeholder="Paste the full review text here..."
                 value={comment}
                 onChange={e => setComment(e.target.value)}

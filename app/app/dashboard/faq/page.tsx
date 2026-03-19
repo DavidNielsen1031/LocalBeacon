@@ -31,11 +31,13 @@ export default function FaqBuilderPage() {
   const [result, setResult] = useState<FaqResult | null>(null)
   const [copied, setCopied] = useState<'html' | 'schema' | null>(null)
   const [platform, setPlatform] = useState<Platform>('generic')
+  const [error, setError] = useState<string | null>(null)
 
   const handleGenerate = async () => {
     if (!businessName || !category || !city || !state) return
     setLoading(true)
     setResult(null)
+    setError(null)
 
     try {
       const res = await fetch('/api/generate/faq', {
@@ -54,7 +56,7 @@ export default function FaqBuilderPage() {
       setResult(data)
       try { posthog.capture('tool_used', { tool: 'faq' }) } catch {}
     } catch {
-      // fallback
+      setError('Something went wrong. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -85,6 +87,7 @@ export default function FaqBuilderPage() {
 
   return (
     <div className="space-y-8">
+      {error && <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-4 mb-4">{error}</div>}
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-[#2D3436]">FAQ Page Builder</h1>
@@ -113,8 +116,9 @@ export default function FaqBuilderPage() {
         <CardContent className="p-6 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-[#2D3436] mb-1.5">Business Name</label>
+              <label htmlFor="faq-businessName" className="block text-sm font-medium text-[#2D3436] mb-1.5">Business Name</label>
               <input
+                id="faq-businessName"
                 type="text"
                 value={businessName}
                 onChange={(e) => setBusinessName(e.target.value)}
@@ -123,8 +127,9 @@ export default function FaqBuilderPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#2D3436] mb-1.5">Business Type</label>
+              <label htmlFor="faq-category" className="block text-sm font-medium text-[#2D3436] mb-1.5">Business Type</label>
               <select
+                id="faq-category"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 className="w-full bg-white border border-[#DFE6E9] rounded-lg px-4 py-2.5 text-[#2D3436] focus:outline-none focus:border-[#FF6B35]/50"
@@ -136,8 +141,9 @@ export default function FaqBuilderPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#2D3436] mb-1.5">City</label>
+              <label htmlFor="faq-city" className="block text-sm font-medium text-[#2D3436] mb-1.5">City</label>
               <input
+                id="faq-city"
                 type="text"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
@@ -146,8 +152,9 @@ export default function FaqBuilderPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#2D3436] mb-1.5">State</label>
+              <label htmlFor="faq-state" className="block text-sm font-medium text-[#2D3436] mb-1.5">State</label>
               <input
+                id="faq-state"
                 type="text"
                 value={state}
                 onChange={(e) => setState(e.target.value)}
@@ -157,8 +164,9 @@ export default function FaqBuilderPage() {
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-[#2D3436] mb-1.5">Services (optional, comma-separated)</label>
+            <label htmlFor="faq-services" className="block text-sm font-medium text-[#2D3436] mb-1.5">Services (optional, comma-separated)</label>
             <input
+              id="faq-services"
               type="text"
               value={services}
               onChange={(e) => setServices(e.target.value)}
@@ -219,7 +227,7 @@ export default function FaqBuilderPage() {
           <Card className="bg-white border-[#DFE6E9]">
             <CardContent className="p-5">
               <h3 className="font-semibold text-[#2D3436] text-sm mb-3">📋 Schema Markup (paste in your website&apos;s &lt;head&gt; tag)</h3>
-              <pre className="bg-white0 rounded-lg p-4 overflow-x-auto text-xs text-green-400 max-h-64 overflow-y-auto">
+              <pre className="bg-white rounded-lg p-4 overflow-x-auto text-xs text-green-400 max-h-64 overflow-y-auto">
                 {JSON.stringify(result.schema, null, 2)}
               </pre>
             </CardContent>
