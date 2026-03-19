@@ -29,12 +29,12 @@ export function DfyUpsellCard({ dfyContext }: DfyUpsellCardProps) {
 
       <ul className="space-y-1.5 mb-4">
         {[
-          "Schema markup installed on your site",
-          "llms.txt deployed to your domain",
-          "15-25 FAQs written + installed with schema",
-          "Platform-specific implementation",
-          "Dedicated onboarding call",
+          "30-min live onboarding call",
+          "15-25 custom FAQs for your business",
+          "Schema markup + live installation walkthrough",
+          "llms.txt + live deployment walkthrough",
           "Full AEO audit with prioritized fixes",
+          "1 month of Solo included",
         ].map((item) => (
           <li key={item} className="flex items-start gap-2 text-sm" style={{ color: "#2D3436" }}>
             <span style={{ color: "#B8860B", fontWeight: 700, marginTop: "1px" }}>✓</span>
