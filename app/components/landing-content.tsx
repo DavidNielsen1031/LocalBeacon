@@ -85,12 +85,12 @@ const plans = [
     name: "Free",
     price: "$0",
     period: "forever",
-    tagline: "Try it out — see what LocalBeacon can do.",
+    tagline: "See how visible your business is to AI — in 10 seconds.",
     features: [
+      "1 AI Readiness scan per month",
       "5 Google post drafts per month",
-      "3 local city pages",
-      "1 business location",
-      "Copy & post to Google yourself",
+      "3 review response drafts per month",
+      "Schema markup preview (read-only)",
     ],
     cta: "Connect Your Google Listing",
     href: "/sign-up",
@@ -103,11 +103,12 @@ const plans = [
     tagline: "AI-written content for your local business, every week.",
     features: [
       "Unlimited Google post drafts — generated weekly",
-      "10 local city pages with SEO optimization",
-      "AI-written review replies",
-      "Blog post generator",
-      "AI Readiness score & recommendations",
+      "10 new city/service area pages per month",
+      "Unlimited AI-written review replies",
+      "Blog post generator (4/month)",
+      "Unlimited AI Readiness scans + monitoring",
       "Schema markup & llms.txt generator",
+      "Monthly progress report",
     ],
     cta: "Start Solo — $49/mo",
     href: "/sign-up",
@@ -117,13 +118,14 @@ const plans = [
     name: "DFY Setup",
     price: "$499",
     period: "one-time",
-    tagline: "We do everything for you — schema, llms.txt, FAQs, and a full AEO audit.",
+    tagline: "We set up your entire AI visibility foundation — you just approve.",
     features: [
-      "Schema markup generator — copy & paste ready",
-      "AI Discovery File generator — ready to deploy",
-      "15-25 localized FAQs written for your business",
-      "Platform-specific implementation guide",
+      "30-minute live onboarding call",
+      "15-25 custom FAQs for your business",
+      "Schema markup + live installation walkthrough",
+      "llms.txt + live deployment walkthrough",
       "Full AEO audit with prioritized fixes",
+      "1 month of Solo included",
     ],
     cta: "Get DFY Setup — $499",
     href: "/pricing#dfy",
@@ -1004,8 +1006,8 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
                 marginBottom: "12px",
               }}
             >
-              Simple pricing.{" "}
-              <span style={{ color: ORANGE }}>No surprises.</span>
+              More calls for less than{" "}
+              <span style={{ color: ORANGE }}>$2/day</span>
             </h2>
             <p style={{ color: SLATE, fontSize: "1.0625rem", lineHeight: 1.6 }}>
               Start free, upgrade anytime. No contracts.
