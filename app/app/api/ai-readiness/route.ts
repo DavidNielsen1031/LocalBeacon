@@ -27,7 +27,8 @@ interface RuleConfig {
   category: string
 }
 
-const AI_CRAWLERS = ['GPTBot', 'ChatGPT-User', 'ClaudeBot', 'PerplexityBot', 'Google-Extended', 'Amazonbot', 'cohere-ai']
+const AI_CRAWLERS_LEGACY = ['GPTBot', 'ChatGPT-User', 'ClaudeBot', 'PerplexityBot', 'Google-Extended', 'Amazonbot', 'cohere-ai']
+const AI_CRAWLERS_INDIVIDUAL = ['GPTBot', 'ClaudeBot', 'PerplexityBot', 'Applebot', 'GoogleOther', 'Bytespider', 'CCBot', 'anthropic-ai']
 
 /**
  * SSRF protection: returns true if the URL targets a private/internal network.
@@ -175,7 +176,7 @@ async function checkRobotsTxt(baseUrl: string): Promise<CheckResult> {
       currentAgent = trimmed.replace('user-agent:', '').trim()
     }
     if (trimmed.startsWith('disallow:') && trimmed.replace('disallow:', '').trim() === '/') {
-      for (const crawler of AI_CRAWLERS) {
+      for (const crawler of AI_CRAWLERS_LEGACY) {
         if (currentAgent === crawler.toLowerCase() || currentAgent === '*') {
           blocked.push(crawler)
         }
@@ -193,6 +194,245 @@ async function checkRobotsTxt(baseUrl: string): Promise<CheckResult> {
       ? 'All AI crawlers are allowed access'
       : `Blocked: ${uniqueBlocked.join(', ')}`,
     fix: passed ? '' : `Edit your robots.txt to remove blocks on: ${uniqueBlocked.join(', ')}. These are the bots that power ChatGPT, Claude, and Perplexity search.`,
+    errorType: 'success',
+  }
+}
+
+async function checkAiCrawlerAccess(baseUrl: string): Promise<CheckResult> {
+  const rule = getRule('ai_crawler_access')
+  const { response: res } = await fetchWithRetry(`${baseUrl}/robots.txt`)
+
+  if (!res?.ok) {
+    return {
+      ...rule,
+      passed: true,
+      details: 'No robots.txt found — all 8 AI crawlers are allowed by default',
+      errorType: 'success',
+    }
+  }
+
+  const body = await res.text().catch(() => '')
+  const lines = body.split('\n')
+  let currentAgent = ''
+  const blocked: string[] = []
+  const allowedByWildcardBlock: string[] = []
+  let wildcardBlocksAll = false
+
+  for (const line of lines) {
+    const trimmed = line.trim().toLowerCase()
+    if (trimmed.startsWith('user-agent:')) {
+      currentAgent = trimmed.replace('user-agent:', '').trim()
+    }
+    if (trimmed.startsWith('disallow:') && trimmed.replace('disallow:', '').trim() === '/') {
+      if (currentAgent === '*') {
+        wildcardBlocksAll = true
+      }
+      for (const crawler of AI_CRAWLERS_INDIVIDUAL) {
+        if (currentAgent === crawler.toLowerCase()) {
+          blocked.push(crawler)
+        }
+      }
+    }
+    // Check for explicit Allow overrides
+    if (trimmed.startsWith('allow:') && trimmed.replace('allow:', '').trim() === '/') {
+      for (const crawler of AI_CRAWLERS_INDIVIDUAL) {
+        if (currentAgent === crawler.toLowerCase()) {
+          allowedByWildcardBlock.push(crawler)
+        }
+      }
+    }
+  }
+
+  // If wildcard blocks all and no individual allow, all are blocked
+  const finalBlocked = wildcardBlocksAll
+    ? AI_CRAWLERS_INDIVIDUAL.filter(c => !allowedByWildcardBlock.includes(c) && !blocked.includes(c)).concat(blocked)
+    : blocked
+
+  const uniqueBlocked = [...new Set(finalBlocked)]
+  const blockedCount = uniqueBlocked.length
+  const passed = blockedCount === 0
+  const partial = blockedCount > 0 && blockedCount < AI_CRAWLERS_INDIVIDUAL.length
+
+  return {
+    ...rule,
+    passed,
+    details: passed
+      ? `All 8 AI crawlers allowed: ${AI_CRAWLERS_INDIVIDUAL.join(', ')}`
+      : blockedCount === AI_CRAWLERS_INDIVIDUAL.length
+      ? `All 8 AI crawlers are blocked — AI engines cannot index your site`
+      : `${blockedCount} of 8 AI crawlers blocked: ${uniqueBlocked.join(', ')}`,
+    fix: passed ? '' : `Edit your robots.txt to allow: ${uniqueBlocked.join(', ')}`,
+    errorType: partial ? 'parse_error' : passed ? 'success' : 'http_4xx',
+  }
+}
+
+async function checkAiIndexJson(baseUrl: string): Promise<CheckResult> {
+  const rule = getRule('ai_index_json')
+  const { response: res, errorType } = await fetchWithRetry(`${baseUrl}/ai-index.json`)
+
+  if (!res?.ok) {
+    return {
+      ...rule,
+      passed: false,
+      details: 'No ai-index.json file found at site root',
+      errorType,
+    }
+  }
+
+  try {
+    const text = await res.text()
+    JSON.parse(text)
+    return {
+      ...rule,
+      passed: true,
+      details: 'ai-index.json found and contains valid JSON',
+      errorType: 'success',
+    }
+  } catch {
+    return {
+      ...rule,
+      passed: false,
+      details: 'ai-index.json found but contains invalid JSON',
+      errorType: 'parse_error',
+    }
+  }
+}
+
+interface CitabilityPassage {
+  text: string
+  wordCount: number
+  citable: boolean
+  reason: string
+}
+
+function extractCitabilityPassages(html: string): CitabilityPassage[] {
+  // Extract text from <p> tags
+  const pTagMatches = html.match(/<p[^>]*>([\s\S]*?)<\/p>/gi) || []
+  const passages: CitabilityPassage[] = []
+
+  for (const match of pTagMatches) {
+    const text = match.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+    if (text.length < 30) continue // skip very short fragments
+
+    const words = text.split(/\s+/).filter(w => w.length > 0)
+    const wordCount = words.length
+
+    // Check for declarative topic sentence (starts with a subject + verb pattern)
+    const firstSentence = text.split(/[.!?]/)[0] || ''
+    const hasDeclarativeSentence = /^[A-Z][^,]{10,}/.test(firstSentence) &&
+      !/^(Are|Is|Do|Does|Did|Will|Can|Could|Should|Would|Have|Has|Had|What|How|Why|When|Where|Who)\b/i.test(firstSentence)
+
+    let citable = false
+    let reason = ''
+
+    if (wordCount < 50) {
+      reason = 'Too short (under 50 words) — AI needs more context'
+    } else if (wordCount > 250) {
+      reason = 'Too long (over 250 words) — AI prefers focused passages'
+    } else if (wordCount >= 100 && wordCount <= 200 && hasDeclarativeSentence) {
+      citable = true
+      reason = 'Good length with clear topic sentence'
+    } else if (wordCount >= 50 && wordCount < 100) {
+      reason = 'Slightly short (50-100 words) — aim for 100-200 words'
+    } else if (wordCount > 200 && wordCount <= 250) {
+      reason = 'Slightly long (200-250 words) — consider tightening'
+    } else if (!hasDeclarativeSentence) {
+      reason = 'No clear declarative topic sentence at start'
+    } else {
+      reason = 'Does not meet citability criteria'
+    }
+
+    passages.push({ text: text.slice(0, 300) + (text.length > 300 ? '...' : ''), wordCount, citable, reason })
+  }
+
+  return passages.slice(0, 15) // cap to 15 passages for performance
+}
+
+async function checkCitability(html: string): Promise<CheckResult & { passages?: CitabilityPassage[] }> {
+  const rule = getRule('citability')
+  const passages = extractCitabilityPassages(html)
+  const citableCount = passages.filter(p => p.citable).length
+  const passed = citableCount >= 3
+
+  return {
+    ...rule,
+    passed,
+    details: passed
+      ? `Found ${citableCount} citable passages — strong AI citation potential`
+      : citableCount === 0
+      ? 'No citable passages found — paragraphs need to be 100-200 words with clear topic sentences'
+      : `Only ${citableCount} citable passage${citableCount === 1 ? '' : 's'} found — need at least 3`,
+    errorType: 'success',
+    passages,
+  }
+}
+
+async function checkEeat(html: string, baseUrl: string): Promise<CheckResult> {
+  const rule = getRule('eeat')
+  const signals: string[] = []
+
+  // Check for about page link
+  const hasAboutLink = /href="[^"]*\/(about|about-us|our-team|who-we-are)[^"]*"/i.test(html)
+  if (hasAboutLink) signals.push('About page link')
+
+  // Author name/bio mentions
+  const hasAuthorMention = /\b(written by|by [A-Z][a-z]+ [A-Z][a-z]+|author:|team member|our team|meet [a-z]+ )/i.test(html)
+  if (hasAuthorMention) signals.push('Author/team mentions')
+
+  // Credential keywords
+  const hasCredentials = /\b(licensed|certified|insured|bonded|accredited|years of experience|[0-9]+ years|member of|association|credential|diploma|degree)\b/i.test(html)
+  if (hasCredentials) signals.push('Credential/certification keywords')
+
+  const passed = signals.length >= 2
+
+  return {
+    ...rule,
+    passed,
+    details: signals.length === 0
+      ? 'No E-E-A-T signals found — no about page, credentials, or team mentions'
+      : passed
+      ? `E-E-A-T signals found: ${signals.join(', ')}`
+      : `Only ${signals.length} E-E-A-T signal found: ${signals.join(', ')} — need at least 2`,
+    errorType: 'success',
+  }
+}
+
+async function checkBrandSocialLinks(html: string): Promise<CheckResult> {
+  const rule = getRule('brand_social_links')
+
+  // Check schema.org sameAs
+  const hasSameAs = /"sameAs"\s*:\s*\[/i.test(html) || /"sameAs"\s*:\s*"https?:/i.test(html)
+
+  // Check explicit social link patterns
+  const socialPatterns = [
+    /href="https?:\/\/(www\.)?(facebook|fb)\.com\/[^"]+"/i,
+    /href="https?:\/\/(www\.)?instagram\.com\/[^"]+"/i,
+    /href="https?:\/\/(www\.)?twitter\.com\/[^"]+"/i,
+    /href="https?:\/\/(www\.)?x\.com\/[^"]+"/i,
+    /href="https?:\/\/(www\.)?linkedin\.com\/(company|in)\/[^"]+"/i,
+    /href="https?:\/\/(www\.)?youtube\.com\/(channel|c|@)[^"]+"/i,
+    /href="https?:\/\/(www\.)?yelp\.com\/biz\/[^"]+"/i,
+  ]
+
+  const foundSocials: string[] = []
+  const socialNames = ['Facebook', 'Instagram', 'Twitter/X', 'Twitter/X', 'LinkedIn', 'YouTube', 'Yelp']
+  socialPatterns.forEach((pattern, i) => {
+    if (pattern.test(html)) foundSocials.push(socialNames[i])
+  })
+  const uniqueSocials = [...new Set(foundSocials)]
+
+  const passed = hasSameAs || uniqueSocials.length >= 2
+
+  return {
+    ...rule,
+    passed,
+    details: hasSameAs
+      ? `Schema sameAs found${uniqueSocials.length > 0 ? ` + ${uniqueSocials.join(', ')} links` : ''}`
+      : uniqueSocials.length >= 2
+      ? `Social profile links found: ${uniqueSocials.join(', ')}`
+      : uniqueSocials.length === 1
+      ? `Only 1 social link found (${uniqueSocials[0]}) — add more for stronger brand authority`
+      : 'No social profile links or sameAs schema found',
     errorType: 'success',
   }
 }
@@ -468,20 +708,30 @@ export async function POST(req: NextRequest) {
   const html = await pageRes.text()
 
   const checks = await Promise.all([
+    // AI Access
     checkLlmsTxt(baseUrl),
     checkRobotsTxt(baseUrl),
-    checkSchemaMarkup(html),
-    checkFaqContent(html),
-    checkHttps(baseUrl),
-    checkOpenGraph(html),
-    checkMobile(html),
-    checkSitemap(baseUrl),
+    checkAiCrawlerAccess(baseUrl),
+    checkAiIndexJson(baseUrl),
+    // Content Structure
     checkHeadingStructure(html),
+    checkFaqContent(html),
+    checkAnswerFirstContent(html),
     checkServicePages(html),
     checkContentFreshness(html),
+    // Schema & Data
+    checkSchemaMarkup(html),
     checkReviewSchema(html),
-    checkAnswerFirstContent(html),
     checkNapConsistency(html),
+    checkBrandSocialLinks(html),
+    // Citability & Quality
+    checkCitability(html),
+    checkEeat(html, baseUrl),
+    // Meta & Technical
+    checkHttps(baseUrl),
+    checkMobile(html),
+    checkOpenGraph(html),
+    checkSitemap(baseUrl),
   ])
 
   const totalWeight = checks.reduce((sum, c) => sum + c.weight, 0)
