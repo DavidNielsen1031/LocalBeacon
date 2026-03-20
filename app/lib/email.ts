@@ -4,7 +4,7 @@ const resend = process.env.RESEND_API_KEY
   ? new Resend(process.env.RESEND_API_KEY)
   : null
 
-const FROM_EMAIL = 'LocalBeacon <hello@localbeacon.ai>'
+const FROM_EMAIL = 'LocalBeacon <hello@perpetualagility.com>'
 
 interface WeeklyEmailData {
   to: string

@@ -368,7 +368,7 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 items-start">
-              <Link href="/sign-up" style={{ textDecoration: "none" }}>
+              <Link href="/check" style={{ textDecoration: "none" }}>
                 <button
                   style={{
                     backgroundColor: ORANGE,
@@ -385,7 +385,7 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
                     gap: "8px",
                   }}
                 >
-                  Connect Your Google Listing — Free
+                  Check Your AI Score — Free
                   <ArrowRight size={18} />
                 </button>
               </Link>
@@ -1370,12 +1370,12 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
               marginBottom: "16px",
             }}
           >
-            Connect your Google listing. First posts written in minutes.
+            See how visible your business is to AI. Takes 10 seconds.
           </h2>
           <p style={{ color: "rgba(255,255,255,0.65)", fontSize: "1.0625rem", lineHeight: 1.6, marginBottom: "36px" }}>
-            Takes 2 minutes. No credit card. Cancel whenever.
+            Free scan. No sign-up required. See your score instantly.
           </p>
-          <Link href="/sign-up" style={{ textDecoration: "none" }}>
+          <Link href="/check" style={{ textDecoration: "none" }}>
             <button
               style={{
                 backgroundColor: ORANGE,
@@ -1392,7 +1392,7 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
                 gap: "8px",
               }}
             >
-              Connect Your Google Listing — Free
+              Check Your AI Score — Free
               <ArrowRight size={18} />
             </button>
           </Link>
