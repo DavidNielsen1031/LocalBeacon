@@ -75,6 +75,10 @@ function OnboardingContent() {
     setData(prev => ({ ...prev, [field]: value }))
 
   const goToStep = (s: number) => {
+    // Auto-add primary city as first service area when entering Step 2
+    if (s === 2 && data.primary_city && !data.service_areas.includes(data.primary_city)) {
+      setData(prev => ({ ...prev, service_areas: [prev.primary_city, ...prev.service_areas] }))
+    }
     setStep(s)
     try { posthog.capture('onboarding_step', { step: s }) } catch {}
   }
@@ -198,11 +202,11 @@ function OnboardingContent() {
 
   return (
     <div className="min-h-screen bg-[#FAFAF7] flex flex-col items-center px-4 py-12">
-      {/* Logo */}
-      <div className="flex items-center gap-2 mb-10">
+      {/* Logo — links home as escape hatch */}
+      <a href="/" className="flex items-center gap-2 mb-10 no-underline hover:opacity-80 transition-opacity">
         <img src="/logo-192.png" alt="LocalBeacon" style={{ height: "36px", width: "36px" }} />
         <span className="text-[#1B2A4A] font-bold text-xl">LocalBeacon.ai</span>
-      </div>
+      </a>
 
       {/* Progress */}
       <div className="flex items-center gap-2 mb-10">
@@ -453,7 +457,7 @@ function OnboardingContent() {
                   <h3 className="text-[#1B2A4A] font-semibold text-base mb-3">{generatedPost.title}</h3>
                   <p className="text-[#636E72] text-sm leading-relaxed whitespace-pre-line">{generatedPost.body}</p>
                   <div className="mt-4 pt-4 border-t border-[#DFE6E9] flex items-center justify-between">
-                    <span className="text-[#636E72]/50 text-xs">CTA: {generatedPost.call_to_action}</span>
+                    <span className="text-[#636E72]/50 text-xs">Suggested action: {generatedPost.call_to_action === 'CALL' ? 'Call Now' : generatedPost.call_to_action}</span>
                     <Button
                       size="sm"
                       onClick={copyPost}
@@ -498,14 +502,21 @@ function OnboardingContent() {
                 </div>
               </div>
 
-              {/* Next steps */}
+              {/* Primary CTA — AI Readiness Scan */}
+              <a
+                href="/dashboard/ai-readiness"
+                className="flex items-center gap-3 p-5 bg-[#FF6B35] rounded-lg hover:bg-[#FF6B35]/90 transition-colors group"
+              >
+                <span className="text-2xl flex-shrink-0">🔍</span>
+                <div className="flex-1">
+                  <p className="text-white font-bold text-base">Run your AI Readiness scan</p>
+                  <p className="text-white/80 text-sm">See how visible your business is to ChatGPT, Perplexity & Google AI</p>
+                </div>
+                <span className="text-white text-lg flex-shrink-0">→</span>
+              </a>
+
+              {/* Secondary actions */}
               {[
-                {
-                  href: '/dashboard/ai-readiness',
-                  emoji: '🔍',
-                  title: 'Run your AI Readiness scan',
-                  desc: 'See how visible your business is to ChatGPT, Perplexity & Google AI',
-                },
                 {
                   href: '/dashboard/llms-txt',
                   emoji: '📄',
@@ -542,9 +553,10 @@ function OnboardingContent() {
 
             <Button
               onClick={() => router.push('/dashboard')}
-              className="w-full bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold h-11"
+              variant="outline"
+              className="w-full border-[#DFE6E9] text-[#636E72] hover:bg-[#DFE6E9]/50 font-semibold h-11"
             >
-              Go to Dashboard →
+              Skip to Dashboard →
             </Button>
           </div>
         )}
