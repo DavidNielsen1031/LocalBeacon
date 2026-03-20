@@ -275,7 +275,7 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
           </div>
 
           {/* CTA */}
-          <Link href="/sign-up" style={{ textDecoration: "none" }}>
+          <Link href="/check" style={{ textDecoration: "none" }}>
             <button
               style={{
                 backgroundColor: ORANGE,
@@ -1078,7 +1078,7 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
                   ))}
                 </ul>
 
-                <Link href={plan.href ?? (plan.premium ? "/pricing#dfy" : "/sign-up")} style={{ textDecoration: "none" }}>
+                <Link href={plan.href ?? (plan.premium ? "/pricing#dfy" : "/check")} style={{ textDecoration: "none" }}>
                   <button
                     style={{
                       width: "100%",

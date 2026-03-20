@@ -54,27 +54,82 @@ function OnboardingContent() {
     phone: '', website: '', service_areas: [],
   })
 
-  // Pre-fill from /check query params
+  // Resume checkout if user came from pricing page (paid plan intent)
+  useEffect(() => {
+    try {
+      const pending = localStorage.getItem('lb_pending_plan')
+      if (pending) {
+        const { plan, timestamp } = JSON.parse(pending)
+        // Only honor if less than 1 hour old
+        if (timestamp && Date.now() - timestamp < 3600000 && (plan === 'SOLO' || plan === 'DFY')) {
+          localStorage.removeItem('lb_pending_plan')
+          // Trigger checkout now that user is authenticated
+          fetch('/api/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ plan, mode: plan === 'DFY' ? 'payment' : 'subscription' }),
+          })
+            .then(r => r.json())
+            .then(data => {
+              if (data.url) window.location.href = data.url
+              // If checkout fails, just continue with onboarding (free tier)
+            })
+            .catch(() => {}) // Fail silently — let them onboard for free
+        } else {
+          localStorage.removeItem('lb_pending_plan')
+        }
+      }
+    } catch {}
+  }, [])
+
+  // Pre-fill from /check query params + localStorage scan data
   useEffect(() => {
     const urlParam = searchParams.get('url')
-    const emailParam = searchParams.get('email')
     const scoreParam = searchParams.get('score')
-    if (urlParam || emailParam) {
+
+    // Try localStorage first (set by /check before redirect to sign-up)
+    let scanData: { url?: string; score?: number; email?: string } = {}
+    try {
+      const stored = localStorage.getItem('lb_scan_data')
+      if (stored) {
+        const parsed = JSON.parse(stored)
+        // Only use if less than 1 hour old
+        if (parsed.timestamp && Date.now() - parsed.timestamp < 3600000) {
+          scanData = parsed
+        }
+        // Don't remove yet — remove on successful form submission so refresh works
+      }
+    } catch {}
+
+    const website = (urlParam || scanData.url || '').replace(/[<>"'`]/g, '')
+    if (website) {
+      // Try to extract business name from the domain
+      const domain = website.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0].split('.')[0]
+      const guessedName = domain
+        .replace(/[-_]/g, ' ')
+        .replace(/[<>"'`]/g, '')
+        .replace(/\b\w/g, c => c.toUpperCase())
+
       setData(prev => ({
         ...prev,
-        website: urlParam || prev.website,
+        website: website,
+        // Only set name if it looks like a real business name (not "example" or single char)
+        name: guessedName.length > 2 && guessedName.toLowerCase() !== 'www' ? guessedName : prev.name,
       }))
     }
-    if (scoreParam) {
-      const parsed = parseInt(scoreParam, 10)
-      if (!isNaN(parsed)) setPrefillScore(parsed)
-    }
+
+    const score = scoreParam ? parseInt(scoreParam, 10) : scanData.score
+    if (score && !isNaN(score)) setPrefillScore(score)
   }, [searchParams])
 
   const update = (field: keyof BusinessData, value: string) =>
     setData(prev => ({ ...prev, [field]: value }))
 
   const goToStep = (s: number) => {
+    // Auto-add primary city as first service area when entering Step 2
+    if (s === 2 && data.primary_city && !data.service_areas.includes(data.primary_city)) {
+      setData(prev => ({ ...prev, service_areas: [prev.primary_city, ...prev.service_areas] }))
+    }
     setStep(s)
     try { posthog.capture('onboarding_step', { step: s }) } catch {}
   }
@@ -96,6 +151,8 @@ function OnboardingContent() {
       body: JSON.stringify(data),
     })
     const json = await res.json()
+    // Clean up scan data now that the business is saved
+    try { localStorage.removeItem('lb_scan_data') } catch {}
     return json.business?.id
   }
 
@@ -131,16 +188,23 @@ function OnboardingContent() {
     }
   }
 
+    const handleGeneratePost = async () => {
+    setLoading(true)
+    const businessId = await saveBusiness()
+    const post = await generateFirstPost(businessId)
+    setGeneratedPost(post)
+    setLoading(false)
+    goToStep(3)
+  }
+
+  // Keep for DFY dialog and pricing page checkout flows
   const handleStep3Continue = async (plan: string) => {
-    // DFY requires confirmation before redirecting to Stripe
     if (plan === 'dfy') {
       setShowDfyDialog(true)
       return
     }
-
     setLoading(true)
     const businessId = await saveBusiness()
-
     if (plan !== 'free') {
       try {
         const planKey = plan === 'solo' ? 'SOLO' : 'DFY'
@@ -158,11 +222,10 @@ function OnboardingContent() {
         // Fall through to free flow if checkout fails
       }
     }
-
     const post = await generateFirstPost(businessId)
     setGeneratedPost(post)
     setLoading(false)
-    goToStep(4)
+    goToStep(3)
   }
 
   const handleDfyConfirm = async () => {
@@ -194,15 +257,15 @@ function OnboardingContent() {
     }
   }
 
-  const steps = ['Business Info', 'Service Areas', 'Choose Plan', 'First Post', "What's Next"]
+  const steps = ['Business Info', 'Service Areas', 'First Post', "What's Next"]
 
   return (
     <div className="min-h-screen bg-[#FAFAF7] flex flex-col items-center px-4 py-12">
-      {/* Logo */}
-      <div className="flex items-center gap-2 mb-10">
+      {/* Logo — links home as escape hatch */}
+      <a href="/" className="flex items-center gap-2 mb-10 no-underline hover:opacity-80 transition-opacity">
         <img src="/logo-192.png" alt="LocalBeacon" style={{ height: "36px", width: "36px" }} />
         <span className="text-[#1B2A4A] font-bold text-xl">LocalBeacon.ai</span>
-      </div>
+      </a>
 
       {/* Progress */}
       <div className="flex items-center gap-2 mb-10">
@@ -225,9 +288,9 @@ function OnboardingContent() {
         {/* Step 1: Business Basics */}
         {step === 1 && (
           <div>
-            <h1 className="text-2xl font-bold text-[#1B2A4A] mb-2">Tell us about your business</h1>
+            <h1 className="text-2xl font-bold text-[#1B2A4A] mb-2">2 minutes to your first AI-optimized Google post</h1>
             <div className="flex items-center gap-3 mb-8">
-              <p className="text-[#636E72]">We&apos;ll use this to generate locally-targeted content.</p>
+              <p className="text-[#636E72]">Tell us about your business and we&apos;ll generate your first post.</p>
               {prefillScore !== null && (
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-[#FF6B35]/10 text-[#FF6B35] border border-[#FF6B35]/30">
                   Score: {prefillScore}/100
@@ -272,25 +335,18 @@ function OnboardingContent() {
                 </div>
                 <div>
                   <Label htmlFor="onboarding-state" className="text-[#2D3436] mb-2 block">State *</Label>
-                  <Input
+                  <select
                     id="onboarding-state"
-                    placeholder="e.g. MN"
-                    maxLength={2}
                     value={data.primary_state}
-                    onChange={e => update('primary_state', e.target.value.toUpperCase())}
-                    className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/50 focus:border-[#FF6B35]/50"
-                  />
+                    onChange={e => update('primary_state', e.target.value)}
+                    className="w-full bg-white border border-[#DFE6E9] text-[#2D3436] rounded-md px-3 py-2 focus:border-[#FF6B35]/50 focus:outline-none"
+                  >
+                    <option value="">State...</option>
+                    {['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','DC'].map(s => (
+                      <option key={s} value={s}>{s}</option>
+                    ))}
+                  </select>
                 </div>
-              </div>
-              <div>
-                <Label htmlFor="onboarding-phone" className="text-[#2D3436] mb-2 block">Phone Number</Label>
-                <Input
-                  id="onboarding-phone"
-                  placeholder="e.g. (612) 555-0100"
-                  value={data.phone}
-                  onChange={e => update('phone', e.target.value)}
-                  className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/50 focus:border-[#FF6B35]/50"
-                />
               </div>
               <div>
                 <Label htmlFor="onboarding-website" className="text-[#2D3436] mb-2 block">Website <span className="text-[#636E72]">(optional)</span></Label>
@@ -351,93 +407,18 @@ function OnboardingContent() {
                 <Button onClick={() => goToStep(1)} variant="outline" className="border-[#DFE6E9] text-[#636E72] hover:bg-[#DFE6E9]/50 flex-1">
                   ← Back
                 </Button>
-                <Button onClick={() => goToStep(3)} className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold flex-1">
-                  Continue →
+                <Button onClick={handleGeneratePost} disabled={loading} className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold flex-1">
+                  {loading ? 'Generating your first post...' : 'Generate First Post →'}
                 </Button>
               </div>
             </div>
           </div>
         )}
 
-        {/* Step 3: Plan Selection */}
-        {step === 3 && (
-          <div>
-            <h1 className="text-2xl font-bold text-[#1B2A4A] mb-2">Choose your plan</h1>
-            <p className="text-[#636E72] mb-8">Start free, upgrade anytime.</p>
-            <div className="space-y-3">
-              {[
-                {
-                  plan: 'free', name: 'Free', price: '$0', badge: null,
-                  features: ['5 GBP posts/month', '3 service area pages', '1 business location', 'Copy-paste mode'],
-                  cta: 'Start Free',
-                },
-                {
-                  plan: 'solo', name: 'Solo', price: '$49/mo', badge: 'Most Popular',
-                  features: ['Unlimited GBP posts', '10 service area pages', '3 locations', '1 blog post/month', 'Review response drafts'],
-                  cta: 'Start Solo →',
-                },
-                {
-                  plan: 'dfy', name: 'DFY Setup', price: '$499 one-time', badge: 'White Glove',
-                  features: ['Schema markup generator — copy & paste ready', 'AI Discovery File generator — ready to deploy', '15-25 localized FAQs written for your business', 'Full AEO audit with prioritized fixes'],
-                  cta: 'Get DFY Setup — $499 →',
-                },
-              ].map(({ plan, name, price, badge, features, cta }) => (
-                <Card
-                  key={plan}
-                  className={`border cursor-pointer transition-all ${
-                    plan === 'solo'
-                      ? 'border-[#FF6B35]/50 bg-[#FF6B35]/5'
-                      : plan === 'dfy'
-                      ? 'border-[#B8860B]/50 bg-gradient-to-b from-[#FFFDF5] to-[#FFF8E7]'
-                      : 'border-[#DFE6E9] bg-white hover:border-[#DFE6E9]'
-                  }`}
-                  onClick={() => handleStep3Continue(plan)}
-                >
-                  <CardContent className="p-5">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[#1B2A4A] font-bold text-lg">{name}</span>
-                        {badge && (
-                          <Badge className={`text-xs ${
-                            plan === 'dfy'
-                              ? 'bg-gradient-to-r from-[#B8860B] to-[#FFD700] text-black border-0'
-                              : 'bg-[#FF6B35]/10 text-[#FF6B35] border-[#FF6B35]/30'
-                          }`}>{badge}</Badge>
-                        )}
-                      </div>
-                      <span className={`font-bold ${plan === 'dfy' ? 'text-[#B8860B]' : 'text-[#FF6B35]'}`}>{price}</span>
-                    </div>
-                    <ul className="space-y-1">
-                      {features.map(f => (
-                        <li key={f} className="text-[#636E72] text-sm flex items-center gap-2">
-                          <span className="text-[#FF6B35]">✓</span> {f}
-                        </li>
-                      ))}
-                    </ul>
-                    <Button
-                      className={`w-full mt-4 font-semibold ${
-                        plan === 'solo'
-                          ? 'bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90'
-                          : plan === 'dfy'
-                          ? 'bg-gradient-to-r from-[#B8860B] to-[#DAA520] text-white hover:from-[#DAA520] hover:to-[#FFD700]'
-                          : 'bg-[#DFE6E9] text-[#1B2A4A] hover:bg-[#DFE6E9]/80'
-                      }`}
-                      disabled={loading}
-                    >
-                      {loading ? 'Setting up...' : cta}
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-            <button onClick={() => goToStep(2)} className="text-[#636E72] text-sm mt-4 w-full text-center hover:text-[#2D3436]">
-              ← Back
-            </button>
-          </div>
-        )}
+        {/* Plan selection removed — all users start on Free, upgrade from dashboard */}
 
-        {/* Step 4: First Generated Post */}
-        {step === 4 && (
+        {/* Step 3: First Generated Post */}
+        {step === 3 && (
           <div>
             <div className="text-center mb-8">
               <div className="text-5xl mb-4">🎉</div>
@@ -453,7 +434,7 @@ function OnboardingContent() {
                   <h3 className="text-[#1B2A4A] font-semibold text-base mb-3">{generatedPost.title}</h3>
                   <p className="text-[#636E72] text-sm leading-relaxed whitespace-pre-line">{generatedPost.body}</p>
                   <div className="mt-4 pt-4 border-t border-[#DFE6E9] flex items-center justify-between">
-                    <span className="text-[#636E72]/50 text-xs">CTA: {generatedPost.call_to_action}</span>
+                    <span className="text-[#636E72]/50 text-xs">Suggested action: {generatedPost.call_to_action === 'CALL' ? 'Call Now' : generatedPost.call_to_action}</span>
                     <Button
                       size="sm"
                       onClick={copyPost}
@@ -465,13 +446,14 @@ function OnboardingContent() {
                 </CardContent>
               </Card>
             )}
-            <div className="bg-white border border-[#DFE6E9] rounded-lg p-4 mb-6">
-              <p className="text-[#636E72] text-sm text-center">
-                📱 To post: Open <strong className="text-[#1B2A4A]">Google Maps</strong> → find your business → <strong className="text-[#1B2A4A]">Add post</strong> → paste this content
+            <div className="bg-[#FFF8F0] border border-[#FF6B35]/20 rounded-lg p-4 mb-6">
+              <p className="text-[#1B2A4A] text-sm font-semibold mb-1">📱 How to post this (60 seconds):</p>
+              <p className="text-[#636E72] text-sm">
+                Open <strong className="text-[#1B2A4A]">Google Maps</strong> → search your business name → tap <strong className="text-[#1B2A4A]">Add update</strong> → paste → publish
               </p>
             </div>
             <Button
-              onClick={() => goToStep(5)}
+              onClick={() => goToStep(4)}
               className="w-full bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold h-11"
             >
               See What's Next →
@@ -479,8 +461,8 @@ function OnboardingContent() {
           </div>
         )}
 
-        {/* Step 5: What's Next */}
-        {step === 5 && (
+        {/* Step 4: What's Next */}
+        {step === 4 && (
           <div>
             <div className="text-center mb-8">
               <div className="text-5xl mb-4">🚀</div>
@@ -498,14 +480,21 @@ function OnboardingContent() {
                 </div>
               </div>
 
-              {/* Next steps */}
+              {/* Primary CTA — AI Readiness Scan */}
+              <a
+                href="/dashboard/ai-readiness"
+                className="flex items-center gap-3 p-5 bg-[#FF6B35] rounded-lg hover:bg-[#FF6B35]/90 transition-colors group"
+              >
+                <span className="text-2xl flex-shrink-0">🔍</span>
+                <div className="flex-1">
+                  <p className="text-white font-bold text-base">Check if Siri & ChatGPT recommend you</p>
+                  <p className="text-white/80 text-sm">See if AI assistants find your business when customers ask — most local businesses are invisible</p>
+                </div>
+                <span className="text-white text-lg flex-shrink-0">→</span>
+              </a>
+
+              {/* Secondary actions */}
               {[
-                {
-                  href: '/dashboard/ai-readiness',
-                  emoji: '🔍',
-                  title: 'Run your AI Readiness scan',
-                  desc: 'See how visible your business is to ChatGPT, Perplexity & Google AI',
-                },
                 {
                   href: '/dashboard/llms-txt',
                   emoji: '📄',
@@ -542,9 +531,10 @@ function OnboardingContent() {
 
             <Button
               onClick={() => router.push('/dashboard')}
-              className="w-full bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold h-11"
+              variant="outline"
+              className="w-full border-[#DFE6E9] text-[#636E72] hover:bg-[#DFE6E9]/50 font-semibold h-11"
             >
-              Go to Dashboard →
+              Skip to Dashboard →
             </Button>
           </div>
         )}

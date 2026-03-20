@@ -279,19 +279,50 @@ export function CheckerForm() {
             </div>
           )}
 
+          {/* Top 3 failing checks preview */}
+          {(() => {
+            const topFailing = result.checks
+              .filter(c => !c.passed)
+              .sort((a, b) => b.weight - a.weight)
+              .slice(0, 3)
+            if (topFailing.length === 0) return null
+            return (
+              <div className="mb-6 text-left">
+                <h3 className="font-semibold text-[#1B2A4A] text-sm mb-3">Your top issues:</h3>
+                <div className="space-y-2">
+                  {topFailing.map(check => (
+                    <div key={check.id} className="p-3 rounded-lg bg-red-50 border border-red-100">
+                      <span className="text-red-500 mr-2">✗</span>
+                      <span className="font-medium text-[#1B2A4A] text-sm">{check.label}</span>
+                      <p className="text-xs text-[#1B2A4A]/50 ml-6">{check.details}</p>
+                    </div>
+                  ))}
+                </div>
+                {result.failed - topFailing.length > 0 && (
+                  <p className="text-xs text-[#1B2A4A]/40 mt-2">
+                    + {result.failed - topFailing.length} more issues found. Get the full breakdown below.
+                  </p>
+                )}
+              </div>
+            )
+          })()}
+
           {/* Email gate */}
           <div className="bg-[#FAFAF7] rounded-xl p-6 border border-black/5">
-            <h3 className="font-semibold text-[#1B2A4A] mb-1">See your full breakdown</h3>
-            <p className="text-sm text-[#1B2A4A]/50 mb-4">
-              See which of the 19 signals passed or failed, and get step-by-step instructions to fix each one.
-            </p>
+            <h3 className="font-semibold text-[#1B2A4A] mb-1">Get your {result.total}-point breakdown + fix-it guide</h3>
+            <p className="text-sm text-[#1B2A4A]/50 mb-2">Your full report includes:</p>
+            <ul className="text-sm text-[#1B2A4A]/60 mb-4 space-y-1 text-left">
+              <li>✓ All {result.total} signals scored (not just top 3)</li>
+              <li>✓ Step-by-step fix instructions for every failing check</li>
+              <li>✓ Priority ranking — which fixes move the needle most</li>
+            </ul>
             <form onSubmit={handleEmailSubmit} className="flex gap-2">
               <input
                 type="email"
                 aria-label="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Your email address"
+                placeholder="Where should we send your full report?"
                 required
                 className="flex-1 px-4 py-3 rounded-lg border border-black/10 bg-white text-[#1B2A4A] placeholder:text-[#1B2A4A]/30 focus:outline-none focus:ring-2 focus:ring-[#FF6B35]/30"
               />
@@ -300,7 +331,7 @@ export function CheckerForm() {
                 disabled={emailSaving}
                 className="px-6 py-3 bg-[#FF6B35] text-white font-semibold rounded-lg hover:bg-[#FF6B35]/90 transition-colors disabled:opacity-50 whitespace-nowrap"
               >
-                {emailSaving ? 'Sending...' : 'Get Report'}
+                {emailSaving ? 'Sending...' : 'Get Full Report'}
               </button>
             </form>
             <p className="text-xs text-[#1B2A4A]/30 mt-2">No spam. Unsubscribe anytime.</p>
@@ -470,11 +501,26 @@ export function CheckerForm() {
             <p className="text-sm text-[#1B2A4A]/50 mb-4">
               LocalBeacon handles your local marketing — we fix your AI visibility and keep it growing.
             </p>
+            <p className="text-lg font-bold text-[#FF6B35] mb-2">Your score: {result.score}/100</p>
+            <p className="text-sm text-[#1B2A4A]/50 mb-4">
+              LocalBeacon users average 80+ after 30 days. We handle it for you.
+            </p>
             <a
               href={`/sign-up?url=${encodeURIComponent(result.url)}&score=${result.score}${email ? `&email=${encodeURIComponent(email)}` : ''}`}
+              onClick={() => {
+                // Save scan data to localStorage so onboarding can pre-fill
+                try {
+                  localStorage.setItem('lb_scan_data', JSON.stringify({
+                    url: result.url,
+                    score: result.score,
+                    email: email,
+                    timestamp: Date.now(),
+                  }))
+                } catch {}
+              }}
               className="inline-block px-8 py-3 bg-[#FF6B35] text-white font-semibold rounded-lg hover:bg-[#FF6B35]/90 transition-colors"
             >
-              Start Free →
+              Start Fixing These Free →
             </a>
           </div>
 
