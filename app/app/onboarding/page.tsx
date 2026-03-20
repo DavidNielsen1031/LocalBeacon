@@ -54,21 +54,43 @@ function OnboardingContent() {
     phone: '', website: '', service_areas: [],
   })
 
-  // Pre-fill from /check query params
+  // Pre-fill from /check query params + localStorage scan data
   useEffect(() => {
     const urlParam = searchParams.get('url')
-    const emailParam = searchParams.get('email')
     const scoreParam = searchParams.get('score')
-    if (urlParam || emailParam) {
+
+    // Try localStorage first (set by /check before redirect to sign-up)
+    let scanData: { url?: string; score?: number; email?: string } = {}
+    try {
+      const stored = localStorage.getItem('lb_scan_data')
+      if (stored) {
+        const parsed = JSON.parse(stored)
+        // Only use if less than 1 hour old
+        if (parsed.timestamp && Date.now() - parsed.timestamp < 3600000) {
+          scanData = parsed
+        }
+        localStorage.removeItem('lb_scan_data') // One-time use
+      }
+    } catch {}
+
+    const website = urlParam || scanData.url
+    if (website) {
+      // Try to extract business name from the domain
+      const domain = website.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0].split('.')[0]
+      const guessedName = domain
+        .replace(/[-_]/g, ' ')
+        .replace(/\b\w/g, c => c.toUpperCase())
+
       setData(prev => ({
         ...prev,
-        website: urlParam || prev.website,
+        website: website,
+        // Only set name if it looks like a real business name (not "example" or single char)
+        name: guessedName.length > 2 && guessedName.toLowerCase() !== 'www' ? guessedName : prev.name,
       }))
     }
-    if (scoreParam) {
-      const parsed = parseInt(scoreParam, 10)
-      if (!isNaN(parsed)) setPrefillScore(parsed)
-    }
+
+    const score = scoreParam ? parseInt(scoreParam, 10) : scanData.score
+    if (score && !isNaN(score)) setPrefillScore(score)
   }, [searchParams])
 
   const update = (field: keyof BusinessData, value: string) =>

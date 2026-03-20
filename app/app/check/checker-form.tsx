@@ -502,6 +502,17 @@ export function CheckerForm() {
             </p>
             <a
               href={`/sign-up?url=${encodeURIComponent(result.url)}&score=${result.score}${email ? `&email=${encodeURIComponent(email)}` : ''}`}
+              onClick={() => {
+                // Save scan data to localStorage so onboarding can pre-fill
+                try {
+                  localStorage.setItem('lb_scan_data', JSON.stringify({
+                    url: result.url,
+                    score: result.score,
+                    email: email,
+                    timestamp: Date.now(),
+                  }))
+                } catch {}
+              }}
               className="inline-block px-8 py-3 bg-[#FF6B35] text-white font-semibold rounded-lg hover:bg-[#FF6B35]/90 transition-colors"
             >
               Start Fixing These Free →
