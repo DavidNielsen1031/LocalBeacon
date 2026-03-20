@@ -71,6 +71,18 @@ export function HomepageSeoContent() {
       <h3>What does the Free plan include?</h3>
       <p>The free plan includes one AI Readiness scan per month analyzing 19 signals, five Google post drafts per month, three review response drafts per month, and a read-only schema markup preview. No credit card required to start.</p>
 
+      <h2>Why Local Businesses Need AI Search Optimization</h2>
+      <p>
+        Local businesses that optimize for AI search engines today will dominate their markets tomorrow. Google now
+        integrates AI-generated answers directly into search results, and platforms like ChatGPT, Claude, and
+        Perplexity are increasingly used by consumers to find local service providers. When someone asks an AI
+        assistant for a plumber in their area, the AI reads websites to determine which businesses to recommend.
+        Businesses with structured data, fresh content, clear service descriptions, and proper schema markup are
+        far more likely to be cited in these AI-generated recommendations. LocalBeacon automates this entire process
+        — generating the schema markup, llms.txt files, FAQ content, and city-specific pages that AI engines need
+        to confidently recommend your business over competitors who have not yet adapted to this shift.
+      </p>
+
       <h2>About LocalBeacon</h2>
       <p>
         LocalBeacon.ai was founded by a team of certified marketing professionals and licensed technology consultants
