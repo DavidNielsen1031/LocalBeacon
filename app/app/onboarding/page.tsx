@@ -135,16 +135,23 @@ function OnboardingContent() {
     }
   }
 
+    const handleGeneratePost = async () => {
+    setLoading(true)
+    const businessId = await saveBusiness()
+    const post = await generateFirstPost(businessId)
+    setGeneratedPost(post)
+    setLoading(false)
+    goToStep(3)
+  }
+
+  // Keep for DFY dialog and pricing page checkout flows
   const handleStep3Continue = async (plan: string) => {
-    // DFY requires confirmation before redirecting to Stripe
     if (plan === 'dfy') {
       setShowDfyDialog(true)
       return
     }
-
     setLoading(true)
     const businessId = await saveBusiness()
-
     if (plan !== 'free') {
       try {
         const planKey = plan === 'solo' ? 'SOLO' : 'DFY'
@@ -162,11 +169,10 @@ function OnboardingContent() {
         // Fall through to free flow if checkout fails
       }
     }
-
     const post = await generateFirstPost(businessId)
     setGeneratedPost(post)
     setLoading(false)
-    goToStep(4)
+    goToStep(3)
   }
 
   const handleDfyConfirm = async () => {
@@ -198,7 +204,7 @@ function OnboardingContent() {
     }
   }
 
-  const steps = ['Business Info', 'Service Areas', 'Choose Plan', 'First Post', "What's Next"]
+  const steps = ['Business Info', 'Service Areas', 'First Post', "What's Next"]
 
   return (
     <div className="min-h-screen bg-[#FAFAF7] flex flex-col items-center px-4 py-12">
@@ -355,93 +361,18 @@ function OnboardingContent() {
                 <Button onClick={() => goToStep(1)} variant="outline" className="border-[#DFE6E9] text-[#636E72] hover:bg-[#DFE6E9]/50 flex-1">
                   ← Back
                 </Button>
-                <Button onClick={() => goToStep(3)} className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold flex-1">
-                  Continue →
+                <Button onClick={handleGeneratePost} disabled={loading} className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold flex-1">
+                  {loading ? 'Generating your first post...' : 'Generate First Post →'}
                 </Button>
               </div>
             </div>
           </div>
         )}
 
-        {/* Step 3: Plan Selection */}
-        {step === 3 && (
-          <div>
-            <h1 className="text-2xl font-bold text-[#1B2A4A] mb-2">Choose your plan</h1>
-            <p className="text-[#636E72] mb-8">Start free, upgrade anytime.</p>
-            <div className="space-y-3">
-              {[
-                {
-                  plan: 'free', name: 'Free', price: '$0', badge: null,
-                  features: ['5 GBP posts/month', '3 service area pages', '1 business location', 'Copy-paste mode'],
-                  cta: 'Start Free',
-                },
-                {
-                  plan: 'solo', name: 'Solo', price: '$49/mo', badge: 'Most Popular',
-                  features: ['Unlimited GBP posts', '10 service area pages', '3 locations', '1 blog post/month', 'Review response drafts'],
-                  cta: 'Start Solo →',
-                },
-                {
-                  plan: 'dfy', name: 'DFY Setup', price: '$499 one-time', badge: 'White Glove',
-                  features: ['Schema markup generator — copy & paste ready', 'AI Discovery File generator — ready to deploy', '15-25 localized FAQs written for your business', 'Full AEO audit with prioritized fixes'],
-                  cta: 'Get DFY Setup — $499 →',
-                },
-              ].map(({ plan, name, price, badge, features, cta }) => (
-                <Card
-                  key={plan}
-                  className={`border cursor-pointer transition-all ${
-                    plan === 'solo'
-                      ? 'border-[#FF6B35]/50 bg-[#FF6B35]/5'
-                      : plan === 'dfy'
-                      ? 'border-[#B8860B]/50 bg-gradient-to-b from-[#FFFDF5] to-[#FFF8E7]'
-                      : 'border-[#DFE6E9] bg-white hover:border-[#DFE6E9]'
-                  }`}
-                  onClick={() => handleStep3Continue(plan)}
-                >
-                  <CardContent className="p-5">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[#1B2A4A] font-bold text-lg">{name}</span>
-                        {badge && (
-                          <Badge className={`text-xs ${
-                            plan === 'dfy'
-                              ? 'bg-gradient-to-r from-[#B8860B] to-[#FFD700] text-black border-0'
-                              : 'bg-[#FF6B35]/10 text-[#FF6B35] border-[#FF6B35]/30'
-                          }`}>{badge}</Badge>
-                        )}
-                      </div>
-                      <span className={`font-bold ${plan === 'dfy' ? 'text-[#B8860B]' : 'text-[#FF6B35]'}`}>{price}</span>
-                    </div>
-                    <ul className="space-y-1">
-                      {features.map(f => (
-                        <li key={f} className="text-[#636E72] text-sm flex items-center gap-2">
-                          <span className="text-[#FF6B35]">✓</span> {f}
-                        </li>
-                      ))}
-                    </ul>
-                    <Button
-                      className={`w-full mt-4 font-semibold ${
-                        plan === 'solo'
-                          ? 'bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90'
-                          : plan === 'dfy'
-                          ? 'bg-gradient-to-r from-[#B8860B] to-[#DAA520] text-white hover:from-[#DAA520] hover:to-[#FFD700]'
-                          : 'bg-[#DFE6E9] text-[#1B2A4A] hover:bg-[#DFE6E9]/80'
-                      }`}
-                      disabled={loading}
-                    >
-                      {loading ? 'Setting up...' : cta}
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-            <button onClick={() => goToStep(2)} className="text-[#636E72] text-sm mt-4 w-full text-center hover:text-[#2D3436]">
-              ← Back
-            </button>
-          </div>
-        )}
+        {/* Plan selection removed — all users start on Free, upgrade from dashboard */}
 
-        {/* Step 4: First Generated Post */}
-        {step === 4 && (
+        {/* Step 3: First Generated Post */}
+        {step === 3 && (
           <div>
             <div className="text-center mb-8">
               <div className="text-5xl mb-4">🎉</div>
@@ -475,7 +406,7 @@ function OnboardingContent() {
               </p>
             </div>
             <Button
-              onClick={() => goToStep(5)}
+              onClick={() => goToStep(4)}
               className="w-full bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold h-11"
             >
               See What's Next →
@@ -483,8 +414,8 @@ function OnboardingContent() {
           </div>
         )}
 
-        {/* Step 5: What's Next */}
-        {step === 5 && (
+        {/* Step 4: What's Next */}
+        {step === 4 && (
           <div>
             <div className="text-center mb-8">
               <div className="text-5xl mb-4">🚀</div>
