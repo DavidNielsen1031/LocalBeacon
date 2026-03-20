@@ -5,5 +5,12 @@
     "passed": 14,
     "failed": 0,
     "failing": ""
+  },
+  {
+    "date": "2026-03-20T12:02:01Z",
+    "score": 61,
+    "passed": 12,
+    "failed": 7,
+    "failing": "ai-index.json file exists, Clean heading structure, FAQ content exists on site, Answer-first content structure, Service area pages exist, Citable content passages, E-E-A-T authority signals"
   }
 ]

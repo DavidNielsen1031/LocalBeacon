@@ -1,0 +1,65 @@
+{
+  "version": "1.0",
+  "name": "LocalBeacon.ai",
+  "description": "AI-powered local visibility engine that automates Google Business Profile posts, city pages, review responses, and AI search optimization for local businesses.",
+  "url": "https://localbeacon.ai",
+  "contact": {
+    "email": "support@localbeacon.ai",
+    "phone": "+16512636612"
+  },
+  "location": {
+    "city": "Burnsville",
+    "state": "MN",
+    "postalCode": "55337",
+    "country": "US"
+  },
+  "services": [
+    "AI Readiness Scanning",
+    "Google Business Profile Post Generation",
+    "Local City Page Builder",
+    "Review Response Drafting",
+    "Schema Markup Generator",
+    "llms.txt Generator",
+    "FAQ Content Builder",
+    "AI Search Optimization (AEO)",
+    "Competitor Analysis",
+    "Monthly Progress Reports"
+  ],
+  "industries_served": [
+    "Plumbers",
+    "HVAC",
+    "Dentists",
+    "Roofers",
+    "Landscapers",
+    "Electricians",
+    "Lawyers",
+    "Chiropractors",
+    "Auto Repair",
+    "Contractors"
+  ],
+  "pricing": {
+    "free": {
+      "price": 0,
+      "features": ["1 AI Readiness scan/month", "5 post drafts/month", "3 review responses/month"]
+    },
+    "solo": {
+      "price": 49,
+      "currency": "USD",
+      "billing": "monthly",
+      "features": ["Unlimited scans", "Unlimited posts", "Unlimited reviews", "10 city pages/month", "4 blog posts/month"]
+    },
+    "dfy": {
+      "price": 499,
+      "currency": "USD",
+      "billing": "one-time",
+      "features": ["30-min onboarding call", "15-25 custom FAQs", "Schema + llms.txt setup", "Full AEO audit", "1 month Solo included"]
+    }
+  },
+  "links": {
+    "pricing": "https://localbeacon.ai/pricing",
+    "free_check": "https://localbeacon.ai/check",
+    "blog": "https://localbeacon.ai/blog",
+    "privacy": "https://localbeacon.ai/privacy",
+    "terms": "https://localbeacon.ai/terms"
+  }
+}
