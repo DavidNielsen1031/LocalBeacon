@@ -69,16 +69,17 @@ function OnboardingContent() {
         if (parsed.timestamp && Date.now() - parsed.timestamp < 3600000) {
           scanData = parsed
         }
-        localStorage.removeItem('lb_scan_data') // One-time use
+        // Don't remove yet — remove on successful form submission so refresh works
       }
     } catch {}
 
-    const website = urlParam || scanData.url
+    const website = (urlParam || scanData.url || '').replace(/[<>"'`]/g, '')
     if (website) {
       // Try to extract business name from the domain
       const domain = website.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0].split('.')[0]
       const guessedName = domain
         .replace(/[-_]/g, ' ')
+        .replace(/[<>"'`]/g, '')
         .replace(/\b\w/g, c => c.toUpperCase())
 
       setData(prev => ({
@@ -122,6 +123,8 @@ function OnboardingContent() {
       body: JSON.stringify(data),
     })
     const json = await res.json()
+    // Clean up scan data now that the business is saved
+    try { localStorage.removeItem('lb_scan_data') } catch {}
     return json.business?.id
   }
 

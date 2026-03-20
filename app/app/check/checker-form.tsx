@@ -298,9 +298,11 @@ export function CheckerForm() {
                     </div>
                   ))}
                 </div>
-                <p className="text-xs text-[#1B2A4A]/40 mt-2">
-                  + {result.failed - topFailing.length} more issues found. Get the full breakdown below.
-                </p>
+                {result.failed - topFailing.length > 0 && (
+                  <p className="text-xs text-[#1B2A4A]/40 mt-2">
+                    + {result.failed - topFailing.length} more issues found. Get the full breakdown below.
+                  </p>
+                )}
               </div>
             )
           })()}

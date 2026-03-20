@@ -2,7 +2,7 @@
 
 **Current Sprint:** 23
 **Theme:** Conversion Optimization
-**Status:** EXECUTING
+**Status:** PREVIEW_DEPLOYED
 **Branch:** sprint/localbeacon/s23
 **Started:** 2026-03-20
 
