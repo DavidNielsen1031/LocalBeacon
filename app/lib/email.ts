@@ -4,7 +4,7 @@ const resend = process.env.RESEND_API_KEY
   ? new Resend(process.env.RESEND_API_KEY)
   : null
 
-const FROM_EMAIL = 'LocalBeacon <hello@localbeacon.ai>'
+const FROM_EMAIL = 'LocalBeacon.ai <hello@localbeacon.ai>'
 
 interface WeeklyEmailData {
   to: string
@@ -120,32 +120,28 @@ export async function sendAeoReportEmail(data: AeoReportEmailData) {
   const passing = data.checks.filter(c => c.passed)
   const domain = data.url.replace(/^https?:\/\//, '').split('/')[0]
 
-  // Top 3 critical failures for the summary
-  const topFixes = failing.slice(0, 3)
+  // Severity-colored badges: High=red, Medium=orange, Low=yellow
+  function severityBadge(weight: number): string {
+    if (weight >= 7) return '<span style="background:#FEE2E2;color:#991B1B;font-size:10px;padding:2px 8px;border-radius:99px;font-weight:700;margin-left:6px;">High</span>'
+    if (weight >= 5) return '<span style="background:#FFF3E0;color:#E65100;font-size:10px;padding:2px 8px;border-radius:99px;font-weight:700;margin-left:6px;">Medium</span>'
+    return '<span style="background:#FFF9C4;color:#F57F17;font-size:10px;padding:2px 8px;border-radius:99px;font-weight:700;margin-left:6px;">Low</span>'
+  }
 
-  const failingHtml = failing.map(c => `
+  const failingHtml = failing.map((c, i) => `
     <tr>
-      <td style="padding: 12px 16px; border-bottom: 1px solid #FEE2E2;">
-        <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
-          <td width="24" valign="top" style="color: #ef4444; font-size: 16px; padding-right: 8px;">✗</td>
-          <td>
-            <strong style="color: #1B2A4A; font-size: 14px;">${c.label}</strong>
-            <span style="background: #FEE2E2; color: #991B1B; font-size: 10px; padding: 2px 6px; border-radius: 9999px; font-weight: 600; margin-left: 6px;">Impact: ${c.weight >= 8 ? 'High' : c.weight >= 6 ? 'Medium' : 'Low'}</span>
-            <br><span style="color: #636E72; font-size: 13px; line-height: 1.6;">${c.details}</span>
-            <br><span style="color: #FF6B35; font-size: 13px; font-weight: 600;">Fix: ${c.fix}</span>
-          </td>
-        </tr></table>
+      <td style="padding: 14px 16px;${i < failing.length - 1 ? ' border-bottom: 1px solid #FEE2E2;' : ''}">
+        <strong style="color: #1B2A4A; font-size: 14px;">${c.label}</strong>
+        ${severityBadge(c.weight)}
+        <br><span style="color: #636E72; font-size: 13px; line-height: 1.6;">${c.details}</span>
+        <br><span style="color: #FF6B35; font-size: 13px; font-weight: 600;">Fix: ${c.fix}</span>
       </td>
     </tr>
   `).join('')
 
-  const passingHtml = passing.map(c => `
+  const passingHtml = passing.map((c, i) => `
     <tr>
-      <td style="padding: 8px 16px; border-bottom: 1px solid #F0F0F0;">
-        <table cellpadding="0" cellspacing="0" border="0"><tr>
-          <td width="24" style="color: #22c55e; font-size: 14px;">✓</td>
-          <td style="color: #1B2A4A; font-size: 13px;">${c.label}</td>
-        </tr></table>
+      <td style="padding: 8px 16px;${i < passing.length - 1 ? ' border-bottom: 1px solid #F0F0F0;' : ''} color: #1B2A4A; font-size: 13px;">
+        <span style="color: #22c55e; margin-right: 6px;">✓</span> ${c.label}
       </td>
     </tr>
   `).join('')
@@ -171,14 +167,19 @@ export async function sendAeoReportEmail(data: AeoReportEmailData) {
     <tr><td align="center" style="padding: 24px 16px;">
       <table cellpadding="0" cellspacing="0" border="0" width="600" style="max-width: 600px; background: #FAFAF7; border-radius: 16px; overflow: hidden;">
 
-        <!-- Header -->
-        <tr><td style="background: #1B2A4A; padding: 24px 32px; text-align: center;">
-          <h1 style="color: white; margin: 0; font-size: 20px; font-weight: 700;">🔦 LocalBeacon</h1>
-          <p style="color: rgba(255,255,255,0.6); margin: 4px 0 0; font-size: 13px;">AI Readiness Report</p>
+        <!-- Header with Logo -->
+        <tr><td style="background: #1B2A4A; padding: 28px 32px 12px; text-align: center;">
+          <img src="https://localbeacon.ai/logo-192.png" alt="LocalBeacon.ai" width="48" height="48" style="display: inline-block; border-radius: 10px;" />
+        </td></tr>
+        <tr><td style="background: #1B2A4A; padding: 0 32px 4px; text-align: center;">
+          <h1 style="color: white; margin: 0; font-size: 22px; font-weight: 700;">LocalBeacon.ai</h1>
+        </td></tr>
+        <tr><td style="background: #1B2A4A; padding: 0 32px 8px; text-align: center;">
+          <p style="color: rgba(255,255,255,0.6); margin: 0; font-size: 13px;">AI Readiness Report</p>
         </td></tr>
 
         <!-- Website URL Banner -->
-        <tr><td style="background: #1B2A4A; padding: 0 32px 24px; text-align: center;">
+        <tr><td style="background: #1B2A4A; padding: 8px 32px 28px; text-align: center;">
           <p style="color: rgba(255,255,255,0.5); font-size: 12px; margin: 0 0 4px; text-transform: uppercase; letter-spacing: 1px;">Report for</p>
           <a href="${data.url}" style="color: #FF6B35; font-size: 18px; font-weight: 700; text-decoration: none;">${domain}</a>
         </td></tr>
@@ -254,7 +255,7 @@ export async function sendAeoReportEmail(data: AeoReportEmailData) {
             <tr><td style="padding: 32px; text-align: center;">
               <h3 style="color: white; margin: 0 0 8px; font-size: 18px;">Want us to fix ${failing.length > 0 ? 'these' : 'future issues'} for you?</h3>
               <p style="color: rgba(255,255,255,0.6); font-size: 14px; margin: 0 0 20px; line-height: 1.5;">
-                LocalBeacon automates your local SEO and AI optimization.<br>
+                LocalBeacon.ai automates your local SEO and AI optimization.<br>
                 Plans start at $49/mo. Or get a full done-for-you setup for $499.
               </p>
               <table cellpadding="0" cellspacing="0" border="0" align="center">
@@ -284,7 +285,7 @@ export async function sendAeoReportEmail(data: AeoReportEmailData) {
             Questions? Reply to this email or contact <a href="mailto:hello@localbeacon.ai" style="color: #FF6B35;">hello@localbeacon.ai</a>
           </p>
           <p style="color: #B0B0B0; font-size: 11px; margin: 12px 0 0; line-height: 1.5;">
-            Perpetual Agility LLC · Burnsville, MN 55337<br>
+            LocalBeacon.ai · Burnsville, MN 55337<br>
             <a href="https://localbeacon.ai/unsubscribe" style="color: #B0B0B0;">Unsubscribe</a>
           </p>
         </td></tr>

@@ -1,17 +1,20 @@
 # Sprint State — LocalBeacon
 
-current_sprint: 22
-current_sprint_name: "Scanner 2.0: Beat the Competition"
-status: EXECUTING
+**Current Sprint:** 12
+**Theme:** Distribution
+**Status:** EXECUTING
+**Branch:** sprint/localbeacon/s12
+**Started:** 2026-03-07
 
 ## History
 
-- S8-S11: CLOSED
-- S12: CLOSED partial (Distribution)
-- S13: CLOSED (Outreach pipeline)
-- S14-S17: CLOSED (Production deploy, Clerk, email, design, implementation guides, gating)
-- S18: CLOSED (Code review — security fixes)
-- S19: CLOSED (PostHog, data continuity, mobile nav, DFY confirm)
-- S20: CLOSED (Plan enforcement, DFY webhook, monthly cron, cleanup)
-- S21: CLOSED (Monitoring — scan history, visibility cron, DFY booking, welcome email)
-- S22: EXECUTING (Scanner 2.0 — expand to 22 checks, ai-index generator, category UI, sync surfaces, citability detail)
+| Sprint | State | Opened | Closed | Review Artifact |
+|--------|-------|--------|--------|-----------------|
+| 8 | CLOSED | 2026-03-03 | 2026-03-03 | sprint-8-review-retro.md |
+| 9 | CLOSED | 2026-03-03 | 2026-03-03 | sprint-9-review-retro.md |
+| 10 | CLOSED | 2026-03-03 | 2026-03-04 | sprint-10-review-retro.md |
+| 11 | CLOSED | 2026-03-06 | 2026-03-07 | sprint-11-review-retro.md (pre-gate system, 30% process) |
+| 12 | PLANNING | 2026-03-07 | — | — |
+
+---
+*Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*
