@@ -283,7 +283,7 @@ export function CheckerForm() {
           <div className="bg-[#FAFAF7] rounded-xl p-6 border border-black/5">
             <h3 className="font-semibold text-[#1B2A4A] mb-1">See your full breakdown</h3>
             <p className="text-sm text-[#1B2A4A]/50 mb-4">
-              See which of the 14 signals passed or failed, and get step-by-step instructions to fix each one.
+              See which of the 19 signals passed or failed, and get step-by-step instructions to fix each one.
             </p>
             <form onSubmit={handleEmailSubmit} className="flex gap-2">
               <input
@@ -351,50 +351,83 @@ export function CheckerForm() {
             </div>
           )}
 
-          {/* Failing signals first */}
-          {result.checks.filter(c => !c.passed).length > 0 && (
-            <div className="mb-8">
-              <h3 className="font-semibold text-[#1B2A4A] mb-3 flex items-center gap-2">
-                <span className="text-red-500">✗</span> Needs attention ({result.checks.filter(c => !c.passed).length})
-              </h3>
-              <div className="space-y-3">
-                {result.checks.filter(c => !c.passed).sort((a, b) => b.weight - a.weight).map((check) => (
-                  <div key={check.id} className="p-4 rounded-lg bg-red-50 border border-red-100">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="font-medium text-[#1B2A4A] text-sm">{check.label}</span>
-                      <span className="text-xs text-red-500 font-medium">
-                        {check.weight >= 8 ? '🔴 Critical' : check.weight >= 5 ? '🟡 Important' : '⚪ Nice-to-have'}
-                      </span>
+          {/* Category-grouped results */}
+          {(() => {
+            const categories = [
+              { name: 'AI Access', icon: '🤖', ids: ['robotsTxt', 'aiCrawlerAccess', 'llmsTxt', 'aiIndexJson'] },
+              { name: 'Content Structure', icon: '📝', ids: ['headingStructure', 'faqContent', 'answerFirstContent', 'servicePages', 'contentFreshness'] },
+              { name: 'Schema & Data', icon: '🔗', ids: ['schemaMarkup', 'reviewSchema', 'napConsistency', 'brandSocialLinks'] },
+              { name: 'Citability & Quality', icon: '📊', ids: ['citability', 'eeat'] },
+              { name: 'Meta & Technical', icon: '⚙️', ids: ['https', 'mobile', 'openGraph', 'sitemap'] },
+            ]
+            return (
+              <div className="space-y-6 mb-8">
+                {categories.map(cat => {
+                  const catChecks = result.checks.filter(c => cat.ids.includes(c.id))
+                  if (catChecks.length === 0) return null
+                  const passing = catChecks.filter(c => c.passed).length
+                  const total = catChecks.length
+                  const pct = Math.round((passing / total) * 100)
+                  return (
+                    <div key={cat.name}>
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="font-semibold text-[#1B2A4A] text-sm flex items-center gap-2">
+                          <span>{cat.icon}</span> {cat.name}
+                        </h3>
+                        <span className={`text-xs font-medium ${pct === 100 ? 'text-green-600' : pct >= 50 ? 'text-amber-600' : 'text-red-500'}`}>
+                          {passing}/{total} passing
+                        </span>
+                      </div>
+                      <div className="w-full bg-gray-100 rounded-full h-1.5 mb-3">
+                        <div className={`h-1.5 rounded-full ${pct === 100 ? 'bg-green-500' : pct >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} style={{ width: `${pct}%` }} />
+                      </div>
+                      <div className="space-y-2">
+                        {catChecks.sort((a, b) => (a.passed === b.passed ? b.weight - a.weight : a.passed ? 1 : -1)).map(check => (
+                          <div key={check.id} className={`p-3 rounded-lg border ${check.passed ? 'bg-green-50 border-green-100' : 'bg-red-50 border-red-100'}`}>
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="font-medium text-[#1B2A4A] text-sm flex items-center gap-2">
+                                <span className={check.passed ? 'text-green-500' : 'text-red-500'}>{check.passed ? '✓' : '✗'}</span>
+                                {check.label}
+                              </span>
+                              {!check.passed && (
+                                <span className="text-xs font-medium text-red-400">
+                                  {check.weight >= 8 ? 'Critical' : check.weight >= 5 ? 'Important' : 'Nice-to-have'}
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-xs text-[#1B2A4A]/50 ml-6">{check.details}</p>
+                            {!check.passed && check.fix && (
+                              <p className="text-xs text-[#FF6B35] font-medium ml-6 mt-1">💡 {check.fix}</p>
+                            )}
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                    <p className="text-sm text-[#1B2A4A]/60 mb-2">{check.details}</p>
-                    {check.fix && (
-                      <p className="text-sm text-[#FF6B35] font-medium">💡 {check.fix}</p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Passing signals */}
-          {result.checks.filter(c => c.passed).length > 0 && (
-            <div className="mb-8">
-              <h3 className="font-semibold text-[#1B2A4A] mb-3 flex items-center gap-2">
-                <span className="text-green-500">✓</span> Passing ({result.checks.filter(c => c.passed).length})
-              </h3>
-              <div className="space-y-2">
-                {result.checks.filter(c => c.passed).map((check) => (
-                  <div key={check.id} className="p-3 rounded-lg bg-green-50 border border-green-100 flex items-center gap-3">
-                    <span className="text-green-500">✓</span>
+                  )
+                })}
+                {/* Ungrouped checks (fallback for any check IDs not in categories) */}
+                {(() => {
+                  const allCatIds = categories.flatMap(c => c.ids)
+                  const ungrouped = result.checks.filter(c => !allCatIds.includes(c.id))
+                  if (ungrouped.length === 0) return null
+                  return (
                     <div>
-                      <span className="font-medium text-[#1B2A4A] text-sm">{check.label}</span>
-                      <p className="text-xs text-[#1B2A4A]/50">{check.details}</p>
+                      <h3 className="font-semibold text-[#1B2A4A] text-sm mb-2">Other Signals</h3>
+                      <div className="space-y-2">
+                        {ungrouped.map(check => (
+                          <div key={check.id} className={`p-3 rounded-lg border ${check.passed ? 'bg-green-50 border-green-100' : 'bg-red-50 border-red-100'}`}>
+                            <span className={`${check.passed ? 'text-green-500' : 'text-red-500'} mr-2`}>{check.passed ? '✓' : '✗'}</span>
+                            <span className="font-medium text-[#1B2A4A] text-sm">{check.label}</span>
+                            <p className="text-xs text-[#1B2A4A]/50 ml-6">{check.details}</p>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                })()}
               </div>
-            </div>
-          )}
+            )
+          })()}
 
           {/* Competitor side-by-side */}
           {competitorResult && (

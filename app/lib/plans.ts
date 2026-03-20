@@ -28,7 +28,7 @@ export const PLANS: PlanDefinition[] = [
     period: 'forever',
     tagline: 'See how visible your business is to AI — in 10 seconds.',
     features: [
-      '1 AI Readiness scan per month',
+      '1 AI Readiness scan per month (19 signals)',
       '5 Google post drafts per month',
       '3 review response drafts per month',
       'Schema markup preview (read-only)',
@@ -44,7 +44,7 @@ export const PLANS: PlanDefinition[] = [
     period: '/month',
     tagline: 'AI-written content for your local business, every week.',
     features: [
-      'Unlimited AI Readiness scans — track your progress',
+      'Unlimited AI Readiness scans (19 signals) — track your progress',
       'Unlimited Google post drafts — fresh content every week',
       'Unlimited review response drafts',
       '10 new city/service area pages per month',

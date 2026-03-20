@@ -422,7 +422,7 @@ export default async function IndustryPage({
               marginBottom: "24px",
             }}
           >
-            Free 14-signal scan. No signup required. Takes 30 seconds.
+            Free 19-signal scan. No signup required. Takes 30 seconds.
           </p>
           <Link
             href="/check"

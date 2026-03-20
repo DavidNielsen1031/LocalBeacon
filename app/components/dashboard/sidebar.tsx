@@ -43,6 +43,7 @@ const navItems = [
   { href: "/dashboard/ai-readiness", label: "AI Readiness", Icon: Zap },
   { href: "/dashboard/faq", label: "FAQ Builder", Icon: HelpCircle },
   { href: "/dashboard/llms-txt", label: "AI Discovery File", Icon: FileCode },
+  { href: "/dashboard/ai-index", label: "AI Index File", Icon: FileCode },
   { href: "/dashboard/audit", label: "Listing Health", Icon: Activity },
   { href: "/dashboard/schema", label: "Schema Markup", Icon: Code },
   { href: "/dashboard/competitors", label: "Competitors", Icon: Users },

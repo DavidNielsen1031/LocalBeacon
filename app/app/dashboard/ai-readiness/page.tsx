@@ -9,6 +9,13 @@ import { AeoRecommendations } from '@/components/aeo-recommendations'
 import { useBusinessContext } from '@/components/business-context'
 import { UpgradeGate } from '@/components/upgrade-gate'
 
+interface CitabilityPassage {
+  text: string
+  wordCount: number
+  citable: boolean
+  reason: string
+}
+
 interface CheckResult {
   id: string
   label: string
@@ -17,6 +24,7 @@ interface CheckResult {
   details: string
   fix: string
   weight: number
+  passages?: CitabilityPassage[]
 }
 
 interface ScanResult {
@@ -394,6 +402,33 @@ export default function AIReadinessPage() {
               </div>
             </div>
           )}
+
+          {/* Citability Detail */}
+          {(() => {
+            const citCheck = result.checks.find(c => c.id === 'citability') as CheckResult | undefined
+            if (!citCheck?.passages || citCheck.passages.length === 0) return null
+            return (
+              <div className="mb-4">
+                <h2 className="text-lg font-bold text-[#2D3436] mb-3">📝 Citability Analysis</h2>
+                <p className="text-[#636E72] text-sm mb-3">
+                  AI models excerpt 100-200 word passages with clear topic sentences. Here&apos;s how your content scores:
+                </p>
+                <div className="space-y-2">
+                  {citCheck.passages.map((p, i) => (
+                    <div key={i} className={`p-3 rounded-lg border text-sm ${p.citable ? 'bg-green-50 border-green-200' : 'bg-amber-50 border-amber-200'}`}>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className={`font-medium ${p.citable ? 'text-green-700' : 'text-amber-700'}`}>
+                          {p.citable ? '✅ Citable' : '⚠️ Needs work'} · {p.wordCount} words
+                        </span>
+                        <span className={`text-xs ${p.citable ? 'text-green-600' : 'text-amber-600'}`}>{p.reason}</span>
+                      </div>
+                      <p className="text-[#636E72] text-xs leading-relaxed">{p.text}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )
+          })()}
 
           {/* Passed checks */}
           {result.checks.filter(c => c.passed).length > 0 && (
