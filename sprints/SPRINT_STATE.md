@@ -1,10 +1,10 @@
 # Sprint State — LocalBeacon
 
-**Current Sprint:** 12
-**Theme:** Distribution
+**Current Sprint:** 23
+**Theme:** Conversion Optimization
 **Status:** EXECUTING
-**Branch:** sprint/localbeacon/s12
-**Started:** 2026-03-07
+**Branch:** sprint/localbeacon/s23
+**Started:** 2026-03-20
 
 ## History
 

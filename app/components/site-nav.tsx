@@ -87,7 +87,7 @@ export function SiteNav() {
         </div>
 
         <div className="flex items-center gap-3">
-          <Link href="/sign-up" style={{ textDecoration: "none" }} className="shrink-0 hidden md:block">
+          <Link href="/check" style={{ textDecoration: "none" }} className="shrink-0 hidden md:block">
             <button
               style={{
                 backgroundColor: ORANGE,
@@ -154,7 +154,7 @@ export function SiteNav() {
               {label}
             </Link>
           ))}
-          <Link href="/sign-up" onClick={() => setMobileOpen(false)}>
+          <Link href="/check" onClick={() => setMobileOpen(false)}>
             <button
               style={{
                 backgroundColor: ORANGE,
