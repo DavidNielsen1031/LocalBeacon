@@ -235,9 +235,9 @@ function OnboardingContent() {
         {/* Step 1: Business Basics */}
         {step === 1 && (
           <div>
-            <h1 className="text-2xl font-bold text-[#1B2A4A] mb-2">Tell us about your business</h1>
+            <h1 className="text-2xl font-bold text-[#1B2A4A] mb-2">2 minutes to your first AI-optimized Google post</h1>
             <div className="flex items-center gap-3 mb-8">
-              <p className="text-[#636E72]">We&apos;ll use this to generate locally-targeted content.</p>
+              <p className="text-[#636E72]">Tell us about your business and we&apos;ll generate your first post.</p>
               {prefillScore !== null && (
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-[#FF6B35]/10 text-[#FF6B35] border border-[#FF6B35]/30">
                   Score: {prefillScore}/100
@@ -282,25 +282,18 @@ function OnboardingContent() {
                 </div>
                 <div>
                   <Label htmlFor="onboarding-state" className="text-[#2D3436] mb-2 block">State *</Label>
-                  <Input
+                  <select
                     id="onboarding-state"
-                    placeholder="e.g. MN"
-                    maxLength={2}
                     value={data.primary_state}
-                    onChange={e => update('primary_state', e.target.value.toUpperCase())}
-                    className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/50 focus:border-[#FF6B35]/50"
-                  />
+                    onChange={e => update('primary_state', e.target.value)}
+                    className="w-full bg-white border border-[#DFE6E9] text-[#2D3436] rounded-md px-3 py-2 focus:border-[#FF6B35]/50 focus:outline-none"
+                  >
+                    <option value="">State...</option>
+                    {['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','DC'].map(s => (
+                      <option key={s} value={s}>{s}</option>
+                    ))}
+                  </select>
                 </div>
-              </div>
-              <div>
-                <Label htmlFor="onboarding-phone" className="text-[#2D3436] mb-2 block">Phone Number</Label>
-                <Input
-                  id="onboarding-phone"
-                  placeholder="e.g. (612) 555-0100"
-                  value={data.phone}
-                  onChange={e => update('phone', e.target.value)}
-                  className="bg-white border-[#DFE6E9] text-[#2D3436] placeholder:text-[#636E72]/50 focus:border-[#FF6B35]/50"
-                />
               </div>
               <div>
                 <Label htmlFor="onboarding-website" className="text-[#2D3436] mb-2 block">Website <span className="text-[#636E72]">(optional)</span></Label>
