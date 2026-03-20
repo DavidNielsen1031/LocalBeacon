@@ -54,6 +54,34 @@ function OnboardingContent() {
     phone: '', website: '', service_areas: [],
   })
 
+  // Resume checkout if user came from pricing page (paid plan intent)
+  useEffect(() => {
+    try {
+      const pending = localStorage.getItem('lb_pending_plan')
+      if (pending) {
+        const { plan, timestamp } = JSON.parse(pending)
+        // Only honor if less than 1 hour old
+        if (timestamp && Date.now() - timestamp < 3600000 && (plan === 'SOLO' || plan === 'DFY')) {
+          localStorage.removeItem('lb_pending_plan')
+          // Trigger checkout now that user is authenticated
+          fetch('/api/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ plan, mode: plan === 'DFY' ? 'payment' : 'subscription' }),
+          })
+            .then(r => r.json())
+            .then(data => {
+              if (data.url) window.location.href = data.url
+              // If checkout fails, just continue with onboarding (free tier)
+            })
+            .catch(() => {}) // Fail silently — let them onboard for free
+        } else {
+          localStorage.removeItem('lb_pending_plan')
+        }
+      }
+    } catch {}
+  }, [])
+
   // Pre-fill from /check query params + localStorage scan data
   useEffect(() => {
     const urlParam = searchParams.get('url')

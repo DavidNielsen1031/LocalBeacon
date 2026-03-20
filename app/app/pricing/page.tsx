@@ -41,6 +41,8 @@ export default function PricingPage() {
       if (data.url) {
         window.location.href = data.url;
       } else if (data.error === "Unauthorized") {
+        // Store plan intent so we can resume checkout after sign-up
+        try { localStorage.setItem('lb_pending_plan', JSON.stringify({ plan, timestamp: Date.now() })) } catch {}
         window.location.href = "/sign-up";
       } else {
         console.error("Checkout error:", data.error);
