@@ -354,11 +354,11 @@ export function CheckerForm() {
           {/* Category-grouped results */}
           {(() => {
             const categories = [
-              { name: 'AI Access', icon: '🤖', ids: ['robotsTxt', 'aiCrawlerAccess', 'llmsTxt', 'aiIndexJson'] },
-              { name: 'Content Structure', icon: '📝', ids: ['headingStructure', 'faqContent', 'answerFirstContent', 'servicePages', 'contentFreshness'] },
-              { name: 'Schema & Data', icon: '🔗', ids: ['schemaMarkup', 'reviewSchema', 'napConsistency', 'brandSocialLinks'] },
+              { name: 'AI Access', icon: '🤖', ids: ['robots_txt', 'ai_crawler_access', 'llms_txt', 'ai_index_json'] },
+              { name: 'Content Structure', icon: '📝', ids: ['headings', 'faq_content', 'answer_first', 'service_pages', 'freshness'] },
+              { name: 'Schema & Data', icon: '🔗', ids: ['schema_markup', 'reviews', 'nap', 'brand_social_links'] },
               { name: 'Citability & Quality', icon: '📊', ids: ['citability', 'eeat'] },
-              { name: 'Meta & Technical', icon: '⚙️', ids: ['https', 'mobile', 'openGraph', 'sitemap'] },
+              { name: 'Meta & Technical', icon: '⚙️', ids: ['https', 'mobile', 'open_graph', 'sitemap'] },
             ]
             return (
               <div className="space-y-6 mb-8">
