@@ -120,26 +120,42 @@ export async function sendAeoReportEmail(data: AeoReportEmailData) {
   const passing = data.checks.filter(c => c.passed)
   const domain = data.url.replace(/^https?:\/\//, '').split('/')[0]
 
-  const failingHtml = failing.length > 0
-    ? failing.map(c => `
-      <div style="background: #FFF5F3; border: 1px solid #F5C6BC; border-radius: 10px; padding: 16px; margin-bottom: 10px;">
-        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-          <span style="color: #ef4444; font-size: 16px;">✗</span>
-          <strong style="color: #1B2A4A; font-size: 14px;">${c.label}</strong>
-          <span style="background: #FEE2E2; color: #991B1B; font-size: 11px; padding: 2px 8px; border-radius: 9999px; font-weight: 600;">Weight: ${c.weight}</span>
-        </div>
-        <p style="color: #636E72; font-size: 13px; margin: 0 0 8px; line-height: 1.5;">${c.details}</p>
-        <p style="color: #FF6B35; font-size: 13px; margin: 0; font-weight: 600;">Fix: ${c.fix}</p>
-      </div>
-    `).join('')
-    : '<p style="color: #22c55e; font-weight: 600;">All checks passed!</p>'
+  // Top 3 critical failures for the summary
+  const topFixes = failing.slice(0, 3)
+
+  const failingHtml = failing.map(c => `
+    <tr>
+      <td style="padding: 12px 16px; border-bottom: 1px solid #FEE2E2;">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+          <td width="24" valign="top" style="color: #ef4444; font-size: 16px; padding-right: 8px;">✗</td>
+          <td>
+            <strong style="color: #1B2A4A; font-size: 14px;">${c.label}</strong>
+            <span style="background: #FEE2E2; color: #991B1B; font-size: 10px; padding: 2px 6px; border-radius: 9999px; font-weight: 600; margin-left: 6px;">Impact: ${c.weight >= 8 ? 'High' : c.weight >= 6 ? 'Medium' : 'Low'}</span>
+            <br><span style="color: #636E72; font-size: 13px; line-height: 1.6;">${c.details}</span>
+            <br><span style="color: #FF6B35; font-size: 13px; font-weight: 600;">Fix: ${c.fix}</span>
+          </td>
+        </tr></table>
+      </td>
+    </tr>
+  `).join('')
 
   const passingHtml = passing.map(c => `
-    <div style="display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid #F0F0F0;">
-      <span style="color: #22c55e; font-size: 14px;">✓</span>
-      <span style="color: #1B2A4A; font-size: 13px;">${c.label}</span>
-    </div>
+    <tr>
+      <td style="padding: 8px 16px; border-bottom: 1px solid #F0F0F0;">
+        <table cellpadding="0" cellspacing="0" border="0"><tr>
+          <td width="24" style="color: #22c55e; font-size: 14px;">✓</td>
+          <td style="color: #1B2A4A; font-size: 13px;">${c.label}</td>
+        </tr></table>
+      </td>
+    </tr>
   `).join('')
+
+  // "What this means" copy based on score
+  const whatThisMeans = data.score >= 75
+    ? `Your website is doing well — AI assistants like ChatGPT, Google AI, and Perplexity can find key information about your business. Fix the remaining gaps below to reach full visibility.`
+    : data.score >= 50
+    ? `When customers ask AI assistants for a business like yours, you're partially visible — but your competitors who score higher will be recommended first. The fixes below are sorted by impact.`
+    : `Right now, when customers ask ChatGPT, Siri, or Google AI to recommend a business like yours, <strong>you don't show up</strong>. Your competitors who have these signals in place will be recommended instead. The good news: every issue below is fixable.`
 
   try {
     const result = await resend.emails.send({
@@ -149,55 +165,133 @@ export async function sendAeoReportEmail(data: AeoReportEmailData) {
       html: `
 <!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"></head>
-<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #2D3436; background: #FAFAF7;">
-  <div style="text-align: center; margin-bottom: 32px;">
-    <h2 style="color: #1B2A4A; margin: 0 0 4px;">🔦 LocalBeacon</h2>
-    <p style="color: #636E72; font-size: 14px; margin: 0;">AI Readiness Report</p>
-  </div>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background: #F5F5F5; color: #2D3436;">
+  <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background: #F5F5F5;">
+    <tr><td align="center" style="padding: 24px 16px;">
+      <table cellpadding="0" cellspacing="0" border="0" width="600" style="max-width: 600px; background: #FAFAF7; border-radius: 16px; overflow: hidden;">
 
-  <div style="text-align: center; margin-bottom: 32px;">
-    <p style="color: #636E72; font-size: 14px; margin: 0 0 16px;">Results for <strong style="color: #1B2A4A;">${domain}</strong></p>
-    <div style="display: inline-block; background: white; border-radius: 16px; padding: 32px 48px; border: 2px solid ${color};">
-      <div style="font-size: 48px; font-weight: 800; color: ${color}; line-height: 1;">${data.score}</div>
-      <div style="font-size: 13px; color: #636E72; margin-top: 4px;">out of 100</div>
-      <div style="margin-top: 8px; display: inline-block; background: ${color}20; color: ${color}; font-weight: 700; padding: 4px 16px; border-radius: 9999px; font-size: 14px;">
-        Grade ${grade}
-      </div>
-    </div>
-    <p style="color: #636E72; font-size: 14px; margin-top: 12px;">${label}</p>
-  </div>
+        <!-- Header -->
+        <tr><td style="background: #1B2A4A; padding: 24px 32px; text-align: center;">
+          <h1 style="color: white; margin: 0; font-size: 20px; font-weight: 700;">🔦 LocalBeacon</h1>
+          <p style="color: rgba(255,255,255,0.6); margin: 4px 0 0; font-size: 13px;">AI Readiness Report</p>
+        </td></tr>
 
-  ${failing.length > 0 ? `
-  <div style="margin-bottom: 32px;">
-    <h3 style="color: #1B2A4A; font-size: 16px; margin: 0 0 16px;">🔴 Needs attention (${failing.length} issue${failing.length !== 1 ? 's' : ''})</h3>
-    ${failingHtml}
-  </div>
-  ` : ''}
+        <!-- Website URL Banner -->
+        <tr><td style="background: #1B2A4A; padding: 0 32px 24px; text-align: center;">
+          <p style="color: rgba(255,255,255,0.5); font-size: 12px; margin: 0 0 4px; text-transform: uppercase; letter-spacing: 1px;">Report for</p>
+          <a href="${data.url}" style="color: #FF6B35; font-size: 18px; font-weight: 700; text-decoration: none;">${domain}</a>
+        </td></tr>
 
-  ${passing.length > 0 ? `
-  <div style="margin-bottom: 32px;">
-    <h3 style="color: #1B2A4A; font-size: 16px; margin: 0 0 12px;">🟢 Passing (${passing.length} signal${passing.length !== 1 ? 's' : ''})</h3>
-    <div style="background: white; border-radius: 12px; padding: 8px 16px; border: 1px solid #DFE6E9;">
-      ${passingHtml}
-    </div>
-  </div>
-  ` : ''}
+        <!-- Score Card -->
+        <tr><td style="padding: 32px; text-align: center;">
+          <table cellpadding="0" cellspacing="0" border="0" align="center" style="border: 3px solid ${color}; border-radius: 16px; background: white;">
+            <tr><td style="padding: 28px 48px; text-align: center;">
+              <div style="font-size: 56px; font-weight: 800; color: ${color}; line-height: 1;">${data.score}</div>
+              <div style="font-size: 14px; color: #636E72; margin-top: 4px;">out of 100</div>
+              <div style="margin-top: 10px; background: ${color}; color: white; font-weight: 700; padding: 6px 20px; border-radius: 9999px; font-size: 15px; display: inline-block;">
+                Grade ${grade}
+              </div>
+            </td></tr>
+          </table>
+          <p style="color: #636E72; font-size: 15px; margin-top: 16px; font-weight: 500;">${label}</p>
+        </td></tr>
 
-  <div style="text-align: center; background: #1B2A4A; border-radius: 12px; padding: 32px; margin-bottom: 24px;">
-    <h3 style="color: white; margin: 0 0 8px; font-size: 16px;">Want LocalBeacon to fix these for you?</h3>
-    <p style="color: rgba(255,255,255,0.6); font-size: 14px; margin: 0 0 16px;">We automate local SEO, AI optimization, and content — starting free.</p>
-    <a href="https://localbeacon.ai/sign-up"
-       style="display: inline-block; background: #FF6B35; color: white; font-weight: 700; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-size: 15px;">
-      Get Started Free →
-    </a>
-  </div>
+        <!-- What This Means -->
+        <tr><td style="padding: 0 32px 24px;">
+          <div style="background: #FFF8F0; border-left: 4px solid #FF6B35; border-radius: 0 8px 8px 0; padding: 16px 20px;">
+            <p style="color: #1B2A4A; font-size: 14px; margin: 0; line-height: 1.6;">
+              <strong>What this means:</strong> ${whatThisMeans}
+            </p>
+          </div>
+        </td></tr>
 
-  <hr style="border: none; border-top: 1px solid #DFE6E9; margin: 24px 0;">
-  <p style="color: #636E72; font-size: 12px; text-align: center;">
-    You requested this report at <a href="https://localbeacon.ai/check" style="color: #FF6B35;">localbeacon.ai/check</a>.<br>
-    Questions? Reply to this email or contact <a href="mailto:hello@localbeacon.ai" style="color: #FF6B35;">hello@localbeacon.ai</a>
-  </p>
+        <!-- Scan Summary -->
+        <tr><td style="padding: 0 32px 24px;">
+          <table cellpadding="0" cellspacing="0" border="0" width="100%">
+            <tr>
+              <td width="33%" style="text-align: center; padding: 16px; background: white; border-radius: 8px;">
+                <div style="font-size: 24px; font-weight: 700; color: #1B2A4A;">${data.checks.length}</div>
+                <div style="font-size: 12px; color: #636E72;">Signals Scanned</div>
+              </td>
+              <td width="4"></td>
+              <td width="33%" style="text-align: center; padding: 16px; background: white; border-radius: 8px;">
+                <div style="font-size: 24px; font-weight: 700; color: #22c55e;">${passing.length}</div>
+                <div style="font-size: 12px; color: #636E72;">Passing</div>
+              </td>
+              <td width="4"></td>
+              <td width="33%" style="text-align: center; padding: 16px; background: white; border-radius: 8px;">
+                <div style="font-size: 24px; font-weight: 700; color: #ef4444;">${failing.length}</div>
+                <div style="font-size: 12px; color: #636E72;">Need Fixing</div>
+              </td>
+            </tr>
+          </table>
+        </td></tr>
+
+        ${failing.length > 0 ? `
+        <!-- Failing Checks -->
+        <tr><td style="padding: 0 32px 24px;">
+          <h3 style="color: #1B2A4A; font-size: 16px; margin: 0 0 12px;">🔴 Needs Attention (${failing.length})</h3>
+          <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background: white; border-radius: 12px; border: 1px solid #FEE2E2; overflow: hidden;">
+            ${failingHtml}
+          </table>
+        </td></tr>
+        ` : ''}
+
+        ${passing.length > 0 ? `
+        <!-- Passing Checks -->
+        <tr><td style="padding: 0 32px 24px;">
+          <h3 style="color: #1B2A4A; font-size: 16px; margin: 0 0 12px;">🟢 Passing (${passing.length})</h3>
+          <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background: white; border-radius: 12px; border: 1px solid #DFE6E9; overflow: hidden;">
+            ${passingHtml}
+          </table>
+        </td></tr>
+        ` : ''}
+
+        <!-- Primary CTA -->
+        <tr><td style="padding: 0 32px 24px;">
+          <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background: #1B2A4A; border-radius: 12px;">
+            <tr><td style="padding: 32px; text-align: center;">
+              <h3 style="color: white; margin: 0 0 8px; font-size: 18px;">Want us to fix ${failing.length > 0 ? 'these' : 'future issues'} for you?</h3>
+              <p style="color: rgba(255,255,255,0.6); font-size: 14px; margin: 0 0 20px; line-height: 1.5;">
+                LocalBeacon automates your local SEO and AI optimization.<br>
+                Plans start at $49/mo. Or get a full done-for-you setup for $499.
+              </p>
+              <table cellpadding="0" cellspacing="0" border="0" align="center">
+                <tr>
+                  <td style="padding: 0 6px;">
+                    <a href="https://localbeacon.ai/pricing" style="display: inline-block; background: #FF6B35; color: white; font-weight: 700; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-size: 15px;">
+                      See Plans & Pricing →
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <!-- Secondary CTA -->
+        <tr><td style="padding: 0 32px 24px; text-align: center;">
+          <a href="https://localbeacon.ai/check" style="color: #FF6B35; font-size: 14px; font-weight: 600; text-decoration: none;">
+            🔄 Re-scan ${domain} →
+          </a>
+        </td></tr>
+
+        <!-- Footer -->
+        <tr><td style="padding: 24px 32px; border-top: 1px solid #DFE6E9; text-align: center;">
+          <p style="color: #636E72; font-size: 12px; margin: 0 0 8px; line-height: 1.6;">
+            You requested this report at <a href="https://localbeacon.ai/check" style="color: #FF6B35;">localbeacon.ai/check</a>.<br>
+            Questions? Reply to this email or contact <a href="mailto:hello@localbeacon.ai" style="color: #FF6B35;">hello@localbeacon.ai</a>
+          </p>
+          <p style="color: #B0B0B0; font-size: 11px; margin: 12px 0 0; line-height: 1.5;">
+            Perpetual Agility LLC · Burnsville, MN 55337<br>
+            <a href="https://localbeacon.ai/unsubscribe" style="color: #B0B0B0;">Unsubscribe</a>
+          </p>
+        </td></tr>
+
+      </table>
+    </td></tr>
+  </table>
 </body>
 </html>`,
     })
