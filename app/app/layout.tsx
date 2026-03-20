@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { DM_Sans, Fraunces } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { PostHogProvider } from "@/components/posthog-provider";
@@ -97,9 +98,11 @@ export default function RootLayout({
         className={`${dmSans.variable} ${fraunces.variable} antialiased`}
         style={{ backgroundColor: "#FAFAF7", color: "#2D3436", fontFamily: "var(--font-dm-sans), sans-serif" }}
       >
-        <PostHogProvider>
-          {children}
-        </PostHogProvider>
+        <Suspense fallback={null}>
+          <PostHogProvider>
+            {children}
+          </PostHogProvider>
+        </Suspense>
       </body>
     </html>
   );
