@@ -313,7 +313,7 @@ export default function AIReadinessPage() {
         <div className="text-center py-12">
           <div className="inline-block w-8 h-8 border-2 border-[#FF6B35]/30 border-t-[#FF6B35] rounded-full animate-spin mb-4" />
           <p className="text-[#636E72]">Scanning {url}...</p>
-          <p className="text-[#636E72]/60 text-sm mt-1">Checking 15 AI visibility signals</p>
+          <p className="text-[#636E72]/60 text-sm mt-1">Checking 19 AI visibility signals</p>
         </div>
       )}
 

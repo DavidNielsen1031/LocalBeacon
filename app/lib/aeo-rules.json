@@ -4,7 +4,7 @@
     {
       "id": "llms_txt",
       "label": "llms.txt file exists",
-      "description": "A llms.txt file tells AI assistants about your business — what you do, where you operate, and how to recommend you.",
+      "description": "A llms.txt file tells AI assistants about your business \u2014 what you do, where you operate, and how to recommend you.",
       "fix": "Download your llms.txt from LocalBeacon and upload it to your website root folder. Your website person can do this in 2 minutes.",
       "weight": 7,
       "severity": "high",
@@ -42,7 +42,7 @@
       "label": "Business schema markup present",
       "description": "Schema markup is structured data that tells AI exactly what your business does, where it is, and what services you offer. It's like a business card for robots.",
       "fix": "Generate your Schema Markup in LocalBeacon's Schema tool and add it to your website's HTML head section. This helps AI understand your business details.",
-      "weight": 8,
+      "weight": 7,
       "severity": "high",
       "category": "schema_data"
     },
@@ -78,7 +78,7 @@
       "label": "FAQ content exists on site",
       "description": "FAQ pages are gold for AI visibility. When someone asks ChatGPT a question about your service, it looks for clear Q&A content to cite.",
       "fix": "Use LocalBeacon's FAQ Builder to generate 15-25 questions specific to your business and location. Add them to your website with our FAQ schema markup.",
-      "weight": 8,
+      "weight": 7,
       "severity": "high",
       "category": "content_structure"
     },
@@ -104,7 +104,7 @@
       "id": "service_pages",
       "label": "Service area pages exist",
       "description": "Dedicated pages for each city you serve dramatically increase your chances of being recommended when someone asks AI for services \"near me\" or in a specific city.",
-      "fix": "Use LocalBeacon's Page Builder to create pages for each city you serve. Example: \"Plumbing Services in Apple Valley, MN\" — each page should answer local questions.",
+      "fix": "Use LocalBeacon's Page Builder to create pages for each city you serve. Example: \"Plumbing Services in Apple Valley, MN\" \u2014 each page should answer local questions.",
       "weight": 7,
       "severity": "high",
       "category": "content_structure"
@@ -141,7 +141,7 @@
       "label": "Website uses HTTPS (secure)",
       "description": "AI engines strongly prefer secure websites. An unsecured site is less likely to be recommended.",
       "fix": "Contact your hosting provider to enable SSL/HTTPS. Most hosts offer free SSL certificates.",
-      "weight": 6,
+      "weight": 5,
       "severity": "medium",
       "category": "meta_technical"
     },
