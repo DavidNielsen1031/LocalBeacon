@@ -415,9 +415,10 @@ function OnboardingContent() {
                 </CardContent>
               </Card>
             )}
-            <div className="bg-white border border-[#DFE6E9] rounded-lg p-4 mb-6">
-              <p className="text-[#636E72] text-sm text-center">
-                📱 To post: Open <strong className="text-[#1B2A4A]">Google Maps</strong> → find your business → <strong className="text-[#1B2A4A]">Add post</strong> → paste this content
+            <div className="bg-[#FFF8F0] border border-[#FF6B35]/20 rounded-lg p-4 mb-6">
+              <p className="text-[#1B2A4A] text-sm font-semibold mb-1">📱 How to post this (60 seconds):</p>
+              <p className="text-[#636E72] text-sm">
+                Open <strong className="text-[#1B2A4A]">Google Maps</strong> → search your business name → tap <strong className="text-[#1B2A4A]">Add update</strong> → paste → publish
               </p>
             </div>
             <Button
@@ -455,8 +456,8 @@ function OnboardingContent() {
               >
                 <span className="text-2xl flex-shrink-0">🔍</span>
                 <div className="flex-1">
-                  <p className="text-white font-bold text-base">Run your AI Readiness scan</p>
-                  <p className="text-white/80 text-sm">See how visible your business is to ChatGPT, Perplexity & Google AI</p>
+                  <p className="text-white font-bold text-base">Check if Siri & ChatGPT recommend you</p>
+                  <p className="text-white/80 text-sm">See if AI assistants find your business when customers ask — most local businesses are invisible</p>
                 </div>
                 <span className="text-white text-lg flex-shrink-0">→</span>
               </a>

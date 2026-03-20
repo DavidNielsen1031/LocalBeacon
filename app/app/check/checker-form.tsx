@@ -307,10 +307,13 @@ export function CheckerForm() {
 
           {/* Email gate */}
           <div className="bg-[#FAFAF7] rounded-xl p-6 border border-black/5">
-            <h3 className="font-semibold text-[#1B2A4A] mb-1">Get your full report with fix instructions</h3>
-            <p className="text-sm text-[#1B2A4A]/50 mb-4">
-              We&apos;ll email the complete breakdown — all {result.total} checks with step-by-step fix instructions for each failing signal.
-            </p>
+            <h3 className="font-semibold text-[#1B2A4A] mb-1">Get your {result.total}-point breakdown + fix-it guide</h3>
+            <p className="text-sm text-[#1B2A4A]/50 mb-2">Your full report includes:</p>
+            <ul className="text-sm text-[#1B2A4A]/60 mb-4 space-y-1 text-left">
+              <li>✓ All {result.total} signals scored (not just top 3)</li>
+              <li>✓ Step-by-step fix instructions for every failing check</li>
+              <li>✓ Priority ranking — which fixes move the needle most</li>
+            </ul>
             <form onSubmit={handleEmailSubmit} className="flex gap-2">
               <input
                 type="email"
