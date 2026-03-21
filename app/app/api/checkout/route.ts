@@ -1,3 +1,10 @@
+/**
+ * POST /api/checkout
+ * Called ONLY from: app/onboarding/page.tsx (post-auth resume flow)
+ * NOT called from: /pricing (informational only, all CTAs → /check)
+ * Auth: Clerk required — returns 401 if not signed in
+ * Mode is derived from plan key (DFY=payment, SOLO=subscription)
+ */
 export const dynamic = 'force-dynamic'
 import { auth } from '@clerk/nextjs/server'
 import { stripe, PLANS } from '@/lib/stripe'

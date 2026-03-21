@@ -121,7 +121,15 @@ export default function PagesPage() {
         <DialogContent className="bg-white max-w-2xl max-h-[80vh] overflow-y-auto">
           {previewPage && (
             <div className="p-6 prose prose-sm max-w-none"
-              dangerouslySetInnerHTML={{ __html: previewPage.html }} />
+              dangerouslySetInnerHTML={{ __html: (() => {
+                try {
+                  const DOMPurify = require('dompurify')
+                  return DOMPurify.sanitize(previewPage.html)
+                } catch {
+                  // Fallback: strip all tags
+                  return previewPage.html.replace(/<[^>]*>/g, '')
+                }
+              })() }} />
           )}
         </DialogContent>
       </Dialog>

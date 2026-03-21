@@ -6,14 +6,21 @@ import { enforceLimits } from '@/lib/plan-limits'
 import { getBusinessContext, buildPromptContext } from '@/lib/prompt-context'
 import { NextRequest, NextResponse } from 'next/server'
 
+/** HTML-escape user-controlled values to prevent stored XSS */
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;')
+}
+
 function mockPage(businessName: string, category: string, city: string, phone: string) {
+  const bn = escapeHtml(businessName), cat = escapeHtml(category), ct = escapeHtml(city), ph = escapeHtml(phone)
   return {
-    html: `<h1>${category} in ${city} | ${businessName}</h1>
-<!-- META: Professional ${category.toLowerCase()} services in ${city}. ${businessName} serves all of ${city} and surrounding areas. Call ${phone || 'today'} for a free estimate. -->
+    html: `<h1>${cat} in ${ct} | ${bn}</h1>
+<!-- META: Professional ${category.toLowerCase()} services in ${ct}. ${bn} serves all of ${ct} and surrounding areas. Call ${phone || 'today'} for a free estimate. -->
 
-<p>When you need dependable ${category.toLowerCase()} services in ${city}, ${businessName} is the team locals trust. We've built our reputation on honest work, fair pricing, and showing up when we say we will.</p>
+<p>When you need dependable ${category.toLowerCase()} services in ${ct}, ${bn} is the team locals trust. We've built our reputation on honest work, fair pricing, and showing up when we say we will.</p>
 
-<h2>Our ${category} Services in ${city}</h2>
+<h2>Our ${cat} Services in ${ct}</h2>
 <ul>
   <li>Emergency repairs and same-day service</li>
   <li>Routine maintenance and inspections</li>
@@ -21,26 +28,26 @@ function mockPage(businessName: string, category: string, city: string, phone: s
   <li>Free estimates and consultations</li>
 </ul>
 
-<h2>Why ${city} Residents Choose ${businessName}</h2>
+<h2>Why ${ct} Residents Choose ${bn}</h2>
 <ul>
   <li>Licensed, insured, and background-checked professionals</li>
   <li>Transparent pricing — no surprise fees</li>
-  <li>Fast response times across all of ${city}</li>
+  <li>Fast response times across all of ${ct}</li>
 </ul>
 
-<h2>Serving All of ${city}</h2>
-<p>We proudly serve homeowners and businesses throughout ${city} and the surrounding area. No matter where you are in ${city}, our team can be there quickly.</p>
+<h2>Serving All of ${ct}</h2>
+<p>We proudly serve homeowners and businesses throughout ${ct} and the surrounding area. No matter where you are in ${ct}, our team can be there quickly.</p>
 
 <h2>Frequently Asked Questions</h2>
 
-<h3>How quickly can you respond to calls in ${city}?</h3>
-<p>We offer same-day service for most ${city} customers, with emergency response available 24/7 for urgent situations.</p>
+<h3>How quickly can you respond to calls in ${ct}?</h3>
+<p>We offer same-day service for most ${ct} customers, with emergency response available 24/7 for urgent situations.</p>
 
-<h3>Are you licensed and insured to work in ${city}?</h3>
-<p>Yes — ${businessName} is fully licensed and insured, meeting all local requirements for ${category.toLowerCase()} work in ${city}.</p>
+<h3>Are you licensed and insured to work in ${ct}?</h3>
+<p>Yes — ${bn} is fully licensed and insured, meeting all local requirements for ${category.toLowerCase()} work in ${ct}.</p>
 
-<h3>Do you offer free estimates for ${city} customers?</h3>
-<p>Absolutely. We provide free, no-obligation estimates for all ${category.toLowerCase()} projects in ${city} and surrounding areas.</p>
+<h3>Do you offer free estimates for ${ct} customers?</h3>
+<p>Absolutely. We provide free, no-obligation estimates for all ${category.toLowerCase()} projects in ${ct} and surrounding areas.</p>
 
 <script type="application/ld+json">
 {
@@ -48,35 +55,35 @@ function mockPage(businessName: string, category: string, city: string, phone: s
   "@graph": [
     {
       "@type": "LocalBusiness",
-      "name": "${businessName}",
+      "name": "${bn}",
       "telephone": "${phone || ''}",
-      "areaServed": "${city}"
+      "areaServed": "${ct}"
     },
     {
       "@type": "FAQPage",
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "How quickly can you respond to calls in ${city}?",
+          "name": "How quickly can you respond to calls in ${ct}?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "We offer same-day service for most ${city} customers, with emergency response available 24/7 for urgent situations."
+            "text": "We offer same-day service for most ${ct} customers, with emergency response available 24/7 for urgent situations."
           }
         },
         {
           "@type": "Question",
-          "name": "Are you licensed and insured to work in ${city}?",
+          "name": "Are you licensed and insured to work in ${ct}?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "${businessName} is fully licensed and insured, meeting all local requirements for ${category.toLowerCase()} work in ${city}."
+            "text": "${bn} is fully licensed and insured, meeting all local requirements for ${category.toLowerCase()} work in ${ct}."
           }
         },
         {
           "@type": "Question",
-          "name": "Do you offer free estimates for ${city} customers?",
+          "name": "Do you offer free estimates for ${ct} customers?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "We provide free, no-obligation estimates for all ${category.toLowerCase()} projects in ${city} and surrounding areas."
+            "text": "We provide free, no-obligation estimates for all ${category.toLowerCase()} projects in ${ct} and surrounding areas."
           }
         }
       ]
@@ -88,7 +95,7 @@ function mockPage(businessName: string, category: string, city: string, phone: s
 <div class="cta">
   <p>Ready to get started? Call us today: <strong>${phone || 'Contact Us'}</strong></p>
 </div>`,
-    title: `${category} in ${city}`,
+    title: `${cat} in ${ct}`,
     word_count: 280,
   }
 }

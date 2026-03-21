@@ -75,7 +75,7 @@ function OnboardingContent() {
           const res = await fetch('/api/checkout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ plan, mode: plan === 'DFY' ? 'payment' : 'subscription' }),
+            body: JSON.stringify({ plan }),
           })
           const data = await res.json()
           if (data.url) {
@@ -271,13 +271,14 @@ function OnboardingContent() {
     }
   }
 
-  // Detect if user came from a paid plan selection (query param or localStorage)
+  // UX-only: controls which onboarding steps are shown (skip First Post for paid intent)
+  // Does NOT control feature access — that's enforced server-side in plan-limits.ts
   const planParam = searchParams.get('plan')
-  const isPaidFlow = planParam === 'solo' || planParam === 'dfy' || !!pendingPlanFallback
+  const isSkipPostFlow = planParam === 'solo' || planParam === 'dfy' || !!pendingPlanFallback
 
-  // Paid: Business Info → Service Areas → Dashboard (skip post + what's next)
-  // Free: Business Info → Service Areas → First Post → Dashboard (skip what's next)
-  const steps = isPaidFlow
+  // Skip-post flow: Business Info → Service Areas → Dashboard
+  // Standard flow: Business Info → Service Areas → First Post → Dashboard
+  const steps = isSkipPostFlow
     ? ['Business Info', 'Service Areas']
     : ['Business Info', 'Service Areas', 'Your First Post']
 
@@ -324,7 +325,7 @@ function OnboardingContent() {
                   const res = await fetch('/api/checkout', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ plan, mode: plan === 'DFY' ? 'payment' : 'subscription' }),
+                    body: JSON.stringify({ plan }),
                   })
                   const d = await res.json()
                   if (d.url) window.location.href = d.url
@@ -468,7 +469,7 @@ function OnboardingContent() {
                 <Button onClick={() => goToStep(1)} variant="outline" className="border-[#DFE6E9] text-[#636E72] hover:bg-[#DFE6E9]/50 flex-1">
                   ← Back
                 </Button>
-                {isPaidFlow ? (
+                {isSkipPostFlow ? (
                   <Button
                     onClick={async () => {
                       setLoading(true)
