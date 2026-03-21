@@ -35,10 +35,12 @@ export function getAllPosts(): BlogPostMeta[] {
       industry: data.industry ?? 'general',
       author: data.author ?? 'LocalBeacon Team',
       readingTime: calculateReadingTime(content),
+      draft: data.draft === true,
     } satisfies BlogPostMeta
   })
 
-  return posts.sort((a, b) => (a.date > b.date ? -1 : 1))
+  // Filter out drafts from public listing
+  return posts.filter(p => !p.draft).sort((a, b) => (a.date > b.date ? -1 : 1))
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {

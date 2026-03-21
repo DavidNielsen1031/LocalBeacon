@@ -174,8 +174,8 @@
     },
     {
       "id": "sitemap_in_robots",
-      "label": "Sitemap referenced in robots.txt",
-      "description": "Your robots.txt should reference your sitemap so search engines can find all your pages. This is the #1 way to ensure Google and AI crawlers discover your content.",
+      "label": "Google can fully map your website",
+      "description": "Your website tells Google where to find all your pages. Without this, some of your pages may never show up in search results or AI answers.",
       "fix": "Add a Sitemap line to your robots.txt file pointing to your sitemap.xml URL. Example: Sitemap: https://yourdomain.com/sitemap.xml",
       "weight": 4,
       "severity": "medium",
@@ -183,8 +183,8 @@
     },
     {
       "id": "canonical_tags",
-      "label": "Canonical URL tags present",
-      "description": "Canonical tags tell search engines which version of a page is the \"official\" one. Without them, AI engines may index duplicate versions of your pages or skip them entirely.",
+      "label": "No duplicate content penalties",
+      "description": "Your website tells Google which version of each page is the real one. Without this, search engines may split your ranking power across duplicate pages.",
       "fix": "Add a canonical link tag to your homepage: <link rel=\"canonical\" href=\"https://yourdomain.com/\" />. Most website builders have this in SEO settings.",
       "weight": 4,
       "severity": "medium",

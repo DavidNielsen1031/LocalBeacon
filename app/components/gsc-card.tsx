@@ -48,16 +48,16 @@ export function GscCard() {
       <Card className="border" style={{ borderColor: "#DFE6E9" }}>
         <CardContent className="p-6 text-center">
           <div className="text-3xl mb-3">📊</div>
-          <h3 className="font-bold text-lg mb-2" style={{ color: NAVY }}>Track Your Search Performance</h3>
+          <h3 className="font-bold text-lg mb-2" style={{ color: NAVY }}>How Customers Find You on Google</h3>
           <p className="text-sm mb-4" style={{ color: SLATE }}>
-            Connect Google Search Console to see your clicks, impressions, and top search queries — proof that LocalBeacon is working.
+            See how many people find your business on Google — which searches bring them, how often they click, and whether it&apos;s growing. Optional — takes 2 minutes to connect.
           </p>
           <Button
             onClick={() => window.location.href = "/api/gsc/connect"}
             className="font-semibold text-white"
             style={{ background: ORANGE }}
           >
-            Connect Google Search Console
+            Connect Google Search Data
           </Button>
         </CardContent>
       </Card>
@@ -69,10 +69,10 @@ export function GscCard() {
     return (
       <Card className="border" style={{ borderColor: "#DFE6E9" }}>
         <CardContent className="p-6 text-center">
-          <div className="text-3xl mb-3">🔒</div>
-          <h3 className="font-bold text-lg mb-2" style={{ color: NAVY }}>Search Performance</h3>
+          <div className="text-3xl mb-3">📊</div>
+          <h3 className="font-bold text-lg mb-2" style={{ color: NAVY }}>How Customers Find You on Google</h3>
           <p className="text-sm mb-4" style={{ color: SLATE }}>
-            Upgrade to Solo to track your Google search performance and prove ROI.
+            Solo members can see how many people find their business through Google searches — and whether it&apos;s growing month over month.
           </p>
           <Button
             onClick={() => window.location.href = "/pricing"}
@@ -91,7 +91,7 @@ export function GscCard() {
     <Card className="border" style={{ borderColor: "#DFE6E9" }}>
       <CardContent className="p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-bold text-lg" style={{ color: NAVY }}>Search Performance</h3>
+          <h3 className="font-bold text-lg" style={{ color: NAVY }}>How Customers Find You</h3>
           <div className="flex gap-1">
             {(["7d", "28d", "3mo"] as const).map(p => (
               <button

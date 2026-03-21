@@ -48,6 +48,7 @@ function OnboardingContent() {
   const [copied, setCopied] = useState(false)
   const [prefillScore, setPrefillScore] = useState<number | null>(null)
   const [showDfyDialog, setShowDfyDialog] = useState(false)
+  const [pendingPlanFallback, setPendingPlanFallback] = useState<string | null>(null)
 
   const [data, setData] = useState<BusinessData>({
     name: '', category: '', primary_city: '', primary_state: '',
@@ -88,7 +89,8 @@ function OnboardingContent() {
           }
           break // Other error, don't retry
         }
-        // If all attempts fail, continue with free onboarding
+        // If all attempts fail, show manual checkout button
+        setPendingPlanFallback(plan)
       } catch {}
     }
     resumeCheckout()
@@ -297,6 +299,45 @@ function OnboardingContent() {
       </div>
 
       <div className="w-full max-w-lg">
+        {/* Plan checkout fallback banner */}
+        {pendingPlanFallback && (
+          <div className="mb-6 rounded-xl border px-5 py-4" style={{ backgroundColor: 'rgba(255,107,53,0.06)', borderColor: 'rgba(255,107,53,0.25)' }}>
+            <p className="text-sm font-semibold mb-2" style={{ color: '#1B2A4A' }}>
+              You selected the {pendingPlanFallback === 'DFY' ? 'DFY Setup ($499)' : 'Solo ($49/mo)'} plan
+            </p>
+            <p className="text-sm mb-3" style={{ color: '#636E72' }}>
+              Complete your purchase to unlock all features, or continue setting up your free account first.
+            </p>
+            <div className="flex gap-3">
+              <Button
+                onClick={async () => {
+                  const plan = pendingPlanFallback
+                  setPendingPlanFallback(null)
+                  const res = await fetch('/api/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ plan, mode: plan === 'DFY' ? 'payment' : 'subscription' }),
+                  })
+                  const d = await res.json()
+                  if (d.url) window.location.href = d.url
+                }}
+                className="font-semibold text-white text-sm"
+                style={{ background: '#FF6B35' }}
+              >
+                Complete Purchase →
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() => setPendingPlanFallback(null)}
+                className="text-sm"
+                style={{ color: '#636E72' }}
+              >
+                Continue with Free
+              </Button>
+            </div>
+          </div>
+        )}
+
         {/* Step 1: Business Basics */}
         {step === 1 && (
           <div>
