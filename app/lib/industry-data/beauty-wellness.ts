@@ -9,7 +9,7 @@ export const beautyWellness: Record<string, IndustryData> = {
     subheadline:
       'Stylists are booked solid on Saturdays but empty on Tuesdays. LocalBeacon keeps your appointment book balanced all week long.',
     description:
-      'LocalBeacon helps hair salons attract new clients through Google Business optimization, AI-powered local search visibility, and automated review management so every stylist stays booked.',
+      'LocalBeacon helps hair salons attract new clients through Google Business optimization, local search visibility, and automated review management so every stylist stays booked.',
     painPoints: [
       {
         icon: '\uD83D\uDCC9',

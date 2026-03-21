@@ -14,7 +14,7 @@ export const PLANS = {
     priceId: null,
   },
   SOLO: {
-    name: "Solo",
+    name: "Local Autopilot",
     price: 49,
     priceId: process.env.STRIPE_SOLO_PRICE_ID || "price_1T6LhxB0OqzCjZpvnGc84VN7",
   },

@@ -9,7 +9,7 @@ export const petServices: Record<string, IndustryData> = {
     subheadline:
       'LocalBeacon keeps your grooming salon visible on Google and AI search — so pet parents find you for regular appointments, not just when Fido is matted beyond recognition.',
     description:
-      'AI-powered local marketing for pet grooming salons and mobile groomers. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for pet grooming businesses.',
+      'Local marketing automation for pet grooming salons and mobile groomers. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for pet grooming businesses.',
     painPoints: [
       {
         icon: '🐾',
@@ -92,7 +92,7 @@ export const petServices: Record<string, IndustryData> = {
     subheadline:
       'LocalBeacon makes you the trusted neighborhood dog walker on Google and AI search — so pet parents choose you over Rover, Wag, and random Craigslist posts.',
     description:
-      'AI-powered local marketing for dog walkers and pet sitting services. Automated Google Business Profile posts, neighborhood-specific service pages, review responses, and AI search optimization built for dog walking businesses.',
+      'Local marketing automation for dog walkers and pet sitting services. Automated Google Business Profile posts, neighborhood-specific service pages, review responses, and AI search optimization built for dog walking businesses.',
     painPoints: [
       {
         icon: '📲',
@@ -180,7 +180,7 @@ export const petServices: Record<string, IndustryData> = {
     subheadline:
       'LocalBeacon keeps your boarding facility visible on Google and AI search — so anxious pet parents choose your facility over impersonal apps when vacation season arrives.',
     description:
-      'AI-powered local marketing for pet boarding facilities, kennels, and doggy daycares. Automated Google Business Profile posts, city-specific landing pages, review responses, and AI search optimization built for pet boarding businesses.',
+      'Local marketing automation for pet boarding facilities, kennels, and doggy daycares. Automated Google Business Profile posts, city-specific landing pages, review responses, and AI search optimization built for pet boarding businesses.',
     painPoints: [
       {
         icon: '🎄',

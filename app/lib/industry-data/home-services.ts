@@ -9,7 +9,7 @@ export const homeServices: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon keeps your plumbing business visible on Google, AI search, and local directories — so homeowners find you first when the pipes burst.",
     description:
-      "AI-powered local marketing for plumbing companies. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for plumbers.",
+      "Local marketing automation for plumbing companies. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for plumbers.",
     painPoints: [
       {
         icon: "📞",
@@ -87,7 +87,7 @@ export const homeServices: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon keeps your HVAC business visible year-round — so you're not scrambling for leads when the weather changes.",
     description:
-      "AI-powered local marketing for HVAC companies. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for heating and cooling businesses.",
+      "Local marketing automation for HVAC companies. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for heating and cooling businesses.",
     painPoints: [
       {
         icon: "🌡️",
@@ -115,7 +115,7 @@ export const homeServices: Record<string, IndustryData> = {
         text: "\"AC Repair in Lakeville\" and \"Furnace Installation in Apple Valley\" pages that rank you locally in each area you serve.",
       },
       {
-        title: "Ready for AI-powered search",
+        title: "Ready for AI search",
         text: "Structured data, FAQ schemas, and llms.txt files that help AI assistants recommend your HVAC business when homeowners ask for help.",
       },
       {
@@ -165,7 +165,7 @@ export const homeServices: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon makes your electrical business the first one homeowners find — on Google, AI search, and everywhere local customers look.",
     description:
-      "AI-powered local marketing for electrical contractors. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for electricians.",
+      "Local marketing automation for electrical contractors. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for electricians.",
     painPoints: [
       {
         icon: "⚡",
@@ -243,7 +243,7 @@ export const homeServices: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon keeps your roofing company visible on Google and AI search — so homeowners call you first after the storm.",
     description:
-      "AI-powered local marketing for roofing companies. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for roofers.",
+      "Local marketing automation for roofing companies. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for roofers.",
     painPoints: [
       {
         icon: "⛈️",
@@ -321,7 +321,7 @@ export const homeServices: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon keeps your painting business front and center on Google and AI search — so homeowners request quotes from you instead of scrolling past.",
     description:
-      "AI-powered local marketing for painting companies. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for house painters.",
+      "Local marketing automation for painting companies. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for house painters.",
     painPoints: [
       {
         icon: "🎨",
@@ -404,7 +404,7 @@ export const homeServices: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon keeps your cleaning business visible on Google and AI search — so new clients find you before they find a competitor with fewer reviews.",
     description:
-      "AI-powered local marketing for residential and commercial cleaning companies. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for cleaning services.",
+      "Local marketing automation for residential and commercial cleaning companies. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for cleaning services.",
     painPoints: [
       {
         icon: "🔄",
@@ -487,7 +487,7 @@ export const homeServices: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon keeps your pest control business visible on Google and AI search — so panicked homeowners find you instantly, not your competitor down the road.",
     description:
-      "AI-powered local marketing for pest control companies. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for exterminators and pest management professionals.",
+      "Local marketing automation for pest control companies. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for exterminators and pest management professionals.",
     painPoints: [
       {
         icon: "🐜",
@@ -570,7 +570,7 @@ export const homeServices: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon makes your moving company the one homeowners trust and call first — on Google, AI search, and local directories where moving decisions start.",
     description:
-      "AI-powered local marketing for moving companies. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for local and long-distance movers.",
+      "Local marketing automation for moving companies. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for local and long-distance movers.",
     painPoints: [
       {
         icon: "📦",
@@ -653,7 +653,7 @@ export const homeServices: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon builds the trusted online presence that separates your legitimate locksmith business from the fake listings and bait-and-switch operators flooding Google.",
     description:
-      "AI-powered local marketing for locksmiths. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for legitimate locksmith businesses.",
+      "Local marketing automation for locksmiths. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for legitimate locksmith businesses.",
     painPoints: [
       {
         icon: "🔒",
@@ -736,7 +736,7 @@ export const homeServices: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon keeps your handyman business booked with the small-to-medium projects homeowners need done — on Google, AI search, and local directories.",
     description:
-      "AI-powered local marketing for handyman services. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for general handymen and home repair professionals.",
+      "Local marketing automation for handyman services. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for general handymen and home repair professionals.",
     painPoints: [
       {
         icon: "🔧",
@@ -819,7 +819,7 @@ export const homeServices: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon makes your appliance repair business the first one homeowners find when the fridge stops cooling or the washer won't spin.",
     description:
-      "AI-powered local marketing for appliance repair companies. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for appliance repair technicians.",
+      "Local marketing automation for appliance repair companies. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for appliance repair technicians.",
     painPoints: [
       {
         icon: "🧊",
@@ -902,7 +902,7 @@ export const homeServices: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon keeps your garage door business visible on Google and AI search — so homeowners call you first when the door won't open, the spring snaps, or they want an upgrade.",
     description:
-      "AI-powered local marketing for garage door companies. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for garage door installation and repair businesses.",
+      "Local marketing automation for garage door companies. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for garage door installation and repair businesses.",
     painPoints: [
       {
         icon: "⚙️",
@@ -985,7 +985,7 @@ export const homeServices: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon keeps your fencing company visible on Google and AI search — so homeowners call you first when they need a new fence, not the cheapest quote on Thumbtack.",
     description:
-      "AI-powered local marketing for fencing companies. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for fence installation and repair businesses.",
+      "Local marketing automation for fencing companies. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for fence installation and repair businesses.",
     painPoints: [
       {
         icon: "🌧️",
@@ -1066,7 +1066,7 @@ export const homeServices: Record<string, IndustryData> = {
     plural: "Emergency Plumbers",
     headline: "Be the first call when pipes burst.",
     subheadline: "Emergency plumbing calls go to whoever ranks first at 2am — LocalBeacon makes sure that's you, not your competitor.",
-    description: "AI-powered local marketing for emergency plumbing services. Own the top spot for burst pipes, flooding, and after-hours plumbing emergencies in every city you serve.",
+    description: "Local marketing automation for emergency plumbing services. Own the top spot for burst pipes, flooding, and after-hours plumbing emergencies in every city you serve.",
     painPoints: [
       { icon: "🚨", title: "Emergency searches need instant results", text: "When a pipe bursts at midnight, homeowners click the first result — not the best result. If you're not ranking #1 for 'emergency plumber near me,' that call goes to a competitor." },
       { icon: "📍", title: "Response area visibility gaps", text: "You cover a wide area for emergencies but only show up in one city online. LocalBeacon creates optimized emergency service pages for every zip code you'll actually drive to at 3am." },

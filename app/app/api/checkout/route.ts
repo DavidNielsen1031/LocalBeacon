@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
 
   // Agency plan has been retired — only Solo and DFY are available
   if ((plan as string) === 'AGENCY') {
-    return NextResponse.json({ error: 'Agency plan is no longer available. Please select Solo.' }, { status: 400 })
+    return NextResponse.json({ error: 'Agency plan is no longer available. Please select Local Autopilot.' }, { status: 400 })
   }
 
   const planConfig = PLANS[plan]

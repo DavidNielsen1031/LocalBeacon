@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
               stripe_customer_id: session.customer as string,
             })
             .eq("clerk_id", clerkUserId);
-          console.log(`DFY checkout completed: ${session.id} — Solo access granted until ${expiresAt}, user: ${clerkUserId}`);
+          console.log(`DFY checkout completed: ${session.id} — Local Autopilot access granted until ${expiresAt}, user: ${clerkUserId}`);
         } else {
           // Regular subscription (solo/agency)
           await supabase

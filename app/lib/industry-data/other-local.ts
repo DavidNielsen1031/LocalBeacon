@@ -9,7 +9,7 @@ export const otherLocal: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon keeps your tutoring business visible to parents searching Google and AI assistants — so families find you before they default to Kumon or an online platform.",
     description:
-      "AI-powered local marketing for tutoring services and test prep centers. Automated Google Business Profile posts, city-specific landing pages, review responses, and AI search optimization built for tutors and learning centers.",
+      "Local marketing automation for tutoring services and test prep centers. Automated Google Business Profile posts, city-specific landing pages, review responses, and AI search optimization built for tutors and learning centers.",
     painPoints: [
       {
         icon: "📚",
@@ -38,7 +38,7 @@ export const otherLocal: Record<string, IndustryData> = {
       },
       {
         title: "AI search visibility for education queries",
-        text: "When a parent asks ChatGPT \"best tutoring service near me for algebra\" or Google AI summarizes local options, your structured data and content help you appear in those AI-generated recommendations.",
+        text: "When a parent asks ChatGPT \"best tutoring service near me for algebra\" or Google AI summarizes local options, your structured data and content help you appear in those automated recommendations.",
       },
       {
         title: "Review responses that reassure parents",
@@ -92,7 +92,7 @@ export const otherLocal: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon makes your daycare the first one parents find when they search — building trust through visibility so enrollment calls come to you, not the center down the street.",
     description:
-      "AI-powered local marketing for daycare centers and childcare providers. Automated Google Business Profile posts, city-specific pages, review responses, and AI search optimization built for early childhood programs.",
+      "Local marketing automation for daycare centers and childcare providers. Automated Google Business Profile posts, city-specific pages, review responses, and AI search optimization built for early childhood programs.",
     painPoints: [
       {
         icon: "👶",
@@ -180,7 +180,7 @@ export const otherLocal: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon keeps your dry cleaning business visible to the customers who still need you — and helps you find the ones who don't know they do yet.",
     description:
-      "AI-powered local marketing for dry cleaners and laundry services. Automated Google Business Profile posts, city-specific landing pages, review responses, and AI search optimization built for dry cleaning businesses.",
+      "Local marketing automation for dry cleaners and laundry services. Automated Google Business Profile posts, city-specific landing pages, review responses, and AI search optimization built for dry cleaning businesses.",
     painPoints: [
       {
         icon: "👔",

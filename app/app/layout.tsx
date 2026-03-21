@@ -67,10 +67,10 @@ export default function RootLayout({
               "applicationCategory": "BusinessApplication",
               "operatingSystem": "Web",
               "url": "https://localbeacon.ai",
-              "description": "AI-powered local visibility engine. Automates Google Business Profile posts, city pages, review responses, and AI search optimization for local businesses.",
+              "description": "Local visibility engine. Automates Google Business Profile posts, city pages, review responses, and AI search optimization for local businesses.",
               "offers": [
                 { "@type": "Offer", "price": "0", "priceCurrency": "USD", "name": "Free" },
-                { "@type": "Offer", "price": "49", "priceCurrency": "USD", "name": "Solo", "priceSpecification": { "@type": "UnitPriceSpecification", "billingDuration": "P1M" } },
+                { "@type": "Offer", "price": "49", "priceCurrency": "USD", "name": "Local Autopilot", "priceSpecification": { "@type": "UnitPriceSpecification", "billingDuration": "P1M" } },
                 { "@type": "Offer", "price": "99", "priceCurrency": "USD", "name": "Agency", "priceSpecification": { "@type": "UnitPriceSpecification", "billingDuration": "P1M" } }
               ],
               "provider": {

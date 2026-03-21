@@ -146,7 +146,7 @@ export default async function ReportsPage() {
           <h3 className="text-base font-bold mb-1" style={{ color: '#1B2A4A' }}>
             Monthly Reports
           </h3>
-          <p className="text-sm mb-1" style={{ color: '#636E72' }}>Available on Solo plan</p>
+          <p className="text-sm mb-1" style={{ color: '#636E72' }}>Available on Local Autopilot plan</p>
           <p className="text-xs mb-5" style={{ color: '#636E72' }}>
             Upgrade to unlock monthly progress reports and track your AI visibility score over time.
           </p>

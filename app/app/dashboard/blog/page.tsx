@@ -53,7 +53,7 @@ export default function BlogPage() {
 
       if (!res.ok) {
         if (res.status === 403 && data.upgradeUrl) {
-          setError(`You've reached your plan limit. Upgrade to Solo for unlimited blog posts.`)
+          setError(`You've reached your plan limit. Upgrade to Local Autopilot for unlimited blog posts.`)
         } else {
           setError(data.error || 'Generation failed — please try again.')
         }

@@ -222,7 +222,7 @@ export default function PricingPage() {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-left">
             {[
-              { emoji: "📝", label: "AI-written Google posts" },
+              { emoji: "📝", label: "Weekly Google posts, handled for you" },
               { emoji: "🌐", label: "Local city pages" },
               { emoji: "⭐", label: "Review reply drafts" },
               { emoji: "🤖", label: "AI Readiness scoring" },
