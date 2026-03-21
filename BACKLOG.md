@@ -194,3 +194,11 @@
 
 ---
 *See also: [[MEMORY|Alexander's Memory]] · [[TOOLS|Infrastructure]] · [[SOUL|Soul]]*
+
+
+### Sprint 25 Retro — Product Improvements
+- [ ] P-1: GSC card loading skeleton (shimmer instead of plain text) — 🟡
+- [ ] P-2: Blog cron duplicate slug prevention — 🟡
+- [ ] P-3: Stripe webhook handler for plan sync post-payment — 🔴 HIGH PRIORITY
+- [ ] P-4: GSC connect account preview hint — 🟢
+
