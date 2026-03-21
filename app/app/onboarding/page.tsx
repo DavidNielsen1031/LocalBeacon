@@ -56,30 +56,42 @@ function OnboardingContent() {
 
   // Resume checkout if user came from pricing page (paid plan intent)
   useEffect(() => {
-    try {
-      const pending = localStorage.getItem('lb_pending_plan')
-      if (pending) {
+    const resumeCheckout = async () => {
+      try {
+        const pending = localStorage.getItem('lb_pending_plan')
+        if (!pending) return
         const { plan, timestamp } = JSON.parse(pending)
         // Only honor if less than 1 hour old
-        if (timestamp && Date.now() - timestamp < 3600000 && (plan === 'SOLO' || plan === 'DFY')) {
+        if (!timestamp || Date.now() - timestamp > 3600000 || (plan !== 'SOLO' && plan !== 'DFY')) {
           localStorage.removeItem('lb_pending_plan')
-          // Trigger checkout now that user is authenticated
-          fetch('/api/checkout', {
+          return
+        }
+        localStorage.removeItem('lb_pending_plan')
+        // Wait for Clerk auth session to be ready (cookie propagation)
+        await new Promise(r => setTimeout(r, 1500))
+        // Try checkout with retry
+        for (let attempt = 0; attempt < 3; attempt++) {
+          const res = await fetch('/api/checkout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ plan, mode: plan === 'DFY' ? 'payment' : 'subscription' }),
           })
-            .then(r => r.json())
-            .then(data => {
-              if (data.url) window.location.href = data.url
-              // If checkout fails, just continue with onboarding (free tier)
-            })
-            .catch(() => {}) // Fail silently — let them onboard for free
-        } else {
-          localStorage.removeItem('lb_pending_plan')
+          const data = await res.json()
+          if (data.url) {
+            window.location.href = data.url
+            return
+          }
+          if (data.error === 'Unauthorized') {
+            // Auth not ready yet, wait and retry
+            await new Promise(r => setTimeout(r, 2000))
+            continue
+          }
+          break // Other error, don't retry
         }
-      }
-    } catch {}
+        // If all attempts fail, continue with free onboarding
+      } catch {}
+    }
+    resumeCheckout()
   }, [])
 
   // Pre-fill from /check query params + localStorage scan data

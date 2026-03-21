@@ -269,13 +269,13 @@ export default function PricingPage() {
           <p className="mb-6" style={{ color: SLATE }}>
             Connect your Google listing and see your first posts in under 2 minutes.
           </p>
-          <Link href="/sign-up">
+          <Link href="/check">
             <Button
               size="lg"
               className="font-bold text-lg px-10 py-6 text-white"
               style={{ background: ORANGE }}
             >
-              Connect Your Google Listing — Free
+              Check Your AI Score — Free
             </Button>
           </Link>
         </div>
