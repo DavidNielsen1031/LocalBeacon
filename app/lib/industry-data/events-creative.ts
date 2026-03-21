@@ -9,7 +9,7 @@ export const eventsCreative: Record<string, IndustryData> = {
     subheadline:
       "Your portfolio is stunning — but it's buried on Instagram where only your existing followers see it. LocalBeacon puts your photography business in front of people actively searching for a photographer in your area.",
     description:
-      "AI-powered local marketing for photographers. Automated Google Business Profile posts, city-specific service pages, review management, and AI search optimization for wedding, portrait, family, and commercial photography.",
+      "Local marketing automation for photographers. Automated Google Business Profile posts, city-specific service pages, review management, and AI search optimization for wedding, portrait, family, and commercial photography.",
     painPoints: [
       {
         icon: "📱",
@@ -42,7 +42,7 @@ export const eventsCreative: Record<string, IndustryData> = {
       },
       {
         title: "Show up when AI recommends photographers",
-        text: "Couples and families increasingly ask ChatGPT and AI assistants for photographer recommendations. LocalBeacon optimizes your online presence so you're included in those AI-generated lists.",
+        text: "Couples and families increasingly ask ChatGPT and AI assistants for photographer recommendations. LocalBeacon optimizes your online presence so you're included in those automated lists.",
       },
     ],
     stats: [
@@ -92,7 +92,7 @@ export const eventsCreative: Record<string, IndustryData> = {
     subheadline:
       "Engaged couples Google \"wedding planner near me\" long before they ask friends for referrals. LocalBeacon makes sure your business is the one they find, trust, and call first.",
     description:
-      "AI-powered local marketing for wedding planners and event coordinators. Automated Google Business Profile posts, city-specific landing pages, review management, and AI search optimization for full-service planning, day-of coordination, and destination weddings.",
+      "Local marketing automation for wedding planners and event coordinators. Automated Google Business Profile posts, city-specific landing pages, review management, and AI search optimization for full-service planning, day-of coordination, and destination weddings.",
     painPoints: [
       {
         icon: "📋",
@@ -125,7 +125,7 @@ export const eventsCreative: Record<string, IndustryData> = {
       },
       {
         title: "AI search visibility for wedding questions",
-        text: "Couples ask AI assistants everything from \"best wedding planner near me\" to \"do I need a day-of coordinator?\" LocalBeacon optimizes your content to appear in these AI-powered search results.",
+        text: "Couples ask AI assistants everything from \"best wedding planner near me\" to \"do I need a day-of coordinator?\" LocalBeacon optimizes your content to appear in these AI search results.",
       },
     ],
     stats: [
@@ -170,7 +170,7 @@ export const eventsCreative: Record<string, IndustryData> = {
     subheadline:
       "Your mixes pack dance floors — but that doesn't matter if no one can find you online. LocalBeacon builds the local presence that turns Google searches into gig requests.",
     description:
-      "AI-powered local marketing for DJs and mobile entertainment companies. Automated Google Business Profile posts, city-specific service pages, review management, and AI search optimization for wedding DJs, corporate event DJs, and party entertainment.",
+      "Local marketing automation for DJs and mobile entertainment companies. Automated Google Business Profile posts, city-specific service pages, review management, and AI search optimization for wedding DJs, corporate event DJs, and party entertainment.",
     painPoints: [
       {
         icon: "🎵",
@@ -203,7 +203,7 @@ export const eventsCreative: Record<string, IndustryData> = {
       },
       {
         title: "AI search answers about local DJs",
-        text: "When someone asks ChatGPT \"best wedding DJ near me\" or tells Siri to find a DJ for their party, your optimized online presence helps you appear in those AI-powered recommendations.",
+        text: "When someone asks ChatGPT \"best wedding DJ near me\" or tells Siri to find a DJ for their party, your optimized online presence helps you appear in those automated recommendations.",
       },
     ],
     stats: [
@@ -230,7 +230,7 @@ export const eventsCreative: Record<string, IndustryData> = {
       {
         question: "I'm a solo DJ — is this worth it for a one-person business?",
         answer:
-          "Especially so. Solo DJs can't afford a marketing team, but you still need a strong online presence. Our Free plan gets you started, and the Solo plan at $49/month is far less than what one additional booking per month would earn you.",
+          "Especially so. Solo DJs can't afford a marketing team, but you still need a strong online presence. Our Free plan gets you started, and the Local Autopilot plan at $49/month is far less than what one additional booking per month would earn you.",
       },
       {
         question: "How do reviews help DJs specifically?",
@@ -253,7 +253,7 @@ export const eventsCreative: Record<string, IndustryData> = {
     subheadline:
       "Local florists are losing orders to 1-800-Flowers and online delivery apps every day. LocalBeacon helps you recapture those customers by making your shop the top result for flower searches in your area.",
     description:
-      "AI-powered local marketing for florists and flower shops. Automated Google Business Profile posts, city-specific landing pages, review management, and AI search optimization for wedding flowers, sympathy arrangements, daily deliveries, and special occasion bouquets.",
+      "Local marketing automation for florists and flower shops. Automated Google Business Profile posts, city-specific landing pages, review management, and AI search optimization for wedding flowers, sympathy arrangements, daily deliveries, and special occasion bouquets.",
     painPoints: [
       {
         icon: "📦",
@@ -328,7 +328,7 @@ export const eventsCreative: Record<string, IndustryData> = {
       {
         question: "What's the cost for a small flower shop?",
         answer:
-          "LocalBeacon starts free for one location with 5 posts per month. The Solo plan at $49/month adds unlimited posts and up to 3 delivery zone areas. Most flower shops find that one or two additional orders per month more than covers the cost.",
+          "LocalBeacon starts free for one location with 5 posts per month. The Local Autopilot plan at $49/month adds unlimited posts and up to 3 delivery zone areas. Most flower shops find that one or two additional orders per month more than covers the cost.",
       },
     ],
   },

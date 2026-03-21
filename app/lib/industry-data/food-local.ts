@@ -9,7 +9,7 @@ export const foodLocal: Record<string, IndustryData> = {
     subheadline:
       "Third-party delivery apps take 30% of every order. LocalBeacon drives direct traffic to your restaurant — customers who walk in, sit down, and come back next week.",
     description:
-      "AI-powered local marketing for restaurants. Automated Google Business Profile posts, city-specific landing pages, review management, and AI search optimization for dine-in, takeout, catering, and direct delivery orders.",
+      "Local marketing automation for restaurants. Automated Google Business Profile posts, city-specific landing pages, review management, and AI search optimization for dine-in, takeout, catering, and direct delivery orders.",
     painPoints: [
       {
         icon: "💸",
@@ -92,7 +92,7 @@ export const foodLocal: Record<string, IndustryData> = {
     subheadline:
       "Corporate lunch orders and wedding receptions don't happen by accident — event planners research extensively online. LocalBeacon makes sure your catering company is the one they find, review, and call.",
     description:
-      "AI-powered local marketing for catering companies. Automated Google Business Profile posts, city-specific landing pages, review management, and AI search optimization for corporate catering, wedding catering, private events, and meal delivery services.",
+      "Local marketing automation for catering companies. Automated Google Business Profile posts, city-specific landing pages, review management, and AI search optimization for corporate catering, wedding catering, private events, and meal delivery services.",
     painPoints: [
       {
         icon: "🏢",
@@ -162,7 +162,7 @@ export const foodLocal: Record<string, IndustryData> = {
       {
         question: "We serve a large metro area — can we rank in multiple cities?",
         answer:
-          "Yes. Our Solo plan supports up to 3 service areas, and the Agency plan covers unlimited cities. We create dedicated landing pages for each area so you rank locally in every market your kitchen can reach.",
+          "Yes. Our Local Autopilot plan supports up to 3 service areas, and the Agency plan covers unlimited cities. We create dedicated landing pages for each area so you rank locally in every market your kitchen can reach.",
       },
     ],
   },
@@ -175,7 +175,7 @@ export const foodLocal: Record<string, IndustryData> = {
     subheadline:
       "Your croissants are perfect and your custom cakes are works of art — but new customers can't taste your baking through a screen. LocalBeacon makes sure they find you, read your rave reviews, and walk through your door.",
     description:
-      "AI-powered local marketing for bakeries. Automated Google Business Profile posts, city-specific landing pages, review management, and AI search optimization for custom cakes, daily pastries, wedding cakes, and specialty baked goods.",
+      "Local marketing automation for bakeries. Automated Google Business Profile posts, city-specific landing pages, review management, and AI search optimization for custom cakes, daily pastries, wedding cakes, and specialty baked goods.",
     painPoints: [
       {
         icon: "🎂",
@@ -230,7 +230,7 @@ export const foodLocal: Record<string, IndustryData> = {
       {
         question: "We're a small bakery with one location — is this worth it?",
         answer:
-          "Absolutely. Our Free plan is built for single-location businesses. Even a few extra walk-in customers per week can significantly impact a bakery's daily revenue, and one additional custom cake order easily covers the cost of our Solo plan.",
+          "Absolutely. Our Free plan is built for single-location businesses. Even a few extra walk-in customers per week can significantly impact a bakery's daily revenue, and one additional custom cake order easily covers the cost of our Local Autopilot plan.",
       },
       {
         question: "How do you handle our early morning hours and limited availability?",
@@ -258,7 +258,7 @@ export const foodLocal: Record<string, IndustryData> = {
     subheadline:
       "Local businesses and residents need fast, reliable delivery from someone who knows the area — not a faceless national carrier. LocalBeacon helps you become the delivery service your community trusts by name.",
     description:
-      "AI-powered local marketing for local delivery services. Automated Google Business Profile posts, city-specific landing pages, review management, and AI search optimization for same-day delivery, restaurant delivery, pharmacy delivery, and local courier services.",
+      "Local marketing automation for local delivery services. Automated Google Business Profile posts, city-specific landing pages, review management, and AI search optimization for same-day delivery, restaurant delivery, pharmacy delivery, and local courier services.",
     painPoints: [
       {
         icon: "📦",
@@ -328,7 +328,7 @@ export const foodLocal: Record<string, IndustryData> = {
       {
         question: "We're a small operation with just a few drivers — is this affordable?",
         answer:
-          "Our Free plan covers one delivery zone with 5 Google posts per month. The Solo plan at $49/month expands to 3 zones with unlimited posts. Most delivery services find that a few new regular customers per month easily covers the investment.",
+          "Our Free plan covers one delivery zone with 5 Google posts per month. The Local Autopilot plan at $49/month expands to 3 zones with unlimited posts. Most delivery services find that a few new regular customers per month easily covers the investment.",
       },
       {
         question: "Can LocalBeacon help us expand into new delivery areas?",

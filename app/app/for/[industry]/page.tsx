@@ -515,7 +515,7 @@ export default async function IndustryPage({
           >
             {[
               { plan: "Free", price: "$0", note: "1 location" },
-              { plan: "Solo", price: "$49/mo", note: "3 locations" },
+              { plan: "Local Autopilot", price: "$49/mo", note: "3 locations" },
               { plan: "Agency", price: "$99/mo", note: "Unlimited" },
             ].map((tier) => (
               <div

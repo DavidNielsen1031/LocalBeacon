@@ -9,7 +9,7 @@ export const healthcare: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon handles your practice's local marketing — so you can focus on patients, not posting to Google.",
     description:
-      "AI-powered local marketing for dental practices. Automated Google Business Profile posts, city-specific practice pages, review responses, and AI search optimization built for dentists.",
+      "Local marketing automation for dental practices. Automated Google Business Profile posts, city-specific practice pages, review responses, and AI search optimization built for dentists.",
     painPoints: [
       {
         icon: "🦷",
@@ -87,7 +87,7 @@ export const healthcare: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon puts your practice in front of people actively searching for drug-free pain relief — not skeptics you have to convince.",
     description:
-      "AI-powered local marketing for chiropractic practices. Automated Google Business Profile posts, city-specific landing pages, review management, and AI search optimization built for chiropractors.",
+      "Local marketing automation for chiropractic practices. Automated Google Business Profile posts, city-specific landing pages, review management, and AI search optimization built for chiropractors.",
     painPoints: [
       {
         icon: "🩻",
@@ -120,7 +120,7 @@ export const healthcare: Record<string, IndustryData> = {
       },
       {
         title: "AI search optimization for chiropractic",
-        text: "When someone asks an AI assistant \"chiropractor near me for lower back pain,\" your structured data and consistent content help your practice surface in AI-generated answers.",
+        text: "When someone asks an AI assistant \"chiropractor near me for lower back pain,\" your structured data and consistent content help your practice surface in automated answers.",
       },
     ],
     stats: [
@@ -170,7 +170,7 @@ export const healthcare: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon keeps your optometry practice visible locally — so patients choose your chair over online retailers and big-box optical stores.",
     description:
-      "AI-powered local marketing for optometry practices. Automated Google Business Profile posts, city-specific practice pages, review management, and AI search optimization built for optometrists.",
+      "Local marketing automation for optometry practices. Automated Google Business Profile posts, city-specific practice pages, review management, and AI search optimization built for optometrists.",
     painPoints: [
       {
         icon: "👓",
@@ -253,7 +253,7 @@ export const healthcare: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon keeps your veterinary practice visible to pet owners in your area — so they choose you for wellness care, not just emergencies.",
     description:
-      "AI-powered local marketing for veterinary practices. Automated Google Business Profile posts, city-specific clinic pages, review management, and AI search optimization built for veterinarians.",
+      "Local marketing automation for veterinary practices. Automated Google Business Profile posts, city-specific clinic pages, review management, and AI search optimization built for veterinarians.",
     painPoints: [
       {
         icon: "🐾",
@@ -286,7 +286,7 @@ export const healthcare: Record<string, IndustryData> = {
       },
       {
         title: "AI search optimization for veterinary",
-        text: "When someone asks an AI assistant \"best vet near me for a new puppy,\" your structured data and consistent local content help your practice appear in AI-generated recommendations.",
+        text: "When someone asks an AI assistant \"best vet near me for a new puppy,\" your structured data and consistent local content help your practice appear in automated recommendations.",
       },
     ],
     stats: [
@@ -336,7 +336,7 @@ export const healthcare: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon helps physical therapy clinics build local visibility — so you get direct patient searches on top of your physician referrals.",
     description:
-      "AI-powered local marketing for physical therapy clinics. Automated Google Business Profile posts, city-specific clinic pages, review management, and AI search optimization built for physical therapists.",
+      "Local marketing automation for physical therapy clinics. Automated Google Business Profile posts, city-specific clinic pages, review management, and AI search optimization built for physical therapists.",
     painPoints: [
       {
         icon: "🏋️",
@@ -419,7 +419,7 @@ export const healthcare: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon builds your local visibility so patients searching for skin care, screenings, and cosmetic treatments find your practice — not a med spa.",
     description:
-      "AI-powered local marketing for dermatology practices. Automated Google Business Profile posts, city-specific practice pages, review management, and AI search optimization built for dermatologists.",
+      "Local marketing automation for dermatology practices. Automated Google Business Profile posts, city-specific practice pages, review management, and AI search optimization built for dermatologists.",
     painPoints: [
       {
         icon: "⏳",
@@ -502,7 +502,7 @@ export const healthcare: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon keeps your pediatric practice visible to parents in your community — from pregnancy Googling through the teenage years.",
     description:
-      "AI-powered local marketing for pediatric practices. Automated Google Business Profile posts, city-specific practice pages, review management, and AI search optimization built for pediatricians.",
+      "Local marketing automation for pediatric practices. Automated Google Business Profile posts, city-specific practice pages, review management, and AI search optimization built for pediatricians.",
     painPoints: [
       {
         icon: "👶",
@@ -590,7 +590,7 @@ export const healthcare: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon helps your counseling practice show up where people actually search for help — not buried on page 3 behind Psychology Today listings.",
     description:
-      "AI-powered local marketing for mental health counselors and therapists. Automated Google Business Profile posts, city-specific practice pages, review management, and AI search optimization built for counseling practices.",
+      "Local marketing automation for mental health counselors and therapists. Automated Google Business Profile posts, city-specific practice pages, review management, and AI search optimization built for counseling practices.",
     painPoints: [
       {
         icon: "🧠",
@@ -623,7 +623,7 @@ export const healthcare: Record<string, IndustryData> = {
       },
       {
         title: "AI search optimization for mental health",
-        text: "When someone asks an AI assistant \"therapist near me who specializes in anxiety,\" your structured data and consistent content help your practice appear in AI-generated recommendations.",
+        text: "When someone asks an AI assistant \"therapist near me who specializes in anxiety,\" your structured data and consistent content help your practice appear in automated recommendations.",
       },
     ],
     stats: [

@@ -1,3 +1,10 @@
+/**
+ * POST /api/checkout
+ * Called ONLY from: app/onboarding/page.tsx (post-auth resume flow)
+ * NOT called from: /pricing (informational only, all CTAs → /check)
+ * Auth: Clerk required — returns 401 if not signed in
+ * Mode is derived from plan key (DFY=payment, SOLO=subscription)
+ */
 export const dynamic = 'force-dynamic'
 import { auth } from '@clerk/nextjs/server'
 import { stripe, PLANS } from '@/lib/stripe'
@@ -16,7 +23,7 @@ export async function POST(req: NextRequest) {
 
   // Agency plan has been retired — only Solo and DFY are available
   if ((plan as string) === 'AGENCY') {
-    return NextResponse.json({ error: 'Agency plan is no longer available. Please select Solo.' }, { status: 400 })
+    return NextResponse.json({ error: 'Agency plan is no longer available. Please select Local Autopilot.' }, { status: 400 })
   }
 
   const planConfig = PLANS[plan]

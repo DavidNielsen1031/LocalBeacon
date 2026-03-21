@@ -186,7 +186,7 @@ export default function DashboardPage() {
           style={{ backgroundColor: 'rgba(255,107,53,0.06)', borderColor: 'rgba(255,107,53,0.25)' }}
         >
           <p className="text-sm" style={{ color: '#2D3436' }}>
-            You&apos;re on the <strong>Free plan</strong>. Upgrade to Solo for unlimited access —{' '}
+            You&apos;re on the <strong>Free plan</strong>. Upgrade to Local Autopilot for unlimited access —{' '}
             <a href="/pricing" className="font-bold underline" style={{ color: '#FF6B35' }}>
               $49/mo →
             </a>
@@ -212,7 +212,7 @@ export default function DashboardPage() {
               borderColor: "rgba(255,107,53,0.3)",
             }}
           >
-            {plan === "agency" ? "Agency Plan" : plan === "solo" ? "Solo Plan" : "Free Plan"}
+            {plan === "agency" ? "Agency Plan" : plan === "solo" ? "Local Autopilot" : "Free Plan"}
           </Badge>
         </div>
         {hasBusiness ? (

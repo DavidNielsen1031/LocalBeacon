@@ -53,12 +53,41 @@ function recordScan() {
   }
 }
 
+/**
+ * Maps each check ID to what each plan fixes.
+ * null = plan doesn't fix it. string = how the plan fixes it.
+ */
+const PLAN_FIX_MAP: Record<string, { free: string | null; autopilot: string | null; dfy: string | null }> = {
+  llms_txt:          { free: null, autopilot: 'Generated and monitored weekly', dfy: 'We install it for you' },
+  ai_index_json:     { free: null, autopilot: 'Auto-generated from your business data', dfy: 'We create and deploy it' },
+  schema_markup:     { free: 'Preview only', autopilot: 'Generated with copy-paste install guide', dfy: 'We install it on your site live' },
+  faq_content:       { free: null, autopilot: 'Up to 5 FAQs generated/month', dfy: '15-25 custom FAQs written for you' },
+  service_pages:     { free: null, autopilot: '10 city pages/month', dfy: 'All city pages created in onboarding' },
+  freshness:         { free: '5 posts/month', autopilot: 'Weekly posts, handled for you', dfy: 'Weekly posts included (1 month)' },
+  reviews:           { free: '3 responses/month', autopilot: 'Unlimited review responses drafted', dfy: 'Unlimited (1 month included)' },
+  answer_first:      { free: null, autopilot: 'Content structured for AI citation', dfy: 'We restructure your content' },
+  citability:        { free: null, autopilot: 'Citable paragraphs in every post', dfy: 'Full content audit + rewrite' },
+  eeat:              { free: null, autopilot: 'Author + expertise signals added', dfy: 'Full E-E-A-T audit' },
+  open_graph:        { free: null, autopilot: 'OG tags in generated pages', dfy: 'We add OG tags to your site' },
+  nap:               { free: null, autopilot: 'Consistent NAP across generated content', dfy: 'Full NAP audit + fix' },
+  brand_social_links:{ free: null, autopilot: null, dfy: 'We add social links to your site' },
+  sitemap:           { free: null, autopilot: null, dfy: 'We verify your sitemap setup' },
+  sitemap_in_robots: { free: null, autopilot: null, dfy: 'We fix your robots.txt' },
+  canonical_tags:    { free: null, autopilot: null, dfy: 'We add canonical tags' },
+  // These are usually already passing or not fixable by LocalBeacon
+  robots_txt:        { free: null, autopilot: null, dfy: null },
+  ai_crawler_access: { free: null, autopilot: null, dfy: null },
+  headings:          { free: null, autopilot: null, dfy: null },
+  https:             { free: null, autopilot: null, dfy: null },
+  mobile:            { free: null, autopilot: null, dfy: null },
+}
+
 function getGrade(score: number): { letter: string; color: string; summary: string } {
   if (score >= 90) return { letter: 'A', color: '#22c55e', summary: 'Excellent visibility' }
   if (score >= 75) return { letter: 'B', color: '#84cc16', summary: 'Good, minor gaps' }
   if (score >= 60) return { letter: 'C', color: '#eab308', summary: 'Needs improvement' }
   if (score >= 40) return { letter: 'D', color: '#f97316', summary: 'Significant gaps' }
-  return { letter: 'F', color: '#ef4444', summary: 'Not AI-ready' }
+  return { letter: 'F', color: '#ef4444', summary: 'Not visible to AI search' }
 }
 
 export function CheckerForm() {
@@ -495,34 +524,163 @@ export function CheckerForm() {
             </div>
           )}
 
-          {/* CTA */}
-          <div className="bg-[#FAFAF7] rounded-xl p-6 border border-black/5 text-center">
-            <h3 className="font-semibold text-[#1B2A4A] mb-1">Want to fix these issues automatically?</h3>
-            <p className="text-sm text-[#1B2A4A]/50 mb-4">
-              LocalBeacon handles your local marketing — we fix your AI visibility and keep it growing.
-            </p>
-            <p className="text-lg font-bold text-[#FF6B35] mb-2">Your score: {result.score}/100</p>
-            <p className="text-sm text-[#1B2A4A]/50 mb-4">
-              LocalBeacon users average 80+ after 30 days. We handle it for you.
-            </p>
-            <a
-              href={`/sign-up?url=${encodeURIComponent(result.url)}&score=${result.score}${email ? `&email=${encodeURIComponent(email)}` : ''}`}
-              onClick={() => {
-                // Save scan data to localStorage so onboarding can pre-fill
-                try {
-                  localStorage.setItem('lb_scan_data', JSON.stringify({
-                    url: result.url,
-                    score: result.score,
-                    email: email,
-                    timestamp: Date.now(),
-                  }))
-                } catch {}
-              }}
-              className="inline-block px-8 py-3 bg-[#FF6B35] text-white font-semibold rounded-lg hover:bg-[#FF6B35]/90 transition-colors"
-            >
-              Start Fixing These Free →
-            </a>
-          </div>
+          {/* Personalized Plan Comparison */}
+          {(() => {
+            const failingChecks = result.checks.filter(c => !c.passed)
+            const totalFailing = failingChecks.length
+
+            const countFixes = (planKey: 'free' | 'autopilot' | 'dfy') =>
+              failingChecks.filter(c => PLAN_FIX_MAP[c.id]?.[planKey]).length
+
+            const getTopFixes = (planKey: 'free' | 'autopilot' | 'dfy', limit = 3) =>
+              failingChecks
+                .filter(c => PLAN_FIX_MAP[c.id]?.[planKey])
+                .sort((a, b) => b.weight - a.weight)
+                .slice(0, limit)
+                .map(c => ({
+                  label: c.label,
+                  how: PLAN_FIX_MAP[c.id]![planKey]!,
+                }))
+
+            const freeFixes = countFixes('free')
+            const autopilotFixes = countFixes('autopilot')
+            const dfyFixes = countFixes('dfy')
+
+            const saveScanData = () => {
+              try {
+                localStorage.setItem('lb_scan_data', JSON.stringify({
+                  url: result.url,
+                  score: result.score,
+                  email: email,
+                  timestamp: Date.now(),
+                }))
+              } catch {}
+            }
+
+            const plans = [
+              {
+                name: 'Free',
+                price: '$0',
+                period: 'forever',
+                fixes: freeFixes,
+                topFixes: getTopFixes('free'),
+                cta: 'Start Free',
+                href: `/sign-up?url=${encodeURIComponent(result.url)}&score=${result.score}${email ? `&email=${encodeURIComponent(email)}` : ''}`,
+                bg: 'transparent',
+                border: '#DFE6E9',
+                textColor: '#1B2A4A',
+                highlight: false,
+              },
+              {
+                name: 'Local Autopilot',
+                price: '$49',
+                period: '/mo',
+                fixes: autopilotFixes,
+                topFixes: getTopFixes('autopilot'),
+                cta: 'Start Local Autopilot',
+                href: `/sign-up?url=${encodeURIComponent(result.url)}&score=${result.score}&plan=solo${email ? `&email=${encodeURIComponent(email)}` : ''}`,
+                bg: '#FF6B35',
+                border: '#FF6B35',
+                textColor: '#fff',
+                highlight: true,
+              },
+              {
+                name: 'DFY Setup',
+                price: '$499',
+                period: 'one-time',
+                fixes: dfyFixes,
+                topFixes: getTopFixes('dfy'),
+                cta: 'Get DFY Setup',
+                href: `/sign-up?url=${encodeURIComponent(result.url)}&score=${result.score}&plan=dfy${email ? `&email=${encodeURIComponent(email)}` : ''}`,
+                bg: 'linear-gradient(90deg, #B8860B, #DAA520)',
+                border: '#B8860B',
+                textColor: '#fff',
+                highlight: false,
+              },
+            ]
+
+            return (
+              <div className="mt-8 pt-8 border-t border-black/5">
+                <div className="text-center mb-6">
+                  <h3 className="text-xl font-bold text-[#1B2A4A] mb-2">
+                    {totalFailing === 0
+                      ? 'Your site is in great shape!'
+                      : `You have ${totalFailing} issue${totalFailing === 1 ? '' : 's'}. Here\u2019s how each plan helps.`}
+                  </h3>
+                  <p className="text-sm text-[#1B2A4A]/50">
+                    Each plan is matched to your specific scan results.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {plans.map(plan => (
+                    <div
+                      key={plan.name}
+                      className="rounded-xl p-5 flex flex-col"
+                      style={{
+                        border: plan.highlight ? `2px solid ${plan.border}` : `1px solid ${plan.border}`,
+                        background: plan.highlight ? 'rgba(255,107,53,0.03)' : 'white',
+                      }}
+                    >
+                      {plan.highlight && (
+                        <span className="inline-block text-xs font-bold text-white px-2 py-0.5 rounded-full mb-2 self-start" style={{ background: '#FF6B35' }}>
+                          Most Popular
+                        </span>
+                      )}
+                      <h4 className="font-bold text-[#1B2A4A] text-lg">{plan.name}</h4>
+                      <div className="flex items-baseline gap-1 mt-1 mb-3">
+                        <span className="text-2xl font-bold text-[#1B2A4A]">{plan.price}</span>
+                        <span className="text-sm text-[#636E72]">{plan.period}</span>
+                      </div>
+
+                      {totalFailing > 0 && (
+                        <div className="mb-3 px-3 py-2 rounded-lg" style={{ background: plan.fixes > 0 ? 'rgba(34,197,94,0.08)' : 'rgba(0,0,0,0.02)' }}>
+                          <span className="text-sm font-semibold" style={{ color: plan.fixes > 0 ? '#16a34a' : '#636E72' }}>
+                            Fixes {plan.fixes} of {totalFailing} issue{totalFailing === 1 ? '' : 's'}
+                          </span>
+                        </div>
+                      )}
+
+                      <ul className="space-y-2 flex-1 mb-4">
+                        {plan.topFixes.map((fix, i) => (
+                          <li key={i} className="text-sm text-[#1B2A4A]/70">
+                            <span className="text-green-500 mr-1.5">✓</span>
+                            <strong className="text-[#1B2A4A]">{fix.label}</strong>
+                            <br />
+                            <span className="ml-5 text-xs text-[#636E72]">{fix.how}</span>
+                          </li>
+                        ))}
+                        {plan.fixes > plan.topFixes.length && (
+                          <li className="text-xs text-[#636E72] ml-5">
+                            + {plan.fixes - plan.topFixes.length} more fixes included
+                          </li>
+                        )}
+                        {plan.fixes === 0 && totalFailing > 0 && (
+                          <li className="text-sm text-[#636E72] italic">
+                            Scan tools only — no automated fixes
+                          </li>
+                        )}
+                      </ul>
+
+                      <a
+                        href={plan.href}
+                        onClick={saveScanData}
+                        className="block w-full text-center py-3 rounded-lg font-semibold text-sm transition-opacity hover:opacity-90"
+                        style={{
+                          background: typeof plan.bg === 'string' && plan.bg.startsWith('linear') ? plan.bg : plan.bg,
+                          color: plan.textColor,
+                          border: plan.highlight ? 'none' : `1px solid ${plan.border}`,
+                          boxShadow: plan.highlight ? '0 4px 14px rgba(255,107,53,0.3)' : 'none',
+                        }}
+                      >
+                        {plan.cta}
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )
+          })()}
 
           {/* Scan another */}
           <div className="text-center mt-4">

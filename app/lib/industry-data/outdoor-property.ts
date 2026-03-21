@@ -9,7 +9,7 @@ export const outdoorProperty: Record<string, IndustryData> = {
     subheadline:
       "LocalBeacon keeps your landscaping business visible year-round — so you book spring cleanups in winter and snow removal in summer.",
     description:
-      "AI-powered local marketing for landscaping companies. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for landscapers.",
+      "Local marketing automation for landscaping companies. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for landscapers.",
     painPoints: [
       {
         icon: "🌿",
@@ -74,7 +74,7 @@ export const outdoorProperty: Record<string, IndustryData> = {
       {
         question: "How much does it cost?",
         answer:
-          "LocalBeacon starts free for one location. Our Solo plan is $49/month for up to 3 locations with unlimited posts, and the Agency plan is $99/month for unlimited locations and white-label features.",
+          "LocalBeacon starts free for one location. Our Local Autopilot plan is $49/month for up to 3 locations with unlimited posts, and the Agency plan is $99/month for unlimited locations and white-label features.",
       },
     ],
   },
@@ -87,7 +87,7 @@ export const outdoorProperty: Record<string, IndustryData> = {
     subheadline:
       "Homeowners don't think about tree service until a branch is hanging over their roof. LocalBeacon keeps your company top of mind — and top of Google — so you get the call, not your competitor.",
     description:
-      "AI-powered local marketing for tree service companies. Automated Google Business Profile posts, city-specific landing pages, review management, and AI search optimization for tree removal, trimming, and emergency storm damage services.",
+      "Local marketing automation for tree service companies. Automated Google Business Profile posts, city-specific landing pages, review management, and AI search optimization for tree removal, trimming, and emergency storm damage services.",
     painPoints: [
       {
         icon: "⛈️",
@@ -120,7 +120,7 @@ export const outdoorProperty: Record<string, IndustryData> = {
       },
       {
         title: "Show up in AI and voice search results",
-        text: "When a homeowner asks Alexa \"tree removal near me\" or searches ChatGPT for arborists in their area, your optimized content helps you appear in those AI-powered results.",
+        text: "When a homeowner asks Alexa \"tree removal near me\" or searches ChatGPT for arborists in their area, your optimized content helps you appear in those AI search results.",
       },
     ],
     stats: [
@@ -142,7 +142,7 @@ export const outdoorProperty: Record<string, IndustryData> = {
       {
         question: "I serve a wide area — can I target multiple cities?",
         answer:
-          "Absolutely. Our Solo plan covers up to 3 locations, and the Agency plan supports unlimited service areas. We create dedicated landing pages for each city so you rank locally in every area you cover.",
+          "Absolutely. Our Local Autopilot plan covers up to 3 locations, and the Agency plan supports unlimited service areas. We create dedicated landing pages for each city so you rank locally in every area you cover.",
       },
       {
         question: "Do you help with content about tree care regulations?",
@@ -170,7 +170,7 @@ export const outdoorProperty: Record<string, IndustryData> = {
     subheadline:
       "Pool owners start searching for service companies weeks before opening day. LocalBeacon makes sure you're the one they find — and keeps you visible through closing season and beyond.",
     description:
-      "AI-powered local marketing for pool service companies. Automated Google posts, city-specific service pages, review management, and AI search optimization for pool maintenance, opening/closing, repairs, and equipment installation.",
+      "Local marketing automation for pool service companies. Automated Google posts, city-specific service pages, review management, and AI search optimization for pool maintenance, opening/closing, repairs, and equipment installation.",
     painPoints: [
       {
         icon: "📅",
@@ -253,7 +253,7 @@ export const outdoorProperty: Record<string, IndustryData> = {
     subheadline:
       "Property managers sign snow contracts in September and October. LocalBeacon makes sure your company is the one they find when they're comparing bids — not scrambling after the first storm.",
     description:
-      "AI-powered local marketing for snow removal companies. Automated Google posts, city-specific service pages, review management, and AI search optimization for commercial snow plowing, residential driveway clearing, salting, and ice management.",
+      "Local marketing automation for snow removal companies. Automated Google posts, city-specific service pages, review management, and AI search optimization for commercial snow plowing, residential driveway clearing, salting, and ice management.",
     painPoints: [
       {
         icon: "⏰",
@@ -336,7 +336,7 @@ export const outdoorProperty: Record<string, IndustryData> = {
     subheadline:
       "Window cleaning is a business built on trust — homeowners let you on their property, near their expensive glass. LocalBeacon builds the online reputation that earns that trust before you ever show up.",
     description:
-      "AI-powered local marketing for window cleaning companies. Automated Google posts, city-specific landing pages, review management, and AI search optimization for residential window washing, commercial building cleaning, and pressure washing services.",
+      "Local marketing automation for window cleaning companies. Automated Google posts, city-specific landing pages, review management, and AI search optimization for residential window washing, commercial building cleaning, and pressure washing services.",
     painPoints: [
       {
         icon: "🔄",

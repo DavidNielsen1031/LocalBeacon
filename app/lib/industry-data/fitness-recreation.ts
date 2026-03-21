@@ -9,7 +9,7 @@ export const fitnessRecreation: Record<string, IndustryData> = {
     subheadline:
       'LocalBeacon keeps your gym visible year-round on Google and AI search — so your January rush turns into February retention and your summer slump becomes a signup season.',
     description:
-      'AI-powered local marketing for gyms and fitness centers. Automated Google Business Profile posts, city-specific landing pages, review responses, and AI search optimization built for independent gyms.',
+      'Local marketing automation for gyms and fitness centers. Automated Google Business Profile posts, city-specific landing pages, review responses, and AI search optimization built for independent gyms.',
     painPoints: [
       {
         icon: '📉',
@@ -92,7 +92,7 @@ export const fitnessRecreation: Record<string, IndustryData> = {
     subheadline:
       'LocalBeacon positions you as the go-to trainer in your area — so clients find your expertise on Google and AI search instead of scrolling past another Instagram post.',
     description:
-      'AI-powered local marketing for personal trainers and fitness coaches. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for independent trainers.',
+      'Local marketing automation for personal trainers and fitness coaches. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for independent trainers.',
     painPoints: [
       {
         icon: '📱',
@@ -175,7 +175,7 @@ export const fitnessRecreation: Record<string, IndustryData> = {
     subheadline:
       'LocalBeacon brings new students to your mat through Google and AI search — so your community grows organically without you spending hours on marketing.',
     description:
-      'AI-powered local marketing for yoga studios and meditation centers. Automated Google Business Profile posts, city-specific studio pages, review responses, and AI search optimization built for yoga businesses.',
+      'Local marketing automation for yoga studios and meditation centers. Automated Google Business Profile posts, city-specific studio pages, review responses, and AI search optimization built for yoga businesses.',
     painPoints: [
       {
         icon: '📲',
@@ -238,7 +238,7 @@ export const fitnessRecreation: Record<string, IndustryData> = {
           'Absolutely. LocalBeacon tailors content to your specific style and offerings. If you specialize in hot yoga, your Google posts and local pages reflect that — attracting the students who are specifically seeking your style.',
       },
       {
-        question: 'Will the AI-generated content feel authentic to my studio\'s voice?',
+        question: 'Will the generated content feel authentic to my studio\'s voice?',
         answer:
           'LocalBeacon generates content based on your studio\'s offerings, style, and values. The tone is warm, community-focused, and wellness-aligned. You review and approve everything before it posts.',
       },
@@ -258,7 +258,7 @@ export const fitnessRecreation: Record<string, IndustryData> = {
     subheadline:
       'LocalBeacon keeps your martial arts school visible on Google and AI search — so parents find your kids programs and adults discover your self-defense classes.',
     description:
-      'AI-powered local marketing for martial arts schools, dojos, and academies. Automated Google Business Profile posts, city-specific landing pages, review responses, and AI search optimization built for martial arts businesses.',
+      'Local marketing automation for martial arts schools, dojos, and academies. Automated Google Business Profile posts, city-specific landing pages, review responses, and AI search optimization built for martial arts businesses.',
     painPoints: [
       {
         icon: '👧',

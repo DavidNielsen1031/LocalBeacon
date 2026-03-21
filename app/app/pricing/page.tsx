@@ -1,18 +1,8 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import { posthog } from "@/lib/posthog";
+import { Button } from "@/components/ui/button";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { PLANS, PRICING_FAQS } from "@/lib/plans";
@@ -23,38 +13,6 @@ const WARM_WHITE = "#FAFAF7";
 const SLATE = "#636E72";
 
 export default function PricingPage() {
-  const [loading, setLoading] = useState<string | null>(null);
-  const [showDfyConfirm, setShowDfyConfirm] = useState(false);
-
-  const handleCheckout = async (plan: "SOLO" | "DFY") => {
-    // Analytics: checkout clicked
-    try { posthog.capture('checkout_clicked', { plan }) } catch {}
-    setLoading(plan);
-    try {
-      const mode = plan === "DFY" ? "payment" : "subscription";
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan, mode }),
-      });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else if (data.error === "Unauthorized") {
-        // Store plan intent so we can resume checkout after sign-up
-        try { localStorage.setItem('lb_pending_plan', JSON.stringify({ plan, timestamp: Date.now() })) } catch {}
-        window.location.href = "/sign-up";
-      } else {
-        console.error("Checkout error:", data.error);
-        window.location.href = "/sign-up";
-      }
-    } catch {
-      window.location.href = "/sign-up";
-    } finally {
-      setLoading(null);
-    }
-  };
-
   return (
     <div className="min-h-screen" style={{ background: WARM_WHITE, color: NAVY }}>
       <SiteNav />
@@ -64,8 +22,8 @@ export default function PricingPage() {
         <h1 className="text-4xl md:text-5xl font-extrabold mb-4" style={{ color: NAVY }}>
           More calls for less than <span style={{ color: ORANGE }}>$2/day</span>
         </h1>
-        <p className="text-lg max-w-xl mx-auto mb-8" style={{ color: SLATE }}>
-          Start free. Upgrade when you see the results. No contracts, cancel anytime.
+        <p className="text-lg max-w-xl mx-auto mb-4" style={{ color: SLATE }}>
+          Start with a free scan to see exactly what we&apos;ll fix for you. No contracts, cancel anytime.
         </p>
 
         {/* Comparison callout */}
@@ -91,7 +49,7 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* Plans */}
+      {/* Plans — all CTAs route to /check */}
       <section className="px-6 pb-20">
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
           {PLANS.map((plan) => {
@@ -164,27 +122,8 @@ export default function PricingPage() {
                     ))}
                   </ul>
 
-                  {plan.name === "Free" ? (
-                    <Link href={plan.href!}>
-                      <Button
-                        className="w-full font-semibold h-12 text-base"
-                        variant="outline"
-                        style={{ border: `1px solid #DFE6E9`, color: NAVY }}
-                      >
-                        {plan.cta}
-                      </Button>
-                    </Link>
-                  ) : (
+                  <Link href="/check">
                     <Button
-                      onClick={() => {
-                        if (!plan.stripePlan) return;
-                        if (plan.premium) {
-                          setShowDfyConfirm(true);
-                        } else {
-                          handleCheckout(plan.stripePlan);
-                        }
-                      }}
-                      disabled={loading !== null}
                       className="w-full font-semibold h-12 text-base text-white"
                       style={{
                         background: plan.highlight
@@ -194,9 +133,9 @@ export default function PricingPage() {
                           : NAVY,
                       }}
                     >
-                      {loading === plan.stripePlan ? "Redirecting to checkout..." : plan.cta}
+                      {plan.name === "Free" ? "Check Your Score Free" : `Start with a Free Scan`}
                     </Button>
-                  )}
+                  </Link>
                   {plan.name === "Free" && (
                     <p className="text-xs text-center mt-2" style={{ color: "#B2BEC3" }}>
                       No credit card required
@@ -222,7 +161,7 @@ export default function PricingPage() {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-left">
             {[
-              { emoji: "📝", label: "AI-written Google posts" },
+              { emoji: "📝", label: "Weekly Google posts, handled for you" },
               { emoji: "🌐", label: "Local city pages" },
               { emoji: "⭐", label: "Review reply drafts" },
               { emoji: "🤖", label: "AI Readiness scoring" },
@@ -267,7 +206,7 @@ export default function PricingPage() {
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl font-bold mb-4" style={{ color: NAVY }}>Ready to get more calls?</h2>
           <p className="mb-6" style={{ color: SLATE }}>
-            Connect your Google listing and see your first posts in under 2 minutes.
+            See exactly what&apos;s holding your business back — in 10 seconds.
           </p>
           <Link href="/check">
             <Button
@@ -275,55 +214,19 @@ export default function PricingPage() {
               className="font-bold text-lg px-10 py-6 text-white"
               style={{ background: ORANGE }}
             >
-              Check Your AI Score — Free
+              Check Your Score — Free
             </Button>
           </Link>
+          <p className="mt-4 text-sm" style={{ color: SLATE }}>
+            Already have an account?{' '}
+            <Link href="/sign-in" className="underline font-semibold" style={{ color: NAVY }}>
+              Log in to manage your plan
+            </Link>
+          </p>
         </div>
       </section>
 
       <SiteFooter />
-
-      {/* DFY Confirmation Dialog */}
-      <Dialog open={showDfyConfirm} onOpenChange={setShowDfyConfirm}>
-        <DialogContent className="max-w-md bg-white">
-          <DialogHeader>
-            <DialogTitle className="text-[#1B2A4A] text-xl font-bold">Confirm DFY Setup Purchase</DialogTitle>
-            <DialogDescription className="text-[#636E72] mt-2">
-              You&apos;re about to purchase the Done-For-You Setup for $499 (one-time payment).
-            </DialogDescription>
-          </DialogHeader>
-          <div className="py-4">
-            <p className="text-sm font-semibold text-[#1B2A4A] mb-3">What&apos;s included:</p>
-            <ul className="space-y-2">
-              {(PLANS.find(p => p.stripePlan === 'DFY')?.features ?? []).map((item) => (
-                <li key={item} className="flex items-start gap-2 text-sm text-[#2D3436]">
-                  <span className="text-[#FF6B35] font-bold mt-0.5">✓</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <DialogFooter className="flex gap-3">
-            <Button
-              variant="outline"
-              onClick={() => setShowDfyConfirm(false)}
-              className="flex-1 border-[#DFE6E9] text-[#636E72]"
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={() => {
-                setShowDfyConfirm(false);
-                handleCheckout("DFY");
-              }}
-              className="flex-1 font-semibold text-white"
-              style={{ background: ORANGE }}
-            >
-              Continue to Checkout
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

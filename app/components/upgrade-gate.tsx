@@ -180,7 +180,7 @@ export function UpgradeGate({
           {feature}
         </h3>
         <p className="text-sm mb-1" style={{ color: "#636E72" }}>
-          Available on Solo plan
+          Available on Local Autopilot plan
         </p>
         <p className="text-xs mb-5" style={{ color: "#636E72" }}>
           Upgrade to unlock {feature} and all other premium features.

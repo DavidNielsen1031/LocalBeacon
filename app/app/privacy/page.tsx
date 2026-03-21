@@ -37,7 +37,7 @@ export default function PrivacyPage() {
               <li><strong className="text-white">Business information:</strong> business name, category, service areas, phone number, website</li>
               <li><strong className="text-white">Google Business Profile data:</strong> when you connect your Google account, we access your business listing information, posts, and reviews (with your explicit authorization via OAuth 2.0)</li>
               <li><strong className="text-white">Payment information:</strong> processed by Stripe — we never see or store your full card number</li>
-              <li><strong className="text-white">Generated content:</strong> AI-written posts, pages, and review responses created through our platform</li>
+              <li><strong className="text-white">Generated content:</strong> Posts, pages, and review responses created through our platform</li>
             </ul>
             <p className="mt-3">We also collect automatically:</p>
             <ul className="list-disc pl-5 space-y-1">

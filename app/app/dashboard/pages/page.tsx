@@ -121,7 +121,15 @@ export default function PagesPage() {
         <DialogContent className="bg-white max-w-2xl max-h-[80vh] overflow-y-auto">
           {previewPage && (
             <div className="p-6 prose prose-sm max-w-none"
-              dangerouslySetInnerHTML={{ __html: previewPage.html }} />
+              dangerouslySetInnerHTML={{ __html: (() => {
+                try {
+                  const DOMPurify = require('dompurify')
+                  return DOMPurify.sanitize(previewPage.html)
+                } catch {
+                  // Fallback: strip all tags
+                  return previewPage.html.replace(/<[^>]*>/g, '')
+                }
+              })() }} />
           )}
         </DialogContent>
       </Dialog>
@@ -184,7 +192,7 @@ export default function PagesPage() {
       {pages.length >= 3 && (
         <div className="mt-6 p-4 bg-[#FF6B35]/5 border border-[#FF6B35]/20 rounded-lg text-center">
           <p className="text-[#FF6B35] text-sm">
-            You&apos;ve reached the Free plan limit. <button className="underline font-semibold">Upgrade to Solo</button> for 10 pages.
+            You&apos;ve reached the Free plan limit. <button className="underline font-semibold">Upgrade to Local Autopilot</button> for 10 pages.
           </p>
         </div>
       )}

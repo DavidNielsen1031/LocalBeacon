@@ -9,7 +9,7 @@ export const professionalServices: Record<string, IndustryData> = {
     subheadline:
       'LocalBeacon keeps your accounting practice visible year-round — so businesses and individuals find you for advisory, bookkeeping, and planning, not just April filings.',
     description:
-      'AI-powered local marketing for accounting firms and CPAs. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for accountants.',
+      'Local marketing automation for accounting firms and CPAs. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for accountants.',
     painPoints: [
       {
         icon: '📅',
@@ -69,7 +69,7 @@ export const professionalServices: Record<string, IndustryData> = {
       {
         question: 'Can LocalBeacon handle multiple office locations?',
         answer:
-          'Yes. Our Solo plan supports up to 3 locations and our Agency plan covers unlimited offices. Each location gets its own Google Business Profile management, local pages, and review responses.',
+          'Yes. Our Local Autopilot plan supports up to 3 locations and our Agency plan covers unlimited offices. Each location gets its own Google Business Profile management, local pages, and review responses.',
       },
       {
         question: 'How is this different from hiring a marketing agency?',
@@ -92,7 +92,7 @@ export const professionalServices: Record<string, IndustryData> = {
     subheadline:
       'LocalBeacon positions your advisory practice as the trusted local option — so prospects choose your expertise over Betterment, Wealthfront, and the robo-advisors.',
     description:
-      'AI-powered local marketing for financial advisors and wealth management firms. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for RIAs and financial planners.',
+      'Local marketing automation for financial advisors and wealth management firms. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for RIAs and financial planners.',
     painPoints: [
       {
         icon: '🤖',
@@ -175,7 +175,7 @@ export const professionalServices: Record<string, IndustryData> = {
     subheadline:
       'LocalBeacon keeps your insurance agency top of local search — so clients call you first instead of comparing rates on Geico.com or Progressive.com.',
     description:
-      'AI-powered local marketing for independent insurance agents and agencies. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for insurance professionals.',
+      'Local marketing automation for independent insurance agents and agencies. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for insurance professionals.',
     painPoints: [
       {
         icon: '💻',
@@ -258,7 +258,7 @@ export const professionalServices: Record<string, IndustryData> = {
     subheadline:
       'LocalBeacon establishes your hyperlocal authority on Google and AI search — so buyers and sellers find you before they find a Zillow Premier Agent.',
     description:
-      'AI-powered local marketing for real estate agents and brokerages. Automated Google Business Profile posts, neighborhood-specific landing pages, review responses, and AI search optimization built for realtors.',
+      'Local marketing automation for real estate agents and brokerages. Automated Google Business Profile posts, neighborhood-specific landing pages, review responses, and AI search optimization built for realtors.',
     painPoints: [
       {
         icon: '🏠',
@@ -346,7 +346,7 @@ export const professionalServices: Record<string, IndustryData> = {
     subheadline:
       'LocalBeacon keeps your notary services visible on Google and AI search — so clients find you for closings, apostilles, and mobile appointments before they try an online service.',
     description:
-      'AI-powered local marketing for notaries and mobile notary services. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for notary professionals.',
+      'Local marketing automation for notaries and mobile notary services. Automated Google Business Profile posts, city-specific service pages, review responses, and AI search optimization built for notary professionals.',
     painPoints: [
       {
         icon: '📱',
