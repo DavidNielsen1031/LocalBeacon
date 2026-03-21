@@ -163,7 +163,7 @@ export function CheckerForm() {
       {/* Input Form */}
       {(viewState === 'idle' || viewState === 'scanning') && (
         <div className="bg-white rounded-2xl shadow-lg border border-black/5 p-6">
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <input
               type="url"
               aria-label="Your website URL"
@@ -177,7 +177,7 @@ export function CheckerForm() {
             <button
               onClick={runScan}
               disabled={viewState === 'scanning' || !url.trim()}
-              className="px-6 py-3 bg-[#FF6B35] text-white font-semibold rounded-lg hover:bg-[#FF6B35]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+              className="px-6 py-3 bg-[#FF6B35] text-white font-semibold rounded-lg hover:bg-[#FF6B35]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap w-full sm:w-auto"
             >
               {viewState === 'scanning' ? (
                 <span className="flex items-center gap-2">
