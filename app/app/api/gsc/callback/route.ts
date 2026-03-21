@@ -1,6 +1,13 @@
 export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
+import { auth } from '@clerk/nextjs/server'
 import { createServerClient } from '@/lib/supabase'
+
+// Only allow known Google OAuth error codes through to the redirect
+const ALLOWED_GSC_ERRORS = new Set([
+  'access_denied', 'invalid_request', 'invalid_scope',
+  'server_error', 'temporarily_unavailable',
+])
 
 /**
  * GET /api/gsc/callback — Handle Google OAuth callback
@@ -15,11 +22,18 @@ export async function GET(req: NextRequest) {
 
   if (error) {
     console.error('[gsc/callback] OAuth error:', error)
-    return NextResponse.redirect(`${baseUrl}/dashboard?gsc_error=${error}`)
+    const sanitizedError = ALLOWED_GSC_ERRORS.has(error) ? error : 'oauth_error'
+    return NextResponse.redirect(`${baseUrl}/dashboard?gsc_error=${sanitizedError}`)
   }
 
   if (!code || !state) {
     return NextResponse.redirect(`${baseUrl}/dashboard?gsc_error=missing_params`)
+  }
+
+  // Verify Clerk session — prevents CSRF via forged state
+  const { userId: sessionUserId } = await auth()
+  if (!sessionUserId) {
+    return NextResponse.redirect(`${baseUrl}/sign-in?redirect_url=${encodeURIComponent(req.url)}`)
   }
 
   // Decode state to get userId
@@ -30,6 +44,11 @@ export async function GET(req: NextRequest) {
     // Reject if state is older than 10 minutes
     if (Date.now() - decoded.ts > 600_000) {
       return NextResponse.redirect(`${baseUrl}/dashboard?gsc_error=expired`)
+    }
+    // Verify state userId matches the authenticated session
+    if (decoded.userId !== sessionUserId) {
+      console.error('[gsc/callback] CSRF mismatch: state userId !== session userId')
+      return NextResponse.redirect(`${baseUrl}/dashboard?gsc_error=csrf_mismatch`)
     }
   } catch {
     return NextResponse.redirect(`${baseUrl}/dashboard?gsc_error=invalid_state`)
@@ -87,12 +106,11 @@ export async function GET(req: NextRequest) {
       return NextResponse.redirect(`${baseUrl}/dashboard?gsc_error=user_not_found`)
     }
 
-    // Upsert GSC connection
+    // Upsert GSC connection (access_token NOT stored — short-lived, derived on demand)
     await supabase.from('gsc_connections').upsert({
       user_id: user.id,
       refresh_token: tokens.refresh_token,
-      access_token: tokens.access_token,
-      token_expiry: new Date(Date.now() + (tokens.expires_in || 3600) * 1000).toISOString(),
+      token_expiry: new Date(0).toISOString(), // Force refresh on first data fetch
       sites: sites,
       connected_at: new Date().toISOString(),
     }, { onConflict: 'user_id' })

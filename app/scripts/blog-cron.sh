@@ -43,6 +43,13 @@ if [ -z "$NEW_POST" ]; then
 fi
 
 SLUG=$(basename "$NEW_POST" .md)
+
+# Validate slug is safe (alphanumeric + hyphens only, no injection)
+if [[ ! "$SLUG" =~ ^[a-z0-9][a-z0-9-]*$ ]]; then
+  echo "❌ Invalid slug: $SLUG — aborting (possible injection)"
+  exit 1
+fi
+
 echo "📄 New post: $SLUG"
 
 # Git commit
@@ -60,20 +67,23 @@ git push github HEAD:content 2>/dev/null || {
 # Submit URL to GSC for indexing
 BLOG_URL="https://localbeacon.ai/blog/$SLUG"
 echo "🔍 Submitting to GSC: $BLOG_URL"
-python3 -c "
+python3 - "$BLOG_URL" "$HOME/.openclaw/workspace/secrets/gws-agent-key.json" <<'PYEOF'
+import sys, json, urllib.request
 from google.oauth2 import service_account
 from google.auth.transport.requests import Request
-import json, urllib.request
+
+blog_url = sys.argv[1]
+key_file = sys.argv[2]
 
 try:
     creds = service_account.Credentials.from_service_account_file(
-        '$HOME/.openclaw/workspace/secrets/gws-agent-key.json',
+        key_file,
         scopes=['https://www.googleapis.com/auth/indexing'],
         subject='david@perpetualagility.com'
     )
     creds.refresh(Request())
     url = 'https://indexing.googleapis.com/v3/urlNotifications:publish'
-    body = json.dumps({'url': '$BLOG_URL', 'type': 'URL_UPDATED'}).encode()
+    body = json.dumps({'url': blog_url, 'type': 'URL_UPDATED'}).encode()
     req = urllib.request.Request(url, data=body, headers={
         'Authorization': f'Bearer {creds.token}',
         'Content-Type': 'application/json'
@@ -82,6 +92,6 @@ try:
     print(f'✅ GSC indexing submitted: {resp.status}')
 except Exception as e:
     print(f'⚠️ GSC indexing failed (non-fatal): {e}')
-" 2>&1
+PYEOF
 
 echo "✅ [$(date)] Blog cron complete: $SLUG"

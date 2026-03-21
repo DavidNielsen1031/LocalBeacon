@@ -34,9 +34,9 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ connected: false, error: 'No Google Search Console connected' }, { status: 200 })
   }
 
-  // Refresh token if expired
-  let accessToken = gsc.access_token
-  if (new Date(gsc.token_expiry) < new Date()) {
+  // Always refresh access token (not stored — derived from refresh_token on demand)
+  let accessToken: string
+  {
     const clientId = process.env.GOOGLE_GSC_CLIENT_ID
     const clientSecret = process.env.GOOGLE_GSC_CLIENT_SECRET
     if (!clientId || !clientSecret) {
@@ -58,10 +58,6 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Failed to refresh GSC token', connected: false }, { status: 401 })
     }
     accessToken = refreshData.access_token
-    await supabase.from('gsc_connections').update({
-      access_token: accessToken,
-      token_expiry: new Date(Date.now() + (refreshData.expires_in || 3600) * 1000).toISOString(),
-    }).eq('user_id', user.id)
   }
 
   // Determine date range
