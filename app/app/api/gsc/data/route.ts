@@ -85,61 +85,35 @@ export async function GET(req: NextRequest) {
 
   // Fetch search analytics
   try {
-    const analyticsRes = await fetch(
-      `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(siteUrl)}/searchAnalytics/query`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          startDate: formatDate(startDate),
-          endDate: formatDate(endDate),
-          dimensions: ['query'],
-          rowLimit: 10,
-        }),
-      }
-    )
-    const analytics = await analyticsRes.json()
-
-    // Also get totals (no dimensions)
-    const totalsRes = await fetch(
-      `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(siteUrl)}/searchAnalytics/query`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          startDate: formatDate(startDate),
-          endDate: formatDate(endDate),
-        }),
-      }
-    )
-    const totals = await totalsRes.json()
-
-    // Get previous period for comparison
+    // Get previous period boundaries
     const prevEnd = new Date(startDate.getTime() - 86400000)
     const periodMs = endDate.getTime() - startDate.getTime()
     const prevStart = new Date(prevEnd.getTime() - periodMs)
 
-    const prevRes = await fetch(
-      `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(siteUrl)}/searchAnalytics/query`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          startDate: formatDate(prevStart),
-          endDate: formatDate(prevEnd),
-        }),
-      }
-    )
-    const prevData = await prevRes.json()
+    const gscUrl = `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(siteUrl)}/searchAnalytics/query`
+    const gscHeaders = {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    }
+
+    // Parallelize all 3 independent GSC API calls
+    const [analyticsRes, totalsRes, prevRes] = await Promise.all([
+      fetch(gscUrl, {
+        method: 'POST', headers: gscHeaders,
+        body: JSON.stringify({ startDate: formatDate(startDate), endDate: formatDate(endDate), dimensions: ['query'], rowLimit: 10 }),
+      }),
+      fetch(gscUrl, {
+        method: 'POST', headers: gscHeaders,
+        body: JSON.stringify({ startDate: formatDate(startDate), endDate: formatDate(endDate) }),
+      }),
+      fetch(gscUrl, {
+        method: 'POST', headers: gscHeaders,
+        body: JSON.stringify({ startDate: formatDate(prevStart), endDate: formatDate(prevEnd) }),
+      }),
+    ])
+    const [analytics, totals, prevData] = await Promise.all([
+      analyticsRes.json(), totalsRes.json(), prevRes.json(),
+    ])
 
     const currentRow = totals.rows?.[0] || { clicks: 0, impressions: 0, ctr: 0, position: 0 }
     const prevRow = prevData.rows?.[0] || { clicks: 0, impressions: 0, ctr: 0, position: 0 }

@@ -10,6 +10,15 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 cd "$PROJECT_DIR"
 
+# Lock file — prevent overlapping cron runs
+LOCK_FILE="/tmp/localbeacon-blog-cron.lock"
+if [ -f "$LOCK_FILE" ]; then
+  echo "⚠️ [$(date)] Cron already running (lock: $LOCK_FILE). Exiting."
+  exit 0
+fi
+trap "rm -f '$LOCK_FILE'" EXIT
+touch "$LOCK_FILE"
+
 # Source env
 if [ -f "$HOME/.config/env/global.env" ]; then
   source "$HOME/.config/env/global.env"
@@ -17,8 +26,8 @@ fi
 
 echo "📝 [$(date)] Blog cron starting..."
 
-# Generate one post from queue
-python3 scripts/generate-blog-post.py --from-queue --count 1 2>&1
+# Generate one post from queue (5 min timeout)
+timeout 300 python3 scripts/generate-blog-post.py --from-queue --count 1 2>&1
 EXIT_CODE=$?
 
 if [ $EXIT_CODE -ne 0 ]; then
@@ -69,7 +78,7 @@ try:
         'Authorization': f'Bearer {creds.token}',
         'Content-Type': 'application/json'
     })
-    resp = urllib.request.urlopen(req)
+    resp = urllib.request.urlopen(req, timeout=15)
     print(f'✅ GSC indexing submitted: {resp.status}')
 except Exception as e:
     print(f'⚠️ GSC indexing failed (non-fatal): {e}')

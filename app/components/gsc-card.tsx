@@ -19,14 +19,20 @@ const ORANGE = "#FF6B35"
 const NAVY = "#1B2A4A"
 const SLATE = "#636E72"
 
-function TrendArrow({ current, previous, inverse }: { current: number; previous: number; inverse?: boolean }) {
-  if (previous === 0 && current === 0) return <span className="text-xs" style={{ color: SLATE }}>—</span>
+function TrendArrow({ current, previous, inverse, label }: { current: number; previous: number; inverse?: boolean; label: string }) {
+  if (previous === 0 && current === 0) return <span className="text-xs" style={{ color: SLATE }} aria-label={`${label}: no change`}>—</span>
   const diff = current - previous
   const pct = previous > 0 ? Math.round((diff / previous) * 100) : current > 0 ? 100 : 0
   const isGood = inverse ? diff < 0 : diff > 0
   const color = isGood ? "#00B894" : diff === 0 ? SLATE : "#D63031"
   const arrow = diff > 0 ? "↑" : diff < 0 ? "↓" : "→"
-  return <span className="text-xs font-semibold" style={{ color }}>{arrow} {Math.abs(pct)}%</span>
+  const direction = diff > 0 ? "up" : diff < 0 ? "down" : "no change"
+  const quality = isGood ? "improved" : diff === 0 ? "unchanged" : "declined"
+  return (
+    <span className="text-xs font-semibold" style={{ color }} aria-label={`${label}: ${direction} ${Math.abs(pct)}%, ${quality}`} role="text">
+      {arrow} {Math.abs(pct)}%
+    </span>
+  )
 }
 
 export function GscCard() {
@@ -35,11 +41,15 @@ export function GscCard() {
   const [period, setPeriod] = useState("28d")
 
   useEffect(() => {
+    const controller = new AbortController()
     setLoading(true)
-    fetch(`/api/gsc/data?period=${period}`)
+    fetch(`/api/gsc/data?period=${period}`, { signal: controller.signal })
       .then(r => r.json())
       .then(d => { setData(d); setLoading(false) })
-      .catch(() => { setData(null); setLoading(false) })
+      .catch(err => {
+        if (err.name !== 'AbortError') { setData(null); setLoading(false) }
+      })
+    return () => controller.abort()
   }, [period])
 
   // Not connected — show connect CTA
@@ -121,22 +131,22 @@ export function GscCard() {
               <div>
                 <p className="text-xs uppercase tracking-wider mb-1" style={{ color: SLATE }}>Clicks</p>
                 <p className="text-2xl font-bold" style={{ color: NAVY }}>{data?.totals?.clicks ?? 0}</p>
-                {data?.previous && <TrendArrow current={data.totals?.clicks ?? 0} previous={data.previous.clicks} />}
+                {data?.previous && <TrendArrow current={data.totals?.clicks ?? 0} previous={data.previous.clicks} label="Clicks" />}
               </div>
               <div>
                 <p className="text-xs uppercase tracking-wider mb-1" style={{ color: SLATE }}>Impressions</p>
                 <p className="text-2xl font-bold" style={{ color: NAVY }}>{(data?.totals?.impressions ?? 0).toLocaleString()}</p>
-                {data?.previous && <TrendArrow current={data.totals?.impressions ?? 0} previous={data.previous.impressions} />}
+                {data?.previous && <TrendArrow current={data.totals?.impressions ?? 0} previous={data.previous.impressions} label="Impressions" />}
               </div>
               <div>
                 <p className="text-xs uppercase tracking-wider mb-1" style={{ color: SLATE }}>CTR</p>
                 <p className="text-2xl font-bold" style={{ color: NAVY }}>{data?.totals?.ctr ?? 0}%</p>
-                {data?.previous && <TrendArrow current={data.totals?.ctr ?? 0} previous={data.previous.ctr} />}
+                {data?.previous && <TrendArrow current={data.totals?.ctr ?? 0} previous={data.previous.ctr} label="Click-through rate" />}
               </div>
               <div>
                 <p className="text-xs uppercase tracking-wider mb-1" style={{ color: SLATE }}>Avg Position</p>
                 <p className="text-2xl font-bold" style={{ color: NAVY }}>{data?.totals?.position ?? 0}</p>
-                {data?.previous && <TrendArrow current={data.totals?.position ?? 0} previous={data.previous.position} inverse />}
+                {data?.previous && <TrendArrow current={data.totals?.position ?? 0} previous={data.previous.position} inverse label="Average position" />}
               </div>
             </div>
 
