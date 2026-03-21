@@ -59,6 +59,25 @@
 
 ---
 
+## 🔴 Discovery: Customer Validation (Parallel to Sprint 5)
+
+> These are NOT sprint items — they run parallel to delivery per [[sprint-os/Discovery|Discovery]]. But they are higher priority than any new feature.
+
+### P0: Expo Registration (Deadline Apr 10)
+- [ ] Complete ST19 vendor registration form for Ramsey EDA Business Expo (Apr 25)
+- [ ] Mail $75 check before Apr 10 cutoff
+- [ ] Finalize booth banner (33"x80" retractable, see `expo/BOOTH-PLAN.md`)
+- [ ] Print 100 one-pagers on cardstock from `expo/one-pager.html`
+- [ ] QR code + tracking URL for expo traffic
+
+### P0: Online Evangelist Outreach (Start This Week)
+- [ ] LinkedIn: search "web designer" + "local business" in MN area — send 10 connection requests
+- [ ] Reddit: post in r/webdesign, r/SEO, r/smallbusiness — describe the problem, invite conversation
+- [ ] Facebook: join 2-3 local business marketing groups, participate before pitching
+- [ ] Goal: 3 conversations by end of March, 6 evangelists by Expo day
+
+---
+
 ## 🏃 Now — Sprint 5: Make It Real
 
 *Active Sprint: See GitHub Milestone "Sprint 5 — Make It Real"*
