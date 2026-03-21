@@ -271,7 +271,15 @@ function OnboardingContent() {
     }
   }
 
-  const steps = ['Business Info', 'Service Areas', 'First Post', "What's Next"]
+  // Detect if user came from a paid plan selection (query param or localStorage)
+  const planParam = searchParams.get('plan')
+  const isPaidFlow = planParam === 'solo' || planParam === 'dfy' || !!pendingPlanFallback
+
+  // Paid: Business Info → Service Areas → Dashboard (skip post + what's next)
+  // Free: Business Info → Service Areas → First Post → Dashboard (skip what's next)
+  const steps = isPaidFlow
+    ? ['Business Info', 'Service Areas']
+    : ['Business Info', 'Service Areas', 'Your First Post']
 
   return (
     <div className="min-h-screen bg-[#FAFAF7] flex flex-col items-center px-4 py-12">
@@ -460,9 +468,24 @@ function OnboardingContent() {
                 <Button onClick={() => goToStep(1)} variant="outline" className="border-[#DFE6E9] text-[#636E72] hover:bg-[#DFE6E9]/50 flex-1">
                   ← Back
                 </Button>
-                <Button onClick={handleGeneratePost} disabled={loading} className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold flex-1">
-                  {loading ? 'Generating your first post...' : 'Generate First Post →'}
-                </Button>
+                {isPaidFlow ? (
+                  <Button
+                    onClick={async () => {
+                      setLoading(true)
+                      await saveBusiness()
+                      try { localStorage.removeItem('lb_scan_data') } catch {}
+                      router.push('/dashboard')
+                    }}
+                    disabled={loading}
+                    className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold flex-1"
+                  >
+                    {loading ? 'Setting up...' : 'Go to Dashboard →'}
+                  </Button>
+                ) : (
+                  <Button onClick={handleGeneratePost} disabled={loading} className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold flex-1">
+                    {loading ? 'Generating your first post...' : 'Generate First Post →'}
+                  </Button>
+                )}
               </div>
             </div>
           </div>
@@ -506,91 +529,15 @@ function OnboardingContent() {
               </p>
             </div>
             <Button
-              onClick={() => goToStep(4)}
+              onClick={() => router.push('/dashboard')}
               className="w-full bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold h-11"
             >
-              See What's Next →
+              Go to Dashboard →
             </Button>
           </div>
         )}
 
-        {/* Step 4: What's Next */}
-        {step === 4 && (
-          <div>
-            <div className="text-center mb-8">
-              <div className="text-5xl mb-4">🚀</div>
-              <h1 className="text-2xl font-bold text-[#1B2A4A] mb-2">You&apos;re all set!</h1>
-              <p className="text-[#636E72]">Here&apos;s everything you can do to boost your AI visibility.</p>
-            </div>
-
-            <div className="space-y-3 mb-8">
-              {/* Completed */}
-              <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-lg">
-                <span className="text-green-500 text-xl flex-shrink-0">✅</span>
-                <div>
-                  <p className="text-[#1B2A4A] font-semibold text-sm">Business profile created</p>
-                  <p className="text-[#636E72] text-xs">Your business info is saved and ready to use</p>
-                </div>
-              </div>
-
-              {/* Primary CTA — AI Readiness Scan */}
-              <a
-                href="/dashboard/ai-readiness"
-                className="flex items-center gap-3 p-5 bg-[#FF6B35] rounded-lg hover:bg-[#FF6B35]/90 transition-colors group"
-              >
-                <span className="text-2xl flex-shrink-0">🔍</span>
-                <div className="flex-1">
-                  <p className="text-white font-bold text-base">Check if Siri & ChatGPT recommend you</p>
-                  <p className="text-white/80 text-sm">See if AI assistants find your business when customers ask — most local businesses are invisible</p>
-                </div>
-                <span className="text-white text-lg flex-shrink-0">→</span>
-              </a>
-
-              {/* Secondary actions */}
-              {[
-                {
-                  href: '/dashboard/llms-txt',
-                  emoji: '📄',
-                  title: 'Generate your llms.txt file',
-                  desc: 'Help AI search engines discover and recommend your business',
-                },
-                {
-                  href: '/dashboard/audit',
-                  emoji: '🏥',
-                  title: 'Check your listing health',
-                  desc: 'Find gaps in your Google Business Profile and local citations',
-                },
-                {
-                  href: '/dashboard',
-                  emoji: '📊',
-                  title: 'View your dashboard',
-                  desc: 'See all your generated content and manage your local presence',
-                },
-              ].map(({ href, emoji, title, desc }) => (
-                <a
-                  key={href}
-                  href={href}
-                  className="flex items-center gap-3 p-4 bg-white border border-[#DFE6E9] rounded-lg hover:border-[#FF6B35]/50 hover:bg-[#FFF8F0] transition-colors group"
-                >
-                  <span className="text-xl flex-shrink-0">{emoji}</span>
-                  <div className="flex-1">
-                    <p className="text-[#1B2A4A] font-semibold text-sm group-hover:text-[#FF6B35] transition-colors">{title}</p>
-                    <p className="text-[#636E72] text-xs">{desc}</p>
-                  </div>
-                  <span className="text-[#FF6B35] text-lg flex-shrink-0">→</span>
-                </a>
-              ))}
-            </div>
-
-            <Button
-              onClick={() => router.push('/dashboard')}
-              variant="outline"
-              className="w-full border-[#DFE6E9] text-[#636E72] hover:bg-[#DFE6E9]/50 font-semibold h-11"
-            >
-              Skip to Dashboard →
-            </Button>
-          </div>
-        )}
+        {/* Step 4 (What's Next) removed in S26-06 — users go directly to dashboard */}
       </div>
 
       {/* DFY Confirmation Dialog */}
