@@ -645,6 +645,40 @@ async function checkNapConsistency(html: string): Promise<CheckResult> {
   }
 }
 
+async function checkSitemapInRobots(baseUrl: string): Promise<CheckResult> {
+  const rule = getRule('sitemap_in_robots')
+  const { response: robotsRes } = await fetchWithRetry(`${baseUrl}/robots.txt`)
+  if (!robotsRes?.ok) {
+    return { ...rule, passed: false, details: 'No robots.txt found — cannot check for sitemap reference', errorType: 'http_4xx' }
+  }
+  const robotsTxt = await robotsRes.text().catch(() => '')
+  const hasSitemapLine = /^Sitemap:\s*https?:\/\/.+/mi.test(robotsTxt)
+  return {
+    ...rule,
+    passed: hasSitemapLine,
+    details: hasSitemapLine
+      ? 'Sitemap URL referenced in robots.txt'
+      : 'robots.txt exists but does not reference a sitemap URL',
+    errorType: 'success',
+  }
+}
+
+async function checkCanonicalTags(html: string): Promise<CheckResult> {
+  const rule = getRule('canonical_tags')
+  const hasCanonical = /<link[^>]+rel=["']canonical["'][^>]*>/i.test(html)
+  const hasNoindex = /<meta[^>]+content=["'][^"']*noindex[^"']*["'][^>]*>/i.test(html)
+  return {
+    ...rule,
+    passed: hasCanonical && !hasNoindex,
+    details: hasNoindex
+      ? 'Page has a noindex directive — search engines will not index this page'
+      : hasCanonical
+      ? 'Canonical URL tag found — search engines know which version of this page to index'
+      : 'No canonical URL tag found — search engines may index duplicate versions of your pages',
+    errorType: 'success',
+  }
+}
+
 // --- Main handler ---
 
 export async function POST(req: NextRequest) {
@@ -732,6 +766,9 @@ export async function POST(req: NextRequest) {
     checkMobile(html),
     checkOpenGraph(html),
     checkSitemap(baseUrl),
+    // Indexing
+    checkSitemapInRobots(baseUrl),
+    checkCanonicalTags(html),
   ])
 
   const totalWeight = checks.reduce((sum, c) => sum + c.weight, 0)
