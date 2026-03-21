@@ -1,156 +1,222 @@
 #!/usr/bin/env bash
-#
-# generate-blog-post.sh — Generate a new blog post using the Claude API
-#
-# Usage:
-#   ./scripts/generate-blog-post.sh "Your Blog Post Title Here"
-#   ./scripts/generate-blog-post.sh "Your Blog Post Title Here" --category aeo --industry plumbers
-#
-# Environment:
-#   ANTHROPIC_API_KEY — Required. Your Anthropic API key.
-#
-# This script can be called from an OpenClaw cron job.
-
+# ──────────────────────────────────────────────────────────────────────
+# LocalBeacon.ai — SEO Blog Post Generator
+# Uses Claude Sonnet to generate high-quality local marketing blog posts
+# Usage: ./scripts/generate-blog-post.sh [--keyword "topic"] [--category aeo|seo|local-marketing|industry-tips|case-studies] [--from-queue]
+# ──────────────────────────────────────────────────────────────────────
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 BLOG_DIR="$PROJECT_DIR/content/blog"
+QUEUE_FILE="$SCRIPT_DIR/blog-keyword-queue.json"
 
-# ── Parse arguments ──────────────────────────────────────────────────────────
+# Load API key
+source ~/.config/env/global.env 2>/dev/null || true
+ANTHROPIC_API_KEY="${REFINE_BACKLOG_ANTHROPIC_KEY:-${ANTHROPIC_API_KEY:-}}"
 
-TITLE="${1:-}"
-CATEGORY="seo"
-INDUSTRY="general"
-
-if [ -z "$TITLE" ]; then
-  echo "Usage: $0 \"Blog Post Title\" [--category aeo|seo|local-marketing|industry-tips|case-studies] [--industry plumbers|general|etc]"
+if [ -z "$ANTHROPIC_API_KEY" ]; then
+  echo "❌ No Anthropic API key found" >&2
   exit 1
 fi
 
-shift
+# Parse args
+KEYWORD=""
+CATEGORY="aeo"
+FROM_QUEUE=false
+DRY_RUN=false
+
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    --keyword) KEYWORD="$2"; shift 2 ;;
     --category) CATEGORY="$2"; shift 2 ;;
-    --industry) INDUSTRY="$2"; shift 2 ;;
-    *) echo "Unknown option: $1"; exit 1 ;;
+    --from-queue) FROM_QUEUE=true; shift ;;
+    --dry-run) DRY_RUN=true; shift ;;
+    *) echo "Unknown arg: $1" >&2; exit 1 ;;
   esac
 done
 
-# ── Validate environment ────────────────────────────────────────────────────
+# If --from-queue, pop the next keyword from the queue
+if $FROM_QUEUE; then
+  if [ ! -f "$QUEUE_FILE" ]; then
+    echo "❌ No queue file at $QUEUE_FILE" >&2
+    exit 1
+  fi
+  # Pop next unprocessed entry
+  ENTRY=$(python3 -c "
+import json, sys
+with open('$QUEUE_FILE') as f:
+    q = json.load(f)
+for item in q:
+    if not item.get('processed'):
+        print(json.dumps(item))
+        break
+else:
+    print('EMPTY')
+")
+  if [ "$ENTRY" = "EMPTY" ]; then
+    echo "✅ Queue is empty — no posts to generate"
+    exit 0
+  fi
+  KEYWORD=$(echo "$ENTRY" | python3 -c "import json,sys; print(json.load(sys.stdin)['keyword'])")
+  CATEGORY=$(echo "$ENTRY" | python3 -c "import json,sys; print(json.load(sys.stdin).get('category','aeo'))")
+  echo "📝 From queue: \"$KEYWORD\" (category: $CATEGORY)"
+fi
 
-if [ -z "${ANTHROPIC_API_KEY:-}" ]; then
-  echo "Error: ANTHROPIC_API_KEY environment variable is not set."
+if [ -z "$KEYWORD" ]; then
+  echo "❌ No keyword provided. Use --keyword \"topic\" or --from-queue" >&2
   exit 1
 fi
 
-# ── Generate slug ────────────────────────────────────────────────────────────
+TODAY=$(date +%Y-%m-%d)
 
-SLUG=$(echo "$TITLE" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-//' | sed 's/-$//')
-DATE=$(date +%Y-%m-%d)
-FILENAME="$BLOG_DIR/$SLUG.md"
+# Get existing post slugs to avoid duplication and to generate internal links
+EXISTING_POSTS=$(ls "$BLOG_DIR"/*.md 2>/dev/null | xargs -I{} basename {} .md | tr '\n' ', ')
 
-if [ -f "$FILENAME" ]; then
-  echo "Error: File already exists: $FILENAME"
-  exit 1
+echo "🤖 Generating blog post for: \"$KEYWORD\" (category: $CATEGORY)"
+
+# Build the prompt
+PROMPT=$(cat <<'PROMPT_EOF'
+You are an expert SEO content writer for LocalBeacon.ai, an AI-powered local marketing platform for small businesses. Write a blog post targeting the keyword/topic provided.
+
+RULES:
+1. Write 1,200-1,800 words. Quality over quantity.
+2. Write like a knowledgeable human, NOT like an AI. No "In today's digital landscape" or "Let's dive in" or "In conclusion." No exclamation marks in headers.
+3. Use concrete examples with specific numbers, cities, and business types. Mention real tools (Google Business Profile, ChatGPT, Perplexity, Claude) by name.
+4. Include 4-6 H2 headings and 2-3 H3 subheadings. First H2 should appear within the first 200 words.
+5. Include a FAQ section at the end with 3-4 questions in H3 tags.
+6. Naturally mention LocalBeacon.ai 2-3 times (not in every section). Link to /check for the free scan and /pricing for plans.
+7. Include at least one statistic or data point (cite source if possible).
+8. Write for a 7th-grade reading level. Short paragraphs (2-3 sentences max). No jargon without explanation.
+9. The meta description must be 150-160 characters and include the primary keyword.
+10. The slug should be lowercase, hyphenated, 3-6 words.
+11. Internal links: reference 2-3 of these existing posts where relevant (use relative /blog/slug format):
+EXISTING_POSTS_PLACEHOLDER
+
+OUTPUT FORMAT (exactly this, no code fences):
+---
+title: "Your Title Here — Include Primary Keyword"
+slug: "your-slug-here"
+date: "DATE_PLACEHOLDER"
+description: "150-160 char meta description with keyword"
+category: "CATEGORY_PLACEHOLDER"
+industry: "general"
+author: "LocalBeacon Team"
+---
+
+[Post content in markdown here]
+
+## Frequently Asked Questions
+
+### Question 1?
+
+Answer...
+
+### Question 2?
+
+Answer...
+
+### Question 3?
+
+Answer...
+PROMPT_EOF
+)
+
+# Replace placeholders
+PROMPT="${PROMPT//EXISTING_POSTS_PLACEHOLDER/$EXISTING_POSTS}"
+PROMPT="${PROMPT//DATE_PLACEHOLDER/$TODAY}"
+PROMPT="${PROMPT//CATEGORY_PLACEHOLDER/$CATEGORY}"
+
+if $DRY_RUN; then
+  echo "--- DRY RUN ---"
+  echo "Keyword: $KEYWORD"
+  echo "Category: $CATEGORY"
+  echo "Prompt length: ${#PROMPT} chars"
+  exit 0
 fi
 
-mkdir -p "$BLOG_DIR"
-
-echo "Generating blog post: $TITLE"
-echo "  Slug: $SLUG"
-echo "  Category: $CATEGORY"
-echo "  Industry: $INDUSTRY"
-echo ""
-
-# ── Call Claude API ──────────────────────────────────────────────────────────
-
-SYSTEM_PROMPT="You are a blog writer for LocalBeacon.ai, an AI-powered local visibility engine for small businesses. Write blog posts that are genuinely helpful, actionable, and written in a friendly but knowledgeable tone — like a smart friend explaining something, not a corporate blog.
-
-Target audience: local business owners (plumbers, dentists, HVAC companies, roofers, landscapers, electricians, etc).
-
-Rules:
-- Write 800-1200 words
-- Use ## for section headings, ### for subsections
-- Include a FAQ section at the end with 3-5 questions (using **bold** for questions)
-- Be specific and actionable — give real advice, not vague platitudes
-- Mention LocalBeacon naturally when relevant (not forced)
-- Write in second person (you/your)
-- No fluff, no filler, no corporate jargon
-- Include practical examples when possible
-
-Output ONLY the markdown body content (no frontmatter — that will be added separately). Start with a compelling opening paragraph."
-
-USER_PROMPT="Write a blog post titled: \"$TITLE\"
-
-Category: $CATEGORY
-Industry focus: $INDUSTRY
-
-Write the full article body in markdown."
-
+# Call Claude Sonnet
 RESPONSE=$(curl -s https://api.anthropic.com/v1/messages \
   -H "Content-Type: application/json" \
   -H "x-api-key: $ANTHROPIC_API_KEY" \
   -H "anthropic-version: 2023-06-01" \
-  -d "$(jq -n \
-    --arg system "$SYSTEM_PROMPT" \
-    --arg user "$USER_PROMPT" \
-    '{
-      model: "claude-sonnet-4-6",
-      max_tokens: 4096,
-      system: $system,
-      messages: [{ role: "user", content: $user }]
-    }')")
+  -d "$(python3 -c "
+import json, sys
+prompt = '''$PROMPT'''
+keyword = '''$KEYWORD'''
+print(json.dumps({
+    'model': 'claude-sonnet-4-20250514',
+    'max_tokens': 4096,
+    'messages': [
+        {'role': 'user', 'content': f'Write a blog post about: {keyword}\n\n{prompt}'}
+    ]
+}))
+")")
 
-# Extract the text content
-BODY=$(echo "$RESPONSE" | jq -r '.content[0].text // empty')
+# Extract text content
+CONTENT=$(echo "$RESPONSE" | python3 -c "
+import json, sys
+try:
+    data = json.load(sys.stdin)
+    if 'content' in data:
+        for block in data['content']:
+            if block.get('type') == 'text':
+                print(block['text'])
+                break
+    elif 'error' in data:
+        print(f'ERROR: {data[\"error\"][\"message\"]}', file=sys.stderr)
+        sys.exit(1)
+except Exception as e:
+    print(f'ERROR: {e}', file=sys.stderr)
+    sys.exit(1)
+")
 
-if [ -z "$BODY" ]; then
-  echo "Error: Failed to generate content. API response:"
-  echo "$RESPONSE" | jq '.'
+if [ -z "$CONTENT" ]; then
+  echo "❌ Empty response from API" >&2
   exit 1
 fi
 
-# ── Generate meta description ───────────────────────────────────────────────
+# Extract slug from frontmatter
+SLUG=$(echo "$CONTENT" | grep '^slug:' | head -1 | sed 's/slug: *"\{0,1\}//' | sed 's/"\{0,1\} *$//')
 
-DESC_RESPONSE=$(curl -s https://api.anthropic.com/v1/messages \
-  -H "Content-Type: application/json" \
-  -H "x-api-key: $ANTHROPIC_API_KEY" \
-  -H "anthropic-version: 2023-06-01" \
-  -d "$(jq -n \
-    --arg user "Write a single SEO meta description (max 155 characters) for a blog post titled \"$TITLE\". Output ONLY the description text, nothing else." \
-    '{
-      model: "claude-haiku-4-5-20251001",
-      max_tokens: 200,
-      messages: [{ role: "user", content: $user }]
-    }')")
-
-DESCRIPTION=$(echo "$DESC_RESPONSE" | jq -r '.content[0].text // empty' | head -1)
-
-if [ -z "$DESCRIPTION" ]; then
-  DESCRIPTION="Learn about $TITLE — actionable insights for local businesses from LocalBeacon.ai."
+if [ -z "$SLUG" ]; then
+  # Generate slug from keyword
+  SLUG=$(echo "$KEYWORD" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | sed 's/[^a-z0-9-]//g' | head -c 50)
 fi
 
-# ── Write the markdown file ─────────────────────────────────────────────────
+OUTPUT_FILE="$BLOG_DIR/$SLUG.md"
 
-cat > "$FILENAME" <<FRONTMATTER
----
-title: "$TITLE"
-slug: "$SLUG"
-date: "$DATE"
-description: "$DESCRIPTION"
-category: "$CATEGORY"
-industry: "$INDUSTRY"
-author: "LocalBeacon Team"
----
+if [ -f "$OUTPUT_FILE" ]; then
+  echo "⚠️  File already exists: $OUTPUT_FILE — appending -new" >&2
+  SLUG="${SLUG}-new"
+  OUTPUT_FILE="$BLOG_DIR/$SLUG.md"
+fi
 
-$BODY
-FRONTMATTER
+# Strip any code fences the model might have added
+CLEAN_CONTENT=$(echo "$CONTENT" | sed '/^```\(markdown\)\{0,1\}$/d')
 
-echo ""
-echo "Blog post generated successfully!"
-echo "  File: $FILENAME"
-echo "  Words: $(echo "$BODY" | wc -w | tr -d ' ')"
-echo ""
-echo "Preview the first 5 lines:"
-head -15 "$FILENAME"
+echo "$CLEAN_CONTENT" > "$OUTPUT_FILE"
+
+echo "✅ Blog post generated: $OUTPUT_FILE"
+echo "   Slug: $SLUG"
+echo "   Words: $(wc -w < "$OUTPUT_FILE" | tr -d ' ')"
+
+# Mark as processed in queue if from queue
+if $FROM_QUEUE; then
+  python3 -c "
+import json
+with open('$QUEUE_FILE') as f:
+    q = json.load(f)
+for item in q:
+    if item['keyword'] == '''$KEYWORD''' and not item.get('processed'):
+        item['processed'] = True
+        item['slug'] = '$SLUG'
+        item['generated_date'] = '$TODAY'
+        break
+with open('$QUEUE_FILE', 'w') as f:
+    json.dump(q, f, indent=2)
+print('📋 Queue updated')
+"
+fi
+
+echo "🎯 Done! Preview at: https://localbeacon.ai/blog/$SLUG"
