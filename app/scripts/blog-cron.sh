@@ -1,39 +1,78 @@
-#!/usr/bin/env bash
-# ──────────────────────────────────────────────────────────────────────
-# LocalBeacon Blog Cron — Generate, commit, and push a new blog post
-# Runs 2x/week (Tue + Thu 6am CST) via launchd
-# ──────────────────────────────────────────────────────────────────────
+#!/bin/bash
+# LocalBeacon Blog Content Cron
+# Generates a blog post from the keyword queue, commits, and submits to GSC
+# Schedule: Mon + Thu at 6am CST
+# Usage: bash scripts/blog-cron.sh
+
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
-LOG_PREFIX="[blog-cron $(date '+%Y-%m-%d %H:%M')]"
-
 cd "$PROJECT_DIR"
 
-echo "$LOG_PREFIX Starting blog generation..."
+# Source env
+if [ -f "$HOME/.config/env/global.env" ]; then
+  source "$HOME/.config/env/global.env"
+fi
+
+echo "📝 [$(date)] Blog cron starting..."
 
 # Generate one post from queue
-python3 scripts/generate-blog-post.py --from-queue --count 1
+python3 scripts/generate-blog-post.py --from-queue --count 1 2>&1
+EXIT_CODE=$?
 
-# Check if any new files were created
-NEW_FILES=$(git status --porcelain content/blog/ | grep '^?' | awk '{print $2}')
+if [ $EXIT_CODE -ne 0 ]; then
+  echo "❌ Blog generation failed (exit code $EXIT_CODE)"
+  exit 1
+fi
 
-if [ -z "$NEW_FILES" ]; then
-  echo "$LOG_PREFIX No new posts generated (queue might be empty)"
+# Find the most recently modified .md file in content/blog/
+NEW_POST=$(find content/blog/ -name "*.md" -mmin -5 -type f | head -1)
+if [ -z "$NEW_POST" ]; then
+  echo "⚠️ No new post file found in content/blog/"
   exit 0
 fi
 
-# Commit and push to content branch
-# Content goes to 'content' branch for preview, then gets merged to main
-git checkout -B content 2>/dev/null || git checkout content 2>/dev/null || git checkout -b content
-git add content/blog/ scripts/blog-keyword-queue.json
-git commit -m "content: new blog post (auto-generated $(date +%Y-%m-%d))" --author="David Nielsen <davidnielsen1031@gmail.com>"
-git push github content 2>/dev/null || git push origin content 2>/dev/null
+SLUG=$(basename "$NEW_POST" .md)
+echo "📄 New post: $SLUG"
 
-# Also push to main for auto-deploy
-git checkout main
-git merge content --no-edit
-git push github main 2>/dev/null || git push origin main 2>/dev/null
+# Git commit
+git config user.email "davidnielsen1031@gmail.com"
+git config user.name "David Nielsen"
+git add "$NEW_POST" scripts/blog-keyword-queue.json
+git commit -m "content: new blog post — $SLUG" || true
 
-echo "$LOG_PREFIX ✅ Blog post published and deployed"
+# Push to content branch (create if needed)
+git push github HEAD:content 2>/dev/null || {
+  echo "⚠️ Push to content branch failed, trying main"
+  git push github HEAD:main 2>/dev/null || true
+}
+
+# Submit URL to GSC for indexing
+BLOG_URL="https://localbeacon.ai/blog/$SLUG"
+echo "🔍 Submitting to GSC: $BLOG_URL"
+python3 -c "
+from google.oauth2 import service_account
+from google.auth.transport.requests import Request
+import json, urllib.request
+
+try:
+    creds = service_account.Credentials.from_service_account_file(
+        '$HOME/.openclaw/workspace/secrets/gws-agent-key.json',
+        scopes=['https://www.googleapis.com/auth/indexing'],
+        subject='david@perpetualagility.com'
+    )
+    creds.refresh(Request())
+    url = 'https://indexing.googleapis.com/v3/urlNotifications:publish'
+    body = json.dumps({'url': '$BLOG_URL', 'type': 'URL_UPDATED'}).encode()
+    req = urllib.request.Request(url, data=body, headers={
+        'Authorization': f'Bearer {creds.token}',
+        'Content-Type': 'application/json'
+    })
+    resp = urllib.request.urlopen(req)
+    print(f'✅ GSC indexing submitted: {resp.status}')
+except Exception as e:
+    print(f'⚠️ GSC indexing failed (non-fatal): {e}')
+" 2>&1
+
+echo "✅ [$(date)] Blog cron complete: $SLUG"
