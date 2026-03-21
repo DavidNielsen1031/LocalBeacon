@@ -322,14 +322,14 @@ function OnboardingContent() {
                   if (d.url) window.location.href = d.url
                 }}
                 className="font-semibold text-white text-sm"
-                style={{ background: '#FF6B35' }}
+                style={{ background: '#C94A14' }}
               >
                 Complete Purchase →
               </Button>
               <Button
                 variant="ghost"
                 onClick={() => setPendingPlanFallback(null)}
-                className="text-sm"
+                className="text-sm border border-[#636E72]/30 hover:border-[#636E72]/60"
                 style={{ color: '#636E72' }}
               >
                 Continue with Free

@@ -18,18 +18,20 @@ interface GscData {
 const ORANGE = "#FF6B35"
 const NAVY = "#1B2A4A"
 const SLATE = "#636E72"
+// Accessible contrast colors: #00705A on white = 6.06:1, #B91C1C on white = 5.9:1
+const GREEN_A11Y = "#00705A"
+const RED_A11Y = "#B91C1C"
 
 function TrendArrow({ current, previous, inverse, label }: { current: number; previous: number; inverse?: boolean; label: string }) {
   if (previous === 0 && current === 0) return <span className="text-xs" style={{ color: SLATE }} aria-label={`${label}: no change`}>—</span>
   const diff = current - previous
   const pct = previous > 0 ? Math.round((diff / previous) * 100) : current > 0 ? 100 : 0
   const isGood = inverse ? diff < 0 : diff > 0
-  const color = isGood ? "#00B894" : diff === 0 ? SLATE : "#D63031"
+  const color = isGood ? GREEN_A11Y : diff === 0 ? SLATE : RED_A11Y
   const arrow = diff > 0 ? "↑" : diff < 0 ? "↓" : "→"
-  const direction = diff > 0 ? "up" : diff < 0 ? "down" : "no change"
-  const quality = isGood ? "improved" : diff === 0 ? "unchanged" : "declined"
+  const sentiment = isGood ? "improved" : diff === 0 ? "unchanged" : "declined"
   return (
-    <span className="text-xs font-semibold" style={{ color }} aria-label={`${label}: ${direction} ${Math.abs(pct)}%, ${quality}`} role="text">
+    <span className="text-xs font-semibold" style={{ color }} aria-label={`${label}: ${sentiment} by ${Math.abs(pct)}%`} role="text">
       {arrow} {Math.abs(pct)}%
     </span>
   )
@@ -63,6 +65,7 @@ export function GscCard() {
             See how many people find your business on Google — which searches bring them, how often they click, and whether it&apos;s growing. Optional — takes 2 minutes to connect.
           </p>
           <Button
+            type="button"
             onClick={() => window.location.href = "/api/gsc/connect"}
             className="font-semibold text-white"
             style={{ background: ORANGE }}
@@ -85,6 +88,7 @@ export function GscCard() {
             Solo members can see how many people find their business through Google searches — and whether it&apos;s growing month over month.
           </p>
           <Button
+            type="button"
             onClick={() => window.location.href = "/pricing"}
             className="font-semibold text-white"
             style={{ background: ORANGE }}
@@ -107,10 +111,12 @@ export function GscCard() {
               <button
                 key={p}
                 onClick={() => setPeriod(p)}
-                className="px-3 py-1 rounded-full text-xs font-semibold transition-colors"
+                aria-pressed={period === p}
+                aria-label={p === "7d" ? "7 days" : p === "28d" ? "28 days" : "3 months"}
+                className="px-3 py-1 rounded-full text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF6B35] focus-visible:ring-offset-2"
                 style={{
                   background: period === p ? ORANGE : "transparent",
-                  color: period === p ? "#fff" : SLATE,
+                  color: period === p ? NAVY : SLATE,
                   border: period === p ? "none" : "1px solid #DFE6E9",
                 }}
               >
@@ -126,29 +132,37 @@ export function GscCard() {
           <div className="text-center py-4 text-sm" style={{ color: SLATE }}>{data.error}</div>
         ) : (
           <>
-            {/* Metrics grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            {/* Metrics grid — semantic dl for label/value association */}
+            <dl className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
               <div>
-                <p className="text-xs uppercase tracking-wider mb-1" style={{ color: SLATE }}>Clicks</p>
-                <p className="text-2xl font-bold" style={{ color: NAVY }}>{data?.totals?.clicks ?? 0}</p>
-                {data?.previous && <TrendArrow current={data.totals?.clicks ?? 0} previous={data.previous.clicks} label="Clicks" />}
+                <dt className="text-xs uppercase tracking-wider mb-1" style={{ color: SLATE }}>Clicks</dt>
+                <dd className="text-2xl font-bold" style={{ color: NAVY }}>
+                  {data?.totals?.clicks ?? 0}
+                  {data?.previous && <> <TrendArrow current={data.totals?.clicks ?? 0} previous={data.previous.clicks} label="Clicks" /></>}
+                </dd>
               </div>
               <div>
-                <p className="text-xs uppercase tracking-wider mb-1" style={{ color: SLATE }}>Impressions</p>
-                <p className="text-2xl font-bold" style={{ color: NAVY }}>{(data?.totals?.impressions ?? 0).toLocaleString()}</p>
-                {data?.previous && <TrendArrow current={data.totals?.impressions ?? 0} previous={data.previous.impressions} label="Impressions" />}
+                <dt className="text-xs uppercase tracking-wider mb-1" style={{ color: SLATE }}>Impressions</dt>
+                <dd className="text-2xl font-bold" style={{ color: NAVY }}>
+                  {(data?.totals?.impressions ?? 0).toLocaleString()}
+                  {data?.previous && <> <TrendArrow current={data.totals?.impressions ?? 0} previous={data.previous.impressions} label="Impressions" /></>}
+                </dd>
               </div>
               <div>
-                <p className="text-xs uppercase tracking-wider mb-1" style={{ color: SLATE }}>CTR</p>
-                <p className="text-2xl font-bold" style={{ color: NAVY }}>{data?.totals?.ctr ?? 0}%</p>
-                {data?.previous && <TrendArrow current={data.totals?.ctr ?? 0} previous={data.previous.ctr} label="Click-through rate" />}
+                <dt className="text-xs uppercase tracking-wider mb-1" style={{ color: SLATE }}>CTR</dt>
+                <dd className="text-2xl font-bold" style={{ color: NAVY }}>
+                  {data?.totals?.ctr ?? 0}%
+                  {data?.previous && <> <TrendArrow current={data.totals?.ctr ?? 0} previous={data.previous.ctr} label="Click-through rate" /></>}
+                </dd>
               </div>
               <div>
-                <p className="text-xs uppercase tracking-wider mb-1" style={{ color: SLATE }}>Avg Position</p>
-                <p className="text-2xl font-bold" style={{ color: NAVY }}>{data?.totals?.position ?? 0}</p>
-                {data?.previous && <TrendArrow current={data.totals?.position ?? 0} previous={data.previous.position} inverse label="Average position" />}
+                <dt className="text-xs uppercase tracking-wider mb-1" style={{ color: SLATE }}>Avg Position</dt>
+                <dd className="text-2xl font-bold" style={{ color: NAVY }}>
+                  {data?.totals?.position ?? 0}
+                  {data?.previous && <> <TrendArrow current={data.totals?.position ?? 0} previous={data.previous.position} inverse label="Average position" /></>}
+                </dd>
               </div>
-            </div>
+            </dl>
 
             {/* Top queries */}
             {data?.topQueries && data.topQueries.length > 0 && (
@@ -160,8 +174,8 @@ export function GscCard() {
                       <span className="text-sm truncate flex-1 mr-4" style={{ color: NAVY }}>{q.query}</span>
                       <div className="flex gap-4 text-xs shrink-0" style={{ color: SLATE }}>
                         <span>{q.clicks} clicks</span>
-                        <span>{q.impressions} imp</span>
-                        <span>#{q.position}</span>
+                        <span aria-label={`${q.impressions} impressions`}>{q.impressions} imp</span>
+                        <span aria-label={`ranked number ${q.position}`}>#{q.position}</span>
                       </div>
                     </div>
                   ))}
