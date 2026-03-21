@@ -63,7 +63,7 @@ export const PLANS: PlanDefinition[] = [
     name: 'DFY Setup',
     price: '$499',
     period: 'one-time',
-    tagline: 'We set up your entire local visibility foundation — you just approve.',
+    tagline: 'We build your local visibility foundation in 5 business days — then Local Autopilot keeps it running.',
     features: [
       '30-minute live onboarding call — we learn your business',
       '15-25 custom FAQs written for your services & area',
@@ -71,7 +71,8 @@ export const PLANS: PlanDefinition[] = [
       'llms.txt generated + live deployment walkthrough',
       'Full AEO audit with prioritized fix list',
       'Platform-specific guides (WordPress, Squarespace, Webflow, Wix)',
-      '1 month of Solo included',
+      '1 month of Local Autopilot included',
+      'One-time setup — then maintain it yourself or stay on Autopilot',
     ],
     cta: 'Get DFY Setup — $499',
     href: null,
@@ -105,6 +106,6 @@ export const PRICING_FAQS = [
   },
   {
     q: "What does 'Done-For-You' mean exactly?",
-    a: "A 30-minute live call where we learn your business, generate your schema markup, llms.txt file, and 15-25 custom FAQs — then walk you through installing everything on your specific platform (WordPress, Squarespace, Webflow, or Wix). You also get a full AEO audit with a prioritized list of fixes, plus 1 month of Solo included so you can keep generating content right away.",
+    a: "DFY is a one-time setup engagement, not ongoing management. We do a 30-minute live call, build your schema markup, llms.txt, and 15-25 custom FAQs, then walk you through installing everything on your platform. You also get a full AEO audit + 1 month of Local Autopilot. After setup, you can maintain things yourself (Free) or keep Local Autopilot running at $49/mo — your call.",
   },
 ]

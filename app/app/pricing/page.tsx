@@ -217,6 +217,12 @@ export default function PricingPage() {
               Check Your Score — Free
             </Button>
           </Link>
+          <p className="mt-4 text-sm" style={{ color: SLATE }}>
+            Already have an account?{' '}
+            <Link href="/sign-in" className="underline font-semibold" style={{ color: NAVY }}>
+              Log in to manage your plan
+            </Link>
+          </p>
         </div>
       </section>
 
