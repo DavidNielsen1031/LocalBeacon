@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useBusinessContext } from "@/components/business-context";
 import { FreshnessBadge } from "@/components/freshness-badge";
+import { GscCard } from "@/components/gsc-card";
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import {
@@ -319,6 +320,13 @@ export default function DashboardPage() {
               </Link>
             ))}
           </div>
+
+          {/* Google Search Console Performance */}
+          {hasBusiness && (
+            <div className="mb-10">
+              <GscCard />
+            </div>
+          )}
 
           {/* Activity Feed */}
           <div className="mb-10">
