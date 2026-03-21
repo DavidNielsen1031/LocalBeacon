@@ -19,6 +19,7 @@ export interface BlogPostMeta {
   industry: string
   author: string
   readingTime: number
+  draft?: boolean
 }
 
 export const CATEGORY_LABELS: Record<BlogPost['category'], string> = {

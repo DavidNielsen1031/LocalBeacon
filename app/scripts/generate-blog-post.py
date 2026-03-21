@@ -83,6 +83,7 @@ description: "150-160 char meta description with keyword"
 category: "{category}"
 industry: "general"
 author: "LocalBeacon Team"
+draft: true
 ---
 
 [Post content in markdown here]

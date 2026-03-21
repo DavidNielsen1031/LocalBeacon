@@ -48,6 +48,7 @@ function OnboardingContent() {
   const [copied, setCopied] = useState(false)
   const [prefillScore, setPrefillScore] = useState<number | null>(null)
   const [showDfyDialog, setShowDfyDialog] = useState(false)
+  const [pendingPlanFallback, setPendingPlanFallback] = useState<string | null>(null)
 
   const [data, setData] = useState<BusinessData>({
     name: '', category: '', primary_city: '', primary_state: '',
@@ -56,30 +57,43 @@ function OnboardingContent() {
 
   // Resume checkout if user came from pricing page (paid plan intent)
   useEffect(() => {
-    try {
-      const pending = localStorage.getItem('lb_pending_plan')
-      if (pending) {
+    const resumeCheckout = async () => {
+      try {
+        const pending = localStorage.getItem('lb_pending_plan')
+        if (!pending) return
         const { plan, timestamp } = JSON.parse(pending)
         // Only honor if less than 1 hour old
-        if (timestamp && Date.now() - timestamp < 3600000 && (plan === 'SOLO' || plan === 'DFY')) {
+        if (!timestamp || Date.now() - timestamp > 3600000 || (plan !== 'SOLO' && plan !== 'DFY')) {
           localStorage.removeItem('lb_pending_plan')
-          // Trigger checkout now that user is authenticated
-          fetch('/api/checkout', {
+          return
+        }
+        localStorage.removeItem('lb_pending_plan')
+        // Wait for Clerk auth session to be ready (cookie propagation)
+        await new Promise(r => setTimeout(r, 1500))
+        // Try checkout with retry
+        for (let attempt = 0; attempt < 3; attempt++) {
+          const res = await fetch('/api/checkout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ plan, mode: plan === 'DFY' ? 'payment' : 'subscription' }),
           })
-            .then(r => r.json())
-            .then(data => {
-              if (data.url) window.location.href = data.url
-              // If checkout fails, just continue with onboarding (free tier)
-            })
-            .catch(() => {}) // Fail silently — let them onboard for free
-        } else {
-          localStorage.removeItem('lb_pending_plan')
+          const data = await res.json()
+          if (data.url) {
+            window.location.href = data.url
+            return
+          }
+          if (data.error === 'Unauthorized') {
+            // Auth not ready yet, wait and retry
+            await new Promise(r => setTimeout(r, 2000))
+            continue
+          }
+          break // Other error, don't retry
         }
-      }
-    } catch {}
+        // If all attempts fail, show manual checkout button
+        setPendingPlanFallback(plan)
+      } catch {}
+    }
+    resumeCheckout()
   }, [])
 
   // Pre-fill from /check query params + localStorage scan data
@@ -285,6 +299,45 @@ function OnboardingContent() {
       </div>
 
       <div className="w-full max-w-lg">
+        {/* Plan checkout fallback banner */}
+        {pendingPlanFallback && (
+          <div className="mb-6 rounded-xl border px-5 py-4" style={{ backgroundColor: 'rgba(255,107,53,0.06)', borderColor: 'rgba(255,107,53,0.25)' }}>
+            <p className="text-sm font-semibold mb-2" style={{ color: '#1B2A4A' }}>
+              You selected the {pendingPlanFallback === 'DFY' ? 'DFY Setup ($499)' : 'Solo ($49/mo)'} plan
+            </p>
+            <p className="text-sm mb-3" style={{ color: '#636E72' }}>
+              Complete your purchase to unlock all features, or continue setting up your free account first.
+            </p>
+            <div className="flex gap-3">
+              <Button
+                onClick={async () => {
+                  const plan = pendingPlanFallback
+                  setPendingPlanFallback(null)
+                  const res = await fetch('/api/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ plan, mode: plan === 'DFY' ? 'payment' : 'subscription' }),
+                  })
+                  const d = await res.json()
+                  if (d.url) window.location.href = d.url
+                }}
+                className="font-semibold text-white text-sm"
+                style={{ background: '#C94A14' }}
+              >
+                Complete Purchase →
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() => setPendingPlanFallback(null)}
+                className="text-sm border border-[#636E72]/30 hover:border-[#636E72]/60"
+                style={{ color: '#636E72' }}
+              >
+                Continue with Free
+              </Button>
+            </div>
+          </div>
+        )}
+
         {/* Step 1: Business Basics */}
         {step === 1 && (
           <div>

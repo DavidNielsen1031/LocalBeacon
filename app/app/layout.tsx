@@ -113,5 +113,15 @@ export default function RootLayout({
     return content;
   }
 
-  return <ClerkProvider publishableKey={publishableKey}>{content}</ClerkProvider>;
+  return (
+    <ClerkProvider
+      publishableKey={publishableKey}
+      afterSignUpUrl="/onboarding"
+      afterSignInUrl="/dashboard"
+      signInUrl="/sign-in"
+      signUpUrl="/sign-up"
+    >
+      {content}
+    </ClerkProvider>
+  );
 }
