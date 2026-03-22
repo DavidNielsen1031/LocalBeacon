@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useBusinessContext } from "@/components/business-context";
 import { FreshnessBadge } from "@/components/freshness-badge";
 import { GscCard } from "@/components/gsc-card";
+import { AiUpdatesCard } from "@/components/ai-updates-card";
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import {
@@ -327,6 +328,11 @@ export default function DashboardPage() {
               <GscCard />
             </div>
           )}
+
+          {/* AI Search Updates */}
+          <div className="mb-10">
+            <AiUpdatesCard plan={plan} />
+          </div>
 
           {/* Activity Feed */}
           <div className="mb-10">
