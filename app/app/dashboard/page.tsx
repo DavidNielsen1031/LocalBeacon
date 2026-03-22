@@ -60,8 +60,8 @@ export default function DashboardPage() {
   const userInitRef = useRef(false);
 
   useEffect(() => {
-    // Detect ?upgraded=dfy query param
-    if (searchParams.get("upgraded") === "dfy") {
+    // Detect ?upgraded=dfy (legacy) or ?checkout=success with DFY plan
+    if (searchParams.get("upgraded") === "dfy" || searchParams.get("checkout") === "success") {
       setDfySuccess(true);
     }
   }, [searchParams]);

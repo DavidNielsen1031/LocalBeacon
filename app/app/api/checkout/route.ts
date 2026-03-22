@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
     // DFY is a one-time payment; Solo and Managed are subscriptions
     const isDfy = plan === 'DFY'
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://localbeacon.ai'
-    const successUrl = `${baseUrl}/dashboard?upgraded=${plan.toLowerCase()}`
+    const successUrl = `${baseUrl}/dashboard?checkout=success`
     const cancelUrl = `${baseUrl}/pricing`
     const lineItems = [{ price: planConfig.priceId, quantity: 1 }]
     const meta = { clerk_user_id: userId, plan }
@@ -51,6 +51,7 @@ export async function POST(req: NextRequest) {
         line_items: lineItems,
         success_url: successUrl,
         cancel_url: cancelUrl,
+        client_reference_id: userId,
         metadata: meta,
       })
     } else {
@@ -60,6 +61,7 @@ export async function POST(req: NextRequest) {
         line_items: lineItems,
         success_url: successUrl,
         cancel_url: cancelUrl,
+        client_reference_id: userId,
         metadata: meta,
         subscription_data: { metadata: meta },
       })
