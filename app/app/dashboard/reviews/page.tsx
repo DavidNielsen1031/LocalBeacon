@@ -1,12 +1,12 @@
 'use client'
 export const dynamic = 'force-dynamic'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Star } from 'lucide-react'
+import { Star, BookmarkCheck } from 'lucide-react'
 import { EmptyState } from '@/components/empty-state'
 import { useBusinessContext } from '@/components/business-context'
 import { UpgradeGate } from '@/components/upgrade-gate'
@@ -22,15 +22,32 @@ interface DraftedResponse {
   timestamp: string
 }
 
+interface SavedResponse {
+  id: string
+  title: string
+  body: string
+  metadata: {
+    reviewer_name: string
+    rating: number
+    original_comment: string
+    generated_response: string
+  }
+  created_at: string
+}
+
 export default function ReviewsPage() {
-  const { plan } = useBusinessContext()
+  const { plan, activeBusinessId } = useBusinessContext()
   const [author, setAuthor] = useState('')
   const [rating, setRating] = useState(5)
   const [comment, setComment] = useState('')
   const [loading, setLoading] = useState(false)
   const [response, setResponse] = useState('')
   const [copied, setCopied] = useState(false)
+  const [saved, setSaved] = useState(false)
+  const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [savedResponses, setSavedResponses] = useState<SavedResponse[]>([])
+  const [loadingSaved, setLoadingSaved] = useState(false)
   const [history, setHistory] = useState<DraftedResponse[]>([
     {
       id: 'demo-1',
@@ -58,10 +75,22 @@ export default function ReviewsPage() {
     },
   ])
 
+  // Load saved responses from DB when business changes
+  useEffect(() => {
+    if (!activeBusinessId) return
+    setLoadingSaved(true)
+    fetch(`/api/save/review-response?business_id=${activeBusinessId}`)
+      .then(r => r.json())
+      .then(data => setSavedResponses(data.items || []))
+      .catch(() => {})
+      .finally(() => setLoadingSaved(false))
+  }, [activeBusinessId])
+
   const draft = async () => {
     if (!comment.trim()) return
     setLoading(true)
     setResponse('')
+    setSaved(false)
     setError(null)
     try {
       const res = await fetch('/api/generate/review-response', {
@@ -91,10 +120,43 @@ export default function ReviewsPage() {
     }
   }
 
+  const saveResponse = async () => {
+    if (!response || !activeBusinessId) return
+    setSaving(true)
+    try {
+      const res = await fetch('/api/save/review-response', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          business_id: activeBusinessId,
+          reviewer_name: author || 'Customer',
+          rating,
+          comment,
+          response,
+        }),
+      })
+      if (res.ok) {
+        setSaved(true)
+        // Refresh saved responses list
+        const updated = await fetch(`/api/save/review-response?business_id=${activeBusinessId}`)
+        const data = await updated.json()
+        setSavedResponses(data.items || [])
+      }
+    } catch {
+      // Silent — copy still works even if save fails
+    } finally {
+      setSaving(false)
+    }
+  }
+
   const copy = () => {
     navigator.clipboard.writeText(response)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  const copyFromSaved = (text: string) => {
+    navigator.clipboard.writeText(text)
   }
 
   const resetForm = () => {
@@ -102,6 +164,7 @@ export default function ReviewsPage() {
     setRating(5)
     setComment('')
     setResponse('')
+    setSaved(false)
   }
 
   const reviewDraftCount = history.filter(h => !h.id.startsWith('demo-')).length
@@ -218,6 +281,23 @@ export default function ReviewsPage() {
                     {copied ? '✓ Copied!' : 'Copy Response'}
                   </Button>
                 </div>
+                {activeBusinessId && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={saveResponse}
+                    disabled={saving || saved}
+                    className={`w-full mt-2 text-xs border-[#DFE6E9] ${saved ? 'text-emerald-600 border-emerald-300 bg-emerald-50' : 'text-[#636E72]'}`}
+                  >
+                    {saving ? (
+                      <span className="flex items-center gap-1.5"><span className="animate-spin">⟳</span> Saving...</span>
+                    ) : saved ? (
+                      <span className="flex items-center gap-1.5"><BookmarkCheck className="w-3.5 h-3.5" /> Saved to responses</span>
+                    ) : (
+                      <span className="flex items-center gap-1.5"><BookmarkCheck className="w-3.5 h-3.5" /> Save Response</span>
+                    )}
+                  </Button>
+                )}
                 <p className="text-[#636E72]/60 text-xs mt-4 text-center">
                   Paste this response directly into Google Maps on your business profile
                 </p>
@@ -241,7 +321,46 @@ export default function ReviewsPage() {
         </div>
       </div>
 
-      {/* History */}
+      {/* Saved Responses from DB */}
+      {(savedResponses.length > 0 || loadingSaved) && (
+        <div className="mt-10">
+          <h2 className="text-lg font-semibold text-[#2D3436] mb-1">Saved Responses</h2>
+          <p className="text-[#636E72] text-sm mb-4">Responses you&apos;ve saved — ready to copy and paste into Google.</p>
+          {loadingSaved ? (
+            <p className="text-[#636E72]/60 text-sm">Loading...</p>
+          ) : (
+            <div className="space-y-3">
+              {savedResponses.map(item => (
+                <Card key={item.id} className="bg-white border-[#DFE6E9] transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
+                  <CardContent className="p-4">
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[#1B2A4A] font-medium text-sm">{item.metadata?.reviewer_name || 'Customer'}</span>
+                        <span className="text-yellow-400 text-xs">{'⭐'.repeat(item.metadata?.rating || 5)}</span>
+                      </div>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <span className="text-[#636E72]/60 text-xs">{new Date(item.created_at).toLocaleDateString()}</span>
+                        <button
+                          onClick={() => copyFromSaved(item.body)}
+                          className="text-[#FF6B35] text-xs font-medium hover:underline"
+                        >
+                          Copy
+                        </button>
+                      </div>
+                    </div>
+                    {item.metadata?.original_comment && (
+                      <p className="text-[#636E72] text-xs italic mb-2 line-clamp-1">&ldquo;{item.metadata.original_comment}&rdquo;</p>
+                    )}
+                    <p className="text-[#2D3436] text-xs leading-relaxed line-clamp-2">{item.body}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Recent Session History */}
       {history.length > 0 && (
         <div className="mt-10">
           <h2 className="text-lg font-semibold text-[#2D3436] mb-4">Recent Responses</h2>

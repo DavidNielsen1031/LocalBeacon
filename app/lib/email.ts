@@ -571,6 +571,78 @@ export async function sendScanUpdateEmail(data: ScanUpdateEmailData) {
   }
 }
 
+interface ReviewNudgeEmailData {
+  to: string
+  businessName: string
+  dashboardUrl: string
+}
+
+export async function sendReviewNudgeEmail(data: ReviewNudgeEmailData) {
+  if (!resend) {
+    console.log('[email] Resend not configured, skipping review nudge email')
+    return { success: false, error: 'Resend not configured' }
+  }
+
+  try {
+    const result = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: data.to,
+      subject: `Don't forget — respond to your Google reviews this week 💬`,
+      html: `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #2D3436; background: #FAFAF7;">
+  <div style="text-align: center; margin-bottom: 32px;">
+    <h2 style="color: #1B2A4A; margin: 0 0 4px;">🔦 LocalBeacon</h2>
+    <p style="color: #636E72; font-size: 14px; margin: 0;">Weekly Review Reminder</p>
+  </div>
+
+  <div style="background: white; border-radius: 12px; border: 1px solid #DFE6E9; padding: 28px; margin-bottom: 24px;">
+    <h2 style="color: #1B2A4A; font-size: 20px; margin: 0 0 12px;">It looks like you haven't responded to any reviews this week</h2>
+    <p style="color: #636E72; font-size: 15px; line-height: 1.6; margin: 0 0 20px;">
+      Responding to Google reviews — even quickly — signals to Google that you're an active, trustworthy business. It takes less than 2 minutes with LocalBeacon.
+    </p>
+
+    <div style="background: #FFF8F0; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+      <p style="color: #1B2A4A; font-size: 14px; font-weight: 600; margin: 0 0 8px;">Why it matters for ${data.businessName}:</p>
+      <ul style="color: #636E72; font-size: 14px; line-height: 1.8; margin: 0; padding-left: 20px;">
+        <li>Businesses that respond to reviews rank higher in local search</li>
+        <li>Responses show potential customers you care</li>
+        <li>AI assistants like ChatGPT consider engagement signals</li>
+      </ul>
+    </div>
+
+    <div style="text-align: center;">
+      <a href="${data.dashboardUrl}/dashboard/reviews"
+         style="display: inline-block; background: #FF6B35; color: white; font-weight: 700; padding: 13px 32px; border-radius: 8px; text-decoration: none; font-size: 15px;">
+        Draft a Response Now →
+      </a>
+    </div>
+  </div>
+
+  <div style="background: #F0F4FF; border-radius: 8px; padding: 16px; margin-bottom: 24px;">
+    <p style="color: #636E72; font-size: 13px; margin: 0; line-height: 1.6;">
+      <strong style="color: #1B2A4A;">How it works:</strong> Paste any Google review into LocalBeacon, click Draft, and we'll write a professional response in seconds. Copy it and paste it into Google — done.
+    </p>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid #DFE6E9; margin: 24px 0;">
+  <p style="color: #636E72; font-size: 12px; text-align: center; line-height: 1.6;">
+    You're receiving this because you're on a LocalBeacon Solo or Agency plan.<br>
+    <a href="${data.dashboardUrl}/dashboard/settings" style="color: #B2BEC3; font-size: 11px;">Manage notification preferences</a>
+  </p>
+</body>
+</html>`,
+    })
+
+    return { success: true, id: result.data?.id }
+  } catch (error) {
+    console.error('[email] Failed to send review nudge email:', error)
+    return { success: false, error: String(error) }
+  }
+}
+
 export async function sendMonthlyReportEmail(data: MonthlyEmailData) {
   if (!resend) {
     console.log('[email] Resend not configured, skipping monthly email')
