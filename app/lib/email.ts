@@ -12,6 +12,7 @@ interface WeeklyEmailData {
   postTitle: string
   postContent: string
   dashboardUrl: string
+  subject?: string
 }
 
 interface MonthlyEmailData {
@@ -35,7 +36,7 @@ export async function sendWeeklyContentEmail(data: WeeklyEmailData) {
     const result = await resend.emails.send({
       from: FROM_EMAIL,
       to: data.to,
-      subject: `Your weekly Google post is ready — ${data.businessName}`,
+      subject: data.subject ?? `Your weekly Google post is ready — ${data.businessName}`,
       html: `
 <!DOCTYPE html>
 <html>
@@ -386,8 +387,8 @@ interface VisibilityAlertData {
   to: string
   businessName: string
   website: string
-  schemaDisappeared: boolean
-  llmsDisappeared: boolean
+  /** List of AEO checks that were passing before but are now failing */
+  regressedChecks: Array<{ id: string; label: string }>
 }
 
 export async function sendVisibilityAlert(data: VisibilityAlertData) {
@@ -396,11 +397,11 @@ export async function sendVisibilityAlert(data: VisibilityAlertData) {
     return { success: false, error: 'Resend not configured' }
   }
 
-  const missing: string[] = []
-  if (data.schemaDisappeared) missing.push('Schema markup (JSON-LD)')
-  if (data.llmsDisappeared) missing.push('llms.txt')
-  const missingList = missing.map(m => `<li style="margin-bottom: 4px;">${m}</li>`).join('')
   const domain = data.website.replace(/^https?:\/\//, '').split('/')[0]
+  const missingList = data.regressedChecks
+    .map(c => `<li style="margin-bottom: 4px;">${c.label}</li>`)
+    .join('')
+  const count = data.regressedChecks.length
 
   try {
     const result = await resend.emails.send({
@@ -418,9 +419,9 @@ export async function sendVisibilityAlert(data: VisibilityAlertData) {
   </div>
 
   <div style="background: #FFF5F3; border: 1px solid #F5C6BC; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
-    <h2 style="color: #C0392B; margin: 0 0 8px; font-size: 18px;">⚠️ AI visibility signals went missing</h2>
+    <h2 style="color: #C0392B; margin: 0 0 8px; font-size: 18px;">⚠️ ${count} AI visibility signal${count !== 1 ? 's' : ''} went missing</h2>
     <p style="color: #2D3436; font-size: 15px; margin: 0 0 16px;">
-      Our weekly scan detected that <strong>${data.businessName}</strong> (${domain}) is now missing signals that were previously detected:
+      Our monitor detected that <strong>${data.businessName}</strong> (${domain}) is now failing ${count} check${count !== 1 ? 's' : ''} that previously passed:
     </p>
     <ul style="color: #C0392B; font-size: 14px; margin: 0; padding-left: 20px; line-height: 1.8;">
       ${missingList}
@@ -432,20 +433,12 @@ export async function sendVisibilityAlert(data: VisibilityAlertData) {
 
   <div style="background: white; border-radius: 12px; border: 1px solid #DFE6E9; padding: 20px; margin-bottom: 24px;">
     <h3 style="color: #1B2A4A; font-size: 15px; margin: 0 0 12px;">What to do</h3>
-    ${data.schemaDisappeared ? `
-    <div style="margin-bottom: 12px;">
-      <strong style="color: #1B2A4A; font-size: 14px;">Schema markup removed:</strong>
-      <p style="color: #636E72; font-size: 13px; margin: 4px 0 0;">
-        Check if a website update removed your JSON-LD schema block. You can restore it from your LocalBeacon dashboard under Schema Settings.
-      </p>
-    </div>` : ''}
-    ${data.llmsDisappeared ? `
-    <div style="margin-bottom: 12px;">
-      <strong style="color: #1B2A4A; font-size: 14px;">llms.txt removed:</strong>
-      <p style="color: #636E72; font-size: 13px; margin: 4px 0 0;">
-        Your llms.txt file (${data.website}/llms.txt) is no longer accessible. Re-upload it from your LocalBeacon dashboard.
-      </p>
-    </div>` : ''}
+    <p style="color: #636E72; font-size: 13px; margin: 0 0 8px;">
+      Run a full AI Readiness scan from your LocalBeacon dashboard to see details and fix recommendations for each failing check.
+    </p>
+    <p style="color: #636E72; font-size: 13px; margin: 0;">
+      These issues are often caused by recent website updates that accidentally removed optimization signals.
+    </p>
   </div>
 
   <div style="text-align: center; margin-bottom: 24px;">
@@ -467,6 +460,185 @@ export async function sendVisibilityAlert(data: VisibilityAlertData) {
     return { success: true, id: result.data?.id }
   } catch (error) {
     console.error('[email] Failed to send visibility alert:', error)
+    return { success: false, error: String(error) }
+  }
+}
+
+interface ScanUpdateEmailData {
+  to: string
+  businessName: string
+  website: string
+  currentScore: number
+  previousScore: number
+  checks: AeoCheckResult[]
+  dashboardUrl: string
+}
+
+export async function sendScanUpdateEmail(data: ScanUpdateEmailData) {
+  if (!resend) {
+    console.log('[email] Resend not configured, skipping scan update email')
+    return { success: false, error: 'Resend not configured' }
+  }
+
+  const { grade, color } = getGradeInfo(data.currentScore)
+  const delta = data.currentScore - data.previousScore
+  const direction = delta > 0 ? 'improved' : 'dropped'
+  const arrow = delta > 0 ? '📈' : '📉'
+  const domain = data.website.replace(/^https?:\/\//, '').split('/')[0]
+  const failing = data.checks.filter(c => !c.passed).sort((a, b) => b.weight - a.weight).slice(0, 5)
+
+  const failingHtml = failing.map(c => `
+    <tr>
+      <td style="padding: 10px 16px; border-bottom: 1px solid #F0F0F0;">
+        <strong style="color: #1B2A4A; font-size: 13px;">${c.label}</strong><br>
+        <span style="color: #636E72; font-size: 12px;">${c.details}</span>
+        ${c.fix ? `<br><span style="color: #FF6B35; font-size: 12px;">Fix: ${c.fix}</span>` : ''}
+      </td>
+    </tr>
+  `).join('')
+
+  try {
+    const result = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: data.to,
+      subject: `${arrow} Your AI Readiness score ${direction} — ${data.businessName} (${data.previousScore} → ${data.currentScore})`,
+      html: `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #2D3436; background: #FAFAF7;">
+  <div style="text-align: center; margin-bottom: 24px;">
+    <h2 style="color: #1B2A4A; margin: 0 0 4px;">🔦 LocalBeacon</h2>
+    <p style="color: #636E72; font-size: 13px; margin: 0;">Weekly AI Readiness Update</p>
+  </div>
+
+  <div style="background: white; border-radius: 12px; border: 1px solid #DFE6E9; padding: 28px; margin-bottom: 20px; text-align: center;">
+    <p style="color: #636E72; font-size: 14px; margin: 0 0 8px;">AI Readiness Score for <strong>${domain}</strong></p>
+    <div style="display: inline-flex; align-items: center; gap: 16px; justify-content: center;">
+      <div style="text-align: center;">
+        <div style="font-size: 14px; color: #636E72; margin-bottom: 2px;">Previous</div>
+        <div style="font-size: 32px; font-weight: 800; color: #636E72;">${data.previousScore}</div>
+      </div>
+      <div style="font-size: 28px;">${arrow}</div>
+      <div style="text-align: center;">
+        <div style="font-size: 14px; color: #636E72; margin-bottom: 2px;">Current</div>
+        <div style="font-size: 40px; font-weight: 800; color: ${color};">${data.currentScore}</div>
+      </div>
+    </div>
+    <div style="margin-top: 12px;">
+      <span style="background: ${color}; color: white; font-weight: 700; padding: 4px 16px; border-radius: 9999px; font-size: 14px;">Grade ${grade}</span>
+    </div>
+    <p style="color: ${delta > 0 ? '#22c55e' : '#ef4444'}; font-weight: 700; font-size: 15px; margin: 12px 0 0;">
+      ${delta > 0 ? '+' : ''}${delta} points — your score ${direction}
+    </p>
+  </div>
+
+  ${failing.length > 0 ? `
+  <div style="background: white; border-radius: 12px; border: 1px solid #DFE6E9; padding: 0; margin-bottom: 20px; overflow: hidden;">
+    <div style="padding: 14px 16px; border-bottom: 1px solid #F0F0F0; background: #FFF8F0;">
+      <h3 style="color: #1B2A4A; margin: 0; font-size: 14px;">🔴 Top issues to fix</h3>
+    </div>
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+      ${failingHtml}
+    </table>
+  </div>
+  ` : `
+  <div style="background: #F0FDF8; border: 1px solid #A7E8D1; border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: center;">
+    <p style="color: #00795C; font-size: 15px; margin: 0;">🎉 All checks passing — your site is AI-ready!</p>
+  </div>
+  `}
+
+  <div style="text-align: center; margin-bottom: 24px;">
+    <a href="${data.dashboardUrl}/ai-readiness"
+       style="display: inline-block; background: #FF6B35; color: white; font-weight: 700; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-size: 15px;">
+      View Full Report →
+    </a>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid #DFE6E9; margin: 24px 0;">
+  <p style="color: #636E72; font-size: 12px; text-align: center; line-height: 1.6;">
+    You're receiving weekly scan updates because you're on a LocalBeacon Solo or Agency plan.<br>
+    <a href="https://localbeacon.ai/dashboard/settings" style="color: #B2BEC3; font-size: 11px;">Manage notification preferences</a>
+  </p>
+</body>
+</html>`,
+    })
+
+    return { success: true, id: result.data?.id }
+  } catch (error) {
+    console.error('[email] Failed to send scan update email:', error)
+    return { success: false, error: String(error) }
+  }
+}
+
+interface ReviewNudgeEmailData {
+  to: string
+  businessName: string
+  dashboardUrl: string
+}
+
+export async function sendReviewNudgeEmail(data: ReviewNudgeEmailData) {
+  if (!resend) {
+    console.log('[email] Resend not configured, skipping review nudge email')
+    return { success: false, error: 'Resend not configured' }
+  }
+
+  try {
+    const result = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: data.to,
+      subject: `Don't forget — respond to your Google reviews this week 💬`,
+      html: `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #2D3436; background: #FAFAF7;">
+  <div style="text-align: center; margin-bottom: 32px;">
+    <h2 style="color: #1B2A4A; margin: 0 0 4px;">🔦 LocalBeacon</h2>
+    <p style="color: #636E72; font-size: 14px; margin: 0;">Weekly Review Reminder</p>
+  </div>
+
+  <div style="background: white; border-radius: 12px; border: 1px solid #DFE6E9; padding: 28px; margin-bottom: 24px;">
+    <h2 style="color: #1B2A4A; font-size: 20px; margin: 0 0 12px;">It looks like you haven't responded to any reviews this week</h2>
+    <p style="color: #636E72; font-size: 15px; line-height: 1.6; margin: 0 0 20px;">
+      Responding to Google reviews — even quickly — signals to Google that you're an active, trustworthy business. It takes less than 2 minutes with LocalBeacon.
+    </p>
+
+    <div style="background: #FFF8F0; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+      <p style="color: #1B2A4A; font-size: 14px; font-weight: 600; margin: 0 0 8px;">Why it matters for ${data.businessName}:</p>
+      <ul style="color: #636E72; font-size: 14px; line-height: 1.8; margin: 0; padding-left: 20px;">
+        <li>Businesses that respond to reviews rank higher in local search</li>
+        <li>Responses show potential customers you care</li>
+        <li>AI assistants like ChatGPT consider engagement signals</li>
+      </ul>
+    </div>
+
+    <div style="text-align: center;">
+      <a href="${data.dashboardUrl}/dashboard/reviews"
+         style="display: inline-block; background: #FF6B35; color: white; font-weight: 700; padding: 13px 32px; border-radius: 8px; text-decoration: none; font-size: 15px;">
+        Draft a Response Now →
+      </a>
+    </div>
+  </div>
+
+  <div style="background: #F0F4FF; border-radius: 8px; padding: 16px; margin-bottom: 24px;">
+    <p style="color: #636E72; font-size: 13px; margin: 0; line-height: 1.6;">
+      <strong style="color: #1B2A4A;">How it works:</strong> Paste any Google review into LocalBeacon, click Draft, and we'll write a professional response in seconds. Copy it and paste it into Google — done.
+    </p>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid #DFE6E9; margin: 24px 0;">
+  <p style="color: #636E72; font-size: 12px; text-align: center; line-height: 1.6;">
+    You're receiving this because you're on a LocalBeacon Solo or Agency plan.<br>
+    <a href="${data.dashboardUrl}/dashboard/settings" style="color: #B2BEC3; font-size: 11px;">Manage notification preferences</a>
+  </p>
+</body>
+</html>`,
+    })
+
+    return { success: true, id: result.data?.id }
+  } catch (error) {
+    console.error('[email] Failed to send review nudge email:', error)
     return { success: false, error: String(error) }
   }
 }

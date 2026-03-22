@@ -107,6 +107,7 @@ export function CheckerForm() {
   const [email, setEmail] = useState('')
   const [emailSaving, setEmailSaving] = useState(false)
   const [emailSaved, setEmailSaved] = useState(false)
+  const [emailError, setEmailError] = useState(false)
   const [error, setError] = useState('')
 
   const runScan = useCallback(async () => {
@@ -164,10 +165,11 @@ export function CheckerForm() {
     if (!email.trim() || !result) return
 
     setEmailSaving(true)
+    setEmailError(false)
     // Analytics: email submitted
     try { posthog.capture('email_submitted', { url: result.url, score: result.score }) } catch {}
     try {
-      await fetch('/api/leads', {
+      const res = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -177,9 +179,14 @@ export function CheckerForm() {
           checks: result.checks,
         }),
       })
-      setEmailSaved(true)
+      if (!res.ok) {
+        setEmailError(true)
+      } else {
+        setEmailSaved(true)
+      }
       setViewState('full-report')
     } catch {
+      setEmailError(true)
       // Still show the report even if email save fails
       setViewState('full-report')
     } finally {
@@ -407,7 +414,13 @@ export function CheckerForm() {
 
           {emailSaved && (
             <div className="mb-6 p-3 rounded-lg bg-green-50 border border-green-200 text-green-700 text-sm">
-              ✅ Report sent to {email}
+              ✅ Report sent to {email} — check your inbox (and spam folder)
+            </div>
+          )}
+
+          {emailError && (
+            <div className="mb-6 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+              ⚠️ We couldn&apos;t send the report email. You can still view your results below.
             </div>
           )}
 

@@ -1,12 +1,32 @@
 {
   "crons": [
     {
+      "path": "/api/cron/city-pages",
+      "schedule": "0 14 1 * *"
+    },
+    {
       "path": "/api/cron/monthly-report",
       "schedule": "0 15 1 * *"
     },
     {
       "path": "/api/cron/monitor-visibility",
       "schedule": "0 15 * * 1"
+    },
+    {
+      "path": "/api/cron/weekly-posts",
+      "schedule": "0 13 * * 1"
+    },
+    {
+      "path": "/api/cron/weekly-blog",
+      "schedule": "0 14 * * 3"
+    },
+    {
+      "path": "/api/cron/weekly-scan",
+      "schedule": "0 15 * * 0"
+    },
+    {
+      "path": "/api/cron/review-nudge",
+      "schedule": "0 14 * * 5"
     }
   ]
 }
