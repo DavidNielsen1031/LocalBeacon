@@ -387,8 +387,8 @@ interface VisibilityAlertData {
   to: string
   businessName: string
   website: string
-  schemaDisappeared: boolean
-  llmsDisappeared: boolean
+  /** List of AEO checks that were passing before but are now failing */
+  regressedChecks: Array<{ id: string; label: string }>
 }
 
 export async function sendVisibilityAlert(data: VisibilityAlertData) {
@@ -397,11 +397,11 @@ export async function sendVisibilityAlert(data: VisibilityAlertData) {
     return { success: false, error: 'Resend not configured' }
   }
 
-  const missing: string[] = []
-  if (data.schemaDisappeared) missing.push('Schema markup (JSON-LD)')
-  if (data.llmsDisappeared) missing.push('llms.txt')
-  const missingList = missing.map(m => `<li style="margin-bottom: 4px;">${m}</li>`).join('')
   const domain = data.website.replace(/^https?:\/\//, '').split('/')[0]
+  const missingList = data.regressedChecks
+    .map(c => `<li style="margin-bottom: 4px;">${c.label}</li>`)
+    .join('')
+  const count = data.regressedChecks.length
 
   try {
     const result = await resend.emails.send({
@@ -419,9 +419,9 @@ export async function sendVisibilityAlert(data: VisibilityAlertData) {
   </div>
 
   <div style="background: #FFF5F3; border: 1px solid #F5C6BC; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
-    <h2 style="color: #C0392B; margin: 0 0 8px; font-size: 18px;">⚠️ AI visibility signals went missing</h2>
+    <h2 style="color: #C0392B; margin: 0 0 8px; font-size: 18px;">⚠️ ${count} AI visibility signal${count !== 1 ? 's' : ''} went missing</h2>
     <p style="color: #2D3436; font-size: 15px; margin: 0 0 16px;">
-      Our weekly scan detected that <strong>${data.businessName}</strong> (${domain}) is now missing signals that were previously detected:
+      Our monitor detected that <strong>${data.businessName}</strong> (${domain}) is now failing ${count} check${count !== 1 ? 's' : ''} that previously passed:
     </p>
     <ul style="color: #C0392B; font-size: 14px; margin: 0; padding-left: 20px; line-height: 1.8;">
       ${missingList}
@@ -433,20 +433,12 @@ export async function sendVisibilityAlert(data: VisibilityAlertData) {
 
   <div style="background: white; border-radius: 12px; border: 1px solid #DFE6E9; padding: 20px; margin-bottom: 24px;">
     <h3 style="color: #1B2A4A; font-size: 15px; margin: 0 0 12px;">What to do</h3>
-    ${data.schemaDisappeared ? `
-    <div style="margin-bottom: 12px;">
-      <strong style="color: #1B2A4A; font-size: 14px;">Schema markup removed:</strong>
-      <p style="color: #636E72; font-size: 13px; margin: 4px 0 0;">
-        Check if a website update removed your JSON-LD schema block. You can restore it from your LocalBeacon dashboard under Schema Settings.
-      </p>
-    </div>` : ''}
-    ${data.llmsDisappeared ? `
-    <div style="margin-bottom: 12px;">
-      <strong style="color: #1B2A4A; font-size: 14px;">llms.txt removed:</strong>
-      <p style="color: #636E72; font-size: 13px; margin: 4px 0 0;">
-        Your llms.txt file (${data.website}/llms.txt) is no longer accessible. Re-upload it from your LocalBeacon dashboard.
-      </p>
-    </div>` : ''}
+    <p style="color: #636E72; font-size: 13px; margin: 0 0 8px;">
+      Run a full AI Readiness scan from your LocalBeacon dashboard to see details and fix recommendations for each failing check.
+    </p>
+    <p style="color: #636E72; font-size: 13px; margin: 0;">
+      These issues are often caused by recent website updates that accidentally removed optimization signals.
+    </p>
   </div>
 
   <div style="text-align: center; margin-bottom: 24px;">
