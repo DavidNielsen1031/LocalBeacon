@@ -101,6 +101,9 @@ export default function PricingPage() {
                   <p className="text-sm uppercase tracking-wider font-semibold" style={{ color: SLATE }}>
                     {plan.name}
                   </p>
+                  {isDfy && (
+                    <p className="text-xs mt-0.5" style={{ color: SLATE }}>Done-For-You — we handle everything</p>
+                  )}
                   <div className="flex items-baseline gap-1 mt-2 mb-1">
                     <span className="text-5xl font-extrabold" style={{ color: NAVY }}>
                       {plan.price}
