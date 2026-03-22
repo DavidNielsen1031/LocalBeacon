@@ -22,7 +22,7 @@ import type { BlogPostMeta } from "@/lib/blog-shared";
 import { CATEGORY_LABELS } from "@/lib/blog-shared";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteNav } from "@/components/site-nav";
-import { PLANS, PRICING_FAQS } from "@/lib/plans";
+import { PLANS, PRICING_FAQS, MODE_BADGES } from "@/lib/plans";
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -973,15 +973,56 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
                   <span style={{ color: SLATE, fontSize: "0.875rem" }}>{plan.period}</span>
                 </div>
 
-                <p style={{ color: SLATE, fontSize: "0.9375rem", marginBottom: "24px", lineHeight: 1.5 }}>
+                <p style={{ color: SLATE, fontSize: "0.9375rem", marginBottom: "16px", lineHeight: 1.5 }}>
                   {plan.tagline}
                 </p>
 
+                {/* Automation count headline for paid plans */}
+                {(() => {
+                  const autoCount = plan.features.filter(f => f.mode === 'auto').length
+                  const doneCount = plan.features.filter(f => f.mode === 'done').length
+                  const handledCount = autoCount + doneCount
+                  if (handledCount === 0) return null
+                  return (
+                    <div style={{
+                      background: plan.premium ? 'rgba(184,134,11,0.08)' : 'rgba(5,150,105,0.08)',
+                      borderRadius: '8px',
+                      padding: '8px 12px',
+                      marginBottom: '16px',
+                      textAlign: 'center',
+                    }}>
+                      <span style={{
+                        fontSize: '0.875rem',
+                        fontWeight: 700,
+                        color: plan.premium ? '#92400E' : '#059669',
+                      }}>
+                        {handledCount} of {plan.features.length} features handled for you
+                      </span>
+                    </div>
+                  )
+                })()}
+
                 <ul style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "28px", flex: 1 }}>
                   {plan.features.map((f) => (
-                    <li key={f} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+                    <li key={f.label} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
                       <CheckCircle2 size={16} style={{ color: ORANGE, flexShrink: 0, marginTop: "3px" }} />
-                      <span style={{ color: CHARCOAL, fontSize: "0.9375rem" }}>{f}</span>
+                      <span style={{ color: CHARCOAL, fontSize: "0.9375rem" }}>
+                        {f.label}
+                        <span style={{
+                          display: "inline-block",
+                          marginLeft: "6px",
+                          padding: "1px 7px",
+                          borderRadius: "9999px",
+                          fontSize: "0.6875rem",
+                          fontWeight: 600,
+                          backgroundColor: MODE_BADGES[f.mode].bg,
+                          color: MODE_BADGES[f.mode].color,
+                          verticalAlign: "middle",
+                          lineHeight: "1.5",
+                        }}>
+                          {MODE_BADGES[f.mode].label}
+                        </span>
+                      </span>
                     </li>
                   ))}
                 </ul>

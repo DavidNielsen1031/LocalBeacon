@@ -4,12 +4,19 @@
  * If you update plan features, do it HERE — nowhere else.
  */
 
+export type FeatureMode = 'diy' | 'auto' | 'done'
+
+export interface PlanFeature {
+  label: string
+  mode: FeatureMode
+}
+
 export interface PlanDefinition {
   name: string
   price: string
   period: string
   tagline: string
-  features: string[]
+  features: PlanFeature[]
   cta: string
   /** If set, the CTA links here (free plan). If null, triggers checkout. */
   href: string | null
@@ -21,6 +28,13 @@ export interface PlanDefinition {
   stripePlan: 'SOLO' | 'DFY' | null
 }
 
+/** Badge config for each feature mode */
+export const MODE_BADGES: Record<FeatureMode, { label: string; bg: string; color: string }> = {
+  diy:  { label: 'You do this', bg: '#F0F0F0', color: '#636E72' },
+  auto: { label: 'Automated',  bg: '#ECFDF5', color: '#059669' },
+  done: { label: 'Done for you', bg: '#EFF6FF', color: '#2563EB' },
+}
+
 export const PLANS: PlanDefinition[] = [
   {
     name: 'Free',
@@ -28,10 +42,10 @@ export const PLANS: PlanDefinition[] = [
     period: 'forever',
     tagline: 'See how visible your business is online — in 10 seconds.',
     features: [
-      '1 AI Readiness scan per month (all 21 signals)',
-      '5 Google post drafts per month',
-      '3 review response drafts per month',
-      'Schema markup preview (read-only)',
+      { label: '1 AI Readiness scan per month (all 21 signals)', mode: 'diy' },
+      { label: '5 Google post drafts per month', mode: 'diy' },
+      { label: '3 review response drafts per month', mode: 'diy' },
+      { label: 'Schema markup preview (read-only)', mode: 'diy' },
     ],
     cta: 'Check Your Score Free',
     href: '/check',
@@ -42,17 +56,18 @@ export const PLANS: PlanDefinition[] = [
     name: 'Local Autopilot',
     price: '$49',
     period: '/month',
-    tagline: 'Your local marketing, handled for you — done weekly.',
+    tagline: 'Your local marketing, handled — you just approve.',
     features: [
-      'Unlimited AI Readiness scans (21 signals) — track your progress',
-      'Weekly Google posts, written and scheduled for you',
-      'Review responses, drafted automatically',
-      '10 new city/service area pages per month',
-      '4 blog posts per month, locally customized',
-      'Schema & llms.txt — generated, monitored, alerts if missing',
-      '1 competitor comparison',
-      'Monthly progress report emailed to you',
-      'Up to 3 business locations',
+      { label: 'Unlimited AI Readiness scans (21 signals)', mode: 'auto' },
+      { label: 'Weekly Google posts, written and scheduled', mode: 'auto' },
+      { label: 'Review responses, drafted automatically', mode: 'auto' },
+      { label: '10 new city pages per month', mode: 'auto' },
+      { label: '4 blog posts per month, locally customized', mode: 'auto' },
+      { label: 'Schema & llms.txt — generated and monitored', mode: 'auto' },
+      { label: 'AI search changes tracked — your listing stays current', mode: 'auto' },
+      { label: '1 competitor comparison', mode: 'auto' },
+      { label: 'Monthly progress report', mode: 'auto' },
+      { label: 'Up to 3 business locations', mode: 'auto' },
     ],
     cta: 'Start Local Autopilot — $49/mo',
     href: null,
@@ -63,16 +78,15 @@ export const PLANS: PlanDefinition[] = [
     name: 'DFY Setup',
     price: '$499',
     period: 'one-time',
-    tagline: 'We build your local visibility foundation in 5 business days — then Local Autopilot keeps it running.',
+    tagline: 'We build your local visibility foundation — then Autopilot keeps it running.',
     features: [
-      '30-minute live onboarding call — we learn your business',
-      '15-25 custom FAQs written for your services & area',
-      'Schema markup generated + live installation walkthrough',
-      'llms.txt generated + live deployment walkthrough',
-      'Full AEO audit with prioritized fix list',
-      'Platform-specific guides (WordPress, Squarespace, Webflow, Wix)',
-      '1 month of Local Autopilot included',
-      'One-time setup — then maintain it yourself or stay on Autopilot',
+      { label: '30-minute live onboarding call', mode: 'done' },
+      { label: '15-25 custom FAQs written for your business', mode: 'done' },
+      { label: 'Schema markup installed on your site', mode: 'done' },
+      { label: 'llms.txt deployed to your site', mode: 'done' },
+      { label: 'Full AEO audit with prioritized fix list', mode: 'done' },
+      { label: 'Platform-specific install (WordPress, Squarespace, Webflow, Wix)', mode: 'done' },
+      { label: '1 month of Local Autopilot included', mode: 'auto' },
     ],
     cta: 'Get DFY Setup — $499',
     href: null,

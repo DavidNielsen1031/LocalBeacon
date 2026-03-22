@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
-import { PLANS, PRICING_FAQS } from "@/lib/plans";
+import { PLANS, PRICING_FAQS, MODE_BADGES } from "@/lib/plans";
 
 const ORANGE = "#FF6B35";
 const NAVY = "#1B2A4A";
@@ -107,17 +107,47 @@ export default function PricingPage() {
                     </span>
                     <span className="text-sm" style={{ color: SLATE }}>{plan.period}</span>
                   </div>
-                  <p className="text-sm mb-6" style={{ color: SLATE }}>{plan.tagline}</p>
+                  <p className="text-sm mb-4" style={{ color: SLATE }}>{plan.tagline}</p>
+
+                  {/* Automation count headline */}
+                  {(() => {
+                    const autoCount = plan.features.filter(f => f.mode === 'auto').length
+                    const doneCount = plan.features.filter(f => f.mode === 'done').length
+                    const handledCount = autoCount + doneCount
+                    if (handledCount === 0) return null
+                    return (
+                      <div
+                        className="rounded-lg px-3 py-2 mb-4 text-center"
+                        style={{ background: isDfy ? 'rgba(184,134,11,0.08)' : 'rgba(5,150,105,0.08)' }}
+                      >
+                        <span
+                          className="text-sm font-bold"
+                          style={{ color: isDfy ? '#92400E' : '#059669' }}
+                        >
+                          {handledCount} of {plan.features.length} features handled for you
+                        </span>
+                      </div>
+                    )
+                  })()}
+
                   <ul className="space-y-3 mb-8 flex-1">
                     {plan.features.map((o) => (
-                      <li key={o} className="flex items-start gap-2 text-sm" style={{ color: "#2D3436" }}>
+                      <li key={o.label} className="flex items-start gap-2 text-sm" style={{ color: "#2D3436" }}>
                         <span
                           className="mt-0.5 shrink-0 font-bold"
                           style={{ color: isDfy ? "#B8860B" : ORANGE }}
                         >
                           ✓
                         </span>
-                        {o}
+                        <span>
+                          {o.label}
+                          <span
+                            className="inline-block ml-1.5 px-1.5 py-px rounded-full text-[0.6875rem] font-semibold align-middle"
+                            style={{ backgroundColor: MODE_BADGES[o.mode].bg, color: MODE_BADGES[o.mode].color }}
+                          >
+                            {MODE_BADGES[o.mode].label}
+                          </span>
+                        </span>
                       </li>
                     ))}
                   </ul>
