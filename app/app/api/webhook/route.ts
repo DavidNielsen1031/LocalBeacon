@@ -46,17 +46,26 @@ export async function POST(req: NextRequest) {
 
       if (clerkUserId && supabase) {
         if (plan === "dfy") {
-          // DFY: one-time payment — grant Solo access for 30 days + set dfy_purchased flag
+          // DFY: one-time payment — grant Solo access for 30 days
           const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
-          await supabase
-            .from("users")
-            .update({
-              plan: "solo",
-              plan_expires_at: expiresAt,
-              dfy_purchased: true,
-              stripe_customer_id: session.customer as string,
-            })
-            .eq("clerk_id", clerkUserId);
+          const updateData: Record<string, unknown> = {
+            plan: "solo",
+            plan_expires_at: expiresAt,
+            stripe_customer_id: session.customer as string,
+          }
+          // Try adding dfy_purchased flag (column may not exist yet)
+          try {
+            await supabase
+              .from("users")
+              .update({ ...updateData, dfy_purchased: true })
+              .eq("clerk_id", clerkUserId);
+          } catch {
+            // Fallback: update without dfy_purchased if column doesn't exist
+            await supabase
+              .from("users")
+              .update(updateData)
+              .eq("clerk_id", clerkUserId);
+          }
           console.log(`DFY checkout completed: ${session.id} — Local Autopilot access granted until ${expiresAt}, user: ${clerkUserId}`);
         } else {
           // Regular subscription (solo)
