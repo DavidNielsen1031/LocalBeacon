@@ -472,6 +472,113 @@ export async function sendVisibilityAlert(data: VisibilityAlertData) {
   }
 }
 
+interface ScanUpdateEmailData {
+  to: string
+  businessName: string
+  website: string
+  currentScore: number
+  previousScore: number
+  checks: AeoCheckResult[]
+  dashboardUrl: string
+}
+
+export async function sendScanUpdateEmail(data: ScanUpdateEmailData) {
+  if (!resend) {
+    console.log('[email] Resend not configured, skipping scan update email')
+    return { success: false, error: 'Resend not configured' }
+  }
+
+  const { grade, color } = getGradeInfo(data.currentScore)
+  const delta = data.currentScore - data.previousScore
+  const direction = delta > 0 ? 'improved' : 'dropped'
+  const arrow = delta > 0 ? '📈' : '📉'
+  const domain = data.website.replace(/^https?:\/\//, '').split('/')[0]
+  const failing = data.checks.filter(c => !c.passed).sort((a, b) => b.weight - a.weight).slice(0, 5)
+
+  const failingHtml = failing.map(c => `
+    <tr>
+      <td style="padding: 10px 16px; border-bottom: 1px solid #F0F0F0;">
+        <strong style="color: #1B2A4A; font-size: 13px;">${c.label}</strong><br>
+        <span style="color: #636E72; font-size: 12px;">${c.details}</span>
+        ${c.fix ? `<br><span style="color: #FF6B35; font-size: 12px;">Fix: ${c.fix}</span>` : ''}
+      </td>
+    </tr>
+  `).join('')
+
+  try {
+    const result = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: data.to,
+      subject: `${arrow} Your AI Readiness score ${direction} — ${data.businessName} (${data.previousScore} → ${data.currentScore})`,
+      html: `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #2D3436; background: #FAFAF7;">
+  <div style="text-align: center; margin-bottom: 24px;">
+    <h2 style="color: #1B2A4A; margin: 0 0 4px;">🔦 LocalBeacon</h2>
+    <p style="color: #636E72; font-size: 13px; margin: 0;">Weekly AI Readiness Update</p>
+  </div>
+
+  <div style="background: white; border-radius: 12px; border: 1px solid #DFE6E9; padding: 28px; margin-bottom: 20px; text-align: center;">
+    <p style="color: #636E72; font-size: 14px; margin: 0 0 8px;">AI Readiness Score for <strong>${domain}</strong></p>
+    <div style="display: inline-flex; align-items: center; gap: 16px; justify-content: center;">
+      <div style="text-align: center;">
+        <div style="font-size: 14px; color: #636E72; margin-bottom: 2px;">Previous</div>
+        <div style="font-size: 32px; font-weight: 800; color: #636E72;">${data.previousScore}</div>
+      </div>
+      <div style="font-size: 28px;">${arrow}</div>
+      <div style="text-align: center;">
+        <div style="font-size: 14px; color: #636E72; margin-bottom: 2px;">Current</div>
+        <div style="font-size: 40px; font-weight: 800; color: ${color};">${data.currentScore}</div>
+      </div>
+    </div>
+    <div style="margin-top: 12px;">
+      <span style="background: ${color}; color: white; font-weight: 700; padding: 4px 16px; border-radius: 9999px; font-size: 14px;">Grade ${grade}</span>
+    </div>
+    <p style="color: ${delta > 0 ? '#22c55e' : '#ef4444'}; font-weight: 700; font-size: 15px; margin: 12px 0 0;">
+      ${delta > 0 ? '+' : ''}${delta} points — your score ${direction}
+    </p>
+  </div>
+
+  ${failing.length > 0 ? `
+  <div style="background: white; border-radius: 12px; border: 1px solid #DFE6E9; padding: 0; margin-bottom: 20px; overflow: hidden;">
+    <div style="padding: 14px 16px; border-bottom: 1px solid #F0F0F0; background: #FFF8F0;">
+      <h3 style="color: #1B2A4A; margin: 0; font-size: 14px;">🔴 Top issues to fix</h3>
+    </div>
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+      ${failingHtml}
+    </table>
+  </div>
+  ` : `
+  <div style="background: #F0FDF8; border: 1px solid #A7E8D1; border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: center;">
+    <p style="color: #00795C; font-size: 15px; margin: 0;">🎉 All checks passing — your site is AI-ready!</p>
+  </div>
+  `}
+
+  <div style="text-align: center; margin-bottom: 24px;">
+    <a href="${data.dashboardUrl}/ai-readiness"
+       style="display: inline-block; background: #FF6B35; color: white; font-weight: 700; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-size: 15px;">
+      View Full Report →
+    </a>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid #DFE6E9; margin: 24px 0;">
+  <p style="color: #636E72; font-size: 12px; text-align: center; line-height: 1.6;">
+    You're receiving weekly scan updates because you're on a LocalBeacon Solo or Agency plan.<br>
+    <a href="https://localbeacon.ai/dashboard/settings" style="color: #B2BEC3; font-size: 11px;">Manage notification preferences</a>
+  </p>
+</body>
+</html>`,
+    })
+
+    return { success: true, id: result.data?.id }
+  } catch (error) {
+    console.error('[email] Failed to send scan update email:', error)
+    return { success: false, error: String(error) }
+  }
+}
+
 export async function sendMonthlyReportEmail(data: MonthlyEmailData) {
   if (!resend) {
     console.log('[email] Resend not configured, skipping monthly email')
