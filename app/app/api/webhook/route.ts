@@ -40,24 +40,26 @@ export async function POST(req: NextRequest) {
   switch (event.type) {
     case "checkout.session.completed": {
       const session = event.data.object as Stripe.Checkout.Session;
-      const clerkUserId = session.metadata?.clerk_user_id;
+      // Prefer client_reference_id (Clerk userId), fall back to metadata for legacy sessions
+      const clerkUserId = session.client_reference_id || session.metadata?.clerk_user_id;
       const plan = session.metadata?.plan?.toLowerCase() || "solo";
 
       if (clerkUserId && supabase) {
         if (plan === "dfy") {
-          // DFY: one-time purchase — grant Solo access for 30 days
+          // DFY: one-time payment — grant Solo access for 30 days + set dfy_purchased flag
           const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
           await supabase
             .from("users")
             .update({
               plan: "solo",
               plan_expires_at: expiresAt,
+              dfy_purchased: true,
               stripe_customer_id: session.customer as string,
             })
             .eq("clerk_id", clerkUserId);
           console.log(`DFY checkout completed: ${session.id} — Local Autopilot access granted until ${expiresAt}, user: ${clerkUserId}`);
         } else {
-          // Regular subscription (solo/agency)
+          // Regular subscription (solo)
           await supabase
             .from("users")
             .update({
