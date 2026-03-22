@@ -37,19 +37,17 @@ export async function POST(req: NextRequest) {
     if (scannedUrl) meta.scanned_url = scannedUrl
     if (score != null) meta.scan_score = String(score)
 
+    // DFY price is configured as recurring in Stripe, so always use subscription mode
     const sessionParams: Record<string, unknown> = {
-      mode: isDfy ? 'payment' : 'subscription',
+      mode: 'subscription',
       payment_method_types: ['card'],
       line_items: lineItems,
       success_url: successUrl,
       cancel_url: cancelUrl,
       metadata: meta,
+      subscription_data: { metadata: meta },
       // Let Stripe collect email if we don't have it
       ...(email ? { customer_email: email } : {}),
-    }
-
-    if (!isDfy) {
-      sessionParams.subscription_data = { metadata: meta }
     }
 
     const session = await stripe.checkout.sessions.create(

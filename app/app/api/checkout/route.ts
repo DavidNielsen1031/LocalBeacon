@@ -35,37 +35,23 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    // DFY is a one-time payment; Solo and Managed are subscriptions
-    const isDfy = plan === 'DFY'
+    // DFY price is configured as recurring in Stripe, so always use subscription mode
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://localbeacon.ai'
     const successUrl = `${baseUrl}/dashboard?checkout=success`
     const cancelUrl = `${baseUrl}/pricing`
     const lineItems = [{ price: planConfig.priceId, quantity: 1 }]
     const meta = { clerk_user_id: userId, plan }
 
-    let session
-    if (isDfy) {
-      session = await stripe.checkout.sessions.create({
-        mode: 'payment',
-        payment_method_types: ['card'],
-        line_items: lineItems,
-        success_url: successUrl,
-        cancel_url: cancelUrl,
-        client_reference_id: userId,
-        metadata: meta,
-      })
-    } else {
-      session = await stripe.checkout.sessions.create({
-        mode: 'subscription',
-        payment_method_types: ['card'],
-        line_items: lineItems,
-        success_url: successUrl,
-        cancel_url: cancelUrl,
-        client_reference_id: userId,
-        metadata: meta,
-        subscription_data: { metadata: meta },
-      })
-    }
+    const session = await stripe.checkout.sessions.create({
+      mode: 'subscription',
+      payment_method_types: ['card'],
+      line_items: lineItems,
+      success_url: successUrl,
+      cancel_url: cancelUrl,
+      client_reference_id: userId,
+      metadata: meta,
+      subscription_data: { metadata: meta },
+    })
 
     return NextResponse.json({ url: session.url })
   } catch (err) {
