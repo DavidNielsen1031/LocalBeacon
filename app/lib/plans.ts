@@ -28,7 +28,7 @@ export const PLANS: PlanDefinition[] = [
     period: 'forever',
     tagline: 'See how visible your business is online — in 10 seconds.',
     features: [
-      '1 AI Readiness scan per month (21 signals)',
+      '1 AI Readiness scan per month (all 21 signals)',
       '5 Google post drafts per month',
       '3 review response drafts per month',
       'Schema markup preview (read-only)',
