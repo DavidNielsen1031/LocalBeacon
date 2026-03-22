@@ -649,7 +649,7 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
             </button>
           </Link>
           <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "0.8125rem", marginTop: "16px" }}>
-            We scan 19 signals that AI search engines look for
+            We scan 21 signals that AI search engines look for
           </p>
         </div>
       </section>

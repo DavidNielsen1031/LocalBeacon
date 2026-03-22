@@ -57,23 +57,23 @@ function recordScan() {
  * Maps each check ID to what each plan fixes.
  * null = plan doesn't fix it. string = how the plan fixes it.
  */
-const PLAN_FIX_MAP: Record<string, { free: string | null; autopilot: string | null; dfy: string | null }> = {
-  llms_txt:          { free: null, autopilot: 'Generated and monitored weekly', dfy: 'We install it for you' },
-  ai_index_json:     { free: null, autopilot: 'Auto-generated from your business data', dfy: 'We create and deploy it' },
-  schema_markup:     { free: 'Preview only', autopilot: 'Generated with copy-paste install guide', dfy: 'We install it on your site live' },
-  faq_content:       { free: null, autopilot: 'Up to 5 FAQs generated/month', dfy: '15-25 custom FAQs written for you' },
-  service_pages:     { free: null, autopilot: '10 city pages/month', dfy: 'All city pages created in onboarding' },
-  freshness:         { free: '5 posts/month', autopilot: 'Weekly posts, handled for you', dfy: 'Weekly posts included (1 month)' },
-  reviews:           { free: '3 responses/month', autopilot: 'Unlimited review responses drafted', dfy: 'Unlimited (1 month included)' },
-  answer_first:      { free: null, autopilot: 'Content structured for AI citation', dfy: 'We restructure your content' },
-  citability:        { free: null, autopilot: 'Citable paragraphs in every post', dfy: 'Full content audit + rewrite' },
-  eeat:              { free: null, autopilot: 'Author + expertise signals added', dfy: 'Full E-E-A-T audit' },
-  open_graph:        { free: null, autopilot: 'OG tags in generated pages', dfy: 'We add OG tags to your site' },
-  nap:               { free: null, autopilot: 'Consistent NAP across generated content', dfy: 'Full NAP audit + fix' },
-  brand_social_links:{ free: null, autopilot: null, dfy: 'We add social links to your site' },
-  sitemap:           { free: null, autopilot: null, dfy: 'We verify your sitemap setup' },
-  sitemap_in_robots: { free: null, autopilot: null, dfy: 'We fix your robots.txt' },
-  canonical_tags:    { free: null, autopilot: null, dfy: 'We add canonical tags' },
+const PLAN_FIX_MAP: Record<string, { fixLabel?: string; free: string | null; autopilot: string | null; dfy: string | null }> = {
+  llms_txt:          { fixLabel: 'AI discovery file', free: null, autopilot: 'We generate it — you copy-paste to your site', dfy: 'We create and install it on your site' },
+  ai_index_json:     { fixLabel: 'AI index file', free: null, autopilot: 'We generate it from your business info', dfy: 'We create and deploy it for you' },
+  schema_markup:     { fixLabel: 'Schema markup', free: 'Preview only', autopilot: 'We generate it — you add it to your site', dfy: 'We install it on your site live' },
+  faq_content:       { fixLabel: 'FAQ content', free: null, autopilot: 'We write up to 5 FAQs/month for you', dfy: 'We write 15-25 custom FAQs and install them' },
+  service_pages:     { fixLabel: 'City pages for areas you serve', free: null, autopilot: 'We build 10 city pages/month for you', dfy: 'We build all your city pages during setup' },
+  freshness:         { fixLabel: 'Fresh Google posts', free: '5 posts/month', autopilot: 'We write and schedule weekly posts', dfy: 'Weekly posts included (1 month)' },
+  reviews:           { fixLabel: 'Review responses', free: '3 drafts/month', autopilot: 'We draft every review response for you', dfy: 'Unlimited drafts (1 month included)' },
+  answer_first:      { fixLabel: 'Content AI can cite', free: null, autopilot: 'We write content structured for AI answers', dfy: 'We rewrite your existing content for AI' },
+  citability:        { fixLabel: 'Citable paragraphs', free: null, autopilot: 'Every post includes citable paragraphs', dfy: 'We audit and rewrite your content' },
+  eeat:              { fixLabel: 'Trust signals (E-E-A-T)', free: null, autopilot: 'We add author + expertise signals', dfy: 'Full trust audit on your site' },
+  open_graph:        { fixLabel: 'Social preview tags', free: null, autopilot: 'Included in generated pages', dfy: 'We add them to your site' },
+  nap:               { fixLabel: 'Business info consistency', free: null, autopilot: 'Consistent info across all content', dfy: 'Full audit + corrections across the web' },
+  brand_social_links:{ fixLabel: 'Social media links', free: null, autopilot: null, dfy: 'We add social links to your site' },
+  sitemap:           { fixLabel: 'Sitemap', free: null, autopilot: null, dfy: 'We verify and fix your sitemap' },
+  sitemap_in_robots: { fixLabel: 'Robots.txt sitemap reference', free: null, autopilot: null, dfy: 'We fix your robots.txt' },
+  canonical_tags:    { fixLabel: 'Canonical URL tags', free: null, autopilot: null, dfy: 'We add canonical tags' },
   // These are usually already passing or not fixable by LocalBeacon
   robots_txt:        { free: null, autopilot: null, dfy: null },
   ai_crawler_access: { free: null, autopilot: null, dfy: null },
@@ -345,13 +345,13 @@ export function CheckerForm() {
               <li>✓ Step-by-step fix instructions for every failing check</li>
               <li>✓ Priority ranking — which fixes move the needle most</li>
             </ul>
-            <form onSubmit={handleEmailSubmit} className="flex gap-2">
+            <form onSubmit={handleEmailSubmit} className="flex flex-col sm:flex-row gap-2">
               <input
                 type="email"
                 aria-label="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Where should we send your full report?"
+                placeholder="Your email address"
                 required
                 className="flex-1 px-4 py-3 rounded-lg border border-black/10 bg-white text-[#1B2A4A] placeholder:text-[#1B2A4A]/30 focus:outline-none focus:ring-2 focus:ring-[#FF6B35]/30"
               />
@@ -538,7 +538,7 @@ export function CheckerForm() {
                 .sort((a, b) => b.weight - a.weight)
                 .slice(0, limit)
                 .map(c => ({
-                  label: c.label,
+                  label: PLAN_FIX_MAP[c.id]?.fixLabel || c.label,
                   how: PLAN_FIX_MAP[c.id]![planKey]!,
                 }))
 

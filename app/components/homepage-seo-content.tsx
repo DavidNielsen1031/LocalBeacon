@@ -69,7 +69,7 @@ export function HomepageSeoContent() {
       <p>An SEO agency charges $800 to $1,500 per month and you wait weeks to see results. LocalBeacon generates your first content within minutes of signing up for just $49 per month. You get weekly Google posts, local city pages, and review reply drafts — no contracts, cancel anytime.</p>
 
       <h3>What does the Free plan include?</h3>
-      <p>The free plan includes one AI Readiness scan per month analyzing 19 signals, five Google post drafts per month, three review response drafts per month, and a read-only schema markup preview. No credit card required to start.</p>
+      <p>The free plan includes one AI Readiness scan per month analyzing 21 signals, five Google post drafts per month, three review response drafts per month, and a read-only schema markup preview. No credit card required to start.</p>
 
       <h2>Why Local Businesses Need AI Search Optimization</h2>
       <p>
