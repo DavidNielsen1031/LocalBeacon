@@ -7,6 +7,10 @@
     {
       "path": "/api/cron/monitor-visibility",
       "schedule": "0 15 * * 1"
+    },
+    {
+      "path": "/api/cron/weekly-posts",
+      "schedule": "0 13 * * 1"
     }
   ]
 }
