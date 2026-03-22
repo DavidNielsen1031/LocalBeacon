@@ -4,7 +4,7 @@
  * If you update plan features, do it HERE — nowhere else.
  */
 
-export type FeatureMode = 'diy' | 'auto' | 'done'
+export type FeatureMode = 'diy' | 'self-setup' | 'auto' | 'done'
 
 export interface PlanFeature {
   label: string
@@ -30,9 +30,10 @@ export interface PlanDefinition {
 
 /** Badge config for each feature mode */
 export const MODE_BADGES: Record<FeatureMode, { label: string; bg: string; color: string }> = {
-  diy:  { label: 'Self-Service', bg: '#F0F0F0', color: '#636E72' },
-  auto: { label: 'Automated',  bg: '#ECFDF5', color: '#059669' },
-  done: { label: 'Done for you', bg: '#EFF6FF', color: '#2563EB' },
+  diy:         { label: 'Self-Service', bg: '#F0F0F0', color: '#636E72' },
+  'self-setup': { label: 'Self-Setup',  bg: '#FFF8E1', color: '#B8860B' },
+  auto:        { label: 'Automated',   bg: '#ECFDF5', color: '#059669' },
+  done:        { label: 'Done for you', bg: '#EFF6FF', color: '#2563EB' },
 }
 
 export const PLANS: PlanDefinition[] = [
@@ -60,14 +61,14 @@ export const PLANS: PlanDefinition[] = [
     features: [
       { label: 'Unlimited AI Readiness scans (21 signals)', mode: 'auto' },
       { label: 'Weekly Google posts, written and scheduled', mode: 'auto' },
-      { label: 'Review responses, drafted automatically', mode: 'auto' },
+      { label: 'Review responses, drafted automatically', mode: 'self-setup' },
       { label: '10 new city pages per month', mode: 'auto' },
       { label: '4 blog posts per month, locally customized', mode: 'auto' },
-      { label: 'Schema & llms.txt — generated and monitored', mode: 'auto' },
+      { label: 'Schema & llms.txt — generated and monitored', mode: 'self-setup' },
       { label: 'AI search changes tracked — your listing stays current', mode: 'auto' },
-      { label: '1 competitor comparison', mode: 'auto' },
+      { label: '1 competitor comparison', mode: 'self-setup' },
       { label: 'Monthly progress report', mode: 'auto' },
-      { label: 'Up to 3 business locations', mode: 'auto' },
+      { label: 'Up to 3 business locations', mode: 'self-setup' },
     ],
     cta: 'Start Local Autopilot — $49/mo',
     href: null,

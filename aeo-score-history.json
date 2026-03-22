@@ -19,5 +19,12 @@
     "passed": 19,
     "failed": 0,
     "failing": ""
+  },
+  {
+    "date": "2026-03-22T12:01:20Z",
+    "score": 95,
+    "passed": 20,
+    "failed": 1,
+    "failing": "Contact info is clear and consistent"
   }
 ]
