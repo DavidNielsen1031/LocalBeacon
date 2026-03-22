@@ -34,7 +34,7 @@ export const PLANS: PlanDefinition[] = [
       'Schema markup preview (read-only)',
     ],
     cta: 'Check Your Score Free',
-    href: '/sign-up',
+    href: '/check',
     highlight: false,
     stripePlan: null,
   },
