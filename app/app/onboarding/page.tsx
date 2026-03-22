@@ -350,7 +350,7 @@ function OnboardingContent() {
         {/* Step 1: Business Basics */}
         {step === 1 && (
           <div>
-            <h1 className="text-2xl font-bold text-[#1B2A4A] mb-2">2 minutes to your first AI-optimized Google post</h1>
+            <h1 className="text-2xl font-bold text-[#1B2A4A] mb-2">2 minutes to your first Google post</h1>
             <div className="flex items-center gap-3 mb-8">
               <p className="text-[#636E72]">Tell us about your business and we&apos;ll generate your first post.</p>
               {prefillScore !== null && (

@@ -104,10 +104,10 @@ export default function CheckPage() {
           LocalBeacon handles your local marketing — weekly Google posts, city pages, review replies, and more. All on autopilot.
         </p>
         <a
-          href="/sign-up"
+          href="/check"
           className="inline-block px-8 py-3 bg-[#FF6B35] text-white font-semibold rounded-lg hover:bg-[#FF6B35]/90 transition-colors"
         >
-          Start Free →
+          Check Another Website →
         </a>
       </section>
 
