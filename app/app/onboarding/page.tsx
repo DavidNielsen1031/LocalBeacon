@@ -41,6 +41,10 @@ interface GeneratedPost {
 function OnboardingContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
+
+  // Resolve plan param early — used by effects below
+  const planParam = searchParams.get('plan')
+
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [areaInput, setAreaInput] = useState('')
@@ -49,14 +53,45 @@ function OnboardingContent() {
   const [prefillScore, setPrefillScore] = useState<number | null>(null)
   const [showDfyDialog, setShowDfyDialog] = useState(false)
   const [pendingPlanFallback, setPendingPlanFallback] = useState<string | null>(null)
+  const [checkoutRedirecting, setCheckoutRedirecting] = useState(
+    planParam === 'solo' || planParam === 'dfy'
+  )
 
   const [data, setData] = useState<BusinessData>({
     name: '', category: '', primary_city: '', primary_state: '',
     phone: '', website: '', service_areas: [],
   })
 
-  // Resume checkout if user came from pricing page (paid plan intent)
+  // URL-param-first checkout: fires immediately when plan is in URL (mobile-safe)
   useEffect(() => {
+    if (planParam !== 'solo' && planParam !== 'dfy') return
+    const planKey = planParam === 'dfy' ? 'DFY' : 'SOLO'
+    setCheckoutRedirecting(true)
+    const attemptCheckout = async () => {
+      try {
+        for (let attempt = 0; attempt < 4; attempt++) {
+          if (attempt > 0) await new Promise(r => setTimeout(r, 1500))
+          const res = await fetch('/api/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ plan: planKey }),
+          })
+          const d = await res.json()
+          if (d.url) { window.location.href = d.url; return }
+          if (d.error !== 'Unauthorized') break
+        }
+      } catch {}
+      // All attempts failed — fall back to form with manual button
+      setCheckoutRedirecting(false)
+      setPendingPlanFallback(planKey)
+    }
+    attemptCheckout()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [planParam])
+
+  // localStorage fallback: only runs when no URL plan param (covers non-mobile / non-OAuth flows)
+  useEffect(() => {
+    if (planParam === 'solo' || planParam === 'dfy') return // URL param handles it
     const resumeCheckout = async () => {
       try {
         const pending = localStorage.getItem('lb_pending_plan')
@@ -83,17 +118,17 @@ function OnboardingContent() {
             return
           }
           if (data.error === 'Unauthorized') {
-            // Auth not ready yet, wait and retry
             await new Promise(r => setTimeout(r, 2000))
             continue
           }
-          break // Other error, don't retry
+          break
         }
         // If all attempts fail, show manual checkout button
         setPendingPlanFallback(plan)
       } catch {}
     }
     resumeCheckout()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Pre-fill from /check query params + localStorage scan data
@@ -273,7 +308,6 @@ function OnboardingContent() {
 
   // UX-only: controls which onboarding steps are shown (skip First Post for paid intent)
   // Does NOT control feature access — that's enforced server-side in plan-limits.ts
-  const planParam = searchParams.get('plan')
   const isSkipPostFlow = planParam === 'solo' || planParam === 'dfy' || !!pendingPlanFallback
 
   // Skip-post flow: Business Info → Service Areas → Dashboard
@@ -281,6 +315,26 @@ function OnboardingContent() {
   const steps = isSkipPostFlow
     ? ['Business Info', 'Service Areas']
     : ['Business Info', 'Service Areas', 'Your First Post']
+
+  // Immediate checkout redirect — show spinner, no form
+  if (checkoutRedirecting) {
+    return (
+      <div className="min-h-screen bg-[#FAFAF7] flex flex-col items-center justify-center px-4">
+        <a href="/" className="flex items-center gap-2 mb-12 no-underline hover:opacity-80 transition-opacity">
+          <img src="/logo-192.png" alt="LocalBeacon" style={{ height: '36px', width: '36px' }} />
+          <span className="text-[#1B2A4A] font-bold text-xl">LocalBeacon.ai</span>
+        </a>
+        <div className="flex flex-col items-center gap-4">
+          <svg className="animate-spin h-8 w-8 text-[#FF6B35]" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+          </svg>
+          <p className="text-[#1B2A4A] font-semibold">Redirecting to checkout...</p>
+          <p className="text-[#636E72] text-sm">You&apos;ll be taken to Stripe to complete your purchase.</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-[#FAFAF7] flex flex-col items-center px-4 py-12">

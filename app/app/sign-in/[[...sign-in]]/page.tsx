@@ -1,6 +1,47 @@
+'use client'
 import { SignIn } from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+
+const appearance = {
+  elements: {
+    rootBox: "w-full max-w-md",
+    card: "bg-white border border-gray-200 shadow-xl",
+    headerTitle: "text-[#1B2A4A]",
+    headerSubtitle: "text-[#1B2A4A]/60",
+    formFieldLabel: "text-[#1B2A4A]/70",
+    formFieldInput:
+      "bg-gray-50 border-gray-200 text-[#1B2A4A] placeholder:text-gray-400 focus:border-[#FF6B35]/50",
+    formButtonPrimary:
+      "bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold",
+    footerActionLink: "text-[#FF6B35] hover:text-[#FF6B35]/80",
+    identityPreviewText: "text-[#1B2A4A]",
+    identityPreviewEditButton: "text-[#FF6B35]",
+    dividerLine: "bg-gray-200",
+    dividerText: "text-gray-400",
+    socialButtonsBlockButton:
+      "bg-gray-50 border-gray-200 text-[#1B2A4A] hover:bg-gray-100",
+    socialButtonsBlockButtonText: "text-[#1B2A4A]",
+  },
+}
+
+function SignInContent() {
+  const searchParams = useSearchParams()
+  const plan = searchParams.get('plan')
+  const redirectUrl =
+    plan === 'solo' || plan === 'dfy'
+      ? `/onboarding?plan=${plan}`
+      : undefined
+
+  return (
+    <SignIn
+      {...(redirectUrl ? { forceRedirectUrl: redirectUrl } : {})}
+      appearance={appearance}
+    />
+  )
+}
 
 export default function SignInPage() {
   return (
@@ -21,29 +62,13 @@ export default function SignInPage() {
           Your local business, always visible.
         </p>
       </div>
-      <SignIn
-        appearance={{
-          elements: {
-            rootBox: "w-full max-w-md",
-            card: "bg-white border border-gray-200 shadow-xl",
-            headerTitle: "text-[#1B2A4A]",
-            headerSubtitle: "text-[#1B2A4A]/60",
-            formFieldLabel: "text-[#1B2A4A]/70",
-            formFieldInput:
-              "bg-gray-50 border-gray-200 text-[#1B2A4A] placeholder:text-gray-400 focus:border-[#FF6B35]/50",
-            formButtonPrimary:
-              "bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold",
-            footerActionLink: "text-[#FF6B35] hover:text-[#FF6B35]/80",
-            identityPreviewText: "text-[#1B2A4A]",
-            identityPreviewEditButton: "text-[#FF6B35]",
-            dividerLine: "bg-gray-200",
-            dividerText: "text-gray-400",
-            socialButtonsBlockButton:
-              "bg-gray-50 border-gray-200 text-[#1B2A4A] hover:bg-gray-100",
-            socialButtonsBlockButtonText: "text-[#1B2A4A]",
-          },
-        }}
-      />
+      <Suspense
+        fallback={
+          <div className="w-full max-w-md h-96 bg-white border border-gray-200 shadow-xl rounded-lg" />
+        }
+      >
+        <SignInContent />
+      </Suspense>
     </div>
   );
 }

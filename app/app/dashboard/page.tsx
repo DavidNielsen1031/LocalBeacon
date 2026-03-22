@@ -128,6 +128,21 @@ export default function DashboardPage() {
       ];
 
   const [upgradeBannerDismissed, setUpgradeBannerDismissed] = useState(false)
+  const [upgradeLoading, setUpgradeLoading] = useState(false)
+
+  const handleUpgradeClick = async () => {
+    setUpgradeLoading(true)
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: 'SOLO' }),
+      })
+      const d = await res.json()
+      if (d.url) { window.location.href = d.url; return }
+    } catch {}
+    setUpgradeLoading(false)
+  }
 
   return (
     <div className="flex-1 px-6 py-8 max-w-6xl">
@@ -188,9 +203,14 @@ export default function DashboardPage() {
         >
           <p className="text-sm" style={{ color: '#2D3436' }}>
             You&apos;re on the <strong>Free plan</strong>. Upgrade to Local Autopilot for unlimited access —{' '}
-            <a href="/pricing" className="font-bold underline" style={{ color: '#FF6B35' }}>
-              $49/mo →
-            </a>
+            <button
+              onClick={handleUpgradeClick}
+              disabled={upgradeLoading}
+              className="font-bold underline disabled:opacity-50 cursor-pointer"
+              style={{ color: '#FF6B35' }}
+            >
+              {upgradeLoading ? 'Loading...' : '$49/mo →'}
+            </button>
           </p>
           <button
             onClick={() => setUpgradeBannerDismissed(true)}
