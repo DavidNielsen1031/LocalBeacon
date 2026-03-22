@@ -616,18 +616,27 @@ export function CheckerForm() {
                   {plans.map(plan => (
                     <div
                       key={plan.name}
-                      className="rounded-xl p-5 flex flex-col"
+                      className="rounded-xl flex flex-col relative"
                       style={{
                         border: plan.highlight ? `2px solid ${plan.border}` : `1px solid ${plan.border}`,
                         background: plan.highlight ? 'rgba(255,107,53,0.03)' : 'white',
+                        marginTop: plan.highlight ? '0' : '24px',
                       }}
                     >
                       {plan.highlight && (
-                        <span className="inline-block text-xs font-bold text-white px-2 py-0.5 rounded-full mb-2 self-start" style={{ background: '#FF6B35' }}>
-                          Most Popular
-                        </span>
+                        <div className="text-center -mt-3">
+                          <span className="inline-block text-xs font-bold text-white px-3 py-1 rounded-full" style={{ background: '#FF6B35' }}>
+                            Most Popular
+                          </span>
+                        </div>
                       )}
-                      <h4 className="font-bold text-[#1B2A4A] text-lg">{plan.name}</h4>
+                      <div className="p-5 flex flex-col flex-1">
+                      <h4 className="font-bold text-[#1B2A4A] text-lg">
+                        {plan.name}
+                        {plan.name === 'DFY Setup' && (
+                          <span className="block text-xs font-normal text-[#636E72] mt-0.5">Done-For-You — we handle everything</span>
+                        )}
+                      </h4>
                       <div className="flex items-baseline gap-1 mt-1 mb-3">
                         <span className="text-2xl font-bold text-[#1B2A4A]">{plan.price}</span>
                         <span className="text-sm text-[#636E72]">{plan.period}</span>
@@ -642,14 +651,31 @@ export function CheckerForm() {
                       )}
 
                       <ul className="space-y-2 flex-1 mb-4">
-                        {plan.topFixes.map((fix, i) => (
+                        {plan.topFixes.map((fix, i) => {
+                          // Determine mode badge based on plan
+                          const planKey = plan.name === 'Free' ? 'free' : plan.name.includes('DFY') ? 'dfy' : 'autopilot'
+                          const modeBadge = planKey === 'dfy'
+                            ? { label: 'Done for you', bg: '#EFF6FF', color: '#2563EB' }
+                            : planKey === 'autopilot'
+                            ? { label: 'Automated', bg: '#ECFDF5', color: '#059669' }
+                            : { label: 'You do this', bg: '#F3F4F6', color: '#6B7280' }
+                          return (
                           <li key={i} className="text-sm text-[#1B2A4A]/70">
-                            <span className="text-green-500 mr-1.5">✓</span>
-                            <strong className="text-[#1B2A4A]">{fix.label}</strong>
-                            <br />
-                            <span className="ml-5 text-xs text-[#636E72]">{fix.how}</span>
+                            <div className="flex items-start gap-1.5">
+                              <span className="text-green-500 mt-0.5 shrink-0">✓</span>
+                              <div className="min-w-0">
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  <strong className="text-[#1B2A4A]">{fix.label}</strong>
+                                  <span className="text-[0.6rem] font-semibold px-1.5 py-0.5 rounded-full whitespace-nowrap" style={{ background: modeBadge.bg, color: modeBadge.color }}>
+                                    {modeBadge.label}
+                                  </span>
+                                </div>
+                                <span className="text-xs text-[#636E72]">{fix.how}</span>
+                              </div>
+                            </div>
                           </li>
-                        ))}
+                          )
+                        })}
                         {plan.fixes > plan.topFixes.length && (
                           <li className="text-xs text-[#636E72] ml-5">
                             + {plan.fixes - plan.topFixes.length} more fixes included
@@ -687,6 +713,7 @@ export function CheckerForm() {
                       >
                         {plan.cta}
                       </a>
+                      </div>
                     </div>
                   ))}
                 </div>
