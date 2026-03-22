@@ -7,14 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from '@/components/ui/dialog'
+
 
 const BUSINESS_CATEGORIES = [
   'Plumber', 'HVAC Technician', 'Dentist', 'Roofer', 'Lawyer',
@@ -42,93 +35,27 @@ function OnboardingContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  // Resolve plan param early — used by effects below
-  const planParam = searchParams.get('plan')
-
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [areaInput, setAreaInput] = useState('')
   const [generatedPost, setGeneratedPost] = useState<GeneratedPost | null>(null)
   const [copied, setCopied] = useState(false)
   const [prefillScore, setPrefillScore] = useState<number | null>(null)
-  const [showDfyDialog, setShowDfyDialog] = useState(false)
-  const [pendingPlanFallback, setPendingPlanFallback] = useState<string | null>(null)
-  const [checkoutRedirecting, setCheckoutRedirecting] = useState(
-    planParam === 'solo' || planParam === 'dfy'
-  )
+
 
   const [data, setData] = useState<BusinessData>({
     name: '', category: '', primary_city: '', primary_state: '',
     phone: '', website: '', service_areas: [],
   })
 
-  // URL-param-first checkout: fires immediately when plan is in URL (mobile-safe)
+  // Claim any pre-auth Stripe checkout (matches by email)
   useEffect(() => {
-    if (planParam !== 'solo' && planParam !== 'dfy') return
-    const planKey = planParam === 'dfy' ? 'DFY' : 'SOLO'
-    setCheckoutRedirecting(true)
-    const attemptCheckout = async () => {
+    const claimCheckout = async () => {
       try {
-        for (let attempt = 0; attempt < 4; attempt++) {
-          if (attempt > 0) await new Promise(r => setTimeout(r, 1500))
-          const res = await fetch('/api/checkout', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ plan: planKey }),
-          })
-          const d = await res.json()
-          if (d.url) { window.location.href = d.url; return }
-          if (d.error !== 'Unauthorized') break
-        }
-      } catch {}
-      // All attempts failed — fall back to form with manual button
-      setCheckoutRedirecting(false)
-      setPendingPlanFallback(planKey)
-    }
-    attemptCheckout()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [planParam])
-
-  // localStorage fallback: only runs when no URL plan param (covers non-mobile / non-OAuth flows)
-  useEffect(() => {
-    if (planParam === 'solo' || planParam === 'dfy') return // URL param handles it
-    const resumeCheckout = async () => {
-      try {
-        const pending = localStorage.getItem('lb_pending_plan')
-        if (!pending) return
-        const { plan, timestamp } = JSON.parse(pending)
-        // Only honor if less than 1 hour old
-        if (!timestamp || Date.now() - timestamp > 3600000 || (plan !== 'SOLO' && plan !== 'DFY')) {
-          localStorage.removeItem('lb_pending_plan')
-          return
-        }
-        localStorage.removeItem('lb_pending_plan')
-        // Wait for Clerk auth session to be ready (cookie propagation)
-        await new Promise(r => setTimeout(r, 1500))
-        // Try checkout with retry
-        for (let attempt = 0; attempt < 3; attempt++) {
-          const res = await fetch('/api/checkout', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ plan }),
-          })
-          const data = await res.json()
-          if (data.url) {
-            window.location.href = data.url
-            return
-          }
-          if (data.error === 'Unauthorized') {
-            await new Promise(r => setTimeout(r, 2000))
-            continue
-          }
-          break
-        }
-        // If all attempts fail, show manual checkout button
-        setPendingPlanFallback(plan)
+        await fetch('/api/claim-checkout', { method: 'POST' })
       } catch {}
     }
-    resumeCheckout()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    claimCheckout()
   }, [])
 
   // Pre-fill from /check query params + localStorage scan data
@@ -246,58 +173,6 @@ function OnboardingContent() {
     goToStep(3)
   }
 
-  // Keep for DFY dialog and pricing page checkout flows
-  const handleStep3Continue = async (plan: string) => {
-    if (plan === 'dfy') {
-      setShowDfyDialog(true)
-      return
-    }
-    setLoading(true)
-    const businessId = await saveBusiness()
-    if (plan !== 'free') {
-      try {
-        const planKey = plan === 'solo' ? 'SOLO' : 'DFY'
-        const res = await fetch('/api/checkout', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ plan: planKey }),
-        })
-        const json = await res.json()
-        if (json.url) {
-          window.location.href = json.url
-          return
-        }
-      } catch {
-        // Fall through to free flow if checkout fails
-      }
-    }
-    const post = await generateFirstPost(businessId)
-    setGeneratedPost(post)
-    setLoading(false)
-    goToStep(3)
-  }
-
-  const handleDfyConfirm = async () => {
-    setShowDfyDialog(false)
-    setLoading(true)
-    await saveBusiness()
-    try {
-      const res = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: 'DFY' }),
-      })
-      const json = await res.json()
-      if (json.url) {
-        window.location.href = json.url
-        return
-      }
-    } catch {
-      // Fall through
-    }
-    setLoading(false)
-  }
-
   const copyPost = () => {
     if (generatedPost) {
       navigator.clipboard.writeText(`${generatedPost.title}\n\n${generatedPost.body}`)
@@ -306,36 +181,7 @@ function OnboardingContent() {
     }
   }
 
-  // UX-only: controls which onboarding steps are shown (skip First Post for paid intent)
-  // Does NOT control feature access — that's enforced server-side in plan-limits.ts
-  const isSkipPostFlow = planParam === 'solo' || planParam === 'dfy' || !!pendingPlanFallback
-
-  // Skip-post flow: Business Info → Service Areas → Dashboard
-  // Standard flow: Business Info → Service Areas → First Post → Dashboard
-  const steps = isSkipPostFlow
-    ? ['Business Info', 'Service Areas']
-    : ['Business Info', 'Service Areas', 'Your First Post']
-
-  // Immediate checkout redirect — show spinner, no form
-  if (checkoutRedirecting) {
-    return (
-      <div className="min-h-screen bg-[#FAFAF7] flex flex-col items-center justify-center px-4">
-        <a href="/" className="flex items-center gap-2 mb-12 no-underline hover:opacity-80 transition-opacity">
-          <img src="/logo-192.png" alt="LocalBeacon" style={{ height: '36px', width: '36px' }} />
-          <span className="text-[#1B2A4A] font-bold text-xl">LocalBeacon.ai</span>
-        </a>
-        <div className="flex flex-col items-center gap-4">
-          <svg className="animate-spin h-8 w-8 text-[#FF6B35]" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-          </svg>
-          <p className="text-[#1B2A4A] font-semibold">Redirecting to checkout...</p>
-          <p className="text-[#636E72] text-sm">You&apos;ll be taken to Stripe to complete your purchase.</p>
-        </div>
-      </div>
-    )
-  }
-
+  const steps = ['Business Info', 'Service Areas', 'Your First Post']
   return (
     <div className="min-h-screen bg-[#FAFAF7] flex flex-col items-center px-4 py-12">
       {/* Logo — links home as escape hatch */}
@@ -362,45 +208,6 @@ function OnboardingContent() {
       </div>
 
       <div className="w-full max-w-lg">
-        {/* Plan checkout fallback banner */}
-        {pendingPlanFallback && (
-          <div className="mb-6 rounded-xl border px-5 py-4" style={{ backgroundColor: 'rgba(255,107,53,0.06)', borderColor: 'rgba(255,107,53,0.25)' }}>
-            <p className="text-sm font-semibold mb-2" style={{ color: '#1B2A4A' }}>
-              You selected the {pendingPlanFallback === 'DFY' ? 'DFY Setup ($499)' : 'Solo ($49/mo)'} plan
-            </p>
-            <p className="text-sm mb-3" style={{ color: '#636E72' }}>
-              Complete your purchase to unlock all features, or continue setting up your free account first.
-            </p>
-            <div className="flex gap-3">
-              <Button
-                onClick={async () => {
-                  const plan = pendingPlanFallback
-                  setPendingPlanFallback(null)
-                  const res = await fetch('/api/checkout', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ plan }),
-                  })
-                  const d = await res.json()
-                  if (d.url) window.location.href = d.url
-                }}
-                className="font-semibold text-white text-sm"
-                style={{ background: '#C94A14' }}
-              >
-                Complete Purchase →
-              </Button>
-              <Button
-                variant="ghost"
-                onClick={() => setPendingPlanFallback(null)}
-                className="text-sm border border-[#636E72]/30 hover:border-[#636E72]/60"
-                style={{ color: '#636E72' }}
-              >
-                Continue with Free
-              </Button>
-            </div>
-          </div>
-        )}
-
         {/* Step 1: Business Basics */}
         {step === 1 && (
           <div>
@@ -523,24 +330,9 @@ function OnboardingContent() {
                 <Button onClick={() => goToStep(1)} variant="outline" className="border-[#DFE6E9] text-[#636E72] hover:bg-[#DFE6E9]/50 flex-1">
                   ← Back
                 </Button>
-                {isSkipPostFlow ? (
-                  <Button
-                    onClick={async () => {
-                      setLoading(true)
-                      await saveBusiness()
-                      try { localStorage.removeItem('lb_scan_data') } catch {}
-                      router.push('/dashboard')
-                    }}
-                    disabled={loading}
-                    className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold flex-1"
-                  >
-                    {loading ? 'Setting up...' : 'Go to Dashboard →'}
-                  </Button>
-                ) : (
-                  <Button onClick={handleGeneratePost} disabled={loading} className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold flex-1">
-                    {loading ? 'Generating your first post...' : 'Generate First Post →'}
-                  </Button>
-                )}
+                <Button onClick={handleGeneratePost} disabled={loading} className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold flex-1">
+                  {loading ? 'Generating your first post...' : 'Generate First Post →'}
+                </Button>
               </div>
             </div>
           </div>
@@ -595,32 +387,7 @@ function OnboardingContent() {
         {/* Step 4 (What's Next) removed in S26-06 — users go directly to dashboard */}
       </div>
 
-      {/* DFY Confirmation Dialog */}
-      <Dialog open={showDfyDialog} onOpenChange={setShowDfyDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Confirm DFY Setup — $499</DialogTitle>
-            <DialogDescription>
-              You&apos;re about to start a $499 one-time DFY Setup. This includes schema markup, llms.txt, FAQs, and a full AEO audit — all implemented for you. Continue to checkout?
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="flex gap-3">
-            <Button
-              variant="outline"
-              onClick={() => setShowDfyDialog(false)}
-              className="flex-1"
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleDfyConfirm}
-              className="flex-1 bg-gradient-to-r from-[#B8860B] to-[#DAA520] text-white hover:from-[#DAA520] hover:to-[#FFD700] font-semibold"
-            >
-              Continue to Checkout →
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+
     </div>
   )
 }

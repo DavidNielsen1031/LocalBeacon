@@ -109,6 +109,7 @@ export function CheckerForm() {
   const [emailSaved, setEmailSaved] = useState(false)
   const [emailError, setEmailError] = useState(false)
   const [error, setError] = useState('')
+  const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null)
 
   const runScan = useCallback(async () => {
     if (!url.trim()) return
@@ -570,6 +571,32 @@ export function CheckerForm() {
               } catch {}
             }
 
+            const handlePaidCheckout = async (planKey: 'SOLO' | 'DFY') => {
+              setCheckoutLoading(planKey)
+              saveScanData()
+              try {
+                const res = await fetch('/api/checkout-public', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    plan: planKey,
+                    email: email || undefined,
+                    url: result.url,
+                    score: result.score,
+                  }),
+                })
+                const data = await res.json()
+                if (data.url) {
+                  window.location.href = data.url
+                  return
+                }
+                console.error('Checkout failed:', data.error)
+              } catch (err) {
+                console.error('Checkout error:', err)
+              }
+              setCheckoutLoading(null)
+            }
+
             const plans = [
               {
                 name: 'Free',
@@ -578,6 +605,7 @@ export function CheckerForm() {
                 fixes: freeFixes,
                 topFixes: getTopFixes('free'),
                 cta: 'Start Free',
+                planKey: null as 'SOLO' | 'DFY' | null,
                 href: `/sign-up?url=${encodeURIComponent(result.url)}&score=${result.score}${email ? `&email=${encodeURIComponent(email)}` : ''}`,
                 bg: 'transparent',
                 border: '#DFE6E9',
@@ -591,7 +619,8 @@ export function CheckerForm() {
                 fixes: autopilotFixes,
                 topFixes: getTopFixes('autopilot'),
                 cta: 'Start Local Autopilot',
-                href: `/sign-up?url=${encodeURIComponent(result.url)}&score=${result.score}&plan=solo${email ? `&email=${encodeURIComponent(email)}` : ''}`,
+                planKey: 'SOLO' as 'SOLO' | 'DFY' | null,
+                href: '#',
                 bg: '#FF6B35',
                 border: '#FF6B35',
                 textColor: '#fff',
@@ -604,7 +633,8 @@ export function CheckerForm() {
                 fixes: dfyFixes,
                 topFixes: getTopFixes('dfy'),
                 cta: 'Get DFY Setup',
-                href: `/sign-up?url=${encodeURIComponent(result.url)}&score=${result.score}&plan=dfy${email ? `&email=${encodeURIComponent(email)}` : ''}`,
+                planKey: 'DFY' as 'SOLO' | 'DFY' | null,
+                href: '#',
                 bg: 'linear-gradient(90deg, #B8860B, #DAA520)',
                 border: '#B8860B',
                 textColor: '#fff',
@@ -701,31 +731,34 @@ export function CheckerForm() {
                         )}
                       </ul>
 
-                      <a
-                        href={plan.href}
-                        onClick={() => {
-                          saveScanData()
-                          // Set pending plan for checkout resume after sign-up
-                          if (plan.name !== 'Free') {
-                            try {
-                              const planKey = plan.name.includes('DFY') ? 'DFY' : 'SOLO'
-                              localStorage.setItem('lb_pending_plan', JSON.stringify({
-                                plan: planKey,
-                                timestamp: Date.now(),
-                              }))
-                            } catch {}
-                          }
-                        }}
-                        className="block w-full text-center py-3 rounded-lg font-semibold text-sm transition-opacity hover:opacity-90"
-                        style={{
-                          background: typeof plan.bg === 'string' && plan.bg.startsWith('linear') ? plan.bg : plan.bg,
-                          color: plan.textColor,
-                          border: plan.highlight ? 'none' : `1px solid ${plan.border}`,
-                          boxShadow: plan.highlight ? '0 4px 14px rgba(255,107,53,0.3)' : 'none',
-                        }}
-                      >
-                        {plan.cta}
-                      </a>
+                      {plan.planKey ? (
+                        <button
+                          onClick={() => handlePaidCheckout(plan.planKey!)}
+                          disabled={checkoutLoading !== null}
+                          className="block w-full text-center py-3 rounded-lg font-semibold text-sm transition-opacity hover:opacity-90 disabled:opacity-60"
+                          style={{
+                            background: typeof plan.bg === 'string' && plan.bg.startsWith('linear') ? plan.bg : plan.bg,
+                            color: plan.textColor,
+                            border: plan.highlight ? 'none' : `1px solid ${plan.border}`,
+                            boxShadow: plan.highlight ? '0 4px 14px rgba(255,107,53,0.3)' : 'none',
+                          }}
+                        >
+                          {checkoutLoading === plan.planKey ? 'Redirecting to checkout...' : plan.cta}
+                        </button>
+                      ) : (
+                        <a
+                          href={plan.href}
+                          onClick={() => saveScanData()}
+                          className="block w-full text-center py-3 rounded-lg font-semibold text-sm transition-opacity hover:opacity-90"
+                          style={{
+                            background: plan.bg,
+                            color: plan.textColor,
+                            border: `1px solid ${plan.border}`,
+                          }}
+                        >
+                          {plan.cta}
+                        </a>
+                      )}
                       </div>
                     </div>
                   ))}

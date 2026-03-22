@@ -44,6 +44,13 @@ export async function POST(req: NextRequest) {
       const clerkUserId = session.client_reference_id || session.metadata?.clerk_user_id;
       const plan = session.metadata?.plan?.toLowerCase() || "solo";
 
+      // Pre-auth checkout (no Clerk user yet) — will be claimed via /api/claim-checkout after sign-up
+      if (!clerkUserId) {
+        const customerEmail = session.customer_details?.email || session.customer_email;
+        console.log(`Pre-auth checkout completed: ${session.id} — email: ${customerEmail}, plan: ${plan}. Will be claimed after sign-up.`);
+        break;
+      }
+
       if (clerkUserId && supabase) {
         if (plan === "dfy") {
           // DFY: one-time payment — grant Solo access for 30 days

@@ -30,12 +30,26 @@ const appearance = {
 function SignUpContent() {
   const searchParams = useSearchParams()
   const plan = searchParams.get('plan')
-  const redirectUrl =
-    plan === 'solo' || plan === 'dfy'
-      ? `/onboarding?plan=${plan}`
-      : '/onboarding'
+  const checkoutSuccess = searchParams.get('checkout') === 'success'
 
-  return <SignUp forceRedirectUrl={redirectUrl} appearance={appearance} />
+  // After Stripe checkout success, always go to onboarding (plan already paid)
+  const redirectUrl = '/onboarding'
+
+  return (
+    <>
+      {checkoutSuccess && (
+        <div className="w-full max-w-md mb-4 rounded-xl border px-5 py-4" style={{ backgroundColor: 'rgba(34,197,94,0.06)', borderColor: 'rgba(34,197,94,0.3)' }}>
+          <p className="text-sm font-semibold mb-1" style={{ color: '#1B2A4A' }}>
+            ✅ Payment successful!
+          </p>
+          <p className="text-sm" style={{ color: '#636E72' }}>
+            Create your account to get started. Your {plan === 'dfy' ? 'DFY Setup' : 'Local Autopilot'} plan is ready.
+          </p>
+        </div>
+      )}
+      <SignUp forceRedirectUrl={redirectUrl} appearance={appearance} />
+    </>
+  )
 }
 
 export default function SignUpPage() {
