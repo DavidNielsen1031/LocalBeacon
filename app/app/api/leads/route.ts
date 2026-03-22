@@ -77,24 +77,21 @@ export async function POST(req: NextRequest) {
       details: typeof c.details === 'string' ? escapeHtml(c.details) : '',
       fix: typeof c.fix === 'string' ? escapeHtml(c.fix) : '',
     }))
-    sendAeoReportEmail({
+    const emailResult = await sendAeoReportEmail({
       to: email,
       url: url_scanned,
       score,
       checks: sanitizedChecks,
-    }).then(result => {
-      console.log(JSON.stringify({
-        event: result.success ? 'aeo_report_email_sent' : 'aeo_report_email_failed',
-        email,
-        url_scanned,
-        emailId: result.success ? result.id : undefined,
-        error: result.success ? undefined : result.error,
-        timestamp: new Date().toISOString(),
-      }))
-    }).catch(err => {
-      console.error('[leads] AEO report email error:', err)
     })
+    console.log(JSON.stringify({
+      event: emailResult.success ? 'aeo_report_email_sent' : 'aeo_report_email_failed',
+      email,
+      url_scanned,
+      emailId: emailResult.success ? (emailResult as { success: true; id?: string }).id : undefined,
+      error: emailResult.success ? undefined : (emailResult as { success: false; error: string }).error,
+      timestamp: new Date().toISOString(),
+    }))
   }
 
-  return NextResponse.json({ ok: true })
+  return NextResponse.json({ ok: true, emailSent: true })
 }

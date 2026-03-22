@@ -30,7 +30,7 @@ export interface PlanDefinition {
 
 /** Badge config for each feature mode */
 export const MODE_BADGES: Record<FeatureMode, { label: string; bg: string; color: string }> = {
-  diy:  { label: 'You do this', bg: '#F0F0F0', color: '#636E72' },
+  diy:  { label: 'Self-Service', bg: '#F0F0F0', color: '#636E72' },
   auto: { label: 'Automated',  bg: '#ECFDF5', color: '#059669' },
   done: { label: 'Done for you', bg: '#EFF6FF', color: '#2563EB' },
 }
