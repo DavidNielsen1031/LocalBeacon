@@ -664,7 +664,19 @@ export function CheckerForm() {
 
                       <a
                         href={plan.href}
-                        onClick={saveScanData}
+                        onClick={() => {
+                          saveScanData()
+                          // Set pending plan for checkout resume after sign-up
+                          if (plan.name !== 'Free') {
+                            try {
+                              const planKey = plan.name.includes('DFY') ? 'DFY' : 'SOLO'
+                              localStorage.setItem('lb_pending_plan', JSON.stringify({
+                                plan: planKey,
+                                timestamp: Date.now(),
+                              }))
+                            } catch {}
+                          }
+                        }}
                         className="block w-full text-center py-3 rounded-lg font-semibold text-sm transition-opacity hover:opacity-90"
                         style={{
                           background: typeof plan.bg === 'string' && plan.bg.startsWith('linear') ? plan.bg : plan.bg,
