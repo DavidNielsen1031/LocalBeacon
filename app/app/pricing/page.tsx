@@ -155,7 +155,7 @@ export default function PricingPage() {
                     ))}
                   </ul>
 
-                  <Link href="/check">
+                  <Link href={plan.name === "Free" ? "/check" : `/check?plan=${isDfy ? "dfy" : "solo"}`}>
                     <Button
                       className="w-full font-semibold h-12 text-base text-white"
                       style={{
