@@ -12,6 +12,7 @@ interface WeeklyEmailData {
   postTitle: string
   postContent: string
   dashboardUrl: string
+  subject?: string
 }
 
 interface MonthlyEmailData {
@@ -35,7 +36,7 @@ export async function sendWeeklyContentEmail(data: WeeklyEmailData) {
     const result = await resend.emails.send({
       from: FROM_EMAIL,
       to: data.to,
-      subject: `Your weekly Google post is ready — ${data.businessName}`,
+      subject: data.subject ?? `Your weekly Google post is ready — ${data.businessName}`,
       html: `
 <!DOCTYPE html>
 <html>
