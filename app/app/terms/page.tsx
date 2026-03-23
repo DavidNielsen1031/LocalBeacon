@@ -30,7 +30,7 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-white font-semibold text-lg mb-3">2. The Service</h2>
-            <p>LocalBeacon is an local marketing platform that helps businesses manage their online visibility. We provide:</p>
+            <p>LocalBeacon is a local marketing platform that helps businesses manage their online visibility. We provide:</p>
             <ul className="list-disc pl-5 space-y-1 mt-2">
               <li>Content for Google Business Profiles (posts, updates)</li>
               <li>Local service area page generation</li>

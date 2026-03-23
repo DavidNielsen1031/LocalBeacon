@@ -17,9 +17,9 @@ LocalBeacon automatically posts to your Google Business Profile every week, crea
 - Web designers/freelancers offering local SEO as a service
 
 ## Pricing
-- Free: $0/month — 1 location, 5 posts/month, 3 city pages
-- Solo: $49/month — 3 locations, unlimited posts, review replies, monthly report
-- Agency: $99/month — unlimited locations, white-label reports, multi-client dashboard
+- Free: $0/month — 1 AI Readiness scan/month, 5 Google post drafts, 3 review response drafts
+- Local Autopilot: $49/month — unlimited scans, weekly auto-posts, city pages, review drafts, monthly reports
+- DFY Setup: $499 one-time — we set everything up for you, plus 1 month of Autopilot included
 
 ## Links
 - Website: https://localbeacon.ai

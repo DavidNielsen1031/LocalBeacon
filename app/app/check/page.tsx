@@ -14,6 +14,7 @@ export const metadata: Metadata = {
     siteName: 'LocalBeacon.ai',
     type: 'website',
   },
+  alternates: { canonical: 'https://localbeacon.ai/check' },
 }
 
 export default function CheckPage() {
