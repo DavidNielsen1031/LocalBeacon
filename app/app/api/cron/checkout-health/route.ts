@@ -1,5 +1,5 @@
 export const dynamic = 'force-dynamic'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { stripe, PLANS } from '@/lib/stripe'
 
 /**
@@ -7,7 +7,11 @@ import { stripe, PLANS } from '@/lib/stripe'
  * Verifies Stripe is configured and price IDs are valid.
  * Logs structured JSON for monitoring.
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const cronSecret = process.env.CRON_SECRET
+  if (!cronSecret || req.headers.get('authorization') !== `Bearer ${cronSecret}`) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
   const issues: string[] = []
 
   // Check Stripe client

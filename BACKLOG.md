@@ -1,154 +1,196 @@
 # LocalBeacon.ai — Product Backlog
 
-**Domain:** localbeacon.ai ✅ | **Stack:** Next.js + Vercel + Stripe + Anthropic + Supabase + Clerk
-**Pricing:** Free ($0) | Local Autopilot ($49/mo) | DFY Setup ($499 one-time)
-**GitHub:** DavidNielsen1031/LocalBeacon | **Vercel:** localbeacon-ai
-
----
-
-## Current State (as of Sprint 28, Mar 22 2026)
-
-**Users:** Zero. **Revenue:** Zero. **Checkout:** Fixed tonight (was broken 22 days).
-
-The product is feature-complete for an MVP — 14 dashboard tools, 8 Vercel crons, scan-first funnel, personalized plan cards, Stripe checkout. The gap is **distribution**, not features.
+**Domain:** localbeacon.ai ✅
+**Stack:** Next.js + Vercel + Stripe + Anthropic + Supabase + GBP API
+**Pricing:** Free | Solo $49/mo | Agency $99/mo
+**GitHub:** DavidNielsen1031/LocalBeacon
+**Vercel:** localbeacon-ai
 
 ---
 
 ## Product Objectives (Problem-Oriented)
 
-- **First paying customer within 60 days of expo (by Jun 24)**
-  - KR1: 6 evangelist conversations by Expo day (Apr 25)
-  - KR2: 3 complete the onboarding flow
-  - KR3: 1 converts to paid plan
+> Framing: SVPG-style outcome objectives. Features ladder up to these. Measure results, not output.
 
-- **Validate the AEO value prop with real SMBs**
-  - KR1: AI Readiness score improves after 30 days on Autopilot
-  - KR2: 1 business cited in an AI assistant answer
-  - KR3: "AI search visibility" cited as buying reason by 2+ users
-
-- **Expo is our first GTM event** (Apr 25, Ramsey EDA)
-  - KR1: Booth materials printed and tested
-  - KR2: 20+ scans from live prospects
-  - KR3: 5+ email sign-ups from expo
+| Objective | Key Results | Status |
+|-----------|------------|--------|
+| **Agencies save ≥5 hrs/week managing local visibility for their clients** | KR1: 3 agency evangelists confirm time savings in interviews · KR2: Average session time >10 min (engaged, not bouncing) · KR3: 1 agency uses dashboard for ≥3 clients | 🔴 Not started — need customer discovery |
+| **SMBs become findable by AI assistants (AEO)** | KR1: AI Readiness score improves after using tools · KR2: 1 business appears in ChatGPT/Perplexity answer after optimization · KR3: "AI Readiness" is cited as buying reason by 2+ users | 🔴 Not validated |
+| **First paying customer within 60 days of evangelist recruitment** | KR1: 6 evangelists recruited · KR2: 3 complete the onboarding flow · KR3: 1 converts to Solo or Agency plan | 🔴 Not started |
+| **LocalBeacon is the go-to tool for local AEO** | KR1: Top 3 Google result for "AI readiness checker local business" · KR2: Listed in 3+ AI/marketing directories · KR3: 1 inbound referral from an existing user | 🔴 Not started |
 
 ---
 
-## ✅ What's Built (Sprints 1-27)
+## ✅ Completed
 
-**Core Product:**
-- AI Readiness Scanner (21 signals, score 0-100, competitor comparison)
-- Google Post Generator (4 types, AI-powered)
-- City Page Builder (service area pages)
-- Review Response Drafter (5-star levels, save + copy)
-- Schema Markup Generator (JSON-LD)
-- FAQ Builder, Blog Generator, AI Index, llms.txt Generator
-- Competitor comparison tool
-- Content queue (draft → scheduled → published)
-- Reports dashboard
+### Sprint 1 — Foundation (Done Feb 28)
+- [x] LB-001: Infrastructure (GitHub, Vercel, DNS, Supabase, Stripe, Upstash Redis, Anthropic key)
+- [x] LB-003: Next.js scaffold (Clerk auth, Tailwind, shadcn/ui, 17 routes)
+- [x] Landing page + pricing + auth + dashboard skeleton deployed
 
-**Automation Crons (Vercel):**
-- Weekly Google posts (Mon)
-- Weekly blog posts (Wed)
-- Weekly AI Readiness scans (Sun)
-- Weekly visibility monitor — all 21 signals (Mon)
-- Monthly city page generation (1st)
-- Monthly progress reports (1st)
-- Weekly review response nudge (Fri)
-- Daily checkout health check (daily)
+### Sprint 2 — Core Product (Done Mar 1)
+- [x] LB-004: Onboarding flow (4-step: business info → service areas → plan → first post)
+- [x] LB-005: GBP post generator (4 types, AI-powered via claude-haiku-4-5, mock fallback)
+- [x] LB-006: Service area page builder (city cards, HTML copy, preview)
+- [x] LB-007: Review response drafter (5 star levels, tone-matched)
+- [x] LB-008: Dashboard MVP (overview, activity feed, plan usage)
+- [x] Stripe products created (Solo $29, Agency $79)
+- [x] All env vars deployed to Vercel
 
-**Infrastructure:**
-- Clerk auth (live keys, Google OAuth)
-- Stripe checkout (Solo $49/mo + DFY $499, webhook → Supabase plan sync)
-- Supabase (users, businesses, content_items, aeo_scans, leads)
-- Resend email (AEO reports, weekly content, nudges)
-- 60+ industry landing pages (/for/plumbers, /for/hvac, etc.)
-- Blog engine with auto-generation
-- GSC OAuth integration
-
-**Funnel:**
-- Scan-first: every CTA → /check → scan → personalized plan cards → Stripe checkout
-- Pre-auth checkout (pay before sign-up, claimed after)
-- AEO report emailed after scan (lead capture)
+### Sprint 3 — UX Redesign (Done Mar 1)
+- [x] Landing page redesign (outcome-led, before/after, FAQ, zero jargon)
+- [x] Pricing page redesign (competitive comparison, dedicated /pricing route)
+- [x] Dashboard redesign (never blank, activity feed, setup CTA, contextual stats)
+- [x] Auto-post pipeline (queue view, Draft→Scheduled→Published, inline edit, approve flow)
+- [x] GBP API application submitted (Case 1-4494000040327, GCP Project localbeacon #667608435377)
+- [x] GCP project created for LocalBeacon
+- [x] Google Workspace created (david@localbeacon.ai)
 
 ---
 
-## 🏃 Active Sprint
-
-### Sprint 28 — Revenue Readiness (Mar 22)
-See `sprints/sprint-28-specs.md`
-
-### Sprint 29 — Trust & Social Proof (planned)
-- Social proof on landing page
-- Dashboard preview for free users
-- Mobile funnel test
-- About Us page
-
-### Sprint 30 — Expo & Outbound (planned, Apr)
-- Expo booth materials (banner, one-pager, QR tracking)
-- Demo script (scan prospect's site live)
-- LinkedIn outbound (20 MN web designers)
-- Reddit/Facebook seeding
-- GSC sitemap verification
-
-### Sprint 31 — Post-Expo Learning (after Apr 25)
-- Expo debrief
-- Follow up with leads
-- Implement top feedback items
-- Signal difficulty badges (GH #12) — if validated by expo feedback
-- First customer success story
+### Sprint 4 — Polish & Credibility (Done Mar 2)
+- [x] LB-S4-01: Supabase Migration (tables created, env vars updated)
+- [x] LB-S4-02: Email Setup (MX, Gmail, aliases, SPF/DKIM/DMARC)
+- [x] LB-S4-03: Privacy Policy + Terms pages created
+- [x] LB-S4-04: Healthcheck Cron (7am/1pm/7pm CST)
+- [x] LB-S4-05: Reviews + City Pages UX Polish
+- [x] LB-S4-06: SEO & Discoverability Basics (meta tags, robots.txt, sitemap, llms.txt)
+- *Carried to Sprint 5:* LB-S4-01 e2e test, LB-S4-03 content coverage, LB-S4-06 GSC submission, LB-S4-07 QR/Expo tracking
 
 ---
 
-## 📋 Backlog (Prioritized by Revenue Impact)
+## 🔴 Discovery: Customer Validation (Parallel to Sprint 5)
 
-**P0 — Revenue Blockers**
-- [ ] Expo vendor registration (deadline Apr 10) — GH #10
-- [ ] Outbound pipeline research — GH #9
-- [ ] Directory submissions — GH #8
+> These are NOT sprint items — they run parallel to delivery per [[sprint-os/Discovery|Discovery]]. But they are higher priority than any new feature.
 
-**P1 — Trust & Conversion**
-- [ ] Signal difficulty badges (GH #12) — post-expo validation
-- [ ] Free trial (7-day, no CC) — if expo conversations confirm need
-- [ ] Customer testimonials / case studies
-- [ ] "About Us" page with real founder info
+### P0: Expo Registration (Deadline Apr 10)
+- [ ] Complete ST19 vendor registration form for Ramsey EDA Business Expo (Apr 25)
+- [ ] Mail $75 check before Apr 10 cutoff
+- [ ] Finalize booth banner (33"x80" retractable, see `expo/BOOTH-PLAN.md`)
+- [ ] Print 100 one-pagers on cardstock from `expo/one-pager.html`
+- [ ] QR code + tracking URL for expo traffic
 
-**P2 — Product Enhancement (ONLY after paying customers validate)**
-- [ ] GBP API integration (pending Google approval, Case 1-4494000040327)
-- [ ] GBP auto-posting (blocked on API)
-- [ ] Multi-location management
-- [ ] White-label reports
-- [ ] Review velocity monitor
-- [ ] "Near me" keyword rank tracker
-
-**Parking Lot:**
-- Google OAuth onboarding (needs GBP API)
-- Agent-native layer (openapi.yaml, MCP server)
-- GSC deep integration
+### P0: Online Evangelist Outreach (Start This Week)
+- [ ] LinkedIn: search "web designer" + "local business" in MN area — send 10 connection requests
+- [ ] Reddit: post in r/webdesign, r/SEO, r/smallbusiness — describe the problem, invite conversation
+- [ ] Facebook: join 2-3 local business marketing groups, participate before pitching
+- [ ] Goal: 3 conversations by end of March, 6 evangelists by Expo day
 
 ---
 
-## 💰 Revenue Model
+## 🏃 Now — Sprint 5: Make It Real
 
-- **Free:** $0 — 1 scan/mo, 5 posts/mo, 3 review drafts/mo, schema preview
-- **Local Autopilot:** $49/mo — unlimited scans, weekly posts, city pages, blog, monitoring
-- **DFY Setup:** $499 one-time — 30-min call, full audit, custom FAQs, schema install, 1 month Autopilot
+*Active Sprint: See GitHub Milestone "Sprint 5 — Make It Real"*
 
-**Stripe Price IDs:**
-- Solo: `price_1T6LhxB0OqzCjZpvnGc84VN7` ($49/mo recurring)
-- DFY: `price_1TCRxpB0OqzCjZpvVebA66dn` ($499/mo recurring — used in subscription mode)
+### Carried from Sprint 4
+- [ ] Test end-to-end: sign up → create business → generate post → saved in DB (from LB-S4-01)
+- [ ] Privacy policy content: data collection, GBP OAuth scope, AI content generation, Stripe billing + footer links (from LB-S4-03)
+- [ ] Submit sitemap to Google Search Console (from LB-S4-06)
+- [ ] QR Code + Tracking for Expo (from LB-S4-07)
+
+### LB-S5-01 · End-to-End Flow Test
+- [ ] Sign up → create business → generate post → verify saved in Supabase
+- [ ] Fix any broken connections between Clerk auth, Supabase, and API routes
+- [ ] Verify service_role key works for server-side DB operations
+
+### LB-S5-02 · Stripe Checkout Integration
+- [ ] Wire Solo upgrade button to Stripe checkout ($49/mo)
+- [ ] Wire Agency upgrade to Stripe checkout ($99/mo)
+- [ ] Handle successful payment → update user plan in Supabase
+- [ ] Stripe webhook: subscription created/cancelled → plan sync
+
+### LB-S5-03 · Blog Post Generator (LB-017)
+- [ ] New dashboard page: /dashboard/blog
+- [ ] AI generates 1 blog post/month per location
+- [ ] Locally customized: neighborhoods, landmarks, city names
+- [ ] FAQ section with schema markup
+- [ ] Export to HTML (copy/paste into WordPress/Squarespace/Wix)
+- [ ] Available on Solo ($49) and Agency ($99)
+
+### LB-S5-04 · GBP Audit Score (LB-018)
+- [ ] New dashboard widget: "Google Listing Health Score: 62/100"
+- [ ] Checklist: photos, hours, description, categories, products, Q&A
+- [ ] Manual input for now (user checks boxes), auto-scan after GBP API
+- [ ] Drives return visits and engagement
+
+### LB-S5-05 · Schema Markup Generator (LB-019)
+- [ ] New dashboard page or section: /dashboard/schema
+- [ ] Generates LocalBusiness, Service, FAQ JSON-LD from business info
+- [ ] One `<script>` tag user copies into site footer
+- [ ] Preview what Google will see
+- [ ] Available on Solo+
 
 ---
+
+## 📋 Next — Backlog (Prioritized)
+
+### High Priority
+- [ ] **Expo Vendor Registration** — Register for Ramsey EDA Business Expo (Apr 25). ST19 form + $75 check. Deadline: Apr 10. Booth plan: `expo/BOOTH-PLAN.md`
+- [ ] **Booth Banner Design** — 33"x80" retractable banner for expo. Black/gold, QR code, tagline.
+- [ ] **One-Pager Finalize** — Print-ready PDF from `expo/one-pager.html`. 100 copies on cardstock.
+
+### Medium Priority
+- [ ] LB-009: Multi-client management (Agency dashboard)
+- [ ] LB-010: White-label reports
+- [ ] LB-017: Monthly local blog post (AEO-optimized)
+- [ ] LB-018: GBP audit score (0-100 completeness check)
+- [ ] LB-019: Schema markup generator (JSON-LD)
+- [ ] LB-011: Competitor gap alerts
+- [ ] Price evaluation: $29 → $39? Competitive analysis says underpriced.
+
+### Lower Priority
+- [ ] LB-020: Review velocity monitor
+- [ ] LB-021: Competitor pulse
+- [ ] LB-022: "Near me" keyword rank tracker
+- [ ] LB-013: Google Search Console integration
+- [ ] LB-014: Citation/NAP audit
+- [ ] LB-015: Agent-native layer (openapi.yaml, MCP server)
+
+---
+
+## 🅿️ Parking Lot
+
+- **Google OAuth Onboarding (Sprint 3 Spec 4)** — Blocked on GBP API approval. Case `1-4494000040327`. Will unblock automatically when Google approves. ~2-4 weeks from Mar 1.
+- **GBP Auto-Posting (LB-012)** — Same blocker. Once API is approved, this becomes top priority.
+- **Automated email (Resend.com)** — Deferred, not needed pre-launch.
+
+---
+
+## 💰 Revenue Model (Updated Mar 1 — price increase)
+
+| Plan | Price | Limits | Target |
+|------|-------|--------|--------|
+| Free | $0 | 1 location, 5 posts/mo, 3 pages | Try before buy |
+| Solo | **$49/mo** | 3 locations, unlimited posts, 10 city pages | DIY business owners |
+| Agency | **$99/mo** | Unlimited everything, white-label, multi-client | Web designers/freelancers |
+
+**Stripe Price IDs (current):**
+- Solo: `price_1T6LhxB0OqzCjZpvnGc84VN7` ($49/mo)
+- Agency: `price_1T6LhxB0OqzCjZpvcNk2NQUO` ($99/mo)
+- Old $29/$79 prices: ARCHIVED
+
+---
+
+## 🎨 Design System
+
+- **Canonical doc:** `design-system/SKILL.md` (created Mar 4, 2026)
+- **Delegation rule:** All standalone UI pages (new dashboard tools, landing sections) are mandatory delegation candidates. Spawn sub-agent with design system skill + spec.
+- **Minimum delegation target:** 2 UI tasks per sprint delegated to sub-agents
 
 ## 🧠 Key Decisions (Locked)
 
-- No new features until paying customers validate existing ones
-- Scan-first funnel (every CTA → /check)
-- Pre-auth Stripe checkout (pay before signing up)
-- Labels update AFTER features ship (no aspirational labeling)
-- "What and where, not how" for delegation specs
+- Distribution wedge: agencies first, not direct SMB
+- Manual-paste MVP, auto-post after GBP API approval
+- Accounts required from day 1
+- One Stripe account (Perpetual Agility LLC)
 - Anti-spam by design (unique signals per page)
-- Agency tier REMOVED — only Free / Autopilot / DFY
+- "Bob test" for all UI copy — zero jargon
+- CTA always "Connect Your Google Listing"
+- Dashboard must never be blank
 
 ---
 
-*Updated: Mar 22, 2026 (Sprint 28)*
+*Created: Feb 28, 2026 | Updated: Mar 1, 2026*
+
+---
+*See also: [[MEMORY|Alexander's Memory]] · [[TOOLS|Infrastructure]] · [[SOUL|Soul]]*
