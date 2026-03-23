@@ -26,7 +26,10 @@
   {
     "keyword": "why your local business doesn't show up in ChatGPT recommendations",
     "category": "aeo",
-    "priority": 2
+    "priority": 2,
+    "processed": true,
+    "slug": "local-business-chatgpt-recommendations",
+    "generated_date": "2026-03-23"
   },
   {
     "keyword": "llms.txt file explained how AI assistants read your website",
