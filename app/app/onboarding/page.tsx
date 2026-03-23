@@ -186,7 +186,7 @@ function OnboardingContent() {
     <div className="min-h-screen bg-[#FAFAF7] flex flex-col items-center px-4 py-12">
       {/* Logo — links home as escape hatch */}
       <a href="/" className="flex items-center gap-2 mb-10 no-underline hover:opacity-80 transition-opacity">
-        <img src="/logo-192.png" alt="LocalBeacon" style={{ height: "36px", width: "36px" }} />
+        <img src="/logo-192.png?v=2" alt="LocalBeacon" style={{ height: "36px", width: "36px" }} />
         <span className="text-[#1B2A4A] font-bold text-xl">LocalBeacon.ai</span>
       </a>
 

@@ -92,7 +92,7 @@ export default async function IndustryPage({
             className="flex items-center gap-2"
           >
             <img
-              src="/logo-192.png"
+              src="/logo-192.png?v=2"
               alt="LocalBeacon"
               style={{ height: "40px", width: "40px" }}
             />
@@ -640,7 +640,7 @@ export default async function IndustryPage({
             className="flex items-center gap-2"
           >
             <img
-              src="/logo-192.png"
+              src="/logo-192.png?v=2"
               alt="LocalBeacon"
               style={{ height: "48px", width: "48px" }}
             />

@@ -51,7 +51,7 @@ export function SiteNav() {
         className="flex items-center justify-between h-16 md:h-20"
       >
         <Link href="/" style={{ textDecoration: "none" }} className="flex items-center gap-1.5 md:gap-2 shrink-0">
-          <img src="/logo-192.png" alt="LocalBeacon" style={{ height: "36px", width: "36px" }} className="md:w-14 md:h-14" />
+          <img src="/logo-192.png?v=2" alt="LocalBeacon" style={{ height: "36px", width: "36px" }} className="md:w-14 md:h-14" />
           <span
             style={{
               fontWeight: 800,
