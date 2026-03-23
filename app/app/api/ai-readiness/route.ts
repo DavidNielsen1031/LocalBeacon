@@ -679,6 +679,190 @@ async function checkCanonicalTags(html: string): Promise<CheckResult> {
   }
 }
 
+async function checkOgImage(html: string): Promise<CheckResult> {
+  const rule = getRule('og_image')
+  const hasOgImage = /property=["']og:image["'][^>]*content=["'][^"']+["']/i.test(html)
+    || /content=["'][^"']+["'][^>]*property=["']og:image["']/i.test(html)
+  return {
+    ...rule,
+    passed: hasOgImage,
+    details: hasOgImage
+      ? 'og:image meta tag found — social share image is set'
+      : 'No og:image meta tag found — pages will show a blank image when shared',
+    errorType: 'success',
+  }
+}
+
+async function checkCanonicalMatch(url: string, html: string): Promise<CheckResult> {
+  const rule = getRule('canonical_match')
+  const canonicalMatch = html.match(/<link[^>]+rel=["']canonical["'][^>]*href=["']([^"']+)["']/i)
+    || html.match(/<link[^>]+href=["']([^"']+)["'][^>]*rel=["']canonical["']/i)
+  if (!canonicalMatch) {
+    return {
+      ...rule,
+      passed: false,
+      details: 'No canonical tag found — cannot verify canonical URL',
+      errorType: 'success',
+    }
+  }
+  const canonicalUrl = canonicalMatch[1].replace(/\/+$/, '')
+  const pageUrl = url.replace(/\/+$/, '')
+  const passed = canonicalUrl === pageUrl || canonicalUrl === pageUrl + '/'
+  return {
+    ...rule,
+    passed,
+    details: passed
+      ? `Canonical URL matches page URL: ${canonicalUrl}`
+      : `Canonical URL (${canonicalUrl}) points to a different page than the URL being checked (${pageUrl})`,
+    errorType: 'success',
+  }
+}
+
+async function checkFaviconComplete(baseUrl: string): Promise<CheckResult> {
+  const rule = getRule('favicon_complete')
+  const [icoResult, pngResult] = await Promise.all([
+    fetchWithRetry(`${baseUrl}/favicon.ico`, 5000, 0),
+    fetchWithRetry(`${baseUrl}/favicon.png`, 5000, 0),
+  ])
+  const hasIco = icoResult.errorType === 'success' && icoResult.response?.ok === true
+  const hasPng = pngResult.errorType === 'success' && pngResult.response?.ok === true
+  const passed = hasIco || hasPng
+  return {
+    ...rule,
+    passed,
+    details: passed
+      ? `Favicon found: ${hasIco ? '/favicon.ico' : ''}${hasIco && hasPng ? ' and ' : ''}${hasPng ? '/favicon.png' : ''}`
+      : 'No favicon found at /favicon.ico or /favicon.png',
+    errorType: passed ? 'success' : 'http_4xx',
+  }
+}
+
+async function checkWwwRedirect(baseUrl: string): Promise<CheckResult> {
+  const rule = getRule('www_redirect')
+  let parsedUrl: URL
+  try {
+    parsedUrl = new URL(baseUrl)
+  } catch {
+    return { ...rule, passed: false, details: 'Could not parse URL', errorType: 'parse_error' }
+  }
+
+  const hostname = parsedUrl.hostname
+  const isWww = hostname.startsWith('www.')
+  const nonWwwHost = isWww ? hostname.slice(4) : `www.${hostname}`
+  const altUrl = `${parsedUrl.protocol}//${nonWwwHost}${parsedUrl.pathname}`
+
+  // SSRF check: skip private-range IPs for alt variant (same hostname context, safe to skip)
+  try {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 6000)
+    let redirected = false
+    let finalUrl = ''
+    try {
+      const res = await fetch(altUrl, {
+        signal: controller.signal,
+        headers: { 'User-Agent': 'LocalBeacon-AEO-Checker/1.0' },
+        redirect: 'follow',
+      })
+      clearTimeout(timeout)
+      redirected = res.redirected || res.url !== altUrl
+      finalUrl = res.url
+    } catch {
+      clearTimeout(timeout)
+      return {
+        ...rule,
+        passed: true,
+        details: `${nonWwwHost} does not resolve — only one version of the domain is accessible`,
+        errorType: 'success',
+      }
+    }
+
+    const canonicalBase = baseUrl.replace(/\/+$/, '')
+    const finalBase = finalUrl.replace(/\/+$/, '')
+    const redirectsToCanonical = finalBase === canonicalBase || finalBase.startsWith(canonicalBase)
+
+    return {
+      ...rule,
+      passed: redirected && redirectsToCanonical,
+      details: redirected && redirectsToCanonical
+        ? `${nonWwwHost} correctly redirects to ${hostname}`
+        : redirected
+        ? `${nonWwwHost} redirects, but not to the canonical domain (goes to ${finalUrl})`
+        : `${nonWwwHost} does not redirect — both www and non-www versions serve content independently`,
+      errorType: 'success',
+    }
+  } catch {
+    return { ...rule, passed: false, details: 'Could not check www redirect', errorType: 'timeout' }
+  }
+}
+
+async function checkMetaUnique(url: string, html: string): Promise<CheckResult> {
+  const rule = getRule('meta_unique')
+
+  const titleMatch = html.match(/<title[^>]*>([^<]*)<\/title>/i)
+  const pageTitle = titleMatch ? titleMatch[1].trim() : ''
+
+  let parsedUrl: URL
+  try {
+    parsedUrl = new URL(url)
+  } catch {
+    return { ...rule, passed: true, details: 'Could not parse URL for homepage check', errorType: 'parse_error' }
+  }
+
+  const isHomepage = !parsedUrl.pathname || parsedUrl.pathname === '/' || parsedUrl.pathname === '/index.html'
+
+  if (isHomepage) {
+    const passed = pageTitle.length > 0
+    return {
+      ...rule,
+      passed,
+      details: passed ? `Homepage title found: "${pageTitle}"` : 'No page title found',
+      errorType: 'success',
+    }
+  }
+
+  if (!pageTitle) {
+    return {
+      ...rule,
+      passed: false,
+      details: 'No page title found on this page',
+      errorType: 'success',
+    }
+  }
+
+  const baseUrl = `${parsedUrl.protocol}//${parsedUrl.host}`
+  try {
+    const { response: homeRes } = await fetchWithRetry(baseUrl, 5000, 0)
+    if (!homeRes?.ok) {
+      return {
+        ...rule,
+        passed: true,
+        details: `Page title found: "${pageTitle}" (could not compare to homepage)`,
+        errorType: 'success',
+      }
+    }
+    const homeHtml = await homeRes.text().catch(() => '')
+    const homeTitleMatch = homeHtml.match(/<title[^>]*>([^<]*)<\/title>/i)
+    const homeTitle = homeTitleMatch ? homeTitleMatch[1].trim() : ''
+
+    const passed = !homeTitle || pageTitle.toLowerCase() !== homeTitle.toLowerCase()
+    return {
+      ...rule,
+      passed,
+      details: passed
+        ? `Page title "${pageTitle}" is unique from homepage title`
+        : `Page title "${pageTitle}" is identical to homepage title — each page needs a unique title`,
+      errorType: 'success',
+    }
+  } catch {
+    return {
+      ...rule,
+      passed: true,
+      details: `Page title found: "${pageTitle}" (could not compare to homepage)`,
+      errorType: 'success',
+    }
+  }
+}
+
 // --- Main handler ---
 
 export async function POST(req: NextRequest) {
@@ -769,6 +953,12 @@ export async function POST(req: NextRequest) {
     // Indexing
     checkSitemapInRobots(baseUrl),
     checkCanonicalTags(html),
+    // SEO hygiene
+    checkOgImage(html),
+    checkCanonicalMatch(baseUrl, html),
+    checkFaviconComplete(baseUrl),
+    checkWwwRedirect(baseUrl),
+    checkMetaUnique(baseUrl, html),
   ])
 
   const totalWeight = checks.reduce((sum, c) => sum + c.weight, 0)

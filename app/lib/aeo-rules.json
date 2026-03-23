@@ -189,6 +189,51 @@
       "weight": 4,
       "severity": "medium",
       "category": "indexing"
+    },
+    {
+      "id": "og_image",
+      "label": "Social share image (og:image) set",
+      "description": "The og:image tag controls the image shown when your page is shared on social media or previewed by AI tools. Missing it means a blank or random image appears.",
+      "fix": "Add an og:image meta tag to your page's <head>: <meta property=\"og:image\" content=\"https://yourdomain.com/your-image.jpg\" />. Use a 1200x630px image for best results.",
+      "weight": 3,
+      "severity": "low",
+      "category": "meta_technical"
+    },
+    {
+      "id": "canonical_match",
+      "label": "Canonical URL matches page URL",
+      "description": "If your canonical tag points to a different page, search engines will credit that page instead of this one — quietly stealing your ranking power.",
+      "fix": "Make sure the canonical URL in your page's <head> exactly matches the URL of this page. Example: <link rel=\"canonical\" href=\"https://yourdomain.com/this-page/\" />",
+      "weight": 4,
+      "severity": "medium",
+      "category": "indexing"
+    },
+    {
+      "id": "favicon_complete",
+      "label": "Favicon present",
+      "description": "A favicon signals a professional, complete website. Some AI tools and browsers use it as a trust signal when displaying your site.",
+      "fix": "Upload a favicon.ico or favicon.png to your website's root folder. Most website builders have a 'Site Icon' setting in branding or general settings.",
+      "weight": 2,
+      "severity": "low",
+      "category": "meta_technical"
+    },
+    {
+      "id": "www_redirect",
+      "label": "www redirects to canonical domain",
+      "description": "If both www.yourdomain.com and yourdomain.com serve your site without redirecting, search engines treat them as two different sites — splitting your authority.",
+      "fix": "Set up a 301 redirect from www.yourdomain.com to yourdomain.com (or vice versa). Your hosting provider's DNS settings usually handle this with a single toggle.",
+      "weight": 2,
+      "severity": "low",
+      "category": "indexing"
+    },
+    {
+      "id": "meta_unique",
+      "label": "Page title is unique (not homepage default)",
+      "description": "If your inner pages share the same title as your homepage, search engines get confused about which page to rank for what query. Every page needs its own descriptive title.",
+      "fix": "Give each page a unique <title> tag that describes that specific page. Example: \"Emergency Plumbing in Apple Valley, MN | Smith Plumbing\" instead of just \"Smith Plumbing\".",
+      "weight": 3,
+      "severity": "medium",
+      "category": "meta_technical"
     }
   ]
 }

@@ -79,7 +79,7 @@ export async function GET(req: NextRequest) {
         const pageRes = await fetchWithTimeout(baseUrl)
         const html = pageRes?.ok ? await pageRes.text().catch(() => '') : ''
 
-        // Run all 21 AEO checks
+        // Run all 26 AEO checks
         const { checks, score, passed, failed } = await runAllChecks(baseUrl, html)
         checked++
 
