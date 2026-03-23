@@ -59,15 +59,17 @@ export const PLANS: PlanDefinition[] = [
     period: '/month',
     tagline: 'Your local marketing, handled — you just approve.',
     features: [
+      // Automated first — these run without customer effort
+      { label: 'AI search changes tracked — your site stays current', mode: 'auto' },
       { label: 'Unlimited AI Readiness scans (21 signals)', mode: 'auto' },
       { label: 'Weekly Google posts, written and scheduled', mode: 'auto' },
-      { label: 'Review responses, drafted automatically', mode: 'self-setup' },
       { label: '10 new city pages per month', mode: 'auto' },
       { label: '4 blog posts per month, locally customized', mode: 'auto' },
-      { label: 'Schema & llms.txt — generated and monitored', mode: 'self-setup' },
-      { label: 'AI search changes tracked — your listing stays current', mode: 'auto' },
-      { label: '1 competitor comparison', mode: 'self-setup' },
       { label: 'Monthly progress report', mode: 'auto' },
+      // Self-Setup — customer does initial config, then it runs
+      { label: 'Review responses, drafted automatically', mode: 'self-setup' },
+      { label: 'Schema & llms.txt — generated and monitored', mode: 'self-setup' },
+      { label: '1 competitor comparison', mode: 'self-setup' },
       { label: 'Up to 3 business locations', mode: 'self-setup' },
     ],
     cta: 'Start Local Autopilot — $49/mo',

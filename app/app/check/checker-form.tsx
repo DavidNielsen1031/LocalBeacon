@@ -57,29 +57,37 @@ function recordScan() {
  * Maps each check ID to what each plan fixes.
  * null = plan doesn't fix it. string = how the plan fixes it.
  */
-const PLAN_FIX_MAP: Record<string, { fixLabel?: string; free: string | null; autopilot: string | null; dfy: string | null }> = {
-  llms_txt:          { fixLabel: 'AI discovery file', free: null, autopilot: 'We generate it — you copy-paste to your site', dfy: 'We create and install it on your site' },
-  ai_index_json:     { fixLabel: 'AI index file', free: null, autopilot: 'We generate it from your business info', dfy: 'We create and deploy it for you' },
-  schema_markup:     { fixLabel: 'Schema markup', free: 'Preview only', autopilot: 'We generate it — you add it to your site', dfy: 'We install it on your site live' },
-  faq_content:       { fixLabel: 'FAQ content', free: null, autopilot: 'We write up to 5 FAQs/month for you', dfy: 'We write 15-25 custom FAQs and install them' },
-  service_pages:     { fixLabel: 'City pages for areas you serve', free: null, autopilot: 'We build 10 city pages/month for you', dfy: 'We build all your city pages during setup' },
-  freshness:         { fixLabel: 'Fresh Google posts', free: '5 posts/month', autopilot: 'We write and schedule weekly posts', dfy: 'Weekly posts included (1 month)' },
-  reviews:           { fixLabel: 'Review responses', free: '3 drafts/month', autopilot: 'We draft every review response for you', dfy: 'Unlimited drafts (1 month included)' },
-  answer_first:      { fixLabel: 'Content AI can cite', free: null, autopilot: 'We write content structured for AI answers', dfy: 'We rewrite your existing content for AI' },
-  citability:        { fixLabel: 'Citable paragraphs', free: null, autopilot: 'Every post includes citable paragraphs', dfy: 'We audit and rewrite your content' },
-  eeat:              { fixLabel: 'Trust signals (E-E-A-T)', free: null, autopilot: 'We add author + expertise signals', dfy: 'Full trust audit on your site' },
-  open_graph:        { fixLabel: 'Social preview tags', free: null, autopilot: 'Included in generated pages', dfy: 'We add them to your site' },
-  nap:               { fixLabel: 'Business info consistency', free: null, autopilot: 'Consistent info across all content', dfy: 'Full audit + corrections across the web' },
-  brand_social_links:{ fixLabel: 'Social media links', free: null, autopilot: null, dfy: 'We add social links to your site' },
-  sitemap:           { fixLabel: 'Sitemap', free: null, autopilot: null, dfy: 'We verify and fix your sitemap' },
-  sitemap_in_robots: { fixLabel: 'Robots.txt sitemap reference', free: null, autopilot: null, dfy: 'We fix your robots.txt' },
-  canonical_tags:    { fixLabel: 'Canonical URL tags', free: null, autopilot: null, dfy: 'We add canonical tags' },
+type FixMode = 'diy' | 'self-setup' | 'auto' | 'done'
+const PLAN_FIX_MAP: Record<string, { fixLabel?: string; free: string | null; freeMode?: FixMode; autopilot: string | null; autopilotMode?: FixMode; dfy: string | null; dfyMode?: FixMode }> = {
+  llms_txt:          { fixLabel: 'AI discovery file', free: null, autopilot: 'We generate it — you copy-paste to your site', autopilotMode: 'self-setup', dfy: 'We create and install it on your site', dfyMode: 'done' },
+  ai_index_json:     { fixLabel: 'AI index file', free: null, autopilot: 'We generate it from your business info', autopilotMode: 'self-setup', dfy: 'We create and deploy it for you', dfyMode: 'done' },
+  schema_markup:     { fixLabel: 'Schema markup', free: 'Preview only', freeMode: 'diy', autopilot: 'We generate it — you add it to your site', autopilotMode: 'self-setup', dfy: 'We install it on your site live', dfyMode: 'done' },
+  faq_content:       { fixLabel: 'FAQ content', free: null, autopilot: 'We write up to 5 FAQs/month for you', autopilotMode: 'auto', dfy: 'We write 15-25 custom FAQs and install them', dfyMode: 'done' },
+  service_pages:     { fixLabel: 'City pages for areas you serve', free: null, autopilot: 'We build 10 city pages/month for you', autopilotMode: 'auto', dfy: 'We build all your city pages during setup', dfyMode: 'done' },
+  freshness:         { fixLabel: 'Fresh Google posts', free: '5 posts/month', freeMode: 'diy', autopilot: 'We write and schedule weekly posts', autopilotMode: 'auto', dfy: 'Weekly posts included (1 month)', dfyMode: 'auto' },
+  reviews:           { fixLabel: 'Review responses', free: '3 drafts/month', freeMode: 'diy', autopilot: 'We draft responses — you paste them', autopilotMode: 'self-setup', dfy: 'Unlimited drafts (1 month included)', dfyMode: 'done' },
+  answer_first:      { fixLabel: 'Content AI can cite', free: null, autopilot: 'We write content structured for AI answers', autopilotMode: 'auto', dfy: 'We rewrite your existing content for AI', dfyMode: 'done' },
+  citability:        { fixLabel: 'Citable paragraphs', free: null, autopilot: 'Every post includes citable paragraphs', autopilotMode: 'auto', dfy: 'We audit and rewrite your content', dfyMode: 'done' },
+  eeat:              { fixLabel: 'Trust signals (E-E-A-T)', free: null, autopilot: 'We add author + expertise signals', autopilotMode: 'auto', dfy: 'Full trust audit on your site', dfyMode: 'done' },
+  open_graph:        { fixLabel: 'Social preview tags', free: null, autopilot: 'Included in generated pages', autopilotMode: 'auto', dfy: 'We add them to your site', dfyMode: 'done' },
+  nap:               { fixLabel: 'Business info consistency', free: null, autopilot: 'Consistent info across all content', autopilotMode: 'auto', dfy: 'Full audit + corrections across the web', dfyMode: 'done' },
+  brand_social_links:{ fixLabel: 'Social media links', free: null, autopilot: null, dfy: 'We add social links to your site', dfyMode: 'done' },
+  sitemap:           { fixLabel: 'Sitemap', free: null, autopilot: null, dfy: 'We verify and fix your sitemap', dfyMode: 'done' },
+  sitemap_in_robots: { fixLabel: 'Robots.txt sitemap reference', free: null, autopilot: null, dfy: 'We fix your robots.txt', dfyMode: 'done' },
+  canonical_tags:    { fixLabel: 'Canonical URL tags', free: null, autopilot: null, dfy: 'We add canonical tags', dfyMode: 'done' },
   // These are usually already passing or not fixable by LocalBeacon
   robots_txt:        { free: null, autopilot: null, dfy: null },
   ai_crawler_access: { free: null, autopilot: null, dfy: null },
   headings:          { free: null, autopilot: null, dfy: null },
   https:             { free: null, autopilot: null, dfy: null },
   mobile:            { free: null, autopilot: null, dfy: null },
+}
+
+const MODE_BADGE_CONFIG: Record<FixMode, { label: string; bg: string; color: string }> = {
+  diy:         { label: 'Self-Service', bg: '#F0F0F0', color: '#636E72' },
+  'self-setup': { label: 'Self-Setup',  bg: '#FFF8E1', color: '#B8860B' },
+  auto:        { label: 'Automated',   bg: '#ECFDF5', color: '#059669' },
+  done:        { label: 'Done for you', bg: '#EFF6FF', color: '#2563EB' },
 }
 
 function getGrade(score: number): { letter: string; color: string; summary: string } {
@@ -546,15 +554,17 @@ export function CheckerForm() {
             const countFixes = (planKey: 'free' | 'autopilot' | 'dfy') =>
               failingChecks.filter(c => PLAN_FIX_MAP[c.id]?.[planKey]).length
 
-            const getTopFixes = (planKey: 'free' | 'autopilot' | 'dfy', limit = 3) =>
-              failingChecks
+            const getTopFixes = (planKey: 'free' | 'autopilot' | 'dfy') => {
+              const modeKey = planKey === 'free' ? 'freeMode' : planKey === 'autopilot' ? 'autopilotMode' : 'dfyMode'
+              return failingChecks
                 .filter(c => PLAN_FIX_MAP[c.id]?.[planKey])
                 .sort((a, b) => b.weight - a.weight)
-                .slice(0, limit)
                 .map(c => ({
                   label: PLAN_FIX_MAP[c.id]?.fixLabel || c.label,
                   how: PLAN_FIX_MAP[c.id]![planKey]!,
+                  mode: (PLAN_FIX_MAP[c.id] as Record<string, unknown>)?.[modeKey] as FixMode | undefined,
                 }))
+            }
 
             const freeFixes = countFixes('free')
             const autopilotFixes = countFixes('autopilot')
@@ -655,7 +665,7 @@ export function CheckerForm() {
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
                   {plans.map(plan => (
                     <div
                       key={plan.name}
@@ -693,15 +703,9 @@ export function CheckerForm() {
                         </div>
                       )}
 
-                      <ul className="space-y-2 flex-1 mb-4">
+                      <ul className="space-y-2.5 flex-1 mb-4">
                         {plan.topFixes.map((fix, i) => {
-                          // Determine mode badge based on plan
-                          const planKey = plan.name === 'Free' ? 'free' : plan.name.includes('DFY') ? 'dfy' : 'autopilot'
-                          const modeBadge = planKey === 'dfy'
-                            ? { label: 'Done for you', bg: '#EFF6FF', color: '#2563EB' }
-                            : planKey === 'autopilot'
-                            ? { label: 'Automated', bg: '#ECFDF5', color: '#059669' }
-                            : { label: 'You do this', bg: '#F3F4F6', color: '#6B7280' }
+                          const modeBadge = fix.mode ? MODE_BADGE_CONFIG[fix.mode] : null
                           return (
                           <li key={i} className="text-sm text-[#1B2A4A]/70">
                             <div className="flex items-start gap-1.5">
@@ -709,9 +713,11 @@ export function CheckerForm() {
                               <div className="min-w-0">
                                 <div className="flex items-center gap-1.5 flex-wrap">
                                   <strong className="text-[#1B2A4A]">{fix.label}</strong>
-                                  <span className="text-[0.6rem] font-semibold px-1.5 py-0.5 rounded-full whitespace-nowrap" style={{ background: modeBadge.bg, color: modeBadge.color }}>
-                                    {modeBadge.label}
-                                  </span>
+                                  {modeBadge && (
+                                    <span className="text-[0.6rem] font-semibold px-1.5 py-0.5 rounded-full whitespace-nowrap" style={{ background: modeBadge.bg, color: modeBadge.color }}>
+                                      {modeBadge.label}
+                                    </span>
+                                  )}
                                 </div>
                                 <span className="text-xs text-[#636E72]">{fix.how}</span>
                               </div>
@@ -719,11 +725,6 @@ export function CheckerForm() {
                           </li>
                           )
                         })}
-                        {plan.fixes > plan.topFixes.length && (
-                          <li className="text-xs text-[#636E72] ml-5">
-                            + {plan.fixes - plan.topFixes.length} more fixes included
-                          </li>
-                        )}
                         {plan.fixes === 0 && totalFailing > 0 && (
                           <li className="text-sm text-[#636E72] italic">
                             Scan tools only — no automated fixes
