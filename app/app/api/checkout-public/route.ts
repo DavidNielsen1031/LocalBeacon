@@ -57,7 +57,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ url: session.url })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Checkout failed'
-    console.error('Public checkout error:', message)
+    console.error(JSON.stringify({
+      event: 'checkout_error',
+      route: 'checkout-public',
+      plan,
+      email: email || null,
+      error: message,
+      timestamp: new Date().toISOString(),
+    }))
     return NextResponse.json({ error: message }, { status: 500 })
   }
 }
