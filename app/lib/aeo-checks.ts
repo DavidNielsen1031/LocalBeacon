@@ -15,6 +15,13 @@ export interface CheckResult {
   errorType?: 'success' | 'dns_error' | 'timeout' | 'http_4xx' | 'http_5xx' | 'parse_error'
 }
 
+export interface CitabilityPassage {
+  text: string
+  wordCount: number
+  citable: boolean
+  reason: string
+}
+
 interface RuleConfig {
   id: string
   label: string
@@ -25,8 +32,8 @@ interface RuleConfig {
   category: string
 }
 
-const AI_CRAWLERS_LEGACY = ['GPTBot', 'ChatGPT-User', 'ClaudeBot', 'PerplexityBot', 'Google-Extended', 'Amazonbot', 'cohere-ai']
-const AI_CRAWLERS_INDIVIDUAL = ['GPTBot', 'ClaudeBot', 'PerplexityBot', 'Applebot', 'GoogleOther', 'Bytespider', 'CCBot', 'anthropic-ai']
+export const AI_CRAWLERS_LEGACY = ['GPTBot', 'ChatGPT-User', 'ClaudeBot', 'PerplexityBot', 'Google-Extended', 'Amazonbot', 'cohere-ai']
+export const AI_CRAWLERS_INDIVIDUAL = ['GPTBot', 'ClaudeBot', 'PerplexityBot', 'Applebot', 'GoogleOther', 'Bytespider', 'CCBot', 'anthropic-ai']
 
 function getRule(id: string): RuleConfig {
   const rule = rulesConfig.rules.find((r: RuleConfig) => r.id === id)
@@ -34,7 +41,7 @@ function getRule(id: string): RuleConfig {
   return rule
 }
 
-interface FetchResult {
+export interface FetchResult {
   response: Response | null
   errorType: 'success' | 'dns_error' | 'timeout' | 'http_4xx' | 'http_5xx' | 'parse_error'
   statusCode?: number
@@ -122,7 +129,7 @@ export async function checkRobotsTxt(baseUrl: string): Promise<CheckResult> {
     ...rule,
     passed,
     details: passed ? 'All AI crawlers are allowed access' : `Blocked: ${uniqueBlocked.join(', ')}`,
-    fix: passed ? '' : `Edit your robots.txt to remove blocks on: ${uniqueBlocked.join(', ')}.`,
+    fix: passed ? '' : `Edit your robots.txt to remove blocks on: ${uniqueBlocked.join(', ')}. These are the bots that power ChatGPT, Claude, and Perplexity search.`,
     errorType: 'success',
   }
 }
@@ -187,32 +194,48 @@ export async function checkAiIndexJson(baseUrl: string): Promise<CheckResult> {
   }
 }
 
-function extractCitabilityPassages(html: string) {
+function extractCitabilityPassages(html: string): CitabilityPassage[] {
   const pTagMatches = html.match(/<p[^>]*>([\s\S]*?)<\/p>/gi) || []
-  const passages: Array<{ text: string; wordCount: number; citable: boolean; reason: string }> = []
+  const passages: CitabilityPassage[] = []
+
   for (const match of pTagMatches) {
     const text = match.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
     if (text.length < 30) continue
+
     const words = text.split(/\s+/).filter(w => w.length > 0)
     const wordCount = words.length
+
     const firstSentence = text.split(/[.!?]/)[0] || ''
     const hasDeclarativeSentence = /^[A-Z][^,]{10,}/.test(firstSentence) &&
       !/^(Are|Is|Do|Does|Did|Will|Can|Could|Should|Would|Have|Has|Had|What|How|Why|When|Where|Who)\b/i.test(firstSentence)
+
     let citable = false
     let reason = ''
-    if (wordCount < 50) reason = 'Too short (under 50 words)'
-    else if (wordCount > 250) reason = 'Too long (over 250 words)'
-    else if (wordCount >= 100 && wordCount <= 200 && hasDeclarativeSentence) { citable = true; reason = 'Good length with clear topic sentence' }
-    else if (wordCount >= 50 && wordCount < 100) reason = 'Slightly short (50-100 words)'
-    else if (wordCount > 200 && wordCount <= 250) reason = 'Slightly long (200-250 words)'
-    else if (!hasDeclarativeSentence) reason = 'No clear declarative topic sentence at start'
-    else reason = 'Does not meet citability criteria'
+
+    if (wordCount < 50) {
+      reason = 'Too short (under 50 words) — AI needs more context'
+    } else if (wordCount > 250) {
+      reason = 'Too long (over 250 words) — AI prefers focused passages'
+    } else if (wordCount >= 100 && wordCount <= 200 && hasDeclarativeSentence) {
+      citable = true
+      reason = 'Good length with clear topic sentence'
+    } else if (wordCount >= 50 && wordCount < 100) {
+      reason = 'Slightly short (50-100 words) — aim for 100-200 words'
+    } else if (wordCount > 200 && wordCount <= 250) {
+      reason = 'Slightly long (200-250 words) — consider tightening'
+    } else if (!hasDeclarativeSentence) {
+      reason = 'No clear declarative topic sentence at start'
+    } else {
+      reason = 'Does not meet citability criteria'
+    }
+
     passages.push({ text: text.slice(0, 300) + (text.length > 300 ? '...' : ''), wordCount, citable, reason })
   }
+
   return passages.slice(0, 15)
 }
 
-export async function checkCitability(html: string): Promise<CheckResult> {
+export async function checkCitability(html: string): Promise<CheckResult & { passages?: CitabilityPassage[] }> {
   const rule = getRule('citability')
   const passages = extractCitabilityPassages(html)
   const citableCount = passages.filter(p => p.citable).length
@@ -226,10 +249,11 @@ export async function checkCitability(html: string): Promise<CheckResult> {
       ? 'No citable passages found — paragraphs need to be 100-200 words with clear topic sentences'
       : `Only ${citableCount} citable passage${citableCount === 1 ? '' : 's'} found — need at least 3`,
     errorType: 'success',
+    passages,
   }
 }
 
-export async function checkEeat(html: string): Promise<CheckResult> {
+export async function checkEeat(html: string, baseUrl?: string): Promise<CheckResult> {
   const rule = getRule('eeat')
   const signals: string[] = []
   if (/href="[^"]*\/(about|about-us|our-team|who-we-are)[^"]*"/i.test(html)) signals.push('About page link')
@@ -240,7 +264,7 @@ export async function checkEeat(html: string): Promise<CheckResult> {
     ...rule,
     passed,
     details: signals.length === 0
-      ? 'No E-E-A-T signals found'
+      ? 'No E-E-A-T signals found — no about page, credentials, or team mentions'
       : passed
       ? `E-E-A-T signals found: ${signals.join(', ')}`
       : `Only ${signals.length} E-E-A-T signal found: ${signals.join(', ')} — need at least 2`,
@@ -273,7 +297,7 @@ export async function checkBrandSocialLinks(html: string): Promise<CheckResult> 
       : uniqueSocials.length >= 2
       ? `Social profile links found: ${uniqueSocials.join(', ')}`
       : uniqueSocials.length === 1
-      ? `Only 1 social link found (${uniqueSocials[0]}) — add more`
+      ? `Only 1 social link found (${uniqueSocials[0]}) — add more for stronger brand authority`
       : 'No social profile links or sameAs schema found',
     errorType: 'success',
   }
@@ -288,9 +312,9 @@ export async function checkSchemaMarkup(html: string): Promise<CheckResult> {
     ...rule,
     passed: hasLocalBusiness || hasOrgSchema,
     details: hasLocalBusiness
-      ? 'LocalBusiness schema found'
+      ? 'LocalBusiness schema found — AI can read your business info'
       : hasOrgSchema
-      ? 'Organization schema found'
+      ? 'Organization schema found (good, but LocalBusiness schema would be better)'
       : hasAnySchema
       ? 'Some schema found, but no business-specific schema'
       : 'No schema markup found',
@@ -307,7 +331,7 @@ export async function checkFaqContent(html: string): Promise<CheckResult> {
     ...rule,
     passed: hasFaqSchema || (hasFaqSection && questionCount >= 3),
     details: hasFaqSchema
-      ? 'FAQ page with schema markup found'
+      ? 'FAQ page with schema markup found — excellent for AI citations'
       : hasFaqSection
       ? `FAQ section found with ${questionCount} questions`
       : questionCount > 0
@@ -333,7 +357,7 @@ export async function checkOpenGraph(html: string): Promise<CheckResult> {
     details: hasOg && hasTwitter
       ? 'Both Open Graph and Twitter Card tags found'
       : hasOg
-      ? 'Open Graph tags found'
+      ? 'Open Graph tags found (add Twitter Card tags too for full coverage)'
       : 'No Open Graph tags found',
     errorType: 'success',
   }
@@ -342,7 +366,7 @@ export async function checkOpenGraph(html: string): Promise<CheckResult> {
 export async function checkMobile(html: string): Promise<CheckResult> {
   const rule = getRule('mobile')
   const hasViewport = /name="viewport"/i.test(html)
-  return { ...rule, passed: hasViewport, details: hasViewport ? 'Viewport meta tag found' : 'No viewport meta tag found', errorType: 'success' }
+  return { ...rule, passed: hasViewport, details: hasViewport ? 'Viewport meta tag found — site appears mobile-friendly' : 'No viewport meta tag found', errorType: 'success' }
 }
 
 export async function checkSitemap(baseUrl: string): Promise<CheckResult> {
@@ -360,7 +384,7 @@ export async function checkHeadingStructure(html: string): Promise<CheckResult> 
   return {
     ...rule,
     passed,
-    details: `Found ${h1Count} H1 tag${h1Count !== 1 ? 's' : ''} and ${h2Count} H2 tags.`,
+    details: `Found ${h1Count} H1 tag${h1Count !== 1 ? 's' : ''} and ${h2Count} H2 tags. ${h1Count === 1 ? 'Good H1 structure.' : h1Count === 0 ? 'Missing H1.' : 'Multiple H1s — should have exactly one.'} ${h2Count >= 2 ? 'Good content structure.' : 'Need more H2 sections.'}`,
     errorType: 'success',
   }
 }
@@ -392,8 +416,8 @@ export async function checkContentFreshness(html: string): Promise<CheckResult> 
     details: hasCurrent
       ? `Content references ${currentYear} — appears current`
       : hasRecent
-      ? `Content references ${lastYear} but not ${currentYear}`
-      : 'No recent year references found',
+      ? `Content references ${lastYear} but not ${currentYear} — consider updating`
+      : 'No recent year references found — content may appear outdated to AI',
     errorType: 'success',
   }
 }
@@ -408,8 +432,8 @@ export async function checkReviewSchema(html: string): Promise<CheckResult> {
     details: hasReviewSchema
       ? 'Review/rating schema markup found'
       : hasTestimonials
-      ? 'Testimonial content found'
-      : 'No review content or testimonials found',
+      ? 'Testimonial content found (add schema markup to boost AI visibility)'
+      : 'No review content or testimonials found on homepage',
     errorType: 'success',
   }
 }
@@ -426,12 +450,12 @@ export async function checkAnswerFirstContent(html: string): Promise<CheckResult
     ...rule,
     passed,
     details: passed
-      ? 'Homepage content mentions both services and location early'
+      ? 'Homepage content mentions both services and location early — good for AI extraction'
       : hasServiceMention
       ? 'Services mentioned but no specific location in early content'
       : hasLocationMention
       ? 'Location mentioned but services not clear in early content'
-      : 'Homepage doesn\'t clearly state what you do or where',
+      : 'Homepage doesn\'t clearly state what you do or where in the first content block',
     errorType: 'success',
   }
 }
@@ -448,7 +472,7 @@ export async function checkNapConsistency(html: string): Promise<CheckResult> {
     details: uniquePhones.length === 0
       ? 'No phone number found on page'
       : uniquePhones.length > 2
-      ? `Found ${uniquePhones.length} different phone numbers`
+      ? `Found ${uniquePhones.length} different phone numbers — this confuses AI`
       : `Phone number found. ${hasAddress ? 'Address markup present.' : 'No structured address found.'}`,
     errorType: 'success',
   }
@@ -457,7 +481,7 @@ export async function checkNapConsistency(html: string): Promise<CheckResult> {
 export async function checkSitemapInRobots(baseUrl: string): Promise<CheckResult> {
   const rule = getRule('sitemap_in_robots')
   const { response: robotsRes } = await fetchWithRetry(`${baseUrl}/robots.txt`)
-  if (!robotsRes?.ok) return { ...rule, passed: false, details: 'No robots.txt found', errorType: 'http_4xx' }
+  if (!robotsRes?.ok) return { ...rule, passed: false, details: 'No robots.txt found — cannot check for sitemap reference', errorType: 'http_4xx' }
   const robotsTxt = await robotsRes.text().catch(() => '')
   const hasSitemapLine = /^Sitemap:\s*https?:\/\/.+/mi.test(robotsTxt)
   return {
@@ -476,10 +500,10 @@ export async function checkCanonicalTags(html: string): Promise<CheckResult> {
     ...rule,
     passed: hasCanonical && !hasNoindex,
     details: hasNoindex
-      ? 'Page has a noindex directive'
+      ? 'Page has a noindex directive — search engines will not index this page'
       : hasCanonical
-      ? 'Canonical URL tag found'
-      : 'No canonical URL tag found',
+      ? 'Canonical URL tag found — search engines know which version of this page to index'
+      : 'No canonical URL tag found — search engines may index duplicate versions of your pages',
     errorType: 'success',
   }
 }
