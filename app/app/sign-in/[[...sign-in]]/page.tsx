@@ -49,7 +49,7 @@ export default function SignInPage() {
       <div className="mb-8 text-center">
         <Link href="/" className="flex items-center gap-2 justify-center mb-4">
           <Image
-            src="/logo-48.png?v=2"
+            src="/logo-48.png?v=3"
             alt="LocalBeacon"
             width={32}
             height={32}
