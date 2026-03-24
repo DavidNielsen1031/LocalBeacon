@@ -91,11 +91,10 @@ export async function getUserPlan(clerkUserId: string): Promise<PlanTier> {
 
   // Check if the plan has expired (used for DFY 30-day Solo access)
   if (user.plan_expires_at && new Date(user.plan_expires_at) < new Date()) {
-    // Plan expired — downgrade to free in DB (best-effort) and return free
-    await supabase
-      .from('users')
-      .update({ plan: 'free', plan_expires_at: null })
-      .eq('clerk_id', clerkUserId)
+    // TODO: Plan downgrades should NOT happen here. This is a pure read function.
+    // Downgrade writes should be triggered by a Stripe webhook handler (e.g. POST /api/webhooks/stripe)
+    // or a scheduled cron job that sweeps expired plans. Doing it inline here causes hidden
+    // side effects every time the plan is checked (e.g. during usage checks, dashboard loads).
     return 'free'
   }
 

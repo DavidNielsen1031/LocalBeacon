@@ -3,6 +3,10 @@ import { auth } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@/lib/supabase'
 
+// In-memory access token cache — keyed by user_id.
+// NOTE: resets on serverless cold starts, but prevents redundant refreshes within the same instance.
+const tokenCache = new Map<string, { accessToken: string; expiresAt: number }>()
+
 /**
  * GET /api/gsc/data?period=7d|28d|3mo
  * Returns search performance data from Google Search Console
@@ -34,7 +38,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ connected: false, error: 'No Google Search Console connected' }, { status: 200 })
   }
 
-  // Always refresh access token (not stored — derived from refresh_token on demand)
+  // Get access token — use cache if still valid, otherwise refresh
   let accessToken: string
   {
     const clientId = process.env.GOOGLE_GSC_CLIENT_ID
@@ -43,21 +47,33 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'GSC not configured' }, { status: 503 })
     }
 
-    const refreshRes = await fetch('https://oauth2.googleapis.com/token', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        client_id: clientId,
-        client_secret: clientSecret,
-        refresh_token: gsc.refresh_token,
-        grant_type: 'refresh_token',
-      }),
-    })
-    const refreshData = await refreshRes.json()
-    if (!refreshRes.ok) {
-      return NextResponse.json({ error: 'Failed to refresh GSC token', connected: false }, { status: 401 })
+    const cached = tokenCache.get(user.id)
+    const fiveMinutesFromNow = Date.now() + 5 * 60 * 1000
+
+    if (cached && cached.expiresAt > fiveMinutesFromNow) {
+      // Token is still valid — use cached value
+      accessToken = cached.accessToken
+    } else {
+      // Token expired or missing — refresh from Google
+      const refreshRes = await fetch('https://oauth2.googleapis.com/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          client_id: clientId,
+          client_secret: clientSecret,
+          refresh_token: gsc.refresh_token,
+          grant_type: 'refresh_token',
+        }),
+      })
+      const refreshData = await refreshRes.json()
+      if (!refreshRes.ok) {
+        return NextResponse.json({ error: 'Failed to refresh GSC token', connected: false }, { status: 401 })
+      }
+      accessToken = refreshData.access_token
+      // Cache the token — Google access tokens expire in ~1 hour
+      const expiresIn = (refreshData.expires_in as number) || 3600
+      tokenCache.set(user.id, { accessToken, expiresAt: Date.now() + expiresIn * 1000 })
     }
-    accessToken = refreshData.access_token
   }
 
   // Determine date range

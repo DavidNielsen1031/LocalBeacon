@@ -13,10 +13,16 @@ interface AnthropicResult {
   isDegraded: boolean
 }
 
-// In-memory failure tracking (resets on cold start, acceptable for serverless)
+// In-memory failure tracking for circuit breaker pattern.
+// IMPORTANT: This state is NOT shared across serverless function instances and resets
+// on every cold start. It provides degradation detection within a single instance only.
+// TODO: Replace with a Redis-backed counter for true cross-instance circuit breaking.
 let failureCount = 0
 let lastFailureAt: string | null = null
 let lastFailureError: string | null = null
+
+// Number of failures within the window required to mark the client as degraded.
+const FAILURE_THRESHOLD = 3
 
 export async function generateText(
   prompt: string,
@@ -79,7 +85,7 @@ export async function generateText(
       success: false,
       error: errorMessage,
       errorCode,
-      isDegraded: true,
+      isDegraded: failureCount >= FAILURE_THRESHOLD,
     }
   }
 }
@@ -90,6 +96,6 @@ export function getAnthropicStatus() {
     failureCount,
     lastFailureAt,
     lastFailureError,
-    isDegraded: !client || (lastFailureAt !== null && (Date.now() - new Date(lastFailureAt).getTime()) < 300_000),
+    isDegraded: !client || (failureCount >= FAILURE_THRESHOLD && lastFailureAt !== null && (Date.now() - new Date(lastFailureAt).getTime()) < 300_000),
   }
 }
