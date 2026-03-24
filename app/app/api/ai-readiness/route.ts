@@ -702,10 +702,16 @@ async function checkCanonicalMatch(url: string, html: string): Promise<CheckResu
       ...rule,
       passed: false,
       details: 'No canonical tag found — cannot verify canonical URL',
-      errorType: 'success',
+      errorType: 'parse_error',
     }
   }
-  const canonicalUrl = canonicalMatch[1].replace(/\/+$/, '')
+  // Resolve relative canonicals against the page URL
+  let canonicalUrl: string
+  try {
+    canonicalUrl = new URL(canonicalMatch[1], url).href.replace(/\/+$/, '')
+  } catch {
+    canonicalUrl = canonicalMatch[1].replace(/\/+$/, '')
+  }
   const pageUrl = url.replace(/\/+$/, '')
   const passed = canonicalUrl === pageUrl || canonicalUrl === pageUrl + '/'
   return {

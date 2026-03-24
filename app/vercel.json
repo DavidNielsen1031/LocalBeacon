@@ -44,6 +44,11 @@
       ],
       "destination": "https://localbeacon.ai/:path*",
       "permanent": true
+    },
+    {
+      "source": "/favicon.svg",
+      "destination": "/favicon.png",
+      "permanent": true
     }
   ]
 }

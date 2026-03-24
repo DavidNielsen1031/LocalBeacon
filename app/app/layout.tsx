@@ -75,7 +75,7 @@ export default function RootLayout({
               "offers": [
                 { "@type": "Offer", "price": "0", "priceCurrency": "USD", "name": "Free" },
                 { "@type": "Offer", "price": "49", "priceCurrency": "USD", "name": "Local Autopilot", "priceSpecification": { "@type": "UnitPriceSpecification", "billingDuration": "P1M" } },
-                { "@type": "Offer", "price": "499", "priceCurrency": "USD", "name": "DFY Setup" }
+                { "@type": "Offer", "price": "499", "priceCurrency": "USD", "name": "Done-For-You Setup" }
               ],
               "provider": {
                 "@type": "Organization",
