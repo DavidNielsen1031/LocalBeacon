@@ -15,28 +15,28 @@ export async function GET(req: NextRequest) {
   const supabase = createServerClient()
   if (!supabase) return NextResponse.json({ error: 'DB not configured' }, { status: 500 })
 
-  // Get all solo/agency users with businesses
-  const { data: users } = await supabase
-    .from('users')
-    .select('id, clerk_id, plan')
-    .in('plan', ['solo', 'agency'])
+  // Single JOIN query — eliminates N+1 pattern
+  const { data: bizWithUsers } = await supabase
+    .from('businesses')
+    .select('*, users!inner(id, clerk_id, plan)')
 
-  if (!users?.length) return NextResponse.json({ scanned: 0, emailed: 0 })
+  // Filter: paid plans only, must have website and contact email
+  const eligible = (bizWithUsers || []).filter((b: any) =>
+    ['solo', 'agency'].includes(b.users?.plan) && b.website && b.contact_email
+  )
+
+  if (!eligible.length) return NextResponse.json({ scanned: 0, emailed: 0 })
 
   let scanned = 0
   let emailed = 0
   const errors: string[] = []
 
-  for (const user of users) {
+  // Process in parallel — network calls dominate, Promise.all is safe here
+  await Promise.all(eligible.map(async (biz: any) => {
     try {
-      const { data: businesses } = await supabase
-        .from('businesses')
-        .select('*')
-        .eq('user_id', user.id)
-
-      for (const biz of businesses || []) {
-        // Skip if no website or no contact email
-        if (!biz.website || !biz.contact_email) continue
+      {
+        // Skip if no website or no contact email (already filtered, but keep guard)
+        if (!biz.website || !biz.contact_email) return
 
         let baseUrl = biz.website.trim()
         if (!baseUrl.startsWith('http')) baseUrl = `https://${baseUrl}`
@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
               timestamp: new Date().toISOString(),
             }))
             errors.push(`${biz.name}: fetch failed (${errorType})`)
-            continue
+            return
           }
 
           const html = await pageRes.text()
@@ -114,11 +114,11 @@ export async function GET(req: NextRequest) {
           errors.push(`${biz.name}: scan error`)
         }
       }
-    } catch (userErr) {
-      console.error(`Weekly scan failed for user ${user.clerk_id}:`, userErr)
-      errors.push(`user ${user.clerk_id}: error`)
+    } catch (err) {
+      console.error(`Weekly scan failed for business ${biz.id}:`, err)
+      errors.push(`${biz.name}: error`)
     }
-  }
+  }))
 
   return NextResponse.json({ scanned, emailed, errors: errors.length ? errors : undefined })
 }

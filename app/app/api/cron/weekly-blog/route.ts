@@ -14,25 +14,22 @@ export async function GET(req: NextRequest) {
   const supabase = createServerClient()
   if (!supabase) return NextResponse.json({ error: 'DB not configured' }, { status: 500 })
 
-  // Get all solo/agency users
-  const { data: users } = await supabase
-    .from('users')
-    .select('id, clerk_id, plan')
-    .in('plan', ['solo', 'agency'])
+  // Single JOIN query — eliminates N+1 pattern
+  const { data: bizWithUsers } = await supabase
+    .from('businesses')
+    .select('*, users!inner(id, clerk_id, plan)')
 
-  if (!users?.length) return NextResponse.json({ generated: 0 })
+  // Filter: paid plans only, must have contact email
+  const eligible = (bizWithUsers || []).filter((b: any) =>
+    ['solo', 'agency'].includes(b.users?.plan) && b.contact_email
+  )
+
+  if (!eligible.length) return NextResponse.json({ generated: 0 })
 
   let generated = 0
-  for (const user of users) {
+  const results = await Promise.allSettled(eligible.map(async (biz: any) => {
     try {
-      const { data: businesses } = await supabase
-        .from('businesses')
-        .select('*')
-        .eq('user_id', user.id)
-
-      for (const biz of businesses || []) {
-        // Skip businesses with no contact email
-        if (!biz.contact_email) continue
+      {
 
         const ctx: BusinessContext = {
           name: biz.name || '',
@@ -124,11 +121,15 @@ Respond ONLY with valid JSON in this exact format:
           subject: `Your weekly blog post is ready — ${biz.name}`,
         })
 
-        generated++
       }
     } catch (err) {
-      console.error(`[weekly-blog] Cron failed for user ${user.clerk_id}:`, err)
+      console.error(`[weekly-blog] Cron failed for business ${biz.id}:`, err)
+      throw err
     }
+  }))
+
+  for (const result of results) {
+    if (result.status === 'fulfilled') generated++
   }
 
   return NextResponse.json({ generated })

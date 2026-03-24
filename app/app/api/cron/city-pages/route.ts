@@ -15,51 +15,46 @@ export async function GET(req: NextRequest) {
   const supabase = createServerClient()
   if (!supabase) return NextResponse.json({ error: 'DB not configured' }, { status: 500 })
 
-  // Get all solo/agency users
-  const { data: users } = await supabase
-    .from('users')
-    .select('id, clerk_id, plan')
-    .in('plan', ['solo', 'agency'])
+  // Single JOIN query — eliminates N+1 pattern
+  const { data: bizWithUsers } = await supabase
+    .from('businesses')
+    .select('id, name, category, primary_city, service_areas, specialties, description, contact_email, users!inner(id, clerk_id, plan)')
 
-  if (!users?.length) return NextResponse.json({ generated: 0 })
+  // Filter: paid plans only, must have contact email and service areas
+  const eligible = (bizWithUsers || []).filter((b: any) =>
+    ['solo', 'agency'].includes(b.users?.plan) &&
+    b.contact_email &&
+    Array.isArray(b.service_areas) &&
+    b.service_areas.length > 0
+  )
 
-  let generated = 0
-  let skipped = 0
+  const skipped = (bizWithUsers || []).length - eligible.length
 
-  for (const user of users) {
-    try {
-      // Get user's businesses with all needed fields
-      const { data: businesses } = await supabase
-        .from('businesses')
-        .select('id, name, category, primary_city, service_areas, specialties, description, contact_email')
-        .eq('user_id', user.id)
+  if (!eligible.length) return NextResponse.json({ generated: 0, skipped })
 
-      for (const biz of businesses || []) {
-        // Skip if no contact email or no service areas
-        if (!biz.contact_email || !Array.isArray(biz.service_areas) || biz.service_areas.length === 0) {
-          skipped++
-          continue
-        }
+  // Each promise resolves to the number of pages generated for that business
+  const pageCounts = await Promise.allSettled(eligible.map(async (biz: any): Promise<number> => {
+    let bizGenerated = 0
 
-        // Get cities that already have service pages for this business
-        const { data: existingPages } = await supabase
-          .from('content_items')
-          .select('metadata')
-          .eq('business_id', biz.id)
-          .eq('type', 'service_page')
+    // Get cities that already have service pages for this business
+    const { data: existingPages } = await supabase
+      .from('content_items')
+      .select('metadata')
+      .eq('business_id', biz.id)
+      .eq('type', 'service_page')
 
-        const coveredCities = new Set<string>(
-          (existingPages || [])
-            .map((p) => (p.metadata as { city?: string })?.city)
-            .filter(Boolean) as string[]
-        )
+    const coveredCities = new Set<string>(
+      (existingPages || [])
+        .map((p) => (p.metadata as { city?: string })?.city)
+        .filter(Boolean) as string[]
+    )
 
-        // Find cities not yet covered
-        const uncoveredCities = (biz.service_areas as string[]).filter(
-          (city) => !coveredCities.has(city)
-        )
+    // Find cities not yet covered
+    const uncoveredCities = (biz.service_areas as string[]).filter(
+      (city) => !coveredCities.has(city)
+    )
 
-        if (uncoveredCities.length === 0) continue
+    if (uncoveredCities.length === 0) return bizGenerated
 
         // Generate up to MAX_PAGES_PER_BUSINESS new city pages
         const citiesToGenerate = uncoveredCities.slice(0, MAX_PAGES_PER_BUSINESS)
@@ -110,7 +105,7 @@ Guidelines:
               error: result.error,
               timestamp: new Date().toISOString(),
             }))
-            continue
+            continue  // skip this city, try next
           }
 
           const title = `${biz.name} – Serving ${city}`
@@ -135,7 +130,7 @@ Guidelines:
               timestamp: new Date().toISOString(),
             }))
           } else {
-            generated++
+            bizGenerated++
             console.log(JSON.stringify({
               event: 'city_page_generated',
               businessId: biz.id,
@@ -145,11 +140,15 @@ Guidelines:
             }))
           }
         }
-      }
-    } catch (err) {
-      console.error(`City pages cron failed for user ${user.clerk_id}:`, err)
-    }
-  }
+
+    return bizGenerated
+  }))
+
+  const generated = pageCounts.reduce((sum, r) => {
+    if (r.status === 'fulfilled') return sum + r.value
+    console.error('City pages cron error:', r.reason)
+    return sum
+  }, 0)
 
   return NextResponse.json({ generated, skipped })
 }

@@ -12,61 +12,60 @@ export async function GET(req: NextRequest) {
   const supabase = createServerClient()
   if (!supabase) return NextResponse.json({ error: 'DB not configured' }, { status: 500 })
 
-  // Get all solo/agency users with businesses
-  const { data: users } = await supabase
-    .from('users')
-    .select('id, clerk_id, plan')
-    .in('plan', ['solo', 'agency'])
+  // Single JOIN query — eliminates N+1 pattern
+  const { data: bizWithUsers } = await supabase
+    .from('businesses')
+    .select('*, users!inner(id, clerk_id, plan)')
 
-  if (!users?.length) return NextResponse.json({ sent: 0 })
+  // Filter: paid plans only, must have a contact email
+  const eligible = (bizWithUsers || []).filter((b: any) =>
+    ['solo', 'agency'].includes(b.users?.plan) && b.contact_email
+  )
+
+  if (!eligible.length) return NextResponse.json({ sent: 0 })
+
+  const startOfMonth = new Date()
+  startOfMonth.setDate(1)
+  startOfMonth.setHours(0, 0, 0, 0)
+  const month = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
 
   let sent = 0
-  for (const user of users) {
-    try {
-      // Get user's businesses
-      const { data: businesses } = await supabase
-        .from('businesses')
-        .select('*')
-        .eq('user_id', user.id)
+  const results = await Promise.allSettled(
+    eligible.map(async (biz: any) => {
+      const user = biz.users
 
-      for (const biz of businesses || []) {
-        // Get this month's stats
-        const startOfMonth = new Date()
-        startOfMonth.setDate(1)
-        startOfMonth.setHours(0, 0, 0, 0)
-
-        const { count: postsCount } = await supabase
+      // Get this month's content count + latest AEO score in parallel
+      const [{ count: postsCount }, { data: latestScan }] = await Promise.all([
+        supabase
           .from('content_items')
           .select('*', { count: 'exact', head: true })
           .eq('business_id', biz.id)
-          .gte('created_at', startOfMonth.toISOString())
-
-        // Get latest AEO score
-        const { data: latestScan } = await supabase
+          .gte('created_at', startOfMonth.toISOString()),
+        supabase
           .from('aeo_scans')
           .select('score')
           .eq('business_id', biz.id)
           .order('created_at', { ascending: false })
           .limit(1)
-          .single()
+          .single(),
+      ])
 
-        const month = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+      await sendMonthlyReportEmail({
+        to: biz.contact_email,
+        businessName: biz.name,
+        postsGenerated: postsCount || 0,
+        pagesCreated: 0,
+        reviewsReplied: 0,
+        aeoScore: latestScan?.score ?? null,
+        dashboardUrl: 'https://localbeacon.ai/dashboard',
+        month,
+      })
+    })
+  )
 
-        await sendMonthlyReportEmail({
-          to: biz.contact_email || '',
-          businessName: biz.name,
-          postsGenerated: postsCount || 0,
-          pagesCreated: 0,
-          reviewsReplied: 0,
-          aeoScore: latestScan?.score ?? null,
-          dashboardUrl: `https://localbeacon.ai/dashboard`,
-          month,
-        })
-        sent++
-      }
-    } catch (err) {
-      console.error(`Monthly report failed for user ${user.clerk_id}:`, err)
-    }
+  for (const result of results) {
+    if (result.status === 'fulfilled') sent++
+    else console.error('Monthly report failed:', result.reason)
   }
 
   return NextResponse.json({ sent })

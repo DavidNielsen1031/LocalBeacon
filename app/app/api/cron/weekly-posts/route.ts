@@ -96,39 +96,31 @@ export async function GET(req: NextRequest) {
   const supabase = createServerClient()
   if (!supabase) return NextResponse.json({ error: 'DB not configured' }, { status: 500 })
 
-  // Get all paying users
-  const { data: users, error: usersError } = await supabase
-    .from('users')
-    .select('id, clerk_id, plan, email')
-    .in('plan', ['solo', 'agency'])
+  // Single JOIN query — eliminates N+1 pattern
+  const { data: bizWithUsers, error: bizError } = await supabase
+    .from('businesses')
+    .select('id, name, category, primary_city, service_areas, specialties, description, contact_email, users!inner(id, clerk_id, plan, email)')
 
-  if (usersError) {
-    console.error('[weekly-posts] Failed to fetch users:', usersError)
-    return NextResponse.json({ error: 'Failed to fetch users' }, { status: 500 })
+  if (bizError) {
+    console.error('[weekly-posts] Failed to fetch businesses:', bizError)
+    return NextResponse.json({ error: 'Failed to fetch businesses' }, { status: 500 })
   }
 
-  if (!users?.length) return NextResponse.json({ generated: 0 })
+  // Filter: paid plans only, must have contact email
+  const eligible = (bizWithUsers || []).filter((b: any) =>
+    ['solo', 'agency'].includes(b.users?.plan) && b.contact_email
+  )
+
+  if (!eligible.length) return NextResponse.json({ generated: 0 })
 
   const scheduledFor = getNextMonday9AMCST()
   let generated = 0
 
-  for (const user of users) {
+  const results = await Promise.allSettled(eligible.map(async (biz: any) => {
     try {
-      const { data: businesses } = await supabase
-        .from('businesses')
-        .select('id, name, category, primary_city, service_areas, specialties, description, contact_email')
-        .eq('user_id', user.id)
-
-      for (const biz of businesses || []) {
-        // Skip businesses without a contact email
-        if (!biz.contact_email) {
-          console.log(`[weekly-posts] Skipping business ${biz.id} — no contact_email`)
-          continue
-        }
-
-        try {
-          // Generate the weekly GBP post
-          const post = await generateWeeklyPost(biz)
+      {
+        // Generate the weekly GBP post
+        const post = await generateWeeklyPost(biz)
 
           // Save to content_queue
           const { error: insertError } = await supabase
@@ -161,9 +153,14 @@ export async function GET(req: NextRequest) {
           console.error(`[weekly-posts] Failed for business ${biz.id}:`, bizErr)
         }
       }
-    } catch (userErr) {
-      console.error(`[weekly-posts] Failed for user ${user.id}:`, userErr)
+    } catch (err) {
+      console.error(`[weekly-posts] Failed for business ${biz.id}:`, err)
+      throw err
     }
+  }))
+
+  for (const result of results) {
+    if (result.status === 'fulfilled') generated++
   }
 
   return NextResponse.json({ generated })
