@@ -7,8 +7,15 @@
 export const dynamic = 'force-dynamic'
 import { stripe, PLANS } from '@/lib/stripe'
 import { NextRequest, NextResponse } from 'next/server'
+import { rateLimit } from '@/lib/rate-limit'
 
 export async function POST(req: NextRequest) {
+  // Rate limit: 10 checkout sessions per minute per IP
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || req.headers.get('x-real-ip') || 'unknown'
+  if (!rateLimit(ip, 10, 60_000)) {
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+  }
+
   if (!stripe) {
     return NextResponse.json({ error: 'Payments not configured' }, { status: 503 })
   }

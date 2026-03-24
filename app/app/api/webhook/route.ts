@@ -130,25 +130,16 @@ export async function POST(req: NextRequest) {
 
     case "invoice.payment_failed": {
       const invoice = event.data.object as Stripe.Invoice;
-      console.log(`Payment failed for invoice: ${invoice.id}, customer: ${invoice.customer}`);
-
-      // Find user by Stripe customer ID and downgrade to free
-      if (invoice.customer && supabase) {
-        const customerId = typeof invoice.customer === 'string' ? invoice.customer : invoice.customer.id;
-        const { data: user } = await supabase
-          .from("users")
-          .select("clerk_id")
-          .eq("stripe_customer_id", customerId)
-          .single();
-
-        if (user?.clerk_id) {
-          await supabase
-            .from("users")
-            .update({ plan: "free" })
-            .eq("clerk_id", user.clerk_id);
-          console.log(`Payment failed — downgraded user ${user.clerk_id} to free`);
-        }
-      }
+      // Log only — do NOT downgrade on first failure. Stripe retries 3-4 times before
+      // canceling the subscription. Downgrading here causes immediate access loss on
+      // transient card declines. The actual downgrade happens on customer.subscription.deleted.
+      console.log(JSON.stringify({
+        event: 'stripe_payment_failed',
+        invoice_id: invoice.id,
+        customer: invoice.customer,
+        attempt_count: invoice.attempt_count,
+        timestamp: new Date().toISOString(),
+      }));
       break;
     }
 
