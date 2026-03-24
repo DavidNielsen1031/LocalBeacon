@@ -142,7 +142,7 @@ Not in any meaningful way. The score reflects genuine signals that AI engines us
 No. The score indicates readiness — how well-positioned you are. AI recommendations also depend on the specific query, location, competition, and the AI model's training data. But higher scores strongly correlate with more frequent recommendations.
 
 **How does LocalBeacon calculate this score?**
-The score is based on a 26-point audit across the categories described above. Each factor is weighted by its impact on AI discoverability, based on research into how major AI models source and prioritize local business information.
+The score is based on a 15-point audit across the categories described above. Each factor is weighted by its impact on AI discoverability, based on research into how major AI models source and prioritize local business information.
 
 ---
 *Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*
