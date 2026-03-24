@@ -6,6 +6,12 @@ import { getUserPlan } from '@/lib/plan-limits'
 import { getBusinessContext, buildPromptContext } from '@/lib/prompt-context'
 import { NextRequest, NextResponse } from 'next/server'
 
+/** HTML-escape user-controlled values to prevent stored XSS */
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;')
+}
+
 const blogTypeGuide: Record<string, string> = {
   seasonal: 'Seasonal tips article — timely advice about weather, season changes, or upcoming needs your customers are preparing for',
   faq: 'FAQ-style article — answers the top 5-7 questions your customers actually ask, optimized for AI search and Google featured snippets',
@@ -14,48 +20,49 @@ const blogTypeGuide: Record<string, string> = {
 }
 
 function mockBlogPost(businessName: string, category: string, city: string, type: string) {
+  const bn = escapeHtml(businessName), cat = escapeHtml(category), ct = escapeHtml(city)
   const titles: Record<string, string> = {
-    seasonal: `5 Things ${city} Homeowners Should Know Before ${new Date().getMonth() < 6 ? 'Summer' : 'Winter'}`,
-    faq: `${category} in ${city}: Your Top Questions Answered`,
-    how_to: `How to Choose the Right ${category} Company in ${city}`,
-    local: `The Complete Guide to ${category} Services in ${city}`,
+    seasonal: `5 Things ${ct} Homeowners Should Know Before ${new Date().getMonth() < 6 ? 'Summer' : 'Winter'}`,
+    faq: `${cat} in ${ct}: Your Top Questions Answered`,
+    how_to: `How to Choose the Right ${cat} Company in ${ct}`,
+    local: `The Complete Guide to ${cat} Services in ${ct}`,
   }
   const title = titles[type] || titles.local
-  const preview = `Whether you're a longtime ${city} resident or just moved to the area, finding a reliable ${category.toLowerCase()} company can feel overwhelming. At ${businessName}, we've helped hundreds of local families and businesses navigate exactly this decision. Here's what you need to know...`
+  const preview = `Whether you're a longtime ${ct} resident or just moved to the area, finding a reliable ${category.toLowerCase()} company can feel overwhelming. At ${bn}, we've helped hundreds of local families and businesses navigate exactly this decision. Here's what you need to know...`
 
   return {
     title,
     html: `<article>
 <h1>${title}</h1>
 <p class="intro">${preview}</p>
-<h2>What ${city} Customers Ask Most</h2>
-<p>Every week, we talk to ${city} homeowners who have the same questions. Here are the honest answers.</p>
+<h2>What ${ct} Customers Ask Most</h2>
+<p>Every week, we talk to ${ct} homeowners who have the same questions. Here are the honest answers.</p>
 <h2>Why Local Experience Matters</h2>
-<p>${businessName} has served ${city} and surrounding areas for years. We know the local codes, common issues specific to this area's climate, and what your neighbors are dealing with.</p>
+<p>${bn} has served ${ct} and surrounding areas for years. We know the local codes, common issues specific to this area's climate, and what your neighbors are dealing with.</p>
 <h2>How to Make the Right Choice</h2>
 <ul>
   <li>Check that your contractor is licensed and insured in Minnesota</li>
-  <li>Ask for references from ${city} customers specifically</li>
+  <li>Ask for references from ${ct} customers specifically</li>
   <li>Get at least two estimates — compare scope, not just price</li>
   <li>Read recent Google reviews to see how they handle problems</li>
 </ul>
 <h2>Frequently Asked Questions</h2>
-<h3>How much does ${category.toLowerCase()} cost in ${city}?</h3>
-<p>Costs vary by project scope, but most ${city} customers spend $150–$500 for standard services. Always get a written estimate before work begins.</p>
-<h3>How quickly can I get service in ${city}?</h3>
-<p>${businessName} offers same-day service for most ${city} requests. Emergency situations receive priority scheduling, often within 2–4 hours.</p>
+<h3>How much does ${category.toLowerCase()} cost in ${ct}?</h3>
+<p>Costs vary by project scope, but most ${ct} customers spend $150–$500 for standard services. Always get a written estimate before work begins.</p>
+<h3>How quickly can I get service in ${ct}?</h3>
+<p>${bn} offers same-day service for most ${ct} requests. Emergency situations receive priority scheduling, often within 2–4 hours.</p>
 <h3>Are you licensed to do ${category.toLowerCase()} work in Minnesota?</h3>
-<p>Yes — ${businessName} holds all required Minnesota state licenses and carries full liability insurance on every job in ${city} and surrounding areas.</p>
+<p>Yes — ${bn} holds all required Minnesota state licenses and carries full liability insurance on every job in ${ct} and surrounding areas.</p>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How much does ${category.toLowerCase()} cost in ${city}?","acceptedAnswer":{"@type":"Answer","text":"Costs vary by project scope, but most ${city} customers spend $150–$500 for standard services. Always get a written estimate before work begins."}},{"@type":"Question","name":"How quickly can I get service in ${city}?","acceptedAnswer":{"@type":"Answer","text":"${businessName} offers same-day service for most ${city} requests. Emergency situations receive priority scheduling, often within 2–4 hours."}},{"@type":"Question","name":"Are you licensed to do ${category.toLowerCase()} work in Minnesota?","acceptedAnswer":{"@type":"Answer","text":"${businessName} holds all required Minnesota state licenses and carries full liability insurance on every job in ${city} and surrounding areas."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How much does ${category.toLowerCase()} cost in ${ct}?","acceptedAnswer":{"@type":"Answer","text":"Costs vary by project scope, but most ${ct} customers spend $150–$500 for standard services. Always get a written estimate before work begins."}},{"@type":"Question","name":"How quickly can I get service in ${ct}?","acceptedAnswer":{"@type":"Answer","text":"${bn} offers same-day service for most ${ct} requests. Emergency situations receive priority scheduling, often within 2–4 hours."}},{"@type":"Question","name":"Are you licensed to do ${category.toLowerCase()} work in Minnesota?","acceptedAnswer":{"@type":"Answer","text":"${bn} holds all required Minnesota state licenses and carries full liability insurance on every job in ${ct} and surrounding areas."}}]}
 </script>
 </article>`,
     preview,
     word_count: 320,
     faqs: [
-      { q: `How much does ${category.toLowerCase()} cost in ${city}?`, a: `Costs vary by project scope, but most ${city} customers spend $150–$500 for standard services. Always get a written estimate before work begins.` },
-      { q: `How quickly can I get service in ${city}?`, a: `${businessName} offers same-day service for most ${city} requests. Emergency situations receive priority scheduling, often within 2–4 hours.` },
-      { q: `Are you licensed to do ${category.toLowerCase()} work in Minnesota?`, a: `${businessName} holds all required Minnesota state licenses and carries full liability insurance on every job in ${city} and surrounding areas.` },
+      { q: `How much does ${category.toLowerCase()} cost in ${ct}?`, a: `Costs vary by project scope, but most ${ct} customers spend $150–$500 for standard services. Always get a written estimate before work begins.` },
+      { q: `How quickly can I get service in ${ct}?`, a: `${bn} offers same-day service for most ${ct} requests. Emergency situations receive priority scheduling, often within 2–4 hours.` },
+      { q: `Are you licensed to do ${category.toLowerCase()} work in Minnesota?`, a: `${bn} holds all required Minnesota state licenses and carries full liability insurance on every job in ${ct} and surrounding areas.` },
     ],
   }
 }

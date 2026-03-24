@@ -52,13 +52,13 @@ export async function GET(
       .from('content_items')
       .select('*', { count: 'exact', head: true })
       .eq('business_id', businessId)
-      .eq('type', 'city_page'),
+      .eq('type', 'service_page'),
 
     supabase
       .from('content_items')
       .select('*', { count: 'exact', head: true })
       .eq('business_id', businessId)
-      .eq('type', 'review_reply'),
+      .eq('type', 'review_response'),
 
     supabase
       .from('content_items')

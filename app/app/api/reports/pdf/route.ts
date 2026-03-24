@@ -57,14 +57,14 @@ export async function GET(req: NextRequest) {
     .from('content_items')
     .select('*', { count: 'exact', head: true })
     .eq('business_id', businessId)
-    .eq('type', 'city_page')
+    .eq('type', 'service_page')
     .gte('created_at', startOfMonth.toISOString())
 
   const { count: reviewsThisMonth } = await supabase
     .from('content_items')
     .select('*', { count: 'exact', head: true })
     .eq('business_id', businessId)
-    .eq('type', 'review_reply')
+    .eq('type', 'review_response')
     .gte('created_at', startOfMonth.toISOString())
 
   // Total counts
@@ -78,7 +78,7 @@ export async function GET(req: NextRequest) {
     .from('content_items')
     .select('*', { count: 'exact', head: true })
     .eq('business_id', businessId)
-    .eq('type', 'city_page')
+    .eq('type', 'service_page')
 
   // AEO score
   const { data: aeoScans } = await supabase

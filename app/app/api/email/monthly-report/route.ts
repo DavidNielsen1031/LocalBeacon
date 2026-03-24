@@ -56,7 +56,7 @@ export async function POST(req: Request) {
         .from('content_items')
         .select('*', { count: 'exact', head: true })
         .eq('business_id', business.id)
-        .eq('type', 'city_page')
+        .eq('type', 'service_page')
         .gte('created_at', lastMonth.toISOString())
         .lte('created_at', lastMonthEnd.toISOString())
 
@@ -64,7 +64,7 @@ export async function POST(req: Request) {
         .from('content_items')
         .select('*', { count: 'exact', head: true })
         .eq('business_id', business.id)
-        .eq('type', 'review_reply')
+        .eq('type', 'review_response')
         .gte('created_at', lastMonth.toISOString())
         .lte('created_at', lastMonthEnd.toISOString())
 
