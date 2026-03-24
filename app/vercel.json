@@ -32,5 +32,23 @@
       "path": "/api/cron/checkout-health",
       "schedule": "0 13 * * *"
     }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.localbeacon.ai"
+        }
+      ],
+      "destination": "https://localbeacon.ai/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/favicon.svg",
+      "destination": "/favicon.png",
+      "permanent": true
+    }
   ]
 }

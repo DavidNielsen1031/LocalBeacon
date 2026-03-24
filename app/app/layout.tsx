@@ -31,11 +31,13 @@ export const metadata: Metadata = {
     siteName: "LocalBeacon.ai",
     type: "website",
     locale: "en_US",
+    images: [{ url: "https://localbeacon.ai/og-image.png", width: 1200, height: 630, alt: "LocalBeacon.ai — AI-Powered Local Marketing" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "LocalBeacon.ai — More calls. Less work.",
     description: "We handle your local marketing. Weekly Google posts, city pages, review replies — all on autopilot.",
+    images: ["https://localbeacon.ai/og-image.png"],
   },
   robots: {
     index: true,
@@ -56,7 +58,9 @@ export default function RootLayout({
   const content = (
     <html lang="en">
       <head>
-        <link rel="icon" href="/favicon.png" type="image/png" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -71,7 +75,7 @@ export default function RootLayout({
               "offers": [
                 { "@type": "Offer", "price": "0", "priceCurrency": "USD", "name": "Free" },
                 { "@type": "Offer", "price": "49", "priceCurrency": "USD", "name": "Local Autopilot", "priceSpecification": { "@type": "UnitPriceSpecification", "billingDuration": "P1M" } },
-                { "@type": "Offer", "price": "99", "priceCurrency": "USD", "name": "Agency", "priceSpecification": { "@type": "UnitPriceSpecification", "billingDuration": "P1M" } }
+                { "@type": "Offer", "price": "499", "priceCurrency": "USD", "name": "Done-For-You Setup" }
               ],
               "provider": {
                 "@type": "Organization",

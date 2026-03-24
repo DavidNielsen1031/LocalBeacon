@@ -57,7 +57,7 @@ export function HomepageSeoContent() {
 
       <h2>Frequently Asked Questions</h2>
       <h3>What is LocalBeacon.ai?</h3>
-      <p>LocalBeacon.ai is an local marketing platform that automates Google Business Profile posts, creates city-specific landing pages, drafts review responses, and optimizes your business for AI search engines like ChatGPT and Perplexity. It costs $49 per month — a fraction of what SEO agencies charge.</p>
+      <p>LocalBeacon.ai is a local marketing platform that automates Google Business Profile posts, creates city-specific landing pages, drafts review responses, and optimizes your business for AI search engines like ChatGPT and Perplexity. It costs $49 per month — a fraction of what SEO agencies charge.</p>
 
       <h3>How does AI search optimization work?</h3>
       <p>AI search engines like ChatGPT, Claude, and Perplexity read your website to decide whether to recommend your business. LocalBeacon generates schema markup, llms.txt files, FAQ content, and structured data that make your business easy for AI to understand and cite in answers.</p>
