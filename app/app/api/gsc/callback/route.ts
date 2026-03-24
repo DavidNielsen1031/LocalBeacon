@@ -41,10 +41,6 @@ export async function GET(req: NextRequest) {
   try {
     const decoded = JSON.parse(Buffer.from(state, 'base64url').toString())
     userId = decoded.userId
-    // Reject if state is older than 10 minutes
-    if (Date.now() - decoded.ts > 600_000) {
-      return NextResponse.redirect(`${baseUrl}/dashboard?gsc_error=expired`)
-    }
     // Verify state userId matches the authenticated session
     if (decoded.userId !== sessionUserId) {
       console.error('[gsc/callback] CSRF mismatch: state userId !== session userId')

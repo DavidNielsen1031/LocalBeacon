@@ -97,16 +97,15 @@ export async function POST(req: NextRequest) {
 
       if (clerkUserId && supabase) {
         if (status === "active") {
-          // Plan stays as-is — already set on checkout.session.completed
-          console.log(`Subscription active for user ${clerkUserId}`);
-        } else if (status === "past_due" || status === "unpaid" || status === "canceled") {
-          // Downgrade to free on payment failure or cancellation
+          // Re-activate plan if payment eventually succeeded after past_due/unpaid
+          const plan = subscription.metadata?.plan?.toLowerCase() || "solo";
           await supabase
             .from("users")
-            .update({ plan: "free" })
+            .update({ plan })
             .eq("clerk_id", clerkUserId);
-          console.log(`Subscription ${status} — downgraded user ${clerkUserId} to free`);
+          console.log(`Subscription reactivated — restored user ${clerkUserId} to plan: ${plan}`);
         }
+        // Do NOT downgrade on past_due/unpaid — Stripe retries; only downgrade on subscription.deleted
       }
       break;
     }
