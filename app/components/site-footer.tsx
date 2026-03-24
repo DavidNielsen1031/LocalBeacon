@@ -20,7 +20,7 @@ export function SiteFooter() {
         className="flex flex-col md:flex-row items-center justify-between gap-5"
       >
         <Link href="/" style={{ textDecoration: "none" }} className="flex items-center gap-2">
-          <img src="/logo-192.png?v=3" alt="LocalBeacon" style={{ height: "48px", width: "48px" }} />
+          <img src="/logo-192.png?v=4" alt="LocalBeacon" style={{ height: "48px", width: "48px" }} />
           <span style={{ fontWeight: 800, fontSize: "1.125rem", color: NAVY }}>
             Local<span style={{ color: ORANGE }}>Beacon</span>.ai
           </span>
