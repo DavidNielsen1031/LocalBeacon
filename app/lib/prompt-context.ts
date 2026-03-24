@@ -56,7 +56,7 @@ export function buildPromptContext(ctx: BusinessContext): string {
   return lines.join('\n')
 }
 
-export async function getBusinessContext(clerkUserId: string): Promise<BusinessContext | null> {
+export async function getBusinessContext(clerkUserId: string, businessId?: string): Promise<BusinessContext | null> {
   try {
     const supabase = createServerClient()
     if (!supabase) return null
@@ -70,12 +70,17 @@ export async function getBusinessContext(clerkUserId: string): Promise<BusinessC
 
     if (userError || !user) return null
 
-    // users.id → businesses.user_id
-    const { data: business, error: bizError } = await supabase
+    // Fetch specific business if businessId provided, otherwise fall back to first business
+    let query = supabase
       .from('businesses')
       .select('name, category, primary_city, service_areas, specialties, description')
       .eq('user_id', user.id)
-      .single()
+
+    if (businessId) {
+      query = query.eq('id', businessId)
+    }
+
+    const { data: business, error: bizError } = await query.single()
 
     if (bizError || !business) return null
 

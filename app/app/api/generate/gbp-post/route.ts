@@ -39,26 +39,32 @@ export async function POST(req: NextRequest) {
     service_areas = [],
   } = body
 
+  // Resolve Clerk ID to internal UUID
+  const supabase = createServerClient()
+  let dbUserId: string | null = null
+  if (supabase) {
+    const { data: dbUser } = await supabase.from('users').select('id').eq('clerk_id', userId).single()
+    if (!dbUser) return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    dbUserId = dbUser.id
+  }
+
   // Verify business ownership if business_id provided
-  if (business_id) {
-    const supabase = createServerClient()
-    if (supabase) {
-      const { data: biz, error: bizErr } = await supabase
-        .from('businesses')
-        .select('user_id')
-        .eq('id', business_id)
-        .single()
-      if (bizErr || !biz) {
-        return NextResponse.json({ error: 'Business not found' }, { status: 404 })
-      }
-      if (biz.user_id !== userId) {
-        return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-      }
+  if (business_id && supabase && dbUserId) {
+    const { data: biz, error: bizErr } = await supabase
+      .from('businesses')
+      .select('user_id')
+      .eq('id', business_id)
+      .single()
+    if (bizErr || !biz) {
+      return NextResponse.json({ error: 'Business not found' }, { status: 404 })
+    }
+    if (biz.user_id !== dbUserId) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
   }
 
   // Enrich prompt with business context from Settings if available
-  const bizCtx = await getBusinessContext(userId)
+  const bizCtx = await getBusinessContext(userId, business_id)
   const contextBlock = bizCtx
     ? `You are writing content for the following business:\n${buildPromptContext(bizCtx)}\n\n`
     : ''
@@ -100,7 +106,6 @@ Respond in JSON only:
 
   // Save to DB if business_id provided
   if (business_id) {
-    const supabase = createServerClient()
     if (supabase) {
       await supabase.from('content_items').insert({
         business_id,
