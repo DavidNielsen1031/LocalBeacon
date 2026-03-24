@@ -48,10 +48,10 @@ export function SiteNav() {
       />
       <div
         style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}
-        className="flex items-center justify-between h-16 md:h-20"
+        className="flex items-center justify-center md:justify-between h-16 md:h-20"
       >
         <Link href="/" style={{ textDecoration: "none" }} className="flex items-center gap-1.5 md:gap-2 shrink-0">
-          <img src="/logo-192.png?v=4" alt="LocalBeacon" style={{ height: "36px", width: "36px" }} className="md:w-14 md:h-14" />
+          <img src="/logo-192.png?v=4" alt="LocalBeacon" style={{ height: "32px", width: "32px" }} className="md:w-10 md:h-10" />
           <span
             style={{
               fontWeight: 800,
@@ -59,7 +59,7 @@ export function SiteNav() {
               letterSpacing: "-0.02em",
               whiteSpace: "nowrap",
             }}
-            className="text-base md:text-xl"
+            className="text-sm md:text-xl"
           >
             Local<span style={{ color: ORANGE }}>Beacon</span>.ai
           </span>

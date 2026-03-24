@@ -1,10 +1,10 @@
 # Sprint State — LocalBeacon
 
-**Current Sprint:** 29
-**Theme:** SEO Truth + Brand Fix
-**Status:** CLOSED
-**Branch:** sprint/localbeacon/s29
-**Started:** 2026-03-23
+**Current Sprint:** 12
+**Theme:** Distribution
+**Status:** EXECUTING
+**Branch:** sprint/localbeacon/s12
+**Started:** 2026-03-07
 
 ## History
 
