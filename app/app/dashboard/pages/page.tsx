@@ -1,6 +1,6 @@
 'use client'
 export const dynamic = 'force-dynamic'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -17,6 +17,19 @@ interface ServicePage {
 }
 
 export default function PagesPage() {
+  const domPurifyRef = useRef<typeof import('dompurify') | null>(null)
+
+  useEffect(() => {
+    // Dynamically import DOMPurify on the client only (requires window)
+    import('dompurify').then(mod => { domPurifyRef.current = mod.default ?? mod })
+  }, [])
+
+  const sanitizeHtml = (html: string): string => {
+    if (domPurifyRef.current) return domPurifyRef.current.sanitize(html)
+    // Fallback before DOMPurify loads: strip all tags
+    return html.replace(/<[^>]*>/g, '')
+  }
+
   const [pages, setPages] = useState<ServicePage[]>([
     {
       city: 'Burnsville',
@@ -121,15 +134,7 @@ export default function PagesPage() {
         <DialogContent className="bg-white max-w-2xl max-h-[80vh] overflow-y-auto">
           {previewPage && (
             <div className="p-6 prose prose-sm max-w-none"
-              dangerouslySetInnerHTML={{ __html: (() => {
-                try {
-                  const DOMPurify = require('dompurify')
-                  return DOMPurify.sanitize(previewPage.html)
-                } catch {
-                  // Fallback: strip all tags
-                  return previewPage.html.replace(/<[^>]*>/g, '')
-                }
-              })() }} />
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(previewPage.html) }} />
           )}
         </DialogContent>
       </Dialog>
