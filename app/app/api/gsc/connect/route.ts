@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic'
 import { auth } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
+import { randomBytes } from 'crypto'
 
 /**
  * GET /api/gsc/connect — Redirect user to Google OAuth consent screen
@@ -18,7 +19,9 @@ export async function GET(req: NextRequest) {
   }
 
   const scope = 'https://www.googleapis.com/auth/webmasters.readonly'
-  const state = Buffer.from(JSON.stringify({ userId, ts: Date.now() })).toString('base64url')
+  // Use a cryptographically random nonce to prevent CSRF — do NOT use Date.now()
+  const nonce = randomBytes(32).toString('hex')
+  const state = Buffer.from(JSON.stringify({ userId, nonce })).toString('base64url')
 
   const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth')
   authUrl.searchParams.set('client_id', clientId)

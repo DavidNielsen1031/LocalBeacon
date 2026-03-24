@@ -18,20 +18,36 @@ type ResendEvent = {
 }
 
 export async function POST(req: NextRequest) {
-  // Verify webhook secret
+  // Read raw body first — required for HMAC signature verification
+  const body = await req.text()
+
+  // Verify webhook signature using Svix HMAC
   const webhookSecret = process.env.RESEND_WEBHOOK_SECRET
   if (webhookSecret) {
     const svixId = req.headers.get('svix-id')
     const svixTimestamp = req.headers.get('svix-timestamp')
     const svixSignature = req.headers.get('svix-signature')
-    
+
     if (!svixId || !svixTimestamp || !svixSignature) {
       console.error('[resend-webhook] Missing svix headers')
       return NextResponse.json({ error: 'Missing headers' }, { status: 401 })
     }
+
+    try {
+      const { Webhook } = await import('svix')
+      const wh = new Webhook(webhookSecret)
+      wh.verify(body, {
+        'svix-id': svixId,
+        'svix-timestamp': svixTimestamp,
+        'svix-signature': svixSignature,
+      })
+    } catch (err) {
+      console.error('[resend-webhook] Signature verification failed:', err)
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
+    }
   }
 
-  const event: ResendEvent = await req.json()
+  const event: ResendEvent = JSON.parse(body)
   const { type, data } = event
 
   // Log every event for PostHog pipeline
