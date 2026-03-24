@@ -50,7 +50,7 @@ export default function CheckPage() {
         <div className="grid md:grid-cols-3 gap-8">
           {[
             { step: '1', title: 'Enter your website', desc: 'Paste any URL — yours or a competitor\'s.' },
-            { step: '2', title: 'We scan 21 signals', desc: 'From AI discovery files to review content, we check what matters.' },
+            { step: '2', title: 'We scan 26 signals', desc: 'From AI discovery files to review content, we check what matters.' },
             { step: '3', title: 'Get your score', desc: 'See your grade instantly. Get the full breakdown via email.' },
           ].map((item) => (
             <div key={item.step} className="text-center">

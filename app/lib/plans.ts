@@ -43,7 +43,7 @@ export const PLANS: PlanDefinition[] = [
     period: 'forever',
     tagline: 'See how visible your business is online — in 10 seconds.',
     features: [
-      { label: '1 AI Readiness scan per month (all 21 signals)', mode: 'diy' },
+      { label: '1 AI Readiness scan per month (all 26 signals)', mode: 'diy' },
       { label: '5 Google post drafts per month', mode: 'diy' },
       { label: '3 review response drafts per month', mode: 'diy' },
       { label: 'Schema markup preview (read-only)', mode: 'diy' },
@@ -61,7 +61,7 @@ export const PLANS: PlanDefinition[] = [
     features: [
       // Automated first — these run without customer effort
       { label: 'AI search changes tracked — your site stays current', mode: 'auto' },
-      { label: 'Unlimited AI Readiness scans (21 signals)', mode: 'auto' },
+      { label: 'Unlimited AI Readiness scans (26 signals)', mode: 'auto' },
       { label: 'Weekly Google posts, written and scheduled', mode: 'auto' },
       { label: '10 new city pages per month', mode: 'auto' },
       { label: '4 blog posts per month, locally customized', mode: 'auto' },

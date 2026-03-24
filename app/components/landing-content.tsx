@@ -55,7 +55,7 @@ const outcomes = [
     Icon: BarChart3,
     title: "Know exactly what's bringing in calls",
     description:
-      "See exactly how visible your business is to AI search engines with a 15-point audit and actionable recommendations.",
+      "See exactly how visible your business is to AI search engines with a 26-point audit and actionable recommendations.",
   },
   {
     Icon: TrendingUp,
@@ -649,7 +649,7 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
             </button>
           </Link>
           <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "0.8125rem", marginTop: "16px" }}>
-            We scan 21 signals that AI search engines look for
+            We scan 26 signals that AI search engines look for
           </p>
         </div>
       </section>
