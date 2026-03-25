@@ -18,6 +18,7 @@ export const LAUNCH_PACKAGE_AMOUNT = 499
 export const LAUNCH_PACKAGE_ANNUAL_PRICE = '$399'
 export const LAUNCH_PACKAGE_ANNUAL_AMOUNT = 399
 export const LAUNCH_PACKAGE_ANNUAL_SAVINGS = '$100'
+export const BEACON_LAUNCH_TOTAL_ANNUAL_SAVINGS = '$389'  // $289 Pro annual + $100 setup discount
 
 // ─── Types ──────────────────────────────────────────────────────────
 

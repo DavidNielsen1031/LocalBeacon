@@ -12,6 +12,7 @@ import {
   AUTOPILOT_ANNUAL_PRICE,
   AUTOPILOT_ANNUAL_SAVINGS,
   LAUNCH_PACKAGE_ANNUAL_SAVINGS,
+  BEACON_LAUNCH_TOTAL_ANNUAL_SAVINGS,
   type PlanDefinition,
   type FeatureTag,
 } from "@/lib/plans";
@@ -118,14 +119,6 @@ function BillingToggle({
       >
         Annual
       </span>
-      {isAnnual && (
-        <span
-          className="text-xs font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap"
-          style={{ background: "#FFF1EB", color: ORANGE }}
-        >
-          Save {AUTOPILOT_ANNUAL_SAVINGS}
-        </span>
-      )}
     </div>
   );
 }
@@ -151,10 +144,18 @@ function AutopilotCard({
         boxShadow: `0 4px 24px ${ORANGE}20`,
       }}
     >
-      <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+      <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-2">
         <Badge className="font-bold px-4 text-white" style={{ background: ORANGE }}>
           Most Popular
         </Badge>
+        {isAnnual && (
+          <Badge
+            className="font-bold px-3 text-xs whitespace-nowrap"
+            style={{ background: "#FFF1EB", color: ORANGE }}
+          >
+            Save {AUTOPILOT_ANNUAL_SAVINGS}
+          </Badge>
+        )}
       </div>
 
       <CardContent className="p-6 pt-8 flex-1 flex flex-col">
@@ -215,13 +216,21 @@ function LaunchPackageCard({ plan, isAnnual = false }: { plan: PlanDefinition; i
         boxShadow: `0 4px 24px ${GOLD}20`,
       }}
     >
-      <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+      <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-2">
         <Badge
           className="font-bold px-4 text-white"
           style={{ background: `linear-gradient(90deg, #B8860B, ${GOLD})` }}
         >
           White Glove
         </Badge>
+        {isAnnual && (
+          <Badge
+            className="font-bold px-3 text-xs whitespace-nowrap"
+            style={{ background: "#FFFDF5", color: "#B8860B", border: "1px solid #B8860B" }}
+          >
+            Save {BEACON_LAUNCH_TOTAL_ANNUAL_SAVINGS}
+          </Badge>
+        )}
       </div>
 
       <CardContent className="p-6 pt-8 flex-1 flex flex-col">
