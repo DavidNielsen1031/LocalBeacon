@@ -82,7 +82,7 @@ function BillingToggle({
   onToggle: () => void;
 }) {
   return (
-    <div className="flex items-center justify-center gap-4 mb-8">
+    <div className="flex items-center justify-center gap-3 mb-8">
       <span
         className="text-sm font-semibold cursor-pointer select-none"
         style={{ color: isAnnual ? SLATE : NAVY }}
@@ -92,15 +92,23 @@ function BillingToggle({
       </span>
       <button
         onClick={onToggle}
-        className="relative w-12 h-6 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 shrink-0"
+        className="relative rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 shrink-0"
         style={{
+          width: "44px",
+          height: "24px",
           background: isAnnual ? ORANGE : MIST,
         }}
         aria-label="Toggle annual billing"
       >
         <span
-          className="absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-md transition-transform duration-200"
-          style={{ transform: isAnnual ? "translateX(26px)" : "translateX(2px)" }}
+          className="absolute bg-white rounded-full shadow-md transition-transform duration-200"
+          style={{
+            width: "20px",
+            height: "20px",
+            top: "2px",
+            left: "2px",
+            transform: isAnnual ? "translateX(20px)" : "translateX(0px)",
+          }}
         />
       </button>
       <span
@@ -112,7 +120,7 @@ function BillingToggle({
       </span>
       {isAnnual && (
         <span
-          className="text-xs font-bold px-2 py-0.5 rounded-full whitespace-nowrap"
+          className="text-xs font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap"
           style={{ background: "#FFF1EB", color: ORANGE }}
         >
           Save {AUTOPILOT_ANNUAL_SAVINGS}
@@ -193,7 +201,8 @@ function AutopilotCard({
 }
 
 function LaunchPackageCard({ plan, isAnnual = false }: { plan: PlanDefinition; isAnnual?: boolean }) {
-  const displayPrice = isAnnual && plan.annualPrice ? plan.annualPrice : plan.price;
+  const setupPrice = isAnnual && plan.annualPrice ? plan.annualPrice : plan.price;
+  const bundleTotal = isAnnual ? "$1,298" : null; // $399 setup + $899 annual
   const ctaText = isAnnual && plan.ctaAnnual ? plan.ctaAnnual : plan.cta;
 
   return (
@@ -219,18 +228,29 @@ function LaunchPackageCard({ plan, isAnnual = false }: { plan: PlanDefinition; i
         <p className="text-sm uppercase tracking-wider font-semibold" style={{ color: SLATE }}>
           {plan.name}
         </p>
-        <div className="flex items-baseline gap-1 mt-2 mb-1">
-          <span className="text-5xl font-extrabold" style={{ color: NAVY }}>
-            {displayPrice}
-          </span>
-          <span className="text-sm" style={{ color: SLATE }}>
-            one-time
-          </span>
-        </div>
-        {isAnnual && (
-          <p className="text-xs mb-2" style={{ color: "#B8860B" }}>
-            {LAUNCH_PACKAGE_ANNUAL_SAVINGS} off when bundled with annual
-          </p>
+        {isAnnual ? (
+          <>
+            <div className="flex items-baseline gap-1 mt-2 mb-1">
+              <span className="text-5xl font-extrabold" style={{ color: NAVY }}>
+                {bundleTotal}
+              </span>
+              <span className="text-sm" style={{ color: SLATE }}>
+                /first year
+              </span>
+            </div>
+            <p className="text-xs mb-2" style={{ color: "#B8860B" }}>
+              {setupPrice} setup + {AUTOPILOT_ANNUAL_PRICE} annual Pro — save {LAUNCH_PACKAGE_ANNUAL_SAVINGS} on setup
+            </p>
+          </>
+        ) : (
+          <div className="flex items-baseline gap-1 mt-2 mb-1">
+            <span className="text-5xl font-extrabold" style={{ color: NAVY }}>
+              {setupPrice}
+            </span>
+            <span className="text-sm" style={{ color: SLATE }}>
+              one-time
+            </span>
+          </div>
         )}
         <p className="text-sm mb-5" style={{ color: SLATE }}>
           {plan.tagline}

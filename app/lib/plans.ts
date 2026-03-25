@@ -209,7 +209,7 @@ export const PRICING_FAQS = [
   },
   {
     q: 'Is there an annual plan?',
-    a: `Yes! Autopilot is ${AUTOPILOT_ANNUAL_PRICE}/year — that saves you ${AUTOPILOT_ANNUAL_SAVINGS} compared to monthly billing.`,
+    a: `Yes! LocalBeacon Pro is ${AUTOPILOT_ANNUAL_PRICE}/year — that saves you ${AUTOPILOT_ANNUAL_SAVINGS} compared to monthly billing.`,
   },
   {
     q: "What happens when I buy Beacon Launch?",
