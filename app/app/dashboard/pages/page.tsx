@@ -198,7 +198,7 @@ export default function PagesPage() {
       {pages.length >= 3 && (
         <div className="mt-6 p-4 bg-[#FF6B35]/5 border border-[#FF6B35]/20 rounded-lg text-center">
           <p className="text-[#FF6B35] text-sm">
-            You&apos;ve reached the Free plan limit. <button className="underline font-semibold">Upgrade to Autopilot</button> for 3 city pages per month.
+            You&apos;ve reached the Free plan limit. <button className="underline font-semibold">Upgrade to Pro</button> for 3 city pages per month.
           </p>
         </div>
       )}

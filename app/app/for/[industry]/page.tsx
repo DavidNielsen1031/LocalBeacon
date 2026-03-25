@@ -29,7 +29,7 @@ export async function generateMetadata({
     title: `LocalBeacon for ${data.plural} — ${data.headline}`,
     description: data.description,
     openGraph: {
-      title: `LocalBeacon for ${data.plural} — Local Marketing on Autopilot`,
+      title: `LocalBeacon for ${data.plural} — AI-Powered Local Marketing`,
       description: data.description,
       url: `https://localbeacon.ai/for/${data.slug}`,
       siteName: "LocalBeacon.ai",
@@ -515,7 +515,7 @@ export default async function IndustryPage({
           >
             {[
               { plan: "Free", price: "$0", note: "1 location" },
-              { plan: "Autopilot", price: "$99/mo", note: "Everything automated" },
+              { plan: "LocalBeacon Pro", price: "$99/mo", note: "Everything automated" },
               { plan: "Launch Package", price: "$499", note: "One-time setup" },
             ].map((tier) => (
               <div

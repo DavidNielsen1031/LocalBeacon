@@ -11,6 +11,7 @@ import {
   AUTOPILOT_MONTHLY_PRICE,
   AUTOPILOT_ANNUAL_PRICE,
   AUTOPILOT_ANNUAL_SAVINGS,
+  LAUNCH_PACKAGE_ANNUAL_SAVINGS,
   type PlanDefinition,
   type FeatureTag,
 } from "@/lib/plans";
@@ -81,9 +82,9 @@ function BillingToggle({
   onToggle: () => void;
 }) {
   return (
-    <div className="flex items-center justify-center gap-3 mb-8">
+    <div className="flex items-center justify-center gap-4 mb-8">
       <span
-        className="text-sm font-semibold cursor-pointer"
+        className="text-sm font-semibold cursor-pointer select-none"
         style={{ color: isAnnual ? SLATE : NAVY }}
         onClick={() => isAnnual && onToggle()}
       >
@@ -91,19 +92,19 @@ function BillingToggle({
       </span>
       <button
         onClick={onToggle}
-        className="relative w-14 h-7 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+        className="relative w-12 h-6 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 shrink-0"
         style={{
           background: isAnnual ? ORANGE : MIST,
         }}
         aria-label="Toggle annual billing"
       >
         <span
-          className="absolute top-0.5 w-6 h-6 bg-white rounded-full shadow-md transition-transform duration-200"
-          style={{ transform: isAnnual ? "translateX(30px)" : "translateX(2px)" }}
+          className="absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-md transition-transform duration-200"
+          style={{ transform: isAnnual ? "translateX(26px)" : "translateX(2px)" }}
         />
       </button>
       <span
-        className="text-sm font-semibold cursor-pointer"
+        className="text-sm font-semibold cursor-pointer select-none"
         style={{ color: isAnnual ? NAVY : SLATE }}
         onClick={() => !isAnnual && onToggle()}
       >
@@ -111,7 +112,7 @@ function BillingToggle({
       </span>
       {isAnnual && (
         <span
-          className="text-xs font-bold px-2 py-0.5 rounded-full"
+          className="text-xs font-bold px-2 py-0.5 rounded-full whitespace-nowrap"
           style={{ background: "#FFF1EB", color: ORANGE }}
         >
           Save {AUTOPILOT_ANNUAL_SAVINGS}
@@ -191,7 +192,10 @@ function AutopilotCard({
   );
 }
 
-function LaunchPackageCard({ plan }: { plan: PlanDefinition }) {
+function LaunchPackageCard({ plan, isAnnual = false }: { plan: PlanDefinition; isAnnual?: boolean }) {
+  const displayPrice = isAnnual && plan.annualPrice ? plan.annualPrice : plan.price;
+  const ctaText = isAnnual && plan.ctaAnnual ? plan.ctaAnnual : plan.cta;
+
   return (
     <Card
       id="dfy"
@@ -217,12 +221,17 @@ function LaunchPackageCard({ plan }: { plan: PlanDefinition }) {
         </p>
         <div className="flex items-baseline gap-1 mt-2 mb-1">
           <span className="text-5xl font-extrabold" style={{ color: NAVY }}>
-            {plan.price}
+            {displayPrice}
           </span>
           <span className="text-sm" style={{ color: SLATE }}>
-            {plan.period}
+            one-time
           </span>
         </div>
+        {isAnnual && (
+          <p className="text-xs mb-2" style={{ color: "#B8860B" }}>
+            {LAUNCH_PACKAGE_ANNUAL_SAVINGS} off when bundled with annual
+          </p>
+        )}
         <p className="text-sm mb-5" style={{ color: SLATE }}>
           {plan.tagline}
         </p>
@@ -245,7 +254,7 @@ function LaunchPackageCard({ plan }: { plan: PlanDefinition }) {
             {[
               { step: "1", text: "Purchase → book your strategy call" },
               { step: "2", text: "We build everything (5–7 business days)" },
-              { step: "3", text: `Autopilot starts — ${AUTOPILOT_MONTHLY_PRICE}/mo after your included first month` },
+              { step: "3", text: `Pro starts — ${AUTOPILOT_MONTHLY_PRICE}/mo after your included first month` },
             ].map((s) => (
               <div key={s.step} className="flex items-center gap-2 text-xs" style={{ color: "#2D3436" }}>
                 <span
@@ -260,16 +269,16 @@ function LaunchPackageCard({ plan }: { plan: PlanDefinition }) {
           </div>
         </div>
 
-        <Link href="/check?plan=dfy">
+        <Link href={isAnnual ? "/check?plan=dfy_annual" : "/check?plan=dfy"}>
           <Button
             className="w-full font-semibold h-12 text-base text-white"
             style={{ background: `linear-gradient(90deg, #B8860B, ${GOLD})` }}
           >
-            {plan.cta}
+            {ctaText}
           </Button>
         </Link>
         <p className="text-xs text-center mt-2" style={{ color: "#B2BEC3" }}>
-          One-time payment — includes first month of Autopilot
+          One-time payment — includes first month of Pro
         </p>
       </CardContent>
     </Card>
@@ -283,41 +292,18 @@ function LaunchPackageCard({ plan }: { plan: PlanDefinition }) {
 export function PricingSection() {
   const [isAnnual, setIsAnnual] = useState(false);
 
-  const autopilotPlan = PLANS.find((p) => p.name === "Autopilot")!;
-  const launchPlan = PLANS.find((p) => p.name === "Launch Package")!;
+  const proPlan = PLANS.find((p) => p.name === "LocalBeacon Pro")!;
+  const launchPlan = PLANS.find((p) => p.name === "Beacon Launch")!;
 
   return (
     <>
-      {/* Free scan banner */}
-      <div
-        className="flex flex-wrap items-center justify-between gap-4 rounded-xl px-6 py-4 mb-8"
-        style={{ background: "white", border: `1px solid ${MIST}` }}
-      >
-        <div>
-          <p className="font-bold text-base" style={{ color: NAVY }}>
-            🔍 Free AI Readiness Scan
-          </p>
-          <p className="text-sm mt-0.5" style={{ color: SLATE }}>
-            See how your business appears in ChatGPT, Google AI, and Perplexity — no account needed.
-          </p>
-        </div>
-        <Link href="/check">
-          <Button
-            className="font-semibold text-sm text-white whitespace-nowrap"
-            style={{ background: NAVY }}
-          >
-            Check Your Score — Free
-          </Button>
-        </Link>
-      </div>
-
       {/* Billing toggle */}
       <BillingToggle isAnnual={isAnnual} onToggle={() => setIsAnnual(!isAnnual)} />
 
       {/* Two-card grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <AutopilotCard plan={autopilotPlan} isAnnual={isAnnual} />
-        <LaunchPackageCard plan={launchPlan} />
+        <AutopilotCard plan={proPlan} isAnnual={isAnnual} />
+        <LaunchPackageCard plan={launchPlan} isAnnual={isAnnual} />
       </div>
     </>
   );

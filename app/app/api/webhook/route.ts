@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
               .eq("clerk_id", clerkUserId);
           }
 
-          // Auto-create Autopilot subscription with 30-day trial (first month included in DFY)
+          // Auto-create Pro subscription with 30-day trial (first month included in DFY)
           const soloPriceId = STRIPE_PLANS.SOLO.priceId
           if (soloPriceId && session.customer) {
             try {
@@ -86,7 +86,7 @@ export async function POST(req: NextRequest) {
             }
           }
 
-          console.log(`DFY checkout completed: ${session.id} — Autopilot access granted until ${expiresAt}, user: ${clerkUserId}`);
+          console.log(`DFY checkout completed: ${session.id} — Pro access granted until ${expiresAt}, user: ${clerkUserId}`);
         } else {
           // SOLO or SOLO_ANNUAL subscription
           const isAnnual = plan === "SOLO_ANNUAL"

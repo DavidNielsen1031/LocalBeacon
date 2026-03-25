@@ -43,7 +43,7 @@ function SignUpContent() {
             ✅ Payment successful!
           </p>
           <p className="text-sm" style={{ color: '#636E72' }}>
-            Create your account to get started. Your {plan === 'dfy' ? 'DFY Setup' : 'Autopilot'} plan is ready.
+            Create your account to get started. Your {plan === 'dfy' ? 'DFY Setup' : 'Pro'} plan is ready.
           </p>
         </div>
       )}
