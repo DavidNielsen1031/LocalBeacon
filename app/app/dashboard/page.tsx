@@ -21,7 +21,17 @@ import {
   BarChart3,
   FileDown,
   CalendarCheck,
+  Copy,
+  Check,
+  TrendingUp,
+  BookOpen,
 } from "lucide-react";
+import { AUTOPILOT_MONTHLY_PRICE } from "@/lib/plans";
+
+const ORANGE = "#FF6B35";
+const NAVY = "#1B2A4A";
+const SLATE = "#636E72";
+const MIST = "#DFE6E9";
 
 interface DashboardData {
   postsCount: number;
@@ -31,6 +41,7 @@ interface DashboardData {
   recentItems: Array<{
     type: string;
     title: string;
+    content?: string;
     created_at: string;
   }>;
   freshness: {
@@ -38,6 +49,26 @@ interface DashboardData {
     status: "fresh" | "stale" | "critical" | "none";
     lastPostDate: string | null;
   } | null;
+}
+
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+  return (
+    <Button
+      size="sm"
+      onClick={handleCopy}
+      className="font-semibold text-xs text-white gap-1"
+      style={{ backgroundColor: copied ? "#16a34a" : ORANGE }}
+    >
+      {copied ? <Check size={12} /> : <Copy size={12} />}
+      {copied ? "Copied!" : "Copy to Clipboard"}
+    </Button>
+  );
 }
 
 export default function DashboardPage() {
@@ -51,28 +82,24 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // S21-03: DFY success banner
+  // DFY success banner
   const [dfySuccess, setDfySuccess] = useState(false);
   const [dfyBannerDismissed, setDfyBannerDismissed] = useState(false);
   const bookingUrl = process.env.NEXT_PUBLIC_BOOKING_URL ?? null;
 
-  // S21-04: Welcome email on first visit
+  // Welcome email on first visit
   const userInitRef = useRef(false);
 
   useEffect(() => {
-    // Detect ?upgraded=dfy (legacy) or ?checkout=success with DFY plan
     if (searchParams.get("upgraded") === "dfy" || searchParams.get("checkout") === "success") {
       setDfySuccess(true);
     }
   }, [searchParams]);
 
   useEffect(() => {
-    // Call user init once per session (sends welcome email for new users)
     if (!userInitRef.current && user?.id) {
       userInitRef.current = true;
-      fetch("/api/user/init", { method: "POST" }).catch(() => {
-        // best-effort, ignore errors
-      });
+      fetch("/api/user/init", { method: "POST" }).catch(() => {});
     }
   }, [user?.id]);
 
@@ -82,112 +109,81 @@ export default function DashboardPage() {
       setLoading(false);
       return;
     }
-
     setLoading(true);
     setData(null);
     setError(null);
     fetch(`/api/businesses/${activeBusinessId}/dashboard`)
       .then((res) => (res.ok ? res.json() : null))
       .then((d) => setData(d))
-      .catch(() => { setData(null); setError('Something went wrong. Please try again.') })
+      .catch(() => { setData(null); setError("Something went wrong. Please try again."); })
       .finally(() => setLoading(false));
   }, [activeBusinessId]);
 
-  const stats = hasBusiness && data
-    ? [
-        { label: "Google Posts", value: String(data.postsCount), sub: "posts created", Icon: FileText, href: "/dashboard/posts" },
-        { label: "City Pages", value: String(data.pagesCount), sub: "cities covered", Icon: Globe, href: "/dashboard/pages" },
-        { label: "Reviews", value: String(data.reviewsCount), sub: "replies drafted", Icon: Star, href: "/dashboard/reviews" },
-        { label: "AI Readiness", value: data.aeoScore !== null ? `${data.aeoScore}` : "—", sub: data.aeoScore !== null ? "out of 100" : "run your first scan", Icon: Zap, href: "/dashboard/ai-readiness" },
-      ]
-    : [
-        { label: "Google Posts", value: "—", sub: "connect listing to start", Icon: FileText, href: "/onboarding" },
-        { label: "City Pages", value: "—", sub: "set up your service areas", Icon: Globe, href: "/onboarding" },
-        { label: "Reviews", value: "—", sub: "we'll draft replies for you", Icon: Star, href: "/onboarding" },
-        { label: "AI Readiness", value: "—", sub: "scan your website", Icon: Zap, href: "/dashboard/ai-readiness" },
-      ];
-
-  const activityIconMap: Record<string, typeof FileText> = {
-    gbp_post: FileText,
-    city_page: Globe,
-    review_reply: Star,
-  };
-
-  const activity = hasBusiness && data && data.recentItems.length > 0
-    ? data.recentItems.map((item) => ({
-        Icon: activityIconMap[item.type] ?? FileText,
-        text: item.title || `${item.type.replace("_", " ")} created`,
-        time: new Date(item.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
-        action: item.type === "gbp_post" ? "/dashboard/posts" : item.type === "city_page" ? "/dashboard/pages" : "/dashboard/reviews",
-      }))
-    : [
-        { Icon: LinkIcon, text: "Connect your Google listing to get started", time: "First step", action: "/onboarding" },
-        { Icon: PenLine, text: "Generate your first Google post", time: "Step 2", action: "/dashboard/posts" },
-        { Icon: Globe, text: "Build city pages for areas you serve", time: "Step 3", action: "/dashboard/pages" },
-        { Icon: Zap, text: "Check your AI Readiness score", time: "Step 4", action: "/dashboard/ai-readiness" },
-      ];
-
-  const [upgradeBannerDismissed, setUpgradeBannerDismissed] = useState(false)
-  const [upgradeLoading, setUpgradeLoading] = useState(false)
+  const [upgradeBannerDismissed, setUpgradeBannerDismissed] = useState(false);
+  const [upgradeLoading, setUpgradeLoading] = useState(false);
 
   const handleUpgradeClick = async () => {
-    setUpgradeLoading(true)
+    setUpgradeLoading(true);
     try {
-      const res = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: 'SOLO' }),
-      })
-      const d = await res.json()
-      if (d.url) { window.location.href = d.url; return }
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: "SOLO" }),
+      });
+      const d = await res.json();
+      if (d.url) { window.location.href = d.url; return; }
     } catch {}
-    setUpgradeLoading(false)
-  }
+    setUpgradeLoading(false);
+  };
+
+  // Extract actionable items (posts/reviews to copy/post)
+  const readyPosts = data?.recentItems?.filter((i) => i.type === "gbp_post").slice(0, 2) ?? [];
+  const readyReviews = data?.recentItems?.filter((i) => i.type === "review_reply").slice(0, 2) ?? [];
+  const publishedBlogs = data?.recentItems?.filter((i) => i.type === "blog_post").slice(0, 3) ?? [];
+  const publishedPages = data?.recentItems?.filter((i) => i.type === "city_page").slice(0, 3) ?? [];
 
   return (
-    <div className="flex-1 px-6 py-8 max-w-6xl">
-      {error && <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-4 mb-4">{error}</div>}
+    <div className="flex-1 px-6 py-8 max-w-5xl">
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-4 mb-4">{error}</div>
+      )}
 
-      {/* S21-03: DFY success banner */}
+      {/* DFY success banner */}
       {dfySuccess && !dfyBannerDismissed && (
         <div
           className="mb-6 rounded-xl border overflow-hidden"
-          style={{ backgroundColor: 'rgba(34,197,94,0.06)', borderColor: 'rgba(34,197,94,0.3)' }}
+          style={{ backgroundColor: "rgba(34,197,94,0.06)", borderColor: "rgba(34,197,94,0.3)" }}
         >
           <div className="px-5 py-4">
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-start gap-3">
-                <CalendarCheck size={22} className="mt-0.5 shrink-0" style={{ color: '#16a34a' }} />
+                <CalendarCheck size={22} className="mt-0.5 shrink-0" style={{ color: "#16a34a" }} />
                 <div>
-                  <h3 className="font-bold text-base mb-1" style={{ color: '#15803d' }}>
-                    🎉 Welcome to LocalBeacon Done-For-You!
+                  <h3 className="font-bold text-base mb-1" style={{ color: "#15803d" }}>
+                    🎉 Welcome to LocalBeacon!
                   </h3>
-                  <p className="text-sm mb-3" style={{ color: '#2D3436' }}>
-                    Your DFY plan is active. Book your onboarding call so our team can get to work on your AI visibility.
+                  <p className="text-sm mb-3" style={{ color: NAVY }}>
+                    Your Launch Package is active. Book your strategy call so we can get started.
                   </p>
                   {bookingUrl ? (
                     <a
                       href={bookingUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 font-semibold text-sm text-white px-5 py-2.5 rounded-lg transition-colors"
-                      style={{ backgroundColor: '#16a34a' }}
+                      className="inline-flex items-center gap-2 font-semibold text-sm text-white px-5 py-2.5 rounded-lg"
+                      style={{ backgroundColor: "#16a34a" }}
                     >
                       <CalendarCheck size={15} />
-                      Book Your Onboarding Call →
+                      Book Your Strategy Call →
                     </a>
                   ) : (
-                    <p className="text-sm font-medium" style={{ color: '#636E72' }}>
-                      Our team will reach out within 1 business day to schedule your onboarding call.
+                    <p className="text-sm font-medium" style={{ color: SLATE }}>
+                      Our team will reach out within 1 business day to schedule your call.
                     </p>
                   )}
                 </div>
               </div>
-              <button
-                onClick={() => setDfyBannerDismissed(true)}
-                className="text-xs shrink-0 mt-0.5"
-                style={{ color: '#636E72' }}
-              >
+              <button onClick={() => setDfyBannerDismissed(true)} className="text-xs shrink-0" style={{ color: SLATE }}>
                 ✕
               </button>
             </div>
@@ -196,40 +192,36 @@ export default function DashboardPage() {
       )}
 
       {/* Free plan upgrade banner */}
-      {plan === 'free' && !upgradeBannerDismissed && (
+      {plan === "free" && !upgradeBannerDismissed && (
         <div
           className="mb-6 rounded-xl border flex items-center justify-between gap-4 px-5 py-3"
-          style={{ backgroundColor: 'rgba(255,107,53,0.06)', borderColor: 'rgba(255,107,53,0.25)' }}
+          style={{ backgroundColor: "rgba(255,107,53,0.06)", borderColor: "rgba(255,107,53,0.25)" }}
         >
-          <p className="text-sm" style={{ color: '#2D3436' }}>
-            You&apos;re on the <strong>Free plan</strong>. Upgrade to Autopilot for unlimited access —{' '}
+          <p className="text-sm" style={{ color: NAVY }}>
+            You&apos;re on the <strong>Free plan</strong>. Upgrade to Autopilot for full access —{" "}
             <button
               onClick={handleUpgradeClick}
               disabled={upgradeLoading}
               className="font-bold underline disabled:opacity-50 cursor-pointer"
-              style={{ color: '#FF6B35' }}
+              style={{ color: ORANGE }}
             >
-              {upgradeLoading ? 'Loading...' : '$99/mo →'}
+              {upgradeLoading ? "Loading..." : `${AUTOPILOT_MONTHLY_PRICE}/mo →`}
             </button>
           </p>
-          <button
-            onClick={() => setUpgradeBannerDismissed(true)}
-            className="text-xs shrink-0"
-            style={{ color: '#636E72' }}
-          >
+          <button onClick={() => setUpgradeBannerDismissed(true)} className="text-xs shrink-0" style={{ color: SLATE }}>
             ✕
           </button>
         </div>
       )}
 
-      {/* Welcome banner */}
+      {/* Welcome + plan badge */}
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-1">
           <Badge
             className="text-xs border"
             style={{
               backgroundColor: "rgba(255,107,53,0.1)",
-              color: "#FF6B35",
+              color: ORANGE,
               borderColor: "rgba(255,107,53,0.3)",
             }}
           >
@@ -238,25 +230,23 @@ export default function DashboardPage() {
         </div>
         {hasBusiness ? (
           <>
-            <h1 className="text-3xl font-bold" style={{ color: "#1B2A4A" }}>
+            <h1 className="text-2xl font-bold" style={{ color: NAVY }}>
               Welcome back, {firstName}!
             </h1>
-            <p className="mt-1" style={{ color: "#636E72" }}>
-              Here&apos;s what&apos;s happening with{" "}
-              <strong style={{ color: "#1B2A4A" }}>{activeBusiness.name}</strong>.
+            <p className="mt-1 text-sm" style={{ color: SLATE }}>
+              Here&apos;s what&apos;s happening with <strong style={{ color: NAVY }}>{activeBusiness.name}</strong>.
             </p>
           </>
         ) : (
           <>
-            <h1 className="text-3xl font-bold" style={{ color: "#1B2A4A" }}>
+            <h1 className="text-2xl font-bold" style={{ color: NAVY }}>
               Welcome, {firstName}! Let&apos;s get you set up.
             </h1>
-            <p className="mt-1" style={{ color: "#636E72" }}>
-              Connect your Google listing and we&apos;ll start writing posts, pages, and review replies for your business.
+            <p className="mt-1 text-sm" style={{ color: SLATE }}>
+              Connect your Google listing and we&apos;ll start creating content for your business.
             </p>
           </>
         )}
-
         {hasBusiness && data?.freshness && (
           <div className="mt-3">
             <FreshnessBadge
@@ -270,24 +260,16 @@ export default function DashboardPage() {
 
       {/* Setup CTA — only show if no business */}
       {!hasBusiness && (
-        <Card
-          className="mb-8 border"
-          style={{ backgroundColor: "rgba(255,107,53,0.05)", borderColor: "rgba(255,107,53,0.2)" }}
-        >
+        <Card className="mb-8 border" style={{ backgroundColor: "rgba(255,107,53,0.05)", borderColor: "rgba(255,107,53,0.2)" }}>
           <CardContent className="p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
-              <h3 className="font-bold text-lg mb-1" style={{ color: "#1B2A4A" }}>
-                Connect your Google listing
-              </h3>
-              <p className="text-sm" style={{ color: "#636E72" }}>
-                It takes 2 minutes. We&apos;ll auto-detect your business info and write your first posts immediately.
+              <h3 className="font-bold text-lg mb-1" style={{ color: NAVY }}>Connect your Google listing</h3>
+              <p className="text-sm" style={{ color: SLATE }}>
+                It takes 2 minutes. We&apos;ll auto-detect your business info and start creating content immediately.
               </p>
             </div>
             <Link href="/onboarding">
-              <Button
-                className="font-semibold whitespace-nowrap px-6 text-white"
-                style={{ backgroundColor: "#FF6B35" }}
-              >
+              <Button className="font-semibold whitespace-nowrap px-6 text-white" style={{ backgroundColor: ORANGE }}>
                 Connect Now →
               </Button>
             </Link>
@@ -295,246 +277,229 @@ export default function DashboardPage() {
         </Card>
       )}
 
-      {/* Loading state */}
       {loading && hasBusiness && (
         <div className="flex items-center justify-center py-12">
-          <div className="text-sm" style={{ color: "#636E72" }}>
-            Loading dashboard...
-          </div>
+          <div className="text-sm" style={{ color: SLATE }}>Loading dashboard...</div>
         </div>
       )}
 
-      {/* Stats */}
       {!loading && (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-            {stats.map((stat) => (
-              <Link key={stat.label} href={stat.href}>
-                <Card
-                  className="rounded-xl border cursor-pointer h-full transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
-                  style={{
-                    borderColor: "#DFE6E9",
-                    background: "linear-gradient(180deg, #ffffff 0%, #FAF8F5 100%)",
-                  }}
-                >
-                  <CardContent className="p-5">
-                    <div className="flex items-start justify-between mb-3">
-                      <div
-                        className="inline-flex items-center justify-center w-10 h-10 rounded-lg"
-                        style={{ backgroundColor: "rgba(255,107,53,0.1)" }}
-                      >
-                        <stat.Icon size={18} style={{ color: "#FF6B35" }} />
-                      </div>
-                      <stat.Icon size={14} style={{ color: "#DFE6E9" }} />
-                    </div>
-                    <p className="text-3xl font-bold mb-0.5" style={{ color: "#1B2A4A" }}>
-                      {stat.value}
-                    </p>
-                    <p className="text-xs uppercase tracking-wider font-medium" style={{ color: "#636E72" }}>
-                      {stat.label}
-                    </p>
-                    <p className="text-xs mt-1" style={{ color: "#636E72", opacity: 0.7 }}>
-                      {stat.sub}
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
+          {/* ─── Hero: AI Readiness Score ─── */}
+          <Card
+            className="mb-6 border overflow-hidden"
+            style={{
+              borderColor: MIST,
+              background: "linear-gradient(135deg, #ffffff 0%, #FAF8F5 50%, rgba(255,107,53,0.04) 100%)",
+            }}
+          >
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Zap size={16} style={{ color: ORANGE }} />
+                    <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: SLATE }}>
+                      AI Readiness Score
+                    </span>
+                  </div>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-5xl font-extrabold" style={{ color: NAVY }}>
+                      {data?.aeoScore ?? "—"}
+                    </span>
+                    <span className="text-lg" style={{ color: SLATE }}>/100</span>
+                  </div>
+                  <p className="text-xs mt-1" style={{ color: SLATE }}>
+                    {data?.aeoScore
+                      ? "How visible your business is to AI search engines"
+                      : "Run your first scan to see your score"}
+                  </p>
+                </div>
+                <Link href="/dashboard/ai-readiness">
+                  <Button size="sm" variant="outline" className="text-xs font-semibold" style={{ borderColor: ORANGE, color: ORANGE }}>
+                    {data?.aeoScore ? "Re-scan" : "Run Scan"} →
+                  </Button>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* ─── Stats row ─── */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+            {[
+              { label: "Google Posts", value: data?.postsCount ?? 0, Icon: FileText },
+              { label: "City Pages", value: data?.pagesCount ?? 0, Icon: Globe },
+              { label: "Review Replies", value: data?.reviewsCount ?? 0, Icon: Star },
+              { label: "Blog Posts", value: publishedBlogs.length, Icon: BookOpen },
+            ].map((stat) => (
+              <Card key={stat.label} className="border" style={{ borderColor: MIST }}>
+                <CardContent className="p-4 text-center">
+                  <stat.Icon size={16} className="mx-auto mb-1" style={{ color: ORANGE }} />
+                  <p className="text-2xl font-bold" style={{ color: NAVY }}>{stat.value}</p>
+                  <p className="text-[11px] uppercase tracking-wider" style={{ color: SLATE }}>{stat.label}</p>
+                </CardContent>
+              </Card>
             ))}
           </div>
 
-          {/* Google Search Console Performance */}
+          {/* ─── Action Card: Ready for You ─── */}
+          {hasBusiness && (readyPosts.length > 0 || readyReviews.length > 0) && (
+            <Card className="mb-6 border" style={{ borderColor: ORANGE, boxShadow: `0 2px 12px ${ORANGE}10` }}>
+              <CardContent className="p-5">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: ORANGE }} />
+                  <h2 className="font-bold text-sm" style={{ color: NAVY }}>Ready for You</h2>
+                  <span className="text-xs" style={{ color: SLATE }}>— copy & post to your Google listing</span>
+                </div>
+
+                {readyPosts.map((post, i) => (
+                  <div
+                    key={i}
+                    className="rounded-lg p-4 mb-3"
+                    style={{ backgroundColor: "rgba(255,107,53,0.04)", border: `1px solid ${MIST}` }}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1">
+                        <Badge className="text-[10px] mb-2" style={{ backgroundColor: "rgba(255,107,53,0.1)", color: ORANGE }}>
+                          Google Post
+                        </Badge>
+                        <p className="text-sm" style={{ color: NAVY }}>{post.title}</p>
+                        {post.content && (
+                          <p className="text-xs mt-1 line-clamp-3" style={{ color: SLATE }}>{post.content}</p>
+                        )}
+                      </div>
+                      {post.content && <CopyButton text={post.content} />}
+                    </div>
+                  </div>
+                ))}
+
+                {readyReviews.map((review, i) => (
+                  <div
+                    key={i}
+                    className="rounded-lg p-4 mb-3"
+                    style={{ backgroundColor: "rgba(250,204,21,0.04)", border: `1px solid ${MIST}` }}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1">
+                        <Badge className="text-[10px] mb-2" style={{ backgroundColor: "rgba(250,204,21,0.15)", color: "#a16207" }}>
+                          Review Reply
+                        </Badge>
+                        <p className="text-sm" style={{ color: NAVY }}>{review.title}</p>
+                        {review.content && (
+                          <p className="text-xs mt-1 line-clamp-3" style={{ color: SLATE }}>{review.content}</p>
+                        )}
+                      </div>
+                      {review.content && <CopyButton text={review.content} />}
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+
+          {/* ─── Progress: What Autopilot published ─── */}
+          {hasBusiness && (publishedBlogs.length > 0 || publishedPages.length > 0) && (
+            <Card className="mb-6 border" style={{ borderColor: MIST }}>
+              <CardContent className="p-5">
+                <div className="flex items-center gap-2 mb-4">
+                  <TrendingUp size={16} style={{ color: "#16a34a" }} />
+                  <h2 className="font-bold text-sm" style={{ color: NAVY }}>Published This Month</h2>
+                </div>
+                <div className="space-y-2">
+                  {publishedBlogs.map((item, i) => (
+                    <div key={i} className="flex items-center gap-3 py-2" style={{ borderBottom: `1px solid ${MIST}` }}>
+                      <BookOpen size={14} style={{ color: ORANGE }} />
+                      <span className="text-sm flex-1" style={{ color: NAVY }}>{item.title}</span>
+                      <span className="text-xs" style={{ color: SLATE }}>
+                        {new Date(item.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                      </span>
+                    </div>
+                  ))}
+                  {publishedPages.map((item, i) => (
+                    <div key={i} className="flex items-center gap-3 py-2" style={{ borderBottom: `1px solid ${MIST}` }}>
+                      <Globe size={14} style={{ color: ORANGE }} />
+                      <span className="text-sm flex-1" style={{ color: NAVY }}>{item.title}</span>
+                      <span className="text-xs" style={{ color: SLATE }}>
+                        {new Date(item.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                <Link href="/dashboard/content">
+                  <Button size="sm" variant="ghost" className="text-xs mt-3" style={{ color: ORANGE }}>
+                    View all content →
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* ─── Google Search Console ─── */}
           {hasBusiness && (
-            <div className="mb-10">
+            <div className="mb-6">
               <GscCard />
             </div>
           )}
 
-          {/* AI Search Updates */}
-          <div className="mb-10">
+          {/* ─── AI Search Updates ─── */}
+          <div className="mb-6">
             <AiUpdatesCard plan={plan} />
           </div>
 
-          {/* Activity Feed */}
-          <div className="mb-10">
-            <h2 className="text-lg font-semibold mb-4" style={{ color: "#1B2A4A" }}>
-              {hasBusiness && data && data.recentItems.length > 0 ? "Recent Activity" : "Getting Started"}
-            </h2>
-            <div className="space-y-3">
-              {activity.map((item, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-4 p-4 rounded-xl border bg-white cursor-pointer transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
-                  style={{ borderColor: "#DFE6E9" }}
-                >
-                  <div
-                    className="inline-flex items-center justify-center w-8 h-8 rounded-lg shrink-0"
-                    style={{ backgroundColor: "rgba(255,107,53,0.08)" }}
-                  >
-                    <item.Icon size={15} style={{ color: "#FF6B35" }} />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm" style={{ color: "#2D3436" }}>
-                      {item.text}
-                    </p>
-                  </div>
-                  <span className="text-xs" style={{ color: "#636E72" }}>
-                    {item.time}
-                  </span>
-                  {item.action && (
-                    <Link href={item.action}>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="text-xs"
-                        style={{ color: "#FF6B35" }}
-                      >
-                        →
-                      </Button>
-                    </Link>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Download Report */}
+          {/* ─── Monthly Report ─── */}
           {hasBusiness && (
-            <div className="mb-10">
-              <Card
-                className="bg-white rounded-xl border shadow-sm"
-                style={{ borderColor: "#DFE6E9" }}
-              >
-                <CardContent className="p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="inline-flex items-center justify-center w-9 h-9 rounded-lg"
-                      style={{ backgroundColor: "rgba(255,107,53,0.1)" }}
-                    >
-                      <FileDown size={16} style={{ color: "#FF6B35" }} />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-sm" style={{ color: "#1B2A4A" }}>
-                        Monthly Visibility Report
-                      </h3>
-                      <p className="text-xs" style={{ color: "#636E72" }}>
-                        Download a PDF report for {activeBusiness?.name}. Share with clients or keep for your records.
-                      </p>
-                    </div>
+            <Card className="mb-6 border" style={{ borderColor: MIST }}>
+              <CardContent className="p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div
+                    className="inline-flex items-center justify-center w-9 h-9 rounded-lg"
+                    style={{ backgroundColor: "rgba(255,107,53,0.1)" }}
+                  >
+                    <BarChart3 size={16} style={{ color: ORANGE }} />
                   </div>
+                  <div>
+                    <h3 className="font-semibold text-sm" style={{ color: NAVY }}>Monthly Intelligence Report</h3>
+                    <p className="text-xs" style={{ color: SLATE }}>Score trends, competitor tracking, and what we published.</p>
+                  </div>
+                </div>
+                <div className="flex gap-2">
                   <a href={`/api/reports/pdf?businessId=${activeBusinessId}`} download>
-                    <Button
-                      size="sm"
-                      className="font-semibold whitespace-nowrap px-6 text-xs text-white"
-                      style={{ backgroundColor: "#FF6B35" }}
-                    >
-                      Download Report
+                    <Button size="sm" variant="outline" className="text-xs font-semibold" style={{ borderColor: ORANGE, color: ORANGE }}>
+                      <FileDown size={12} className="mr-1" /> PDF
                     </Button>
                   </a>
-                </CardContent>
-              </Card>
-            </div>
-          )}
-
-          {/* Quick Actions */}
-          <div>
-            <h2 className="text-lg font-semibold mb-4" style={{ color: "#1B2A4A" }}>
-              Quick Actions
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {[
-                {
-                  title: hasBusiness ? "Write New Posts" : "Generate Your First Posts",
-                  description: hasBusiness
-                    ? "Create fresh Google post drafts for your business."
-                    : "Connect your Google listing and we'll write posts for you.",
-                  Icon: PenLine,
-                  href: hasBusiness ? "/dashboard/posts" : "/onboarding",
-                  cta: hasBusiness ? "Write Posts" : "Get Started",
-                },
-                {
-                  title: "Build a City Page",
-                  description: "Create a local page to target searches in a specific city or neighborhood.",
-                  Icon: Globe,
-                  href: "/dashboard/pages",
-                  cta: "Build Page",
-                },
-                {
-                  title: "Check AI Readiness",
-                  description: "Scan any URL and see how visible it is to AI search engines like ChatGPT.",
-                  Icon: Zap,
-                  href: "/dashboard/ai-readiness",
-                  cta: "Run Scan",
-                },
-              ].map((action) => (
-                <Card
-                  key={action.title}
-                  className="bg-white rounded-xl border flex flex-col transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
-                  style={{ borderColor: "#DFE6E9" }}
-                >
-                  <CardContent className="p-5 flex-1 flex flex-col">
-                    <div
-                      className="inline-flex items-center justify-center w-10 h-10 rounded-lg mb-3"
-                      style={{ backgroundColor: "rgba(255,107,53,0.1)" }}
-                    >
-                      <action.Icon size={18} style={{ color: "#FF6B35" }} />
-                    </div>
-                    <h3 className="font-semibold text-sm mb-1" style={{ color: "#1B2A4A" }}>
-                      {action.title}
-                    </h3>
-                    <p className="text-xs mb-4 flex-1" style={{ color: "#636E72" }}>
-                      {action.description}
-                    </p>
-                    <Link href={action.href}>
-                      <Button
-                        size="sm"
-                        className="w-full font-semibold text-xs text-white transition-all duration-200 active:scale-[0.98]"
-                        style={{ backgroundColor: "#FF6B35" }}
-                      >
-                        {action.cta}
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-
-          {/* Monthly Report widget (extra) */}
-          {hasBusiness && (
-            <div className="mt-10">
-              <Card
-                className="bg-white rounded-xl border shadow-sm"
-                style={{ borderColor: "#DFE6E9" }}
-              >
-                <CardContent className="p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="inline-flex items-center justify-center w-9 h-9 rounded-lg"
-                      style={{ backgroundColor: "rgba(255,107,53,0.1)" }}
-                    >
-                      <BarChart3 size={16} style={{ color: "#FF6B35" }} />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-sm" style={{ color: "#1B2A4A" }}>
-                        View Monthly Progress Report
-                      </h3>
-                      <p className="text-xs" style={{ color: "#636E72" }}>
-                        See your score over time and track what's improving.
-                      </p>
-                    </div>
-                  </div>
                   <Link href="/dashboard/reports">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="font-semibold whitespace-nowrap px-6 text-xs"
-                      style={{ borderColor: "#FF6B35", color: "#FF6B35" }}
-                    >
-                      View Report
+                    <Button size="sm" className="text-xs font-semibold text-white" style={{ backgroundColor: ORANGE }}>
+                      View Report →
                     </Button>
                   </Link>
-                </CardContent>
-              </Card>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* ─── Getting Started (no business) ─── */}
+          {!hasBusiness && (
+            <div className="space-y-3">
+              <h2 className="text-lg font-semibold" style={{ color: NAVY }}>Getting Started</h2>
+              {[
+                { Icon: LinkIcon, text: "Connect your Google listing to get started", action: "/onboarding" },
+                { Icon: PenLine, text: "Generate your first Google post", action: "/dashboard/posts" },
+                { Icon: Globe, text: "Build city pages for areas you serve", action: "/dashboard/pages" },
+                { Icon: Zap, text: "Check your AI Readiness score", action: "/dashboard/ai-readiness" },
+              ].map((item, i) => (
+                <Link key={i} href={item.action}>
+                  <div
+                    className="flex items-center gap-4 p-4 rounded-xl border bg-white cursor-pointer transition-all hover:shadow-sm"
+                    style={{ borderColor: MIST }}
+                  >
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: "rgba(255,107,53,0.08)" }}>
+                      <item.Icon size={15} style={{ color: ORANGE }} />
+                    </div>
+                    <span className="text-sm flex-1" style={{ color: NAVY }}>{item.text}</span>
+                    <span className="text-xs" style={{ color: ORANGE }}>→</span>
+                  </div>
+                </Link>
+              ))}
             </div>
           )}
         </>
