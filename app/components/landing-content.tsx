@@ -107,7 +107,7 @@ const faqs = [
   },
   {
     q: "How is this different from hiring an SEO agency?",
-    a: "An agency charges $800-1,500/month and you wait weeks for results. LocalBeacon writes your Google posts, builds local pages, and drafts review replies — for $99/month, starting immediately.",
+    a: `An agency charges $800-1,500/month and you wait weeks for results. LocalBeacon writes your Google posts, builds local pages, and optimizes you for AI search — for ${AUTOPILOT_MONTHLY_PRICE}/month, starting immediately.`,
   },
   {
     q: "Will AI assistants like ChatGPT recommend my business?",
@@ -890,6 +890,8 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
             >
               <span style={{ fontWeight: 600, color: NAVY }}>Compare:</span>
               <span>SEO Agency <s style={{ opacity: 0.5 }}>$800–1,500/mo</s></span>
+              <span style={{ opacity: 0.3 }}>|</span>
+              <span>Google Ads <s style={{ opacity: 0.5 }}>$500–2,000/mo</s></span>
               <span style={{ opacity: 0.3 }}>|</span>
               <span style={{ fontWeight: 700, color: ORANGE }}>LocalBeacon {AUTOPILOT_MONTHLY_PRICE}/mo</span>
             </div>

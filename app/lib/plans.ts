@@ -96,7 +96,7 @@ export const PLANS: PlanDefinition[] = [
         tag2: 'you-post',
         subItems: [
           'Weekly GBP posts — fresh, seasonal content delivered to your inbox',
-          'Review response drafts — AI-written replies for new Google reviews',
+          'Review reply drafts — paste any review, get a professional response to copy back',
         ],
       },
       {
@@ -198,7 +198,7 @@ export const PRICING_FAQS = [
   },
   {
     q: 'How is this different from hiring an SEO agency?',
-    a: `An agency charges $800–1,500/month and you wait weeks to see anything happen. LocalBeacon handles your Google posts, builds local pages, and drafts review replies — for ${AUTOPILOT_MONTHLY_PRICE}/month, starting immediately.`,
+    a: `An agency charges $800–1,500/month and you wait weeks to see anything happen. LocalBeacon handles your Google posts, builds local pages, and optimizes you for AI search — for ${AUTOPILOT_MONTHLY_PRICE}/month, starting immediately.`,
   },
   {
     q: 'Who writes the content? Will it sound generic?',

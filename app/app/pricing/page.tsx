@@ -51,6 +51,13 @@ export default function PricingPage() {
           </div>
           <span style={{ color: MIST }}>|</span>
           <div className="flex items-center gap-1.5">
+            <span style={{ color: SLATE }}>Google Ads</span>
+            <span className="line-through" style={{ color: "#B2BEC3" }}>
+              $500–2,000/mo
+            </span>
+          </div>
+          <span style={{ color: MIST }}>|</span>
+          <div className="flex items-center gap-1.5">
             <span className="font-bold" style={{ color: ORANGE }}>
               LocalBeacon
             </span>
