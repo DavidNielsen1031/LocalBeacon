@@ -97,7 +97,7 @@ export async function POST(req: NextRequest) {
   const plan = await getUserPlan(userId)
   if (plan === 'free') {
     return NextResponse.json(
-      { error: 'limit_reached', plan: 'free', upgrade_url: '/pricing', message: 'Blog post generation is available on the Pro plan. Upgrade to unlock.' },
+      { error: 'limit_reached', plan: 'free', upgrade_url: '/pricing', message: 'Blog post generation is available on the Autopilot plan. Upgrade to unlock.' },
       { status: 403 }
     )
   }

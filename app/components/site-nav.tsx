@@ -103,7 +103,7 @@ export function SiteNav() {
               onMouseEnter={(e) => ((e.target as HTMLElement).style.opacity = "0.88")}
               onMouseLeave={(e) => ((e.target as HTMLElement).style.opacity = "1")}
             >
-              Check Your Score
+              Get Started Free
             </button>
           </Link>
 
@@ -168,7 +168,7 @@ export function SiteNav() {
                 fontSize: "1rem",
               }}
             >
-              Check Your Score
+              Get Started Free
             </button>
           </Link>
         </div>

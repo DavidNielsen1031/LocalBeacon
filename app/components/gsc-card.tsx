@@ -93,7 +93,7 @@ export function GscCard() {
             className="font-semibold text-white"
             style={{ background: ORANGE }}
           >
-            Upgrade to Pro — $99/mo
+            Upgrade to Autopilot — $99/mo
           </Button>
         </CardContent>
       </Card>

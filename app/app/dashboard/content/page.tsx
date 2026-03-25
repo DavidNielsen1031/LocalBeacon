@@ -105,7 +105,7 @@ export default function ContentPage() {
           Content
         </h1>
         <p className="text-sm mt-1" style={{ color: SLATE }}>
-          Everything Pro has created for your business.
+          Everything Autopilot has created for your business.
         </p>
       </div>
 
@@ -139,12 +139,12 @@ export default function ContentPage() {
             <p className="text-sm" style={{ color: SLATE }}>
               No {TABS.find((t) => t.key === tab)?.label.toLowerCase()} yet.
               {tab === "posts"
-                ? " Pro creates weekly Google posts automatically."
+                ? " Autopilot creates weekly Google posts automatically."
                 : tab === "pages"
-                ? " Pro builds city pages for your service areas."
+                ? " Autopilot builds city pages for your service areas."
                 : tab === "reviews"
                 ? " Review response drafts appear here when you get new reviews."
-                : " Pro publishes blog posts twice a month."}
+                : " Autopilot publishes blog posts twice a month."}
             </p>
           </CardContent>
         </Card>

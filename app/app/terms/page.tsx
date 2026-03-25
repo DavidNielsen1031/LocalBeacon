@@ -49,8 +49,8 @@ export default function TermsPage() {
             <p className="mb-2">We offer three plans:</p>
             <ul className="list-disc pl-5 space-y-1">
               <li><strong className="text-white">Free ($0/month):</strong> 1 location, 5 posts/month, 3 city pages</li>
-              <li><strong className="text-white">Pro ($99/month or $899/year):</strong> Weekly Google posts, 2 blog posts/month, 3 city pages/month, review response drafts, schema & llms.txt generation, monthly intelligence report</li>
-              <li><strong className="text-white">Launch Package ($499 one-time):</strong> 30-minute strategy call, GBP audit, competitor report, platform installation (FAQs, schema, llms.txt, service area pages), custom brand voice, before &amp; after AI readiness report, first month of Pro included</li>
+              <li><strong className="text-white">Autopilot ($99/month or $899/year):</strong> Weekly Google posts, 2 blog posts/month, 3 city pages/month, review response drafts, schema & llms.txt generation, monthly intelligence report</li>
+              <li><strong className="text-white">Launch Package ($499 one-time):</strong> 30-minute strategy call, GBP audit, competitor report, platform installation (FAQs, schema, llms.txt, service area pages), custom brand voice, before &amp; after AI readiness report, first month of Autopilot included</li>
             </ul>
             <p className="mt-3">Paid plans are billed monthly through Stripe. You can cancel anytime — your plan remains active until the end of the billing period. We do not offer refunds for partial months.</p>
           </section>

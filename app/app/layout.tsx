@@ -74,7 +74,7 @@ export default function RootLayout({
               "description": "Local visibility engine. Automates Google Business Profile posts, city pages, review responses, and AI search optimization for local businesses.",
               "offers": [
                 { "@type": "Offer", "price": "0", "priceCurrency": "USD", "name": "Free" },
-                { "@type": "Offer", "price": "99", "priceCurrency": "USD", "name": "LocalBeacon Pro", "priceSpecification": { "@type": "UnitPriceSpecification", "billingDuration": "P1M" } },
+                { "@type": "Offer", "price": "99", "priceCurrency": "USD", "name": "Autopilot", "priceSpecification": { "@type": "UnitPriceSpecification", "billingDuration": "P1M" } },
                 { "@type": "Offer", "price": "499", "priceCurrency": "USD", "name": "Done-For-You Setup" }
               ],
               "provider": {

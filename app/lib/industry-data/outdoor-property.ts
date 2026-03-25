@@ -64,7 +64,7 @@ export const outdoorProperty: Record<string, IndustryData> = {
       {
         question: "What if I only serve a few neighborhoods?",
         answer:
-          "That's fine — even our Free plan supports one location. As you grow, our Pro plan lets you add more service areas and target more neighborhoods.",
+          "That's fine — even our Free plan supports one location. As you grow, our Autopilot plan lets you add more service areas and target more neighborhoods.",
       },
       {
         question: "Do I need to provide photos or content?",
@@ -74,7 +74,7 @@ export const outdoorProperty: Record<string, IndustryData> = {
       {
         question: "How much does it cost?",
         answer:
-          "LocalBeacon starts free for one location. Our Pro plan is $99/month for up to 3 locations with unlimited posts, You can also add our Launch Package ($499 one-time) for full done-for-you setup.",
+          "LocalBeacon starts free for one location. Our Autopilot plan is $99/month for up to 3 locations with unlimited posts, You can also add our Launch Package ($499 one-time) for full done-for-you setup.",
       },
     ],
   },
@@ -142,7 +142,7 @@ export const outdoorProperty: Record<string, IndustryData> = {
       {
         question: "I serve a wide area — can I target multiple cities?",
         answer:
-          "Absolutely. Our Pro plan covers up to 3 locations, and we create dedicated landing pages for each area you cover. We create dedicated landing pages for each city so you rank locally in every area you cover.",
+          "Absolutely. Our Autopilot plan covers up to 3 locations, and we create dedicated landing pages for each area you cover. We create dedicated landing pages for each city so you rank locally in every area you cover.",
       },
       {
         question: "Do you help with content about tree care regulations?",

@@ -74,7 +74,7 @@ export const foodLocal: Record<string, IndustryData> = {
       {
         question: "We have multiple locations — does this work for restaurant groups?",
         answer:
-          "Yes. Our Pro plan handles your marketing automatically. For multi-location restaurant groups, our Launch Package ($499) sets up every location with optimized content from day one.",
+          "Yes. Our Autopilot plan handles your marketing automatically. For multi-location restaurant groups, our Launch Package ($499) sets up every location with optimized content from day one.",
       },
       {
         question: "Do I need to update the content myself?",
@@ -162,7 +162,7 @@ export const foodLocal: Record<string, IndustryData> = {
       {
         question: "We serve a large metro area — can we rank in multiple cities?",
         answer:
-          "Yes. Our Pro plan supports up to 3 service areas, and for larger areas our team can set up additional cities through the Launch Package. We create dedicated landing pages for each area so you rank locally in every market your kitchen can reach.",
+          "Yes. Our Autopilot plan supports up to 3 service areas, and for larger areas our team can set up additional cities through the Launch Package. We create dedicated landing pages for each area so you rank locally in every market your kitchen can reach.",
       },
     ],
   },
@@ -230,7 +230,7 @@ export const foodLocal: Record<string, IndustryData> = {
       {
         question: "We're a small bakery with one location — is this worth it?",
         answer:
-          "Absolutely. Our Free plan is built for single-location businesses. Even a few extra walk-in customers per week can significantly impact a bakery's daily revenue, and one additional custom cake order easily covers the cost of our Pro plan.",
+          "Absolutely. Our Free plan is built for single-location businesses. Even a few extra walk-in customers per week can significantly impact a bakery's daily revenue, and one additional custom cake order easily covers the cost of our Autopilot plan.",
       },
       {
         question: "How do you handle our early morning hours and limited availability?",
@@ -328,7 +328,7 @@ export const foodLocal: Record<string, IndustryData> = {
       {
         question: "We're a small operation with just a few drivers — is this affordable?",
         answer:
-          "Our Free plan covers one delivery zone with 5 Google posts per month. The Pro plan at $99/month expands to 3 zones with unlimited posts. Most delivery services find that a few new regular customers per month easily covers the investment.",
+          "Our Free plan covers one delivery zone with 5 Google posts per month. The Autopilot plan at $99/month expands to 3 zones with unlimited posts. Most delivery services find that a few new regular customers per month easily covers the investment.",
       },
       {
         question: "Can LocalBeacon help us expand into new delivery areas?",

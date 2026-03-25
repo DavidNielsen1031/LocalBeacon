@@ -64,7 +64,7 @@ export const healthcare: Record<string, IndustryData> = {
       {
         question: "Can this work for multi-location dental practices?",
         answer:
-          "Absolutely. Our Pro plan handles your marketing automatically. For multi-location practices, our Launch Package ($499) sets up every location from day one.",
+          "Absolutely. Our Autopilot plan handles your marketing automatically. For multi-location practices, our Launch Package ($499) sets up every location from day one.",
       },
       {
         question: "What kind of content does LocalBeacon create for dentists?",
@@ -572,7 +572,7 @@ export const healthcare: Record<string, IndustryData> = {
       {
         question: "Does this work for pediatric practices with multiple providers?",
         answer:
-          "Yes. Our Pro plan handles your marketing automatically. For practices with multiple providers and locations, our Launch Package ($499) sets up each location with tailored content.",
+          "Yes. Our Autopilot plan handles your marketing automatically. For practices with multiple providers and locations, our Launch Package ($499) sets up each location with tailored content.",
       },
       {
         question: "How quickly will we see results?",

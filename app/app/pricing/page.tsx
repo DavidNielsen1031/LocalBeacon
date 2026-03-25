@@ -21,8 +21,9 @@ const MIST = "#DFE6E9";
 export default function PricingPage() {
   const [isAnnual, setIsAnnual] = useState(false);
 
-  const proPlan = PLANS.find((p) => p.name === "LocalBeacon Pro")!;
-  const launchPlan = PLANS.find((p) => p.name === "Beacon Launch")!;
+  const freePlan = PLANS.find((p) => p.name === "Free")!;
+  const autopilotPlan = PLANS.find((p) => p.name === "Autopilot")!;
+  const launchPlan = PLANS.find((p) => p.name === "Launch Package")!;
 
   return (
     <div className="min-h-screen" style={{ background: WARM_WHITE, color: NAVY }}>
@@ -73,7 +74,7 @@ export default function PricingPage() {
                 🔍 Free AI Readiness Scan
               </p>
               <p className="text-sm" style={{ color: SLATE }}>
-                See how your business appears in ChatGPT, Google AI, and Perplexity — no account needed.
+                {freePlan.features[0]?.description || "See how your business appears in AI search — no account needed."}
               </p>
             </div>
             <Link href="/check">
@@ -96,8 +97,8 @@ export default function PricingPage() {
       {/* Plans — two cards */}
       <section className="px-6 pb-20">
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-          <AutopilotCard plan={proPlan} isAnnual={isAnnual} />
-          <LaunchPackageCard plan={launchPlan} isAnnual={isAnnual} />
+          <AutopilotCard plan={autopilotPlan} isAnnual={isAnnual} />
+          <LaunchPackageCard plan={launchPlan} />
         </div>
       </section>
 
@@ -105,7 +106,7 @@ export default function PricingPage() {
       <section className="px-6 py-12" style={{ background: "white", borderTop: `1px solid ${MIST}` }}>
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl font-bold mb-4" style={{ color: NAVY }}>
-            Why businesses stay on Pro
+            Why businesses stay on Autopilot
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6">
             {[

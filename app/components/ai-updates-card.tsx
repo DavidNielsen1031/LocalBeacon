@@ -48,7 +48,7 @@ export function AiUpdatesCard({ plan }: AiUpdatesCardProps) {
             <Badge className="text-[0.6rem] px-1.5 py-0" style={{ background: "#EFF6FF", color: "#2563EB" }}>Autopilot</Badge>
           </div>
           <p className="text-xs" style={{ color: "#636E72" }}>
-            Upgrade to Pro to see how AI search is changing — and how we keep your listing current automatically.
+            Upgrade to Autopilot to see how AI search is changing — and how we keep your listing current automatically.
           </p>
         </CardContent>
       </Card>

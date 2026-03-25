@@ -15,9 +15,6 @@ export const AUTOPILOT_ANNUAL_AMOUNT = 899
 export const AUTOPILOT_ANNUAL_SAVINGS = '$289'
 export const LAUNCH_PACKAGE_PRICE = '$499'
 export const LAUNCH_PACKAGE_AMOUNT = 499
-export const LAUNCH_PACKAGE_ANNUAL_PRICE = '$399'
-export const LAUNCH_PACKAGE_ANNUAL_AMOUNT = 399
-export const LAUNCH_PACKAGE_ANNUAL_SAVINGS = '$100'
 
 // ─── Types ──────────────────────────────────────────────────────────
 
@@ -80,7 +77,20 @@ export const MODE_BADGES: Record<FeatureMode, { label: string; bg: string; color
 
 export const PLANS: PlanDefinition[] = [
   {
-    name: 'LocalBeacon Pro',
+    name: 'Free',
+    price: '$0',
+    period: 'forever',
+    tagline: 'See how visible your business is to AI — no account needed.',
+    features: [
+      { label: 'AI Readiness scan (all 26 signals)', description: 'See how your business appears in ChatGPT, Google AI, and Perplexity', mode: 'diy' as FeatureMode },
+    ],
+    cta: 'Check Your AI Score →',
+    href: '/check',
+    highlight: false,
+    stripePlan: null,
+  },
+  {
+    name: 'Autopilot',
     price: AUTOPILOT_MONTHLY_PRICE,
     period: '/month',
     annualPrice: AUTOPILOT_ANNUAL_PRICE,
@@ -132,19 +142,17 @@ export const PLANS: PlanDefinition[] = [
         ],
       },
     ],
-    cta: `Start Pro — ${AUTOPILOT_MONTHLY_PRICE}/mo`,
-    ctaAnnual: `Start Pro — ${AUTOPILOT_ANNUAL_PRICE}/yr`,
+    cta: `Start Autopilot — ${AUTOPILOT_MONTHLY_PRICE}/mo`,
+    ctaAnnual: `Start Autopilot — ${AUTOPILOT_ANNUAL_PRICE}/yr`,
     href: null,
     highlight: true,
     stripePlan: 'SOLO',
     annualStripePlan: 'SOLO_ANNUAL',
   },
   {
-    name: 'Beacon Launch',
+    name: 'Launch Package',
     price: LAUNCH_PACKAGE_PRICE,
     period: 'one-time',
-    annualPrice: LAUNCH_PACKAGE_ANNUAL_PRICE,
-    annualPeriod: 'one-time',
     tagline: 'We set everything up so you\'re optimized from day one.',
     features: [
       { label: '30-minute strategy call', description: 'We learn your business, service areas, and goals', mode: 'done' as FeatureMode },
@@ -162,17 +170,16 @@ export const PLANS: PlanDefinition[] = [
           'All service area pages — every city you serve, built and published on launch day',
         ],
       },
-      { label: 'Custom brand voice profile', description: 'We capture your tone, language, and style — Pro uses it for every piece of content', mode: 'done' as FeatureMode },
+      { label: 'Custom brand voice profile', description: 'We capture your tone, language, and style — Autopilot uses it for every piece of content', mode: 'done' as FeatureMode },
       { label: 'Before & after AI readiness report', description: 'Baseline scan before setup, rescan after — see exactly what improved', mode: 'done' as FeatureMode },
       {
-        label: 'First month of Pro included',
+        label: 'First month of Autopilot included',
         description: 'Your subscription starts immediately — content publishing begins the week we finish setup',
         mode: 'auto' as FeatureMode,
         tag: 'included',
       },
     ],
-    cta: `Get Beacon Launch — ${LAUNCH_PACKAGE_PRICE}`,
-    ctaAnnual: `Get Beacon Launch — ${LAUNCH_PACKAGE_ANNUAL_PRICE}`,
+    cta: `Get Launch Package — ${LAUNCH_PACKAGE_PRICE}`,
     href: null,
     highlight: false,
     addon: true,
@@ -204,15 +211,15 @@ export const PRICING_FAQS = [
     a: "Every piece of content is written specifically about your business, your services, and your local area — not generic templates. You can review and edit everything before it goes live. It mentions your city, your services, and the neighborhoods you actually serve.",
   },
   {
-    q: "What's Beacon Launch?",
-    a: `It's a one-time ${LAUNCH_PACKAGE_PRICE} setup service (${LAUNCH_PACKAGE_ANNUAL_PRICE} when bundled with annual). We do a 30-minute strategy call, install schema markup, llms.txt, and 15–25 custom FAQs on your website, plus build all your service area pages. Your first month of Pro is included. After that, Pro continues at ${AUTOPILOT_MONTHLY_PRICE}/mo.`,
+    q: "What's the Launch Package?",
+    a: `It's a one-time ${LAUNCH_PACKAGE_PRICE} setup service. We do a 30-minute strategy call, install schema markup, llms.txt, and 15–25 custom FAQs on your website, plus build all your service area pages. Your first month of Autopilot is included. After that, Autopilot continues at ${AUTOPILOT_MONTHLY_PRICE}/mo.`,
   },
   {
     q: 'Is there an annual plan?',
     a: `Yes! Autopilot is ${AUTOPILOT_ANNUAL_PRICE}/year — that saves you ${AUTOPILOT_ANNUAL_SAVINGS} compared to monthly billing.`,
   },
   {
-    q: "What happens when I buy Beacon Launch?",
-    a: `After checkout, you'll get an email to book your strategy call. We build everything in 5–7 business days. Your Pro subscription (${AUTOPILOT_MONTHLY_PRICE}/mo) starts automatically after your included first month.`,
+    q: "What happens when I buy the Launch Package?",
+    a: `After checkout, you'll get an email to book your strategy call. We build everything in 5–7 business days. Your Autopilot subscription (${AUTOPILOT_MONTHLY_PRICE}/mo) starts automatically after your included first month.`,
   },
 ]

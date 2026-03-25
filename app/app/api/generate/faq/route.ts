@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
 
   // Check plan limits
   const limitError = await enforceLimits(userId, 'faq')
-  if (limitError) return NextResponse.json({ ...limitError, error: 'Upgrade to Pro for unlimited FAQ generation', upgradeUrl: '/pricing' }, { status: 403 })
+  if (limitError) return NextResponse.json({ ...limitError, error: 'Upgrade to Autopilot for unlimited FAQ generation', upgradeUrl: '/pricing' }, { status: 403 })
 
   const body = await req.json() as FaqRequest
   const { businessName, category, city, state, services = [], count = 20 } = body
