@@ -22,7 +22,7 @@ import type { BlogPostMeta } from "@/lib/blog-shared";
 import { CATEGORY_LABELS } from "@/lib/blog-shared";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteNav } from "@/components/site-nav";
-import { PLANS, PRICING_FAQS, MODE_BADGES } from "@/lib/plans";
+import { PLANS, TAG_BADGES, AUTOPILOT_MONTHLY_PRICE, AUTOPILOT_ANNUAL_PRICE, AUTOPILOT_ANNUAL_SAVINGS } from "@/lib/plans";
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -83,8 +83,6 @@ const withoutVsWith = {
 };
 
 // Plans imported from lib/plans.ts — single source of truth
-const plans = PLANS;
-
 const faqs = [
   {
     q: "What if I don't have a Google listing yet?",
@@ -853,7 +851,7 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
 
       {/* ── Pricing ── */}
       <section id="pricing" style={{ backgroundColor: WARM_WHITE, padding: "96px 24px" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        <div style={{ maxWidth: "900px", margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: "20px" }}>
             <h2
               style={{
@@ -864,8 +862,8 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
                 marginBottom: "12px",
               }}
             >
-              More calls for less than{" "}
-              <span style={{ color: ORANGE }}>$2/day</span>
+              Simple pricing.{" "}
+              <span style={{ color: ORANGE }}>Real results.</span>
             </h2>
             <p style={{ color: SLATE, fontSize: "1.0625rem", lineHeight: 1.6 }}>
               Start free, upgrade anytime. No contracts.
@@ -873,7 +871,7 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
           </div>
 
           {/* Comparison callout */}
-          <div style={{ display: "flex", justifyContent: "center", marginBottom: "48px" }}>
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: "32px" }}>
             <div
               style={{
                 display: "inline-flex",
@@ -889,165 +887,206 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
                 color: SLATE,
               }}
             >
-              <span style={{ fontWeight: 600, color: NAVY }}>Compared to:</span>
-              <span>Hiring an agency <s style={{ opacity: 0.5 }}>$800–1,500/mo</s></span>
+              <span style={{ fontWeight: 600, color: NAVY }}>Compare:</span>
+              <span>SEO Agency <s style={{ opacity: 0.5 }}>$800–1,500/mo</s></span>
               <span style={{ opacity: 0.3 }}>|</span>
-              <span>BrightLocal <s style={{ opacity: 0.5 }}>$39–59/mo</s> (fewer features)</span>
+              <span style={{ fontWeight: 700, color: ORANGE }}>LocalBeacon {AUTOPILOT_MONTHLY_PRICE}/mo</span>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {plans.map((plan) => (
-              <div
-                key={plan.name}
+          {/* Free scan banner */}
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: "16px",
+              backgroundColor: "#fff",
+              border: `1px solid ${MIST}`,
+              borderRadius: "12px",
+              padding: "20px 24px",
+              marginBottom: "32px",
+            }}
+          >
+            <div>
+              <p style={{ fontWeight: 700, fontSize: "1rem", color: NAVY, margin: 0 }}>
+                🔍 Free AI Readiness Scan
+              </p>
+              <p style={{ color: SLATE, fontSize: "0.875rem", margin: "4px 0 0" }}>
+                See how your business appears in AI search — no account needed.
+              </p>
+            </div>
+            <Link href="/check" style={{ textDecoration: "none" }}>
+              <button
                 style={{
-                  backgroundColor: "#fff",
-                  borderRadius: "12px",
-                  padding: "32px",
-                  border: plan.highlight ? `2px solid ${ORANGE}` : plan.addon ? `2px solid #B8860B` : `1px solid ${MIST}`,
-                  boxShadow: plan.highlight
-                    ? "0 10px 30px rgba(255,107,53,0.12)"
-                    : plan.addon
-                    ? "0 10px 30px rgba(184,134,11,0.15)"
-                    : "0 1px 3px rgba(27,42,74,0.06)",
-                  background: plan.addon ? "linear-gradient(180deg, #FFFDF5 0%, #FFF8E7 100%)" : "#fff",
-                  position: "relative",
-                  display: "flex",
-                  flexDirection: "column",
+                  backgroundColor: NAVY,
+                  color: "#fff",
+                  fontWeight: 600,
+                  fontSize: "0.875rem",
+                  padding: "10px 20px",
+                  borderRadius: "8px",
+                  border: "none",
+                  cursor: "pointer",
+                  whiteSpace: "nowrap",
                 }}
               >
-                {plan.highlight && (
+                Check Your Score — Free
+              </button>
+            </Link>
+          </div>
+
+          {/* Two-card grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Autopilot card */}
+            {(() => {
+              const autopilot = PLANS.find(p => p.name === 'Autopilot')!;
+              return (
+                <div
+                  style={{
+                    backgroundColor: "#fff",
+                    borderRadius: "12px",
+                    padding: "32px",
+                    border: `2px solid ${ORANGE}`,
+                    boxShadow: "0 10px 30px rgba(255,107,53,0.12)",
+                    position: "relative",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
                   <div
                     style={{
-                      position: "absolute",
-                      top: "-14px",
-                      left: "50%",
-                      transform: "translateX(-50%)",
-                      backgroundColor: ORANGE,
-                      color: "#fff",
-                      fontWeight: 700,
-                      fontSize: "0.75rem",
-                      borderRadius: "9999px",
-                      padding: "4px 16px",
-                      letterSpacing: "0.04em",
+                      position: "absolute", top: "-14px", left: "50%", transform: "translateX(-50%)",
+                      backgroundColor: ORANGE, color: "#fff", fontWeight: 700, fontSize: "0.75rem",
+                      borderRadius: "9999px", padding: "4px 16px", letterSpacing: "0.04em",
                     }}
                   >
                     Most Popular
                   </div>
-                )}
-                {plan.addon && (
+
+                  <p style={{ fontSize: "0.75rem", fontWeight: 700, color: SLATE, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "8px" }}>
+                    Autopilot
+                  </p>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: "4px", marginBottom: "4px" }}>
+                    <span style={{ fontSize: "2.5rem", fontWeight: 800, color: NAVY }}>{AUTOPILOT_MONTHLY_PRICE}</span>
+                    <span style={{ color: SLATE, fontSize: "0.875rem" }}>/month</span>
+                  </div>
+                  <p style={{ color: ORANGE, fontSize: "0.8125rem", marginBottom: "12px" }}>
+                    or {AUTOPILOT_ANNUAL_PRICE}/year — save {AUTOPILOT_ANNUAL_SAVINGS}
+                  </p>
+                  <p style={{ color: SLATE, fontSize: "0.9375rem", marginBottom: "20px", lineHeight: 1.5 }}>
+                    {autopilot.tagline}
+                  </p>
+
+                  <ul style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "28px", flex: 1 }}>
+                    {autopilot.features.map((f) => (
+                      <li key={f.label} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+                        <CheckCircle2 size={16} style={{ color: ORANGE, flexShrink: 0, marginTop: "3px" }} />
+                        <span style={{ color: CHARCOAL, fontSize: "0.9375rem" }}>
+                          {f.label}
+                          {f.tag && (() => { const b = TAG_BADGES[f.tag]; return (
+                            <span style={{ display: "inline-block", marginLeft: "6px", padding: "1px 7px", borderRadius: "9999px", fontSize: "0.6875rem", fontWeight: 600, backgroundColor: b.bg, color: b.color, verticalAlign: "middle", lineHeight: "1.5" }}>
+                              {b.label}
+                            </span>
+                          )})()}
+                          {f.tag2 && (() => { const b = TAG_BADGES[f.tag2]; return (
+                            <span style={{ display: "inline-block", marginLeft: "4px", padding: "1px 7px", borderRadius: "9999px", fontSize: "0.6875rem", fontWeight: 600, backgroundColor: b.bg, color: b.color, verticalAlign: "middle", lineHeight: "1.5" }}>
+                              {b.label}
+                            </span>
+                          )})()}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Link href="/check?plan=solo" style={{ textDecoration: "none" }}>
+                    <button
+                      style={{
+                        width: "100%", padding: "13px", borderRadius: "8px", fontWeight: 700, fontSize: "0.9375rem",
+                        cursor: "pointer", border: "none", background: ORANGE, color: "#fff",
+                        boxShadow: "0 4px 14px rgba(255,107,53,0.3)", transition: "opacity 0.15s",
+                      }}
+                    >
+                      Start Autopilot — {AUTOPILOT_MONTHLY_PRICE}/mo
+                    </button>
+                  </Link>
+                  <p style={{ color: SLATE, fontSize: "0.75rem", textAlign: "center", marginTop: "8px" }}>
+                    No contracts — cancel anytime
+                  </p>
+                </div>
+              );
+            })()}
+
+            {/* Launch Package card */}
+            {(() => {
+              const lp = PLANS.find(p => p.name === 'Launch Package')!;
+              return (
+                <div
+                  style={{
+                    background: "linear-gradient(180deg, #FFFDF5 0%, #FFF8E7 100%)",
+                    borderRadius: "12px",
+                    padding: "32px",
+                    border: "2px solid #D4A017",
+                    boxShadow: "0 10px 30px rgba(184,134,11,0.15)",
+                    position: "relative",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
                   <div
                     style={{
-                      position: "absolute",
-                      top: "-14px",
-                      left: "50%",
-                      transform: "translateX(-50%)",
-                      background: "linear-gradient(90deg, #B8860B, #FFD700)",
-                      color: "#000",
-                      fontWeight: 700,
-                      fontSize: "0.75rem",
-                      borderRadius: "9999px",
-                      padding: "4px 16px",
-                      letterSpacing: "0.04em",
+                      position: "absolute", top: "-14px", left: "50%", transform: "translateX(-50%)",
+                      background: "linear-gradient(90deg, #B8860B, #D4A017)", color: "#fff", fontWeight: 700,
+                      fontSize: "0.75rem", borderRadius: "9999px", padding: "4px 16px", letterSpacing: "0.04em",
                     }}
                   >
                     White Glove
                   </div>
-                )}
 
-                <p
-                  style={{
-                    fontSize: "0.75rem",
-                    fontWeight: 700,
-                    color: SLATE,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.08em",
-                    marginBottom: "8px",
-                  }}
-                >
-                  {plan.name}
-                </p>
+                  <p style={{ fontSize: "0.75rem", fontWeight: 700, color: SLATE, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "8px" }}>
+                    Launch Package
+                  </p>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: "4px", marginBottom: "4px" }}>
+                    <span style={{ fontSize: "2.5rem", fontWeight: 800, color: NAVY }}>{lp.price}</span>
+                    <span style={{ color: SLATE, fontSize: "0.875rem" }}>{lp.period}</span>
+                  </div>
+                  <p style={{ color: SLATE, fontSize: "0.9375rem", marginBottom: "20px", lineHeight: 1.5 }}>
+                    {lp.tagline}
+                  </p>
 
-                <div style={{ display: "flex", alignItems: "baseline", gap: "4px", marginBottom: "4px" }}>
-                  <span style={{ fontSize: "2.5rem", fontWeight: 800, color: NAVY }}>{plan.price}</span>
-                  <span style={{ color: SLATE, fontSize: "0.875rem" }}>{plan.period}</span>
-                </div>
-
-                <p style={{ color: SLATE, fontSize: "0.9375rem", marginBottom: "16px", lineHeight: 1.5 }}>
-                  {plan.tagline}
-                </p>
-
-                {/* Automation count headline for paid plans */}
-                {(() => {
-                  const autoCount = plan.features.filter(f => f.mode === 'auto').length
-                  const doneCount = plan.features.filter(f => f.mode === 'done').length
-                  const handledCount = autoCount + doneCount
-                  if (handledCount === 0) return null
-                  return (
-                    <div style={{
-                      background: plan.addon ? 'rgba(184,134,11,0.08)' : 'rgba(5,150,105,0.08)',
-                      borderRadius: '8px',
-                      padding: '8px 12px',
-                      marginBottom: '16px',
-                      textAlign: 'center',
-                    }}>
-                      <span style={{
-                        fontSize: '0.875rem',
-                        fontWeight: 700,
-                        color: plan.addon ? '#92400E' : '#059669',
-                      }}>
-                        {handledCount} of {plan.features.length} features handled for you
-                      </span>
-                    </div>
-                  )
-                })()}
-
-                <ul style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "28px", flex: 1 }}>
-                  {plan.features.map((f) => (
-                    <li key={f.label} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                      <CheckCircle2 size={16} style={{ color: ORANGE, flexShrink: 0, marginTop: "3px" }} />
-                      <span style={{ color: CHARCOAL, fontSize: "0.9375rem" }}>
-                        {f.label}
-                        <span style={{
-                          display: "inline-block",
-                          marginLeft: "6px",
-                          padding: "1px 7px",
-                          borderRadius: "9999px",
-                          fontSize: "0.6875rem",
-                          fontWeight: 600,
-                          backgroundColor: MODE_BADGES[f.mode!].bg,
-                          color: MODE_BADGES[f.mode!].color,
-                          verticalAlign: "middle",
-                          lineHeight: "1.5",
-                        }}>
-                          {MODE_BADGES[f.mode!].label}
+                  <ul style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "28px", flex: 1 }}>
+                    {lp.features.map((f) => (
+                      <li key={f.label} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+                        <CheckCircle2 size={16} style={{ color: "#B8860B", flexShrink: 0, marginTop: "3px" }} />
+                        <span style={{ color: CHARCOAL, fontSize: "0.9375rem" }}>
+                          {f.label}
+                          {f.tag && (() => { const b = TAG_BADGES[f.tag]; return (
+                            <span style={{ display: "inline-block", marginLeft: "6px", padding: "1px 7px", borderRadius: "9999px", fontSize: "0.6875rem", fontWeight: 600, backgroundColor: b.bg, color: b.color, verticalAlign: "middle", lineHeight: "1.5" }}>
+                              {b.label}
+                            </span>
+                          )})()}
                         </span>
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+                      </li>
+                    ))}
+                  </ul>
 
-                <Link href={plan.href ?? (plan.addon ? "/pricing#dfy" : "/check")} style={{ textDecoration: "none" }}>
-                  <button
-                    style={{
-                      width: "100%",
-                      padding: "13px",
-                      borderRadius: "8px",
-                      fontWeight: 700,
-                      fontSize: "0.9375rem",
-                      cursor: "pointer",
-                      border: plan.highlight || plan.addon ? "none" : `2px solid ${NAVY}`,
-                      background: plan.highlight ? ORANGE : plan.addon ? "linear-gradient(90deg, #B8860B, #DAA520)" : "transparent",
-                      color: plan.highlight || plan.addon ? "#fff" : NAVY,
-                      boxShadow: plan.highlight ? "0 4px 14px rgba(255,107,53,0.3)" : plan.addon ? "0 4px 14px rgba(184,134,11,0.3)" : "none",
-                      transition: "opacity 0.15s",
-                    }}
-                  >
-                    {plan.cta}
-                  </button>
-                </Link>
-              </div>
-            ))}
+                  <Link href="/check?plan=dfy" style={{ textDecoration: "none" }}>
+                    <button
+                      style={{
+                        width: "100%", padding: "13px", borderRadius: "8px", fontWeight: 700, fontSize: "0.9375rem",
+                        cursor: "pointer", border: "none", background: "linear-gradient(90deg, #B8860B, #DAA520)", color: "#fff",
+                        boxShadow: "0 4px 14px rgba(184,134,11,0.3)", transition: "opacity 0.15s",
+                      }}
+                    >
+                      {lp.cta}
+                    </button>
+                  </Link>
+                  <p style={{ color: SLATE, fontSize: "0.75rem", textAlign: "center", marginTop: "8px" }}>
+                    One-time payment — includes first month of Autopilot
+                  </p>
+                </div>
+              );
+            })()}
           </div>
         </div>
       </section>
