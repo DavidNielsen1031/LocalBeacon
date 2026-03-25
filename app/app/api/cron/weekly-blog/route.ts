@@ -26,9 +26,28 @@ export async function GET(req: NextRequest) {
 
   if (!eligible.length) return NextResponse.json({ generated: 0 })
 
+  const MAX_BLOGS_PER_MONTH = 2
+
   let generated = 0
   const results = await Promise.allSettled(eligible.map(async (biz: any) => {
     try {
+        // Check monthly limit — max 2 blog posts per business per month
+        const startOfMonth = new Date()
+        startOfMonth.setDate(1)
+        startOfMonth.setHours(0, 0, 0, 0)
+
+        const { count: blogCount } = await supabase
+          .from('content_items')
+          .select('*', { count: 'exact', head: true })
+          .eq('business_id', biz.id)
+          .eq('type', 'blog_post')
+          .gte('created_at', startOfMonth.toISOString())
+
+        if ((blogCount ?? 0) >= MAX_BLOGS_PER_MONTH) {
+          console.log(`[weekly-blog] Business ${biz.id} already has ${blogCount} blogs this month, skipping`)
+          return
+        }
+
         const ctx: BusinessContext = {
           name: biz.name || '',
           category: biz.category || '',
