@@ -17,7 +17,7 @@
 | 12 | CLOSED | 2026-03-07 | 2026-03-24 | (retroactive close) |
 | 30 | CLOSED | 2026-03-24 | 2026-03-25 | Pricing restructure ($49→$99, annual, dashboard) |
 | 31 | CLOSED | 2026-03-25 | 2026-03-25 | sprint-31-review-retro.md |
-| 32 | EXECUTING | 2026-03-25 | — | — |
+| 32 | CLOSED | 2026-03-25 | 2026-03-25 | sprint-32-review-retro.md |
 
 ---
 *Part of: [[products/localbeacon/BACKLOG|localbeacon Backlog]] · [[MEMORY|Memory]]*
