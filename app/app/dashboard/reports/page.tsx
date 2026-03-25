@@ -116,7 +116,7 @@ async function getMonthlyData(clerkUserId: string) {
     aeoScore: aeoScan?.score ?? null,
     aeoDate: aeoScan?.scanned_at ?? null,
     monthName: now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
-    plan: (user.plan || 'free').toLowerCase() as 'free' | 'solo' | 'agency',
+    plan: (user.plan || 'free').toLowerCase() as 'free' | 'solo',
   }
 }
 
