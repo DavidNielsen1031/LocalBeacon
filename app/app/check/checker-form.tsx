@@ -628,7 +628,7 @@ export function CheckerForm() {
                 period: '/mo',
                 fixes: autopilotFixes,
                 topFixes: getTopFixes('autopilot'),
-                cta: 'Start Autopilot',
+                cta: 'Start Pro',
                 planKey: 'SOLO' as 'SOLO' | 'DFY' | null,
                 href: '#',
                 bg: '#FF6B35',

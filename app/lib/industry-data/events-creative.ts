@@ -152,7 +152,7 @@ export const eventsCreative: Record<string, IndustryData> = {
       {
         question: "What if I serve multiple cities or destination markets?",
         answer:
-          "That's where LocalBeacon shines. Our Autopilot plan lets you create landing pages for every city and venue market you serve — whether that's three neighboring towns or wedding destinations across the country.",
+          "That's where LocalBeacon shines. Our Pro plan lets you create landing pages for every city and venue market you serve — whether that's three neighboring towns or wedding destinations across the country.",
       },
       {
         question: "How important are Google reviews for wedding planners?",
@@ -230,7 +230,7 @@ export const eventsCreative: Record<string, IndustryData> = {
       {
         question: "I'm a solo DJ — is this worth it for a one-person business?",
         answer:
-          "Especially so. Solo DJs can't afford a marketing team, but you still need a strong online presence. Our Free plan gets you started, and the Autopilot plan at $99/month is far less than what one additional booking per month would earn you.",
+          "Especially so. Solo DJs can't afford a marketing team, but you still need a strong online presence. Our Free plan gets you started, and the Pro plan at $99/month is far less than what one additional booking per month would earn you.",
       },
       {
         question: "How do reviews help DJs specifically?",
@@ -328,7 +328,7 @@ export const eventsCreative: Record<string, IndustryData> = {
       {
         question: "What's the cost for a small flower shop?",
         answer:
-          "LocalBeacon starts free for one location with 5 posts per month. The Autopilot plan at $99/month adds unlimited posts and up to 3 delivery zone areas. Most flower shops find that one or two additional orders per month more than covers the cost.",
+          "LocalBeacon starts free for one location with 5 posts per month. The Pro plan at $99/month adds unlimited posts and up to 3 delivery zone areas. Most flower shops find that one or two additional orders per month more than covers the cost.",
       },
     ],
   },

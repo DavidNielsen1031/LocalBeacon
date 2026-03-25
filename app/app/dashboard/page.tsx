@@ -198,7 +198,7 @@ export default function DashboardPage() {
           style={{ backgroundColor: "rgba(255,107,53,0.06)", borderColor: "rgba(255,107,53,0.25)" }}
         >
           <p className="text-sm" style={{ color: NAVY }}>
-            You&apos;re on the <strong>Free plan</strong>. Upgrade to Autopilot for full access —{" "}
+            You&apos;re on the <strong>Free plan</strong>. Upgrade to Pro for full access —{" "}
             <button
               onClick={handleUpgradeClick}
               disabled={upgradeLoading}
@@ -225,7 +225,7 @@ export default function DashboardPage() {
               borderColor: "rgba(255,107,53,0.3)",
             }}
           >
-            {plan === "solo" ? "Autopilot" : "Free Plan"}
+            {plan === "solo" ? "LocalBeacon Pro" : "Free Plan"}
           </Badge>
         </div>
         {hasBusiness ? (
@@ -396,7 +396,7 @@ export default function DashboardPage() {
             </Card>
           )}
 
-          {/* ─── Progress: What Autopilot published ─── */}
+          {/* ─── Progress: What Pro published ─── */}
           {hasBusiness && (publishedBlogs.length > 0 || publishedPages.length > 0) && (
             <Card className="mb-6 border" style={{ borderColor: MIST }}>
               <CardContent className="p-5">

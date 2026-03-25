@@ -69,7 +69,7 @@ export const professionalServices: Record<string, IndustryData> = {
       {
         question: 'Can LocalBeacon handle multiple office locations?',
         answer:
-          'Yes. Our Autopilot plan supports up to 3 locations For firms with more locations, our Launch Package ($499) sets up every office with optimized content from day one.',
+          'Yes. Our Pro plan supports up to 3 locations For firms with more locations, our Launch Package ($499) sets up every office with optimized content from day one.',
       },
       {
         question: 'How is this different from hiring a marketing agency?',
@@ -318,7 +318,7 @@ export const professionalServices: Record<string, IndustryData> = {
       {
         question: 'Does this work for teams and brokerages?',
         answer:
-          'Yes. Our Autopilot plan handles your marketing automatically. For large agencies with many offices, our Launch Package ($499) sets up each location with optimized content.',
+          'Yes. Our Pro plan handles your marketing automatically. For large agencies with many offices, our Launch Package ($499) sets up each location with optimized content.',
       },
       {
         question: 'How does the AI search optimization work for real estate?',

@@ -14,9 +14,9 @@ import {
 } from '@/lib/plans'
 
 describe('Plan definitions', () => {
-  it('exports exactly 3 plans: Free, Autopilot, Launch Package', () => {
-    expect(PLANS).toHaveLength(3)
-    expect(PLANS.map(p => p.name)).toEqual(['Free', 'Autopilot', 'Launch Package'])
+  it('exports exactly 2 plans: LocalBeacon Pro, Beacon Launch', () => {
+    expect(PLANS).toHaveLength(2)
+    expect(PLANS.map(p => p.name)).toEqual(['LocalBeacon Pro', 'Beacon Launch'])
   })
 
   it('does NOT contain an Agency plan', () => {
@@ -25,19 +25,19 @@ describe('Plan definitions', () => {
   })
 
   it('Autopilot is $99/mo', () => {
-    const autopilot = PLANS.find(p => p.name === 'Autopilot')!
+    const autopilot = PLANS.find(p => p.name === 'LocalBeacon Pro')!
     expect(autopilot.price).toBe('$99')
     expect(autopilot.period).toBe('/month')
   })
 
   it('Autopilot annual is $899/yr', () => {
-    const autopilot = PLANS.find(p => p.name === 'Autopilot')!
+    const autopilot = PLANS.find(p => p.name === 'LocalBeacon Pro')!
     expect(autopilot.annualPrice).toBe('$899')
     expect(autopilot.annualPeriod).toBe('/year')
   })
 
-  it('Launch Package is $499 one-time', () => {
-    const lp = PLANS.find(p => p.name === 'Launch Package')!
+  it('Beacon Launch is $499 one-time', () => {
+    const lp = PLANS.find(p => p.name === 'Beacon Launch')!
     expect(lp.price).toBe('$499')
     expect(lp.period).toBe('one-time')
   })
@@ -84,19 +84,13 @@ describe('Plan definitions', () => {
     }
   })
 
-  it('Free plan has no stripePlan', () => {
-    const free = PLANS.find(p => p.name === 'Free')!
-    expect(free.stripePlan).toBeNull()
-    expect(free.href).toBe('/check')
-  })
-
-  it('Launch Package is marked as addon', () => {
-    const lp = PLANS.find(p => p.name === 'Launch Package')!
+  it('Beacon Launch is marked as addon', () => {
+    const lp = PLANS.find(p => p.name === 'Beacon Launch')!
     expect(lp.addon).toBe(true)
   })
 
-  it('Autopilot is highlighted', () => {
-    const autopilot = PLANS.find(p => p.name === 'Autopilot')!
+  it('Pro is highlighted', () => {
+    const autopilot = PLANS.find(p => p.name === 'LocalBeacon Pro')!
     expect(autopilot.highlight).toBe(true)
   })
 })

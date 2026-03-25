@@ -450,7 +450,7 @@ export async function sendVisibilityAlert(data: VisibilityAlertData) {
 
   <hr style="border: none; border-top: 1px solid #DFE6E9; margin: 24px 0;">
   <p style="color: #636E72; font-size: 12px; text-align: center; line-height: 1.6;">
-    You're receiving this monitoring alert because you're on a LocalBeacon Autopilot plan.<br>
+    You're receiving this monitoring alert because you're on a LocalBeacon Pro plan.<br>
     <a href="https://localbeacon.ai/dashboard/settings" style="color: #B2BEC3; font-size: 11px;">Manage notification preferences</a>
   </p>
 </body>
@@ -557,7 +557,7 @@ export async function sendScanUpdateEmail(data: ScanUpdateEmailData) {
 
   <hr style="border: none; border-top: 1px solid #DFE6E9; margin: 24px 0;">
   <p style="color: #636E72; font-size: 12px; text-align: center; line-height: 1.6;">
-    You're receiving weekly scan updates because you're on a LocalBeacon Autopilot plan.<br>
+    You're receiving weekly scan updates because you're on a LocalBeacon Pro plan.<br>
     <a href="https://localbeacon.ai/dashboard/settings" style="color: #B2BEC3; font-size: 11px;">Manage notification preferences</a>
   </p>
 </body>
@@ -629,7 +629,7 @@ export async function sendReviewNudgeEmail(data: ReviewNudgeEmailData) {
 
   <hr style="border: none; border-top: 1px solid #DFE6E9; margin: 24px 0;">
   <p style="color: #636E72; font-size: 12px; text-align: center; line-height: 1.6;">
-    You're receiving this because you're on a LocalBeacon Autopilot plan.<br>
+    You're receiving this because you're on a LocalBeacon Pro plan.<br>
     <a href="${data.dashboardUrl}/dashboard/settings" style="color: #B2BEC3; font-size: 11px;">Manage notification preferences</a>
   </p>
 </body>
