@@ -108,7 +108,7 @@ export async function GET(req: NextRequest) {
 
   // Filter: paid plans only, must have contact email
   const eligible = (bizWithUsers || []).filter((b: any) =>
-    ['solo', 'agency'].includes(b.users?.plan) && b.contact_email
+    ['solo'].includes(b.users?.plan) && b.contact_email
   )
 
   if (!eligible.length) return NextResponse.json({ generated: 0 })
@@ -117,46 +117,34 @@ export async function GET(req: NextRequest) {
   let generated = 0
 
   const results = await Promise.allSettled(eligible.map(async (biz: any) => {
-    try {
-      {
-        // Generate the weekly GBP post
-        const post = await generateWeeklyPost(biz)
+    // Generate the weekly GBP post
+    const post = await generateWeeklyPost(biz)
 
-          // Save to content_queue
-          const { error: insertError } = await supabase
-            .from('content_queue')
-            .insert({
-              business_id: biz.id,
-              type: 'gbp_post',
-              title: post.title,
-              content: post.content,
-              scheduled_for: scheduledFor.toISOString(),
-              status: 'ready',
-            })
+    // Save to content_queue
+    const { error: insertError } = await supabase
+      .from('content_queue')
+      .insert({
+        business_id: biz.id,
+        type: 'gbp_post',
+        title: post.title,
+        content: post.content,
+        scheduled_for: scheduledFor.toISOString(),
+        status: 'ready',
+      })
 
-          if (insertError) {
-            console.error(`[weekly-posts] Insert failed for business ${biz.id}:`, insertError)
-            continue
-          }
-
-          // Email the business contact
-          await sendWeeklyContentEmail({
-            to: biz.contact_email,
-            businessName: biz.name || 'Your Business',
-            postTitle: post.title,
-            postContent: post.content,
-            dashboardUrl: 'https://localbeacon.ai',
-          })
-
-          generated++
-        } catch (bizErr) {
-          console.error(`[weekly-posts] Failed for business ${biz.id}:`, bizErr)
-        }
-      }
-    } catch (err) {
-      console.error(`[weekly-posts] Failed for business ${biz.id}:`, err)
-      throw err
+    if (insertError) {
+      console.error(`[weekly-posts] Insert failed for business ${biz.id}:`, insertError)
+      throw insertError
     }
+
+    // Email the business contact
+    await sendWeeklyContentEmail({
+      to: biz.contact_email,
+      businessName: biz.name || 'Your Business',
+      postTitle: post.title,
+      postContent: post.content,
+      dashboardUrl: 'https://localbeacon.ai',
+    })
   }))
 
   for (const result of results) {

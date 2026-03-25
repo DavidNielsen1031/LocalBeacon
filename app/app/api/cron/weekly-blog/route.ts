@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
 
   // Filter: paid plans only, must have contact email
   const eligible = (bizWithUsers || []).filter((b: any) =>
-    ['solo', 'agency'].includes(b.users?.plan) && b.contact_email
+    ['solo'].includes(b.users?.plan) && b.contact_email
   )
 
   if (!eligible.length) return NextResponse.json({ generated: 0 })
@@ -29,8 +29,6 @@ export async function GET(req: NextRequest) {
   let generated = 0
   const results = await Promise.allSettled(eligible.map(async (biz: any) => {
     try {
-      {
-
         const ctx: BusinessContext = {
           name: biz.name || '',
           category: biz.category || '',
@@ -69,7 +67,7 @@ Respond ONLY with valid JSON in this exact format:
 
         if (!result.success || !result.text) {
           console.error(`[weekly-blog] AI generation failed for business ${biz.id}:`, result.error)
-          continue
+          return
         }
 
         let title: string
@@ -106,7 +104,7 @@ Respond ONLY with valid JSON in this exact format:
 
         if (insertError) {
           console.error(`[weekly-blog] DB insert failed for business ${biz.id}:`, insertError)
-          continue
+          return
         }
 
         // Email the user — preview first 500 chars in the email body
@@ -121,7 +119,6 @@ Respond ONLY with valid JSON in this exact format:
           subject: `Your weekly blog post is ready — ${biz.name}`,
         })
 
-      }
     } catch (err) {
       console.error(`[weekly-blog] Cron failed for business ${biz.id}:`, err)
       throw err

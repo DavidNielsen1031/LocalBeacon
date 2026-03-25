@@ -202,14 +202,14 @@ export default function DashboardPage() {
           style={{ backgroundColor: 'rgba(255,107,53,0.06)', borderColor: 'rgba(255,107,53,0.25)' }}
         >
           <p className="text-sm" style={{ color: '#2D3436' }}>
-            You&apos;re on the <strong>Free plan</strong>. Upgrade to Local Autopilot for unlimited access —{' '}
+            You&apos;re on the <strong>Free plan</strong>. Upgrade to Autopilot for unlimited access —{' '}
             <button
               onClick={handleUpgradeClick}
               disabled={upgradeLoading}
               className="font-bold underline disabled:opacity-50 cursor-pointer"
               style={{ color: '#FF6B35' }}
             >
-              {upgradeLoading ? 'Loading...' : '$49/mo →'}
+              {upgradeLoading ? 'Loading...' : '$99/mo →'}
             </button>
           </p>
           <button
@@ -233,7 +233,7 @@ export default function DashboardPage() {
               borderColor: "rgba(255,107,53,0.3)",
             }}
           >
-            {plan === "agency" ? "Agency Plan" : plan === "solo" ? "Local Autopilot" : "Free Plan"}
+            {plan === "solo" ? "Autopilot" : "Free Plan"}
           </Badge>
         </div>
         {hasBusiness ? (

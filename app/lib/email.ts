@@ -257,7 +257,7 @@ export async function sendAeoReportEmail(data: AeoReportEmailData) {
               <h3 style="color: white; margin: 0 0 8px; font-size: 18px;">Want us to fix ${failing.length > 0 ? 'these' : 'future issues'} for you?</h3>
               <p style="color: rgba(255,255,255,0.6); font-size: 14px; margin: 0 0 20px; line-height: 1.5;">
                 LocalBeacon.ai automates your local SEO and AI optimization.<br>
-                Plans start at $49/mo. Or get a full done-for-you setup for $499.
+                Plans start at $99/mo. Or get a full done-for-you setup for $499.
               </p>
               <table cellpadding="0" cellspacing="0" border="0" align="center">
                 <tr>
@@ -450,7 +450,7 @@ export async function sendVisibilityAlert(data: VisibilityAlertData) {
 
   <hr style="border: none; border-top: 1px solid #DFE6E9; margin: 24px 0;">
   <p style="color: #636E72; font-size: 12px; text-align: center; line-height: 1.6;">
-    You're receiving this monitoring alert because you're on a LocalBeacon Solo or Agency plan.<br>
+    You're receiving this monitoring alert because you're on a LocalBeacon Autopilot plan.<br>
     <a href="https://localbeacon.ai/dashboard/settings" style="color: #B2BEC3; font-size: 11px;">Manage notification preferences</a>
   </p>
 </body>
@@ -557,7 +557,7 @@ export async function sendScanUpdateEmail(data: ScanUpdateEmailData) {
 
   <hr style="border: none; border-top: 1px solid #DFE6E9; margin: 24px 0;">
   <p style="color: #636E72; font-size: 12px; text-align: center; line-height: 1.6;">
-    You're receiving weekly scan updates because you're on a LocalBeacon Solo or Agency plan.<br>
+    You're receiving weekly scan updates because you're on a LocalBeacon Autopilot plan.<br>
     <a href="https://localbeacon.ai/dashboard/settings" style="color: #B2BEC3; font-size: 11px;">Manage notification preferences</a>
   </p>
 </body>
@@ -629,7 +629,7 @@ export async function sendReviewNudgeEmail(data: ReviewNudgeEmailData) {
 
   <hr style="border: none; border-top: 1px solid #DFE6E9; margin: 24px 0;">
   <p style="color: #636E72; font-size: 12px; text-align: center; line-height: 1.6;">
-    You're receiving this because you're on a LocalBeacon Solo or Agency plan.<br>
+    You're receiving this because you're on a LocalBeacon Autopilot plan.<br>
     <a href="${data.dashboardUrl}/dashboard/settings" style="color: #B2BEC3; font-size: 11px;">Manage notification preferences</a>
   </p>
 </body>

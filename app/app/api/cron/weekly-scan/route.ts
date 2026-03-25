@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
 
   // Filter: paid plans only, must have website and contact email
   const eligible = (bizWithUsers || []).filter((b: any) =>
-    ['solo', 'agency'].includes(b.users?.plan) && b.website && b.contact_email
+    ['solo'].includes(b.users?.plan) && b.website && b.contact_email
   )
 
   if (!eligible.length) return NextResponse.json({ scanned: 0, emailed: 0 })

@@ -64,7 +64,7 @@ export const healthcare: Record<string, IndustryData> = {
       {
         question: "Can this work for multi-location dental practices?",
         answer:
-          "Absolutely. Our Agency plan supports unlimited locations, each with their own Google Business Profile management, local pages, and review responses.",
+          "Absolutely. Our Autopilot plan handles your marketing automatically. For multi-location practices, our Launch Package ($499) sets up every location from day one.",
       },
       {
         question: "What kind of content does LocalBeacon create for dentists?",
@@ -74,7 +74,7 @@ export const healthcare: Record<string, IndustryData> = {
       {
         question: "How is this different from a dental marketing agency?",
         answer:
-          "Dental marketing agencies charge $2,000-8,000/month and often lock you into long contracts. LocalBeacon starts at $49/month, works immediately, and you can cancel anytime.",
+          "Dental marketing agencies charge $2,000-8,000/month and often lock you into long contracts. LocalBeacon starts at $99/month, works immediately, and you can cancel anytime.",
       },
     ],
   },
@@ -572,7 +572,7 @@ export const healthcare: Record<string, IndustryData> = {
       {
         question: "Does this work for pediatric practices with multiple providers?",
         answer:
-          "Yes. Our Agency plan supports practices with multiple providers and locations. Each location gets its own Google Business Profile management, local pages, and tailored content.",
+          "Yes. Our Autopilot plan handles your marketing automatically. For practices with multiple providers and locations, our Launch Package ($499) sets up each location with tailored content.",
       },
       {
         question: "How quickly will we see results?",
@@ -660,7 +660,7 @@ export const healthcare: Record<string, IndustryData> = {
       {
         question: "I'm a solo practitioner. Is this worth it if I only need a few new clients per month?",
         answer:
-          "Absolutely. Solo practitioners often benefit the most because a handful of consistent new clients per month fills your caseload. At $49/month, even one new client covers the cost many times over. And you can pause or cancel anytime.",
+          "Absolutely. Solo practitioners often benefit the most because a handful of consistent new clients per month fills your caseload. At $99/month, even one new client covers the cost many times over. And you can pause or cancel anytime.",
       },
       {
         question: "Will the content feel authentic to my practice's approach?",

@@ -57,7 +57,7 @@ export function HomepageSeoContent() {
 
       <h2>Frequently Asked Questions</h2>
       <h3>What is LocalBeacon.ai?</h3>
-      <p>LocalBeacon.ai is a local marketing platform that automates Google Business Profile posts, creates city-specific landing pages, drafts review responses, and optimizes your business for AI search engines like ChatGPT and Perplexity. It costs $49 per month — a fraction of what SEO agencies charge.</p>
+      <p>LocalBeacon.ai is a local marketing platform that automates Google Business Profile posts, creates city-specific landing pages, drafts review responses, and optimizes your business for AI search engines like ChatGPT and Perplexity. It costs $99 per month — a fraction of what SEO agencies charge.</p>
 
       <h3>How does AI search optimization work?</h3>
       <p>AI search engines like ChatGPT, Claude, and Perplexity read your website to decide whether to recommend your business. LocalBeacon generates schema markup, llms.txt files, FAQ content, and structured data that make your business easy for AI to understand and cite in answers.</p>
@@ -66,7 +66,7 @@ export function HomepageSeoContent() {
       <p>LocalBeacon works for any local service business — plumbers, HVAC technicians, dentists, roofers, lawyers, electricians, landscapers, chiropractors, and more. If people search Google to find businesses like yours, LocalBeacon helps you get found more often.</p>
 
       <h3>How is this different from hiring an SEO agency?</h3>
-      <p>An SEO agency charges $800 to $1,500 per month and you wait weeks to see results. LocalBeacon generates your first content within minutes of signing up for just $49 per month. You get weekly Google posts, local city pages, and review reply drafts — no contracts, cancel anytime.</p>
+      <p>An SEO agency charges $800 to $1,500 per month and you wait weeks to see results. LocalBeacon generates your first content within minutes of signing up for just $99 per month. You get weekly Google posts, local city pages, and review reply drafts — no contracts, cancel anytime.</p>
 
       <h3>What does the Free plan include?</h3>
       <p>The free plan includes one AI Readiness scan per month analyzing 26 signals, five Google post drafts per month, three review response drafts per month, and a read-only schema markup preview. No credit card required to start.</p>

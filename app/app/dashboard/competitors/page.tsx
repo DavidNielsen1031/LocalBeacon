@@ -39,7 +39,7 @@ function getGrade(score: number): { letter: string; color: string } {
 
 export default function CompetitorsPage() {
   const { plan } = useBusinessContext()
-  const maxCompetitors = plan === 'solo' ? 5 : plan === 'agency' ? 10 : 1
+  const maxCompetitors = plan === 'solo' ? 5 : 1
   const [competitors, setCompetitors] = useState<CompetitorEntry[]>([])
   const [newUrl, setNewUrl] = useState('')
   const [myResult, setMyResult] = useState<ScanResult | null>(null)

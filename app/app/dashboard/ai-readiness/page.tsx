@@ -356,7 +356,7 @@ export default function AIReadinessPage() {
               <CardContent className="p-5">
                 <h3 className="text-sm font-semibold text-[#2D3436] mb-1">Visibility Signals</h3>
                 <p className="text-xs text-[#636E72] mb-2">
-                  Key signals monitored weekly for Local Autopilot users
+                  Key signals monitored weekly for Autopilot users
                 </p>
                 <VisibilityStatusBadges status={visibilityStatus} />
               </CardContent>

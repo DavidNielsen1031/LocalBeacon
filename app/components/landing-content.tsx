@@ -108,7 +108,7 @@ const faqs = [
   },
   {
     q: "How is this different from hiring an SEO agency?",
-    a: "An agency charges $800-1,500/month and you wait weeks for results. LocalBeacon writes your Google posts, builds local pages, and drafts review replies — for $49/month, starting immediately.",
+    a: "An agency charges $800-1,500/month and you wait weeks for results. LocalBeacon writes your Google posts, builds local pages, and drafts review replies — for $99/month, starting immediately.",
   },
   {
     q: "Will AI assistants like ChatGPT recommend my business?",
@@ -904,13 +904,13 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
                   backgroundColor: "#fff",
                   borderRadius: "12px",
                   padding: "32px",
-                  border: plan.highlight ? `2px solid ${ORANGE}` : (plan as any).premium ? `2px solid #B8860B` : `1px solid ${MIST}`,
+                  border: plan.highlight ? `2px solid ${ORANGE}` : plan.addon ? `2px solid #B8860B` : `1px solid ${MIST}`,
                   boxShadow: plan.highlight
                     ? "0 10px 30px rgba(255,107,53,0.12)"
-                    : (plan as any).premium
+                    : plan.addon
                     ? "0 10px 30px rgba(184,134,11,0.15)"
                     : "0 1px 3px rgba(27,42,74,0.06)",
-                  background: (plan as any).premium ? "linear-gradient(180deg, #FFFDF5 0%, #FFF8E7 100%)" : "#fff",
+                  background: plan.addon ? "linear-gradient(180deg, #FFFDF5 0%, #FFF8E7 100%)" : "#fff",
                   position: "relative",
                   display: "flex",
                   flexDirection: "column",
@@ -935,7 +935,7 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
                     Most Popular
                   </div>
                 )}
-                {(plan as any).premium && (
+                {plan.addon && (
                   <div
                     style={{
                       position: "absolute",
@@ -985,7 +985,7 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
                   if (handledCount === 0) return null
                   return (
                     <div style={{
-                      background: plan.premium ? 'rgba(184,134,11,0.08)' : 'rgba(5,150,105,0.08)',
+                      background: plan.addon ? 'rgba(184,134,11,0.08)' : 'rgba(5,150,105,0.08)',
                       borderRadius: '8px',
                       padding: '8px 12px',
                       marginBottom: '16px',
@@ -994,7 +994,7 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
                       <span style={{
                         fontSize: '0.875rem',
                         fontWeight: 700,
-                        color: plan.premium ? '#92400E' : '#059669',
+                        color: plan.addon ? '#92400E' : '#059669',
                       }}>
                         {handledCount} of {plan.features.length} features handled for you
                       </span>
@@ -1015,19 +1015,19 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
                           borderRadius: "9999px",
                           fontSize: "0.6875rem",
                           fontWeight: 600,
-                          backgroundColor: MODE_BADGES[f.mode].bg,
-                          color: MODE_BADGES[f.mode].color,
+                          backgroundColor: MODE_BADGES[f.mode!].bg,
+                          color: MODE_BADGES[f.mode!].color,
                           verticalAlign: "middle",
                           lineHeight: "1.5",
                         }}>
-                          {MODE_BADGES[f.mode].label}
+                          {MODE_BADGES[f.mode!].label}
                         </span>
                       </span>
                     </li>
                   ))}
                 </ul>
 
-                <Link href={plan.href ?? (plan.premium ? "/pricing#dfy" : "/check")} style={{ textDecoration: "none" }}>
+                <Link href={plan.href ?? (plan.addon ? "/pricing#dfy" : "/check")} style={{ textDecoration: "none" }}>
                   <button
                     style={{
                       width: "100%",
@@ -1036,10 +1036,10 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
                       fontWeight: 700,
                       fontSize: "0.9375rem",
                       cursor: "pointer",
-                      border: plan.highlight || plan.premium ? "none" : `2px solid ${NAVY}`,
-                      background: plan.highlight ? ORANGE : plan.premium ? "linear-gradient(90deg, #B8860B, #DAA520)" : "transparent",
-                      color: plan.highlight || plan.premium ? "#fff" : NAVY,
-                      boxShadow: plan.highlight ? "0 4px 14px rgba(255,107,53,0.3)" : plan.premium ? "0 4px 14px rgba(184,134,11,0.3)" : "none",
+                      border: plan.highlight || plan.addon ? "none" : `2px solid ${NAVY}`,
+                      background: plan.highlight ? ORANGE : plan.addon ? "linear-gradient(90deg, #B8860B, #DAA520)" : "transparent",
+                      color: plan.highlight || plan.addon ? "#fff" : NAVY,
+                      boxShadow: plan.highlight ? "0 4px 14px rgba(255,107,53,0.3)" : plan.addon ? "0 4px 14px rgba(184,134,11,0.3)" : "none",
                       transition: "opacity 0.15s",
                     }}
                   >
@@ -1082,7 +1082,7 @@ export default function LandingPage({ latestPosts = [] }: { latestPosts?: BlogPo
                 location: "Minneapolis, MN",
               },
               {
-                quote: "I was paying $1,200/month for an SEO agency. LocalBeacon does the local part better for $49.",
+                quote: "I was paying $1,200/month for an SEO agency. LocalBeacon does the local part better for $99.",
                 name: "Mike R.",
                 role: "HVAC Contractor",
                 location: "St. Paul, MN",

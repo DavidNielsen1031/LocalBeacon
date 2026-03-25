@@ -44,7 +44,7 @@ export default function PricingPage() {
           <span style={{ color: "#DFE6E9" }}>|</span>
           <div className="flex items-center gap-1.5">
             <span className="font-bold" style={{ color: ORANGE }}>LocalBeacon</span>
-            <span className="font-bold" style={{ color: ORANGE }}>$49/mo</span>
+            <span className="font-bold" style={{ color: ORANGE }}>$99/mo</span>
           </div>
         </div>
       </section>
@@ -53,7 +53,7 @@ export default function PricingPage() {
       <section className="px-6 pb-20">
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
           {PLANS.map((plan) => {
-            const isDfy = plan.premium;
+            const isDfy = plan.addon;
 
             return (
               <Card
@@ -146,9 +146,9 @@ export default function PricingPage() {
                           {o.label}
                           <span
                             className="inline-block ml-1.5 px-1.5 py-px rounded-full text-[0.6875rem] font-semibold align-middle"
-                            style={{ backgroundColor: MODE_BADGES[o.mode].bg, color: MODE_BADGES[o.mode].color }}
+                            style={{ backgroundColor: MODE_BADGES[o.mode!].bg, color: MODE_BADGES[o.mode!].color }}
                           >
-                            {MODE_BADGES[o.mode].label}
+                            {MODE_BADGES[o.mode!].label}
                           </span>
                         </span>
                       </li>

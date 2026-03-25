@@ -64,7 +64,7 @@ export const outdoorProperty: Record<string, IndustryData> = {
       {
         question: "What if I only serve a few neighborhoods?",
         answer:
-          "That's fine — even our Free plan supports one location. As you grow, our Solo and Agency plans let you add more service areas and target more neighborhoods.",
+          "That's fine — even our Free plan supports one location. As you grow, our Autopilot plan lets you add more service areas and target more neighborhoods.",
       },
       {
         question: "Do I need to provide photos or content?",
@@ -74,7 +74,7 @@ export const outdoorProperty: Record<string, IndustryData> = {
       {
         question: "How much does it cost?",
         answer:
-          "LocalBeacon starts free for one location. Our Local Autopilot plan is $49/month for up to 3 locations with unlimited posts, and the Agency plan is $99/month for unlimited locations and white-label features.",
+          "LocalBeacon starts free for one location. Our Autopilot plan is $99/month for up to 3 locations with unlimited posts, You can also add our Launch Package ($499 one-time) for full done-for-you setup.",
       },
     ],
   },
@@ -142,7 +142,7 @@ export const outdoorProperty: Record<string, IndustryData> = {
       {
         question: "I serve a wide area — can I target multiple cities?",
         answer:
-          "Absolutely. Our Local Autopilot plan covers up to 3 locations, and the Agency plan supports unlimited service areas. We create dedicated landing pages for each city so you rank locally in every area you cover.",
+          "Absolutely. Our Autopilot plan covers up to 3 locations, and we create dedicated landing pages for each area you cover. We create dedicated landing pages for each city so you rank locally in every area you cover.",
       },
       {
         question: "Do you help with content about tree care regulations?",
@@ -240,7 +240,7 @@ export const outdoorProperty: Record<string, IndustryData> = {
       {
         question: "What's the pricing for pool service companies?",
         answer:
-          "LocalBeacon starts free for one location. Solo is $49/month for up to 3 service areas with unlimited posts, and Agency is $99/month for unlimited areas with white-label features — ideal for multi-truck operations.",
+          "LocalBeacon starts free for one location. Solo is $99/month for up to 3 service areas with unlimited posts, plus our Launch Package ($499) sets up everything on your site — ideal for multi-truck operations.",
       },
     ],
   },
@@ -401,7 +401,7 @@ export const outdoorProperty: Record<string, IndustryData> = {
       {
         question: "What if I'm a solo operator with a small service area?",
         answer:
-          "Our Free plan is perfect for solo operators — one location with 5 Google posts per month. As you grow and add crews, upgrade to Solo or Agency to cover more service areas and automate more of your marketing.",
+          "Our Free plan is perfect for solo operators — one location with 5 Google posts per month. As you grow and add crews, upgrade to Autopilot to cover more service areas and automate more of your marketing.",
       },
     ],
   },

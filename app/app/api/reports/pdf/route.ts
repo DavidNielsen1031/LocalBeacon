@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
   const userPlan = (user.plan || 'free').toLowerCase()
   if (userPlan === 'free') {
     return NextResponse.json(
-      { error: 'PDF reports require a Local Autopilot plan or higher.', upgrade_url: '/pricing' },
+      { error: 'PDF reports require a Autopilot plan or higher.', upgrade_url: '/pricing' },
       { status: 403 }
     )
   }

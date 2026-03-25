@@ -30,11 +30,11 @@ export async function GET(req: NextRequest) {
   const supabase = createServerClient()
   if (!supabase) return NextResponse.json({ error: 'DB not configured' }, { status: 500 })
 
-  // Get all solo/agency users with businesses that have a website
+  // Get all paid users with businesses that have a website
   const { data: users } = await supabase
     .from('users')
     .select('id, clerk_id, plan')
-    .in('plan', ['solo', 'agency'])
+    .in('plan', ['solo'])
 
   if (!users?.length) return NextResponse.json({ checked: 0, alerts: 0 })
 

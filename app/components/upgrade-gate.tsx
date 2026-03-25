@@ -29,14 +29,14 @@ function UpgradeCTA({ feature }: { feature: string }) {
         Upgrade to Solo to access <strong>{feature}</strong>
       </p>
       <p className="text-xs mb-4" style={{ color: "#636E72" }}>
-        Unlock unlimited access and all features for $49/mo.
+        Unlock unlimited access and all features for $99/mo.
       </p>
       <Link href="/pricing">
         <button
           className="rounded-lg px-5 py-2 text-sm font-bold text-white transition-opacity hover:opacity-90"
           style={{ backgroundColor: "#FF6B35" }}
         >
-          Upgrade — $49/mo →
+          Upgrade — $99/mo →
         </button>
       </Link>
     </div>
@@ -55,7 +55,7 @@ export function UpgradeGate({
   dfyContext,
 }: UpgradeGateProps) {
   // If user is on required plan or above, render children directly
-  const planOrder = ["free", "solo", "agency"];
+  const planOrder = ["free", "solo"];
   const currentIdx = planOrder.indexOf(currentPlan);
   const requiredIdx = planOrder.indexOf(requiredPlan);
 
@@ -91,7 +91,7 @@ export function UpgradeGate({
                   className="rounded-lg px-5 py-2 text-sm font-bold text-white transition-opacity hover:opacity-90"
                   style={{ backgroundColor: "#FF6B35" }}
                 >
-                  Upgrade — $49/mo →
+                  Upgrade — $99/mo →
                 </button>
               </Link>
             </div>
@@ -180,7 +180,7 @@ export function UpgradeGate({
           {feature}
         </h3>
         <p className="text-sm mb-1" style={{ color: "#636E72" }}>
-          Available on Local Autopilot plan
+          Available on Autopilot plan
         </p>
         <p className="text-xs mb-5" style={{ color: "#636E72" }}>
           Upgrade to unlock {feature} and all other premium features.
@@ -190,7 +190,7 @@ export function UpgradeGate({
             className="rounded-lg px-6 py-2.5 text-sm font-bold text-white transition-opacity hover:opacity-90"
             style={{ backgroundColor: "#FF6B35" }}
           >
-            Upgrade — $49/mo →
+            Upgrade — $99/mo →
           </button>
         </Link>
       </div>

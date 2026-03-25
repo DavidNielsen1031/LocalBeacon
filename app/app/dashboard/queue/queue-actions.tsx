@@ -45,7 +45,7 @@ export function QueueActions({
       if (!res.ok) {
         const data = await res.json()
         if (data.error === 'limit_reached') {
-          setError(`You've used all ${data.limit} posts this month. Upgrade to keep going — plans start at $49/mo.`)
+          setError(`You've used all ${data.limit} posts this month. Upgrade to keep going — plans start at $99/mo.`)
           return
         }
         throw new Error(data.error || 'Failed to generate post')

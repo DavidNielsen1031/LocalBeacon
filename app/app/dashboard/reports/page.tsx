@@ -146,7 +146,7 @@ export default async function ReportsPage() {
           <h3 className="text-base font-bold mb-1" style={{ color: '#1B2A4A' }}>
             Monthly Reports
           </h3>
-          <p className="text-sm mb-1" style={{ color: '#636E72' }}>Available on Local Autopilot plan</p>
+          <p className="text-sm mb-1" style={{ color: '#636E72' }}>Available on Autopilot plan</p>
           <p className="text-xs mb-5" style={{ color: '#636E72' }}>
             Upgrade to unlock monthly progress reports and track your AI visibility score over time.
           </p>
@@ -155,7 +155,7 @@ export default async function ReportsPage() {
               className="rounded-lg px-6 py-2.5 text-sm font-bold text-white transition-opacity hover:opacity-90"
               style={{ backgroundColor: '#FF6B35' }}
             >
-              Upgrade — $49/mo →
+              Upgrade — $99/mo →
             </button>
           </Link>
         </div>
