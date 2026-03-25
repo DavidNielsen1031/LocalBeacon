@@ -50,7 +50,7 @@ export default function CheckPage() {
         <div className="grid md:grid-cols-3 gap-8">
           {[
             { step: '1', title: 'Enter your website', desc: 'Paste any URL — yours or a competitor\'s.' },
-            { step: '2', title: 'We scan 26 signals', desc: 'From AI discovery files to review content, we check what matters.' },
+            { step: '2', title: 'We scan 26+ signals', desc: 'From AI discovery files to review content, we check what matters. Updated weekly.' },
             { step: '3', title: 'Get your score', desc: 'See your grade instantly. Get the full breakdown via email.' },
           ].map((item) => (
             <div key={item.step} className="text-center">
@@ -92,6 +92,16 @@ export default function CheckPage() {
                 <span className="text-sm text-[#1B2A4A]/80">{item.label}</span>
               </div>
             ))}
+          </div>
+
+          {/* Research badge */}
+          <div className="mt-8 text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1B2A4A]/5 border border-[#1B2A4A]/10">
+              <span className="text-sm">🔬</span>
+              <span className="text-xs font-medium text-[#1B2A4A]/70">
+                Powered by 26+ signals — updated weekly as AI search evolves
+              </span>
+            </div>
           </div>
         </div>
       </section>

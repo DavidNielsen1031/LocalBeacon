@@ -27,7 +27,7 @@ export function HomepageSeoContent() {
       <h2>Our Services</h2>
       <p>
         LocalBeacon offers a comprehensive suite of local marketing tools designed specifically for service-based
-        businesses. Our AI Readiness Scanner analyzes 19 critical signals to score how visible your business is
+        businesses. Our AI Readiness Scanner analyzes 26 critical signals to score how visible your business is
         to AI search engines. The Google Post Generator creates weekly, locally-targeted content for your Google
         Business Profile. Our City Page Builder generates dedicated landing pages for every city and neighborhood
         you serve, dramatically increasing your chances of being recommended by AI assistants. The Review Response
