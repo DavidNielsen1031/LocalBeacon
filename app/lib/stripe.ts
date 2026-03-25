@@ -7,28 +7,33 @@ export const stripe = process.env.STRIPE_SECRET_KEY
     })
   : null;
 
-export const PLANS = {
+export const STRIPE_PLANS = {
   FREE: {
     name: "Free",
     price: 0,
     priceId: null,
   },
   SOLO: {
-    name: "Local Autopilot",
-    price: 49,
+    name: "Autopilot (Monthly)",
+    price: 99,
     priceId: process.env.STRIPE_SOLO_PRICE_ID,
   },
-  AGENCY: {
-    name: "Agency",
-    price: 99,
-    priceId: process.env.STRIPE_AGENCY_PRICE_ID,
+  SOLO_ANNUAL: {
+    name: "Autopilot (Annual)",
+    price: 899,
+    priceId: process.env.STRIPE_SOLO_ANNUAL_PRICE_ID,
   },
   DFY: {
-    name: "Done-For-You",
+    name: "Launch Package",
     price: 499,
     priceId: process.env.STRIPE_DFY_PRICE_ID,
   },
-};
+} as const;
+
+/** @deprecated Use STRIPE_PLANS instead */
+export const PLANS = STRIPE_PLANS;
+
+export type StripePlanKey = keyof typeof STRIPE_PLANS;
 
 // Startup validation — log warnings for missing config (non-fatal)
 if (typeof window === "undefined") {
@@ -36,13 +41,13 @@ if (typeof window === "undefined") {
     console.warn("[stripe] STRIPE_SECRET_KEY not set — payments disabled");
   }
   if (!process.env.STRIPE_SOLO_PRICE_ID) {
-    console.warn("[stripe] STRIPE_SOLO_PRICE_ID not set — Solo plan unavailable");
+    console.warn("[stripe] STRIPE_SOLO_PRICE_ID not set — Autopilot monthly unavailable");
   }
-  if (!process.env.STRIPE_AGENCY_PRICE_ID) {
-    console.warn("[stripe] STRIPE_AGENCY_PRICE_ID not set — Agency plan unavailable");
+  if (!process.env.STRIPE_SOLO_ANNUAL_PRICE_ID) {
+    console.warn("[stripe] STRIPE_SOLO_ANNUAL_PRICE_ID not set — Autopilot annual unavailable");
   }
   if (!process.env.STRIPE_DFY_PRICE_ID) {
-    console.warn("[stripe] STRIPE_DFY_PRICE_ID not set — DFY plan unavailable");
+    console.warn("[stripe] STRIPE_DFY_PRICE_ID not set — Launch Package unavailable");
   }
   if (!process.env.STRIPE_WEBHOOK_SECRET) {
     console.warn("[stripe] STRIPE_WEBHOOK_SECRET not set — webhook verification disabled");

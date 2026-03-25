@@ -1,4 +1,4 @@
-export type Plan = 'free' | 'solo' | 'agency'
+export type Plan = 'free' | 'solo'
 export type PostType = 'whats_new' | 'offer' | 'event' | 'product'
 export type ContentStatus = 'draft' | 'approved' | 'published'
 

@@ -1,6 +1,6 @@
 import { createServerClient } from './supabase'
 
-export type PlanTier = 'free' | 'solo' | 'agency'
+export type PlanTier = 'free' | 'solo'
 
 export interface PlanLimits {
   postsPerMonth: number | null  // null = unlimited
@@ -39,25 +39,13 @@ const PLAN_LIMITS: Record<PlanTier, PlanLimits> = {
   },
   solo: {
     postsPerMonth: null,
-    cityPages: 10,
-    locations: 3,
-    scansPerMonth: null,
-    faqGenerations: null,
-    reviewResponses: null,
-    competitors: 5,
-    blogPosts: 4,
-    monthlyReports: true,
-    llmsTxt: null,
-  },
-  agency: {
-    postsPerMonth: null,
-    cityPages: null,
+    cityPages: 3,
     locations: null,
     scansPerMonth: null,
     faqGenerations: null,
     reviewResponses: null,
-    competitors: 10,
-    blogPosts: null,
+    competitors: 5,
+    blogPosts: 2,
     monthlyReports: true,
     llmsTxt: null,
   },
@@ -91,15 +79,11 @@ export async function getUserPlan(clerkUserId: string): Promise<PlanTier> {
 
   // Check if the plan has expired (used for DFY 30-day Solo access)
   if (user.plan_expires_at && new Date(user.plan_expires_at) < new Date()) {
-    // TODO: Plan downgrades should NOT happen here. This is a pure read function.
-    // Downgrade writes should be triggered by a Stripe webhook handler (e.g. POST /api/webhooks/stripe)
-    // or a scheduled cron job that sweeps expired plans. Doing it inline here causes hidden
-    // side effects every time the plan is checked (e.g. during usage checks, dashboard loads).
     return 'free'
   }
 
   const plan = user.plan.toLowerCase()
-  if (plan === 'solo' || plan === 'agency') return plan
+  if (plan === 'solo') return plan
   return 'free'
 }
 
@@ -113,7 +97,6 @@ async function getMonthlyUsage(
   const supabase = createServerClient()
   if (!supabase) return 0
 
-  // Get the user's internal ID
   const { data: user } = await supabase
     .from('users')
     .select('id')
@@ -122,7 +105,6 @@ async function getMonthlyUsage(
   
   if (!user) return 0
 
-  // Get first business ID (for backward compat — callers should pass businessId directly)
   const { data: businesses } = await supabase
     .from('businesses')
     .select('id')
@@ -132,12 +114,10 @@ async function getMonthlyUsage(
   const business = businesses?.[0]
   if (!business) return 0
 
-  // Count this month's content items
   const startOfMonth = new Date()
   startOfMonth.setDate(1)
   startOfMonth.setHours(0, 0, 0, 0)
 
-  // AEO scans live in a separate table
   if (type === 'aeo_scan') {
     const { count } = await supabase
       .from('aeo_scans')
@@ -157,9 +137,6 @@ async function getMonthlyUsage(
   return count ?? 0
 }
 
-/**
- * Map a ContentType to the relevant PlanLimits key.
- */
 function getLimitKey(contentType: ContentType): keyof PlanLimits | null {
   switch (contentType) {
     case 'gbp_post':      return 'postsPerMonth'
@@ -174,10 +151,6 @@ function getLimitKey(contentType: ContentType): keyof PlanLimits | null {
   }
 }
 
-/**
- * Check if the user can generate a specific content type.
- * Returns usage info including whether the action is allowed.
- */
 export async function checkUsage(
   clerkUserId: string,
   contentType: ContentType
@@ -192,7 +165,6 @@ export async function checkUsage(
 
   const limitValue = limits[limitKey]
 
-  // Boolean limits (monthlyReports)
   if (typeof limitValue === 'boolean') {
     return {
       allowed: limitValue,
@@ -204,28 +176,12 @@ export async function checkUsage(
     }
   }
 
-  // Unlimited plan
   if (limitValue === null) {
-    return {
-      allowed: true,
-      plan,
-      limit: null,
-      used: 0,
-      remaining: null,
-      upgradeUrl: '/pricing',
-    }
+    return { allowed: true, plan, limit: null, used: 0, remaining: null, upgradeUrl: '/pricing' }
   }
 
-  // Zero limit (feature not available on this plan at all)
   if (limitValue === 0) {
-    return {
-      allowed: false,
-      plan,
-      limit: 0,
-      used: 0,
-      remaining: 0,
-      upgradeUrl: '/pricing',
-    }
+    return { allowed: false, plan, limit: 0, used: 0, remaining: 0, upgradeUrl: '/pricing' }
   }
 
   const used = await getMonthlyUsage(clerkUserId, contentType)
@@ -241,10 +197,6 @@ export async function checkUsage(
   }
 }
 
-/**
- * Enforce limits — call this at the top of generation API routes.
- * Returns null if allowed, or an error response object if blocked.
- */
 export async function enforceLimits(
   clerkUserId: string,
   contentType: ContentType
@@ -262,10 +214,6 @@ export async function enforceLimits(
   }
 }
 
-/**
- * Get the plan limits object for a given tier.
- * Useful for client-side display of limits.
- */
 export function getPlanLimits(plan: PlanTier): PlanLimits {
   return PLAN_LIMITS[plan]
 }

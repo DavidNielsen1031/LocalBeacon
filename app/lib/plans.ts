@@ -1,34 +1,71 @@
 /**
  * Single source of truth for LocalBeacon plan definitions.
- * Both the homepage (landing-content.tsx) and /pricing page import from here.
- * If you update plan features, do it HERE — nowhere else.
+ * ALL pricing references across the codebase MUST import from here.
+ * If you update plan features or prices, do it HERE — nowhere else.
+ *
+ * Exported constants (for emails, meta, non-component files):
+ *   AUTOPILOT_MONTHLY_PRICE, AUTOPILOT_ANNUAL_PRICE, LAUNCH_PACKAGE_PRICE
  */
 
-export type FeatureMode = 'diy' | 'self-setup' | 'auto' | 'done'
+// ─── Price Constants (importable from anywhere) ─────────────────────
+export const AUTOPILOT_MONTHLY_PRICE = '$99'
+export const AUTOPILOT_MONTHLY_AMOUNT = 99
+export const AUTOPILOT_ANNUAL_PRICE = '$899'
+export const AUTOPILOT_ANNUAL_AMOUNT = 899
+export const AUTOPILOT_ANNUAL_SAVINGS = '$289'
+export const LAUNCH_PACKAGE_PRICE = '$499'
+export const LAUNCH_PACKAGE_AMOUNT = 499
+
+// ─── Types ──────────────────────────────────────────────────────────
+
+export type FeatureTag = 'automated' | 'we-host' | 'you-post' | 'auto-gen' | 'you-install' | 'we-install' | 'included'
 
 export interface PlanFeature {
   label: string
-  mode: FeatureMode
+  description?: string
+  tag?: FeatureTag
+  /** Secondary tag (e.g., "We host" + "Automated") */
+  tag2?: FeatureTag
+  /** Sub-items for grouped features */
+  subItems?: string[]
+  /** @deprecated Legacy mode for existing pricing/landing pages. Use tag/tag2 instead. */
+  mode?: FeatureMode
 }
 
 export interface PlanDefinition {
   name: string
   price: string
   period: string
+  annualPrice?: string
+  annualPeriod?: string
   tagline: string
   features: PlanFeature[]
   cta: string
+  ctaAnnual?: string
   /** If set, the CTA links here (free plan). If null, triggers checkout. */
   href: string | null
-  /** Orange border + "Most Popular" badge */
+  /** Highlighted card (border + badge) */
   highlight: boolean
-  /** Gold gradient + "White Glove" badge */
-  premium?: boolean
+  /** Add-on card styling */
+  addon?: boolean
   /** Stripe plan key for checkout. null = no checkout (free plan). */
-  stripePlan: 'SOLO' | 'DFY' | null
+  stripePlan: 'SOLO' | 'SOLO_ANNUAL' | 'DFY' | null
+  annualStripePlan?: 'SOLO_ANNUAL'
 }
 
-/** Badge config for each feature mode */
+/** Badge config for feature tags */
+export const TAG_BADGES: Record<FeatureTag, { label: string; bg: string; color: string }> = {
+  automated:    { label: 'Automated',      bg: '#EDE9FE', color: '#7C3AED' },
+  'we-host':    { label: 'We host',        bg: '#ECFDF5', color: '#059669' },
+  'you-post':   { label: 'You post',       bg: '#FEF9C3', color: '#A16207' },
+  'auto-gen':   { label: 'Auto-generated', bg: '#EDE9FE', color: '#7C3AED' },
+  'you-install':{ label: 'You install',    bg: '#F5F0E8', color: '#636E72' },
+  'we-install': { label: 'We install',     bg: '#ECFDF5', color: '#059669' },
+  included:     { label: 'Included',       bg: '#FFF1EB', color: '#FF6B35' },
+}
+
+// ─── Legacy compat (remove after Phase 2 UI rewrite) ───────────────
+export type FeatureMode = 'diy' | 'self-setup' | 'auto' | 'done'
 export const MODE_BADGES: Record<FeatureMode, { label: string; bg: string; color: string }> = {
   diy:         { label: 'Self-Service', bg: '#F0F0F0', color: '#636E72' },
   'self-setup': { label: 'Self-Setup',  bg: '#FFF8E1', color: '#B8860B' },
@@ -36,70 +73,122 @@ export const MODE_BADGES: Record<FeatureMode, { label: string; bg: string; color
   done:        { label: 'Done for you', bg: '#EFF6FF', color: '#2563EB' },
 }
 
+// ─── Plan Definitions ───────────────────────────────────────────────
+
 export const PLANS: PlanDefinition[] = [
   {
     name: 'Free',
     price: '$0',
     period: 'forever',
-    tagline: 'See how visible your business is online — in 10 seconds.',
+    tagline: 'See how visible your business is to AI — no account needed.',
     features: [
-      { label: '1 AI Readiness scan per month (all 26 signals)', mode: 'diy' },
-      { label: '5 Google post drafts per month', mode: 'diy' },
-      { label: '3 review response drafts per month', mode: 'diy' },
-      { label: 'Schema markup preview (read-only)', mode: 'diy' },
+      { label: 'AI Readiness scan (all 26 signals)', description: 'See how your business appears in ChatGPT, Google AI, and Perplexity', mode: 'diy' as FeatureMode },
     ],
-    cta: 'Check Your Score Free',
+    cta: 'Check Your AI Score →',
     href: '/check',
     highlight: false,
     stripePlan: null,
   },
   {
-    name: 'Local Autopilot',
-    price: '$49',
+    name: 'Autopilot',
+    price: AUTOPILOT_MONTHLY_PRICE,
     period: '/month',
-    tagline: 'Your local marketing, handled — you just approve.',
+    annualPrice: AUTOPILOT_ANNUAL_PRICE,
+    annualPeriod: '/year',
+    tagline: 'AI keeps your business visible — every week, automatically.',
     features: [
-      // Automated first — these run without customer effort
-      { label: 'AI search changes tracked — your site stays current', mode: 'auto' },
-      { label: 'Unlimited AI Readiness scans (26 signals)', mode: 'auto' },
-      { label: 'Weekly Google posts, written and scheduled', mode: 'auto' },
-      { label: '10 new city pages per month', mode: 'auto' },
-      { label: '4 blog posts per month, locally customized', mode: 'auto' },
-      { label: 'Monthly progress report', mode: 'auto' },
-      // Self-Setup — customer does initial config, then it runs
-      { label: 'Review responses, drafted automatically', mode: 'self-setup' },
-      { label: 'Schema & llms.txt — generated and monitored', mode: 'self-setup' },
-      { label: '1 competitor comparison', mode: 'self-setup' },
-      { label: 'Up to 3 business locations', mode: 'self-setup' },
+      {
+        label: 'Google Business Profile content',
+        description: 'Keep your GBP listing active and engaging — we create the content, you copy & post',
+        mode: 'auto' as FeatureMode,
+        tag: 'automated',
+        tag2: 'you-post',
+        subItems: [
+          'Weekly GBP posts — fresh, seasonal content delivered to your inbox',
+          'Review response drafts — AI-written replies for new Google reviews',
+        ],
+      },
+      {
+        label: '2 blog posts/month',
+        description: 'Locally-optimized articles published automatically on your LocalBeacon page',
+        mode: 'auto' as FeatureMode,
+        tag: 'automated',
+        tag2: 'we-host',
+      },
+      {
+        label: '3 city/service area pages/month',
+        description: 'New pages for surrounding cities, then seasonal refreshes to keep them ranking',
+        mode: 'auto' as FeatureMode,
+        tag: 'automated',
+        tag2: 'we-host',
+      },
+      {
+        label: 'Schema markup & llms.txt generation',
+        description: 'Structured data that tells AI engines what your business does — we generate, you add to your site',
+        mode: 'self-setup' as FeatureMode,
+        tag: 'auto-gen',
+        tag2: 'you-install',
+      },
+      {
+        label: 'Monthly Intelligence Report (email)',
+        description: 'One report, everything you need to know — delivered to your inbox',
+        mode: 'auto' as FeatureMode,
+        tag: 'automated',
+        subItems: [
+          'AI Readiness re-scan — how your score changed',
+          'Competitor tracking — who\'s gaining, who\'s falling behind',
+          'Progress summary — what we published, what\'s working',
+          'AI search landscape changes — new updates & what to do',
+        ],
+      },
     ],
-    cta: 'Start Local Autopilot — $49/mo',
+    cta: `Start Autopilot — ${AUTOPILOT_MONTHLY_PRICE}/mo`,
+    ctaAnnual: `Start Autopilot — ${AUTOPILOT_ANNUAL_PRICE}/yr`,
     href: null,
     highlight: true,
     stripePlan: 'SOLO',
+    annualStripePlan: 'SOLO_ANNUAL',
   },
   {
-    name: 'DFY Setup',
-    price: '$499',
+    name: 'Launch Package',
+    price: LAUNCH_PACKAGE_PRICE,
     period: 'one-time',
-    tagline: 'We build your local visibility foundation — then Autopilot keeps it running.',
+    tagline: 'We set everything up so you\'re optimized from day one.',
     features: [
-      { label: '30-minute live onboarding call', mode: 'done' },
-      { label: '15-25 custom FAQs written for your business', mode: 'done' },
-      { label: 'Schema markup installed on your site', mode: 'done' },
-      { label: 'llms.txt deployed to your site', mode: 'done' },
-      { label: 'Full AEO audit with prioritized fix list', mode: 'done' },
-      { label: 'Platform-specific install (WordPress, Squarespace, Webflow, Wix)', mode: 'done' },
-      { label: '1 month of Local Autopilot included', mode: 'auto' },
+      { label: '30-minute strategy call', description: 'We learn your business, service areas, and goals', mode: 'done' as FeatureMode },
+      { label: 'Google Business Profile audit', description: 'We review and optimize categories, description, and attributes for AI discovery', mode: 'done' as FeatureMode },
+      { label: 'Competitor deep-dive report', description: 'Detailed analysis of your top 3 local competitors — their AI presence, gaps, and your opportunities', mode: 'done' as FeatureMode },
+      {
+        label: 'We install everything on your platform',
+        description: 'WordPress, Squarespace, Wix, or custom — you add us as a temporary admin, we handle the rest',
+        mode: 'done' as FeatureMode,
+        tag: 'we-install',
+        subItems: [
+          '15–25 custom FAQs — real questions your customers ask, optimized for AI',
+          'Schema markup — structured data installed directly on your site',
+          'llms.txt — the file AI engines look for, deployed to your domain',
+          'All service area pages — every city you serve, built and published on launch day',
+        ],
+      },
+      { label: 'Custom brand voice profile', description: 'We capture your tone, language, and style — Autopilot uses it for every piece of content', mode: 'done' as FeatureMode },
+      { label: 'Before & after AI readiness report', description: 'Baseline scan before setup, rescan after — see exactly what improved', mode: 'done' as FeatureMode },
+      {
+        label: 'First month of Autopilot included',
+        description: 'Your subscription starts immediately — content publishing begins the week we finish setup',
+        mode: 'auto' as FeatureMode,
+        tag: 'included',
+      },
     ],
-    cta: 'Get DFY Setup — $499',
+    cta: `Get Launch Package — ${LAUNCH_PACKAGE_PRICE}`,
     href: null,
     highlight: false,
-    premium: true,
+    addon: true,
     stripePlan: 'DFY',
   },
 ]
 
-/** Pricing page FAQs — also single source of truth */
+// ─── FAQs ───────────────────────────────────────────────────────────
+
 export const PRICING_FAQS = [
   {
     q: "What if I don't have a Google listing yet?",
@@ -115,14 +204,22 @@ export const PRICING_FAQS = [
   },
   {
     q: 'How is this different from hiring an SEO agency?',
-    a: "An agency charges $800-1,500/month and you wait weeks to see anything happen. LocalBeacon handles your Google posts, builds local pages, and drafts review replies — for $49/month. Your first content is ready within minutes of signing up.",
+    a: `An agency charges $800–1,500/month and you wait weeks to see anything happen. LocalBeacon handles your Google posts, builds local pages, and drafts review replies — for ${AUTOPILOT_MONTHLY_PRICE}/month, starting immediately.`,
   },
   {
     q: 'Who writes the content? Will it sound generic?',
     a: "Every piece of content is written specifically about your business, your services, and your local area — not generic templates. You can review and edit everything before it goes live. It mentions your city, your services, and the neighborhoods you actually serve.",
   },
   {
-    q: "What does 'Done-For-You' mean exactly?",
-    a: "DFY is a one-time setup engagement, not ongoing management. We do a 30-minute live call, build your schema markup, llms.txt, and 15-25 custom FAQs, then walk you through installing everything on your platform. You also get a full AEO audit + 1 month of Local Autopilot. After setup, you can maintain things yourself (Free) or keep Local Autopilot running at $49/mo — your call.",
+    q: "What's the Launch Package?",
+    a: `It's a one-time ${LAUNCH_PACKAGE_PRICE} setup service. We do a 30-minute strategy call, install schema markup, llms.txt, and 15–25 custom FAQs on your website, plus build all your service area pages. Your first month of Autopilot is included. After that, Autopilot continues at ${AUTOPILOT_MONTHLY_PRICE}/mo.`,
+  },
+  {
+    q: 'Is there an annual plan?',
+    a: `Yes! Autopilot is ${AUTOPILOT_ANNUAL_PRICE}/year — that saves you ${AUTOPILOT_ANNUAL_SAVINGS} compared to monthly billing.`,
+  },
+  {
+    q: "What happens when I buy the Launch Package?",
+    a: `After checkout, you'll get an email to book your strategy call. We build everything in 5–7 business days. Your Autopilot subscription (${AUTOPILOT_MONTHLY_PRICE}/mo) starts automatically after your included first month.`,
   },
 ]

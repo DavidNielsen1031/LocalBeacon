@@ -49,8 +49,8 @@ export default function TermsPage() {
             <p className="mb-2">We offer three plans:</p>
             <ul className="list-disc pl-5 space-y-1">
               <li><strong className="text-white">Free ($0/month):</strong> 1 location, 5 posts/month, 3 city pages</li>
-              <li><strong className="text-white">Local Autopilot ($49/month):</strong> 3 locations, unlimited posts, 10 city pages, review replies, monthly report</li>
-              <li><strong className="text-white">Agency ($99/month):</strong> Unlimited locations, white-label reports, multi-client dashboard, competitor monitoring</li>
+              <li><strong className="text-white">Autopilot ($99/month or $899/year):</strong> Weekly Google posts, 2 blog posts/month, 3 city pages/month, review response drafts, schema & llms.txt generation, monthly intelligence report</li>
+              <li><strong className="text-white">Launch Package ($499 one-time):</strong> 30-minute strategy call, GBP audit, competitor report, platform installation (FAQs, schema, llms.txt, service area pages), custom brand voice, before &amp; after AI readiness report, first month of Autopilot included</li>
             </ul>
             <p className="mt-3">Paid plans are billed monthly through Stripe. You can cancel anytime — your plan remains active until the end of the billing period. We do not offer refunds for partial months.</p>
           </section>
@@ -78,15 +78,15 @@ export default function TermsPage() {
               <li>Use the Service for businesses you don&apos;t own or have authorization to manage</li>
               <li>Generate spam, misleading content, or fake reviews</li>
               <li>Violate Google&apos;s Business Profile policies</li>
-              <li>Resell access to the Service without an Agency plan</li>
+              <li>Resell access to the Service without authorization</li>
               <li>Attempt to reverse-engineer or abuse the AI generation system</li>
               <li>Use the Service for any illegal purpose</li>
             </ul>
           </section>
 
           <section>
-            <h2 className="text-white font-semibold text-lg mb-3">8. Agency Plan — Client Management</h2>
-            <p>If you use the Agency plan to manage client businesses, you represent that you have written authorization from each client to manage their Google Business Profile and generate content on their behalf. You are responsible for ensuring your clients&apos; content complies with Google&apos;s policies.</p>
+            <h2 className="text-white font-semibold text-lg mb-3">8. Launch Package — Done-For-You Setup</h2>
+            <p>If you purchase the Launch Package, you grant LocalBeacon temporary admin access to your website platform (WordPress, Squarespace, Wix, etc.) for the purpose of installing schema markup, llms.txt, FAQs, and service area pages. You may revoke this access after setup is complete. You are responsible for ensuring content published on your site complies with applicable laws and platform policies.</p>
           </section>
 
           <section>

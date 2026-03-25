@@ -69,12 +69,12 @@ export const professionalServices: Record<string, IndustryData> = {
       {
         question: 'Can LocalBeacon handle multiple office locations?',
         answer:
-          'Yes. Our Local Autopilot plan supports up to 3 locations and our Agency plan covers unlimited offices. Each location gets its own Google Business Profile management, local pages, and review responses.',
+          'Yes. Our Autopilot plan supports up to 3 locations For firms with more locations, our Launch Package ($499) sets up every office with optimized content from day one.',
       },
       {
         question: 'How is this different from hiring a marketing agency?',
         answer:
-          'Marketing agencies specializing in accounting firms charge $2,000-6,000/month and often lock you into annual contracts. LocalBeacon starts at $49/month, deploys the same day, and handles the ongoing content and review management that agencies typically neglect after the initial setup.',
+          'Marketing agencies specializing in accounting firms charge $2,000-6,000/month and often lock you into annual contracts. LocalBeacon starts at $99/month, deploys the same day, and handles the ongoing content and review management that agencies typically neglect after the initial setup.',
       },
       {
         question: 'Do I need to write blog posts or create content?',
@@ -318,7 +318,7 @@ export const professionalServices: Record<string, IndustryData> = {
       {
         question: 'Does this work for teams and brokerages?',
         answer:
-          'Yes. Our Agency plan supports unlimited locations and agents. Each agent or office can have their own Google Business Profile management, local pages, and review responses.',
+          'Yes. Our Autopilot plan handles your marketing automatically. For large agencies with many offices, our Launch Package ($499) sets up each location with optimized content.',
       },
       {
         question: 'How does the AI search optimization work for real estate?',
@@ -411,7 +411,7 @@ export const professionalServices: Record<string, IndustryData> = {
       {
         question: 'Is this worth it for a side-gig notary?',
         answer:
-          'Especially so. At $49/month, even two or three additional direct clients per month more than pays for LocalBeacon. Many side-gig notaries use LocalBeacon to transition to full-time mobile notary work.',
+          'Especially so. At $99/month, even two or three additional direct clients per month more than pays for LocalBeacon. Many side-gig notaries use LocalBeacon to transition to full-time mobile notary work.',
       },
     ],
   },

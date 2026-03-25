@@ -69,7 +69,7 @@ export const homeServices: Record<string, IndustryData> = {
       {
         question: "How is this different from hiring an SEO agency?",
         answer:
-          "SEO agencies charge $1,500-5,000/month and take months to show results. LocalBeacon starts at $49/month, deploys immediately, and handles the ongoing content that agencies often neglect after the initial setup.",
+          "SEO agencies charge $1,500-5,000/month and take months to show results. LocalBeacon starts at $99/month, deploys immediately, and handles the ongoing content that agencies often neglect after the initial setup.",
       },
       {
         question: "What if I already have a website?",
@@ -298,7 +298,7 @@ export const homeServices: Record<string, IndustryData> = {
       {
         question: "How does this compare to buying leads from HomeAdvisor?",
         answer:
-          "Lead services charge $50-100+ per lead with no exclusivity. LocalBeacon builds your own organic presence at $49/month — leads come directly to you with no per-lead fees and no sharing with competitors.",
+          "Lead services charge $50-100+ per lead with no exclusivity. LocalBeacon builds your own organic presence at $99/month — leads come directly to you with no per-lead fees and no sharing with competitors.",
       },
       {
         question: "What content does LocalBeacon create for roofers?",

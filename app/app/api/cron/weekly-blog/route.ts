@@ -21,15 +21,32 @@ export async function GET(req: NextRequest) {
 
   // Filter: paid plans only, must have contact email
   const eligible = (bizWithUsers || []).filter((b: any) =>
-    ['solo', 'agency'].includes(b.users?.plan) && b.contact_email
+    ['solo'].includes(b.users?.plan) && b.contact_email
   )
 
   if (!eligible.length) return NextResponse.json({ generated: 0 })
 
+  const MAX_BLOGS_PER_MONTH = 2
+
   let generated = 0
   const results = await Promise.allSettled(eligible.map(async (biz: any) => {
     try {
-      {
+        // Check monthly limit — max 2 blog posts per business per month
+        const startOfMonth = new Date()
+        startOfMonth.setDate(1)
+        startOfMonth.setHours(0, 0, 0, 0)
+
+        const { count: blogCount } = await supabase
+          .from('content_items')
+          .select('*', { count: 'exact', head: true })
+          .eq('business_id', biz.id)
+          .eq('type', 'blog_post')
+          .gte('created_at', startOfMonth.toISOString())
+
+        if ((blogCount ?? 0) >= MAX_BLOGS_PER_MONTH) {
+          console.log(`[weekly-blog] Business ${biz.id} already has ${blogCount} blogs this month, skipping`)
+          return
+        }
 
         const ctx: BusinessContext = {
           name: biz.name || '',
@@ -69,7 +86,7 @@ Respond ONLY with valid JSON in this exact format:
 
         if (!result.success || !result.text) {
           console.error(`[weekly-blog] AI generation failed for business ${biz.id}:`, result.error)
-          continue
+          return
         }
 
         let title: string
@@ -106,7 +123,7 @@ Respond ONLY with valid JSON in this exact format:
 
         if (insertError) {
           console.error(`[weekly-blog] DB insert failed for business ${biz.id}:`, insertError)
-          continue
+          return
         }
 
         // Email the user — preview first 500 chars in the email body
@@ -121,7 +138,6 @@ Respond ONLY with valid JSON in this exact format:
           subject: `Your weekly blog post is ready — ${biz.name}`,
         })
 
-      }
     } catch (err) {
       console.error(`[weekly-blog] Cron failed for business ${biz.id}:`, err)
       throw err

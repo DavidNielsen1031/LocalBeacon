@@ -17,15 +17,16 @@ interface ServicePage {
 }
 
 export default function PagesPage() {
-  const domPurifyRef = useRef<typeof import('dompurify') | null>(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const domPurifyRef = useRef<any>(null)
 
   useEffect(() => {
     // Dynamically import DOMPurify on the client only (requires window)
-    import('dompurify').then(mod => { domPurifyRef.current = mod.default ?? mod })
+    import('dompurify').then(mod => { domPurifyRef.current = (mod as any).default ?? mod })
   }, [])
 
   const sanitizeHtml = (html: string): string => {
-    if (domPurifyRef.current) return domPurifyRef.current.sanitize(html)
+    if (domPurifyRef.current?.sanitize) return domPurifyRef.current.sanitize(html)
     // Fallback before DOMPurify loads: strip all tags
     return html.replace(/<[^>]*>/g, '')
   }
@@ -197,7 +198,7 @@ export default function PagesPage() {
       {pages.length >= 3 && (
         <div className="mt-6 p-4 bg-[#FF6B35]/5 border border-[#FF6B35]/20 rounded-lg text-center">
           <p className="text-[#FF6B35] text-sm">
-            You&apos;ve reached the Free plan limit. <button className="underline font-semibold">Upgrade to Local Autopilot</button> for 10 pages.
+            You&apos;ve reached the Free plan limit. <button className="underline font-semibold">Upgrade to Autopilot</button> for 3 city pages per month.
           </p>
         </div>
       )}

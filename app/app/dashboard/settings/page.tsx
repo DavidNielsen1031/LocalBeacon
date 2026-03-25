@@ -235,7 +235,7 @@ export default function SettingsPage() {
             and full AI Readiness recommendations.
           </p>
           <Button className="bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 font-semibold text-sm">
-            Upgrade to Local Autopilot — $49/month
+            Upgrade to Autopilot — $99/month
           </Button>
         </CardContent>
       </Card>

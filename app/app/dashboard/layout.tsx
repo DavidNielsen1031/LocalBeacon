@@ -19,7 +19,7 @@ async function getBusinessesForUser(clerkUserId: string) {
 
   if (!user) return { businesses: [], plan: "free" as const };
 
-  const plan = (user.plan || "free").toLowerCase() as "free" | "solo" | "agency";
+  const plan = (user.plan || "free").toLowerCase() as "free" | "solo";
 
   // Get all businesses for this user
   const { data: businesses } = await supabase

@@ -9,16 +9,6 @@ import { AddClientWizard } from "@/components/add-client-wizard";
 import {
   LayoutDashboard,
   FileText,
-  Calendar,
-  Globe,
-  Star,
-  BookOpen,
-  Zap,
-  HelpCircle,
-  FileCode,
-  Activity,
-  Code,
-  Users,
   BarChart3,
   Settings,
   Building2,
@@ -34,20 +24,9 @@ import {
 } from "@/components/ui/sheet";
 
 const navItems = [
-  { href: "/dashboard", label: "Overview", Icon: LayoutDashboard },
-  { href: "/dashboard/posts", label: "GBP Posts", Icon: FileText },
-  { href: "/dashboard/queue", label: "Upcoming Posts", Icon: Calendar },
-  { href: "/dashboard/pages", label: "Page Builder", Icon: Globe },
-  { href: "/dashboard/reviews", label: "Reviews", Icon: Star },
-  { href: "/dashboard/blog", label: "Blog Posts", Icon: BookOpen },
-  { href: "/dashboard/ai-readiness", label: "AI Readiness", Icon: Zap },
-  { href: "/dashboard/faq", label: "FAQ Builder", Icon: HelpCircle },
-  { href: "/dashboard/llms-txt", label: "AI Discovery File", Icon: FileCode },
-  { href: "/dashboard/ai-index", label: "AI Index File", Icon: FileCode },
-  { href: "/dashboard/audit", label: "Listing Health", Icon: Activity },
-  { href: "/dashboard/schema", label: "Schema Markup", Icon: Code },
-  { href: "/dashboard/competitors", label: "Competitors", Icon: Users },
-  { href: "/dashboard/reports", label: "Monthly Report", Icon: BarChart3 },
+  { href: "/dashboard", label: "Dashboard", Icon: LayoutDashboard },
+  { href: "/dashboard/content", label: "Content", Icon: FileText },
+  { href: "/dashboard/reports", label: "Reports", Icon: BarChart3 },
   { href: "/dashboard/settings", label: "Settings", Icon: Settings },
 ];
 

@@ -18,7 +18,7 @@
     },
     {
       "path": "/api/cron/weekly-blog",
-      "schedule": "0 14 * * 3"
+      "schedule": "0 14 1,15 * *"
     },
     {
       "path": "/api/cron/weekly-scan",

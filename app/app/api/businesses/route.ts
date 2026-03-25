@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
   // Get user's plan to check business limits
   const { data: userRecord } = await supabase.from('users').select('plan').eq('clerk_id', userId).single()
   const plan = (userRecord?.plan || 'free').toLowerCase()
-  const businessLimit = plan === 'agency' ? null : plan === 'solo' ? 3 : 1
+  const businessLimit = plan === 'solo' ? 3 : 1
 
   // Count existing businesses
   const { data: existingBusinesses } = await supabase

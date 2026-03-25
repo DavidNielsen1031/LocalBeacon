@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   keywords: ["local SEO", "Google Business Profile", "local marketing automation", "small business marketing", "GBP posts", "local visibility"],
   openGraph: {
     title: "LocalBeacon.ai — Your phone rings more. We handle everything.",
-    description: "We handle your local marketing. Weekly Google posts, city pages, review replies — all on autopilot. $49/mo.",
+    description: "We handle your local marketing. Weekly Google posts, city pages, review replies — all on autopilot. $99/mo.",
     url: "https://localbeacon.ai",
     siteName: "LocalBeacon.ai",
     type: "website",
@@ -74,7 +74,7 @@ export default function RootLayout({
               "description": "Local visibility engine. Automates Google Business Profile posts, city pages, review responses, and AI search optimization for local businesses.",
               "offers": [
                 { "@type": "Offer", "price": "0", "priceCurrency": "USD", "name": "Free" },
-                { "@type": "Offer", "price": "49", "priceCurrency": "USD", "name": "Local Autopilot", "priceSpecification": { "@type": "UnitPriceSpecification", "billingDuration": "P1M" } },
+                { "@type": "Offer", "price": "99", "priceCurrency": "USD", "name": "Autopilot", "priceSpecification": { "@type": "UnitPriceSpecification", "billingDuration": "P1M" } },
                 { "@type": "Offer", "price": "499", "priceCurrency": "USD", "name": "Done-For-You Setup" }
               ],
               "provider": {

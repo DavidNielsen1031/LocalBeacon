@@ -50,7 +50,7 @@ export function DfyUpsellCard({ dfyContext }: DfyUpsellCardProps) {
             background: "linear-gradient(90deg, #B8860B 0%, #FFD700 100%)",
           }}
         >
-          Get DFY Setup — $499 →
+          Get Launch Package — $499 →
         </button>
       </Link>
     </div>

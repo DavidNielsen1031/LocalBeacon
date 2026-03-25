@@ -26,7 +26,7 @@ interface BusinessContextType {
   refreshBusinesses: () => Promise<void>;
   canAddBusiness: boolean;
   businessLimit: number | null; // null = unlimited
-  plan: "free" | "solo" | "agency";
+  plan: "free" | "solo";
   loading: boolean;
 }
 
@@ -55,7 +55,7 @@ export function BusinessProvider({
   children: React.ReactNode;
   initialBusinesses: BusinessInfo[];
   initialActiveId: string | null;
-  plan: "free" | "solo" | "agency";
+  plan: "free" | "solo";
 }) {
   const [businesses, setBusinesses] = useState<BusinessInfo[]>(initialBusinesses);
   const [activeBusinessId, setActiveBusinessId] = useState<string | null>(
