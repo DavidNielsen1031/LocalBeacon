@@ -22,11 +22,11 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.clerk.accounts.dev https://js.stripe.com",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.clerk.accounts.dev https://clerk.localbeacon.ai https://js.stripe.com https://us-assets.i.posthog.com",
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: blob: https:",
               "font-src 'self'",
-              "connect-src 'self' https://api.anthropic.com https://api.stripe.com https://*.supabase.co https://www.googleapis.com https://*.clerk.accounts.dev https://clerk.localbeacon.ai",
+              "connect-src 'self' https://api.anthropic.com https://api.stripe.com https://*.supabase.co https://www.googleapis.com https://*.clerk.accounts.dev https://clerk.localbeacon.ai https://*.posthog.com",
               "frame-src https://js.stripe.com https://hooks.stripe.com",
             ].join("; "),
           },
