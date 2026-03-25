@@ -546,29 +546,40 @@ export function CheckerForm() {
             </div>
           )}
 
-          {/* Personalized Plan Comparison */}
+          {/* Score-Aware CTA */}
           {(() => {
             const failingChecks = result.checks.filter(c => !c.passed)
             const totalFailing = failingChecks.length
+            const score = result.score
 
-            const countFixes = (planKey: 'free' | 'autopilot' | 'dfy') =>
-              failingChecks.filter(c => PLAN_FIX_MAP[c.id]?.[planKey]).length
-
-            const getTopFixes = (planKey: 'free' | 'autopilot' | 'dfy') => {
-              const modeKey = planKey === 'free' ? 'freeMode' : planKey === 'autopilot' ? 'autopilotMode' : 'dfyMode'
-              return failingChecks
-                .filter(c => PLAN_FIX_MAP[c.id]?.[planKey])
-                .sort((a, b) => b.weight - a.weight)
-                .map(c => ({
-                  label: PLAN_FIX_MAP[c.id]?.fixLabel || c.label,
-                  how: PLAN_FIX_MAP[c.id]![planKey]!,
-                  mode: (PLAN_FIX_MAP[c.id] as Record<string, unknown>)?.[modeKey] as FixMode | undefined,
-                }))
+            const getMessage = () => {
+              if (score >= 90) return {
+                headline: 'Your site is already well-optimized.',
+                sub: 'LocalBeacon Pro keeps it that way automatically \u2014 fresh content, new signals, and competitor monitoring so you stay ahead.',
+                emoji: '\ud83c\udfc6',
+                urgency: false,
+              }
+              if (score >= 60) return {
+                headline: `You\u2019re ahead of most competitors, but ${totalFailing} gap${totalFailing === 1 ? '' : 's'} could cost you visibility.`,
+                sub: 'AI search evolves weekly. LocalBeacon Pro fixes these gaps and keeps you updated as new signals emerge.',
+                emoji: '\ud83d\udcc8',
+                urgency: false,
+              }
+              if (score >= 30) return {
+                headline: 'Your competitors are more visible to AI search than you are.',
+                sub: `${totalFailing} issue${totalFailing === 1 ? '' : 's'} found. Every week without fixing these, you\u2019re losing potential customers to businesses that AI recommends instead.`,
+                emoji: '\u26a0\ufe0f',
+                urgency: true,
+              }
+              return {
+                headline: 'AI search engines can barely find your business.',
+                sub: `${totalFailing} critical issue${totalFailing === 1 ? '' : 's'}. When customers ask ChatGPT or Google AI for recommendations, you\u2019re invisible. This needs fixing now.`,
+                emoji: '\ud83d\udea8',
+                urgency: true,
+              }
             }
 
-            const freeFixes = countFixes('free')
-            const autopilotFixes = countFixes('autopilot')
-            const dfyFixes = countFixes('dfy')
+            const msg = getMessage()
 
             const saveScanData = () => {
               try {
@@ -581,7 +592,7 @@ export function CheckerForm() {
               } catch {}
             }
 
-            const handlePaidCheckout = async (planKey: 'SOLO' | 'DFY') => {
+            const handlePaidCheckout = async (planKey: 'SOLO' | 'SOLO_ANNUAL' | 'DFY') => {
               setCheckoutLoading(planKey)
               saveScanData()
               try {
@@ -607,167 +618,134 @@ export function CheckerForm() {
               setCheckoutLoading(null)
             }
 
-            const plans = [
-              {
-                name: 'Free',
-                price: '$0',
-                period: 'forever',
-                fixes: freeFixes,
-                topFixes: getTopFixes('free'),
-                cta: 'Start Free',
-                planKey: null as 'SOLO' | 'DFY' | null,
-                href: `/sign-up?url=${encodeURIComponent(result.url)}&score=${result.score}${email ? `&email=${encodeURIComponent(email)}` : ''}`,
-                bg: 'transparent',
-                border: '#DFE6E9',
-                textColor: '#1B2A4A',
-                highlight: false,
-              },
-              {
-                name: 'Autopilot',
-                price: '$99',
-                period: '/mo',
-                fixes: autopilotFixes,
-                topFixes: getTopFixes('autopilot'),
-                cta: 'Start Pro',
-                planKey: 'SOLO' as 'SOLO' | 'DFY' | null,
-                href: '#',
-                bg: '#FF6B35',
-                border: '#FF6B35',
-                textColor: '#fff',
-                highlight: true,
-              },
-              {
-                name: 'Launch Package',
-                price: '$499',
-                period: 'one-time',
-                fixes: dfyFixes,
-                topFixes: getTopFixes('dfy'),
-                cta: 'Get Launch Package',
-                planKey: 'DFY' as 'SOLO' | 'DFY' | null,
-                href: '#',
-                bg: 'linear-gradient(90deg, #B8860B, #DAA520)',
-                border: '#B8860B',
-                textColor: '#fff',
-                highlight: false,
-              },
-            ]
+            const proFixable = failingChecks
+              .filter(c => PLAN_FIX_MAP[c.id]?.autopilot)
+              .sort((a, b) => b.weight - a.weight)
+              .slice(0, 4)
 
             return (
               <div className="mt-8 pt-8 border-t border-black/5">
-                <div className="text-center mb-6">
-                  <h3 className="text-xl font-bold text-[#1B2A4A] mb-2">
-                    {totalFailing === 0
-                      ? 'Your site is in great shape!'
-                      : `You have ${totalFailing} issue${totalFailing === 1 ? '' : 's'}. Here\u2019s how each plan helps.`}
-                  </h3>
-                  <p className="text-sm text-[#1B2A4A]/50">
-                    Each plan is matched to your specific scan results.
-                  </p>
+                <div className="text-center mb-8">
+                  <span className="text-3xl mb-2 block">{msg.emoji}</span>
+                  <h3 className="text-xl font-bold text-[#1B2A4A] mb-2">{msg.headline}</h3>
+                  <p className="text-sm text-[#636E72] max-w-lg mx-auto">{msg.sub}</p>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-                  {plans.map(plan => (
-                    <div
-                      key={plan.name}
-                      className="rounded-xl flex flex-col relative"
-                      style={{
-                        border: plan.highlight ? `2px solid ${plan.border}` : `1px solid ${plan.border}`,
-                        background: plan.highlight ? 'rgba(255,107,53,0.03)' : 'white',
-                        marginTop: plan.highlight ? '0' : '24px',
-                      }}
-                    >
-                      {plan.highlight && (
-                        <div className="text-center -mt-3">
-                          <span className="inline-block text-xs font-bold text-white px-3 py-1 rounded-full" style={{ background: '#FF6B35' }}>
-                            Most Popular
-                          </span>
-                        </div>
-                      )}
-                      <div className="p-5 flex flex-col flex-1">
-                      <h4 className="font-bold text-[#1B2A4A] text-lg">
-                        {plan.name}
-                        {plan.name === 'DFY Setup' && (
-                          <span className="block text-xs font-normal text-[#636E72] mt-0.5">Done-For-You — we handle everything</span>
-                        )}
-                      </h4>
-                      <div className="flex items-baseline gap-1 mt-1 mb-3">
-                        <span className="text-2xl font-bold text-[#1B2A4A]">{plan.price}</span>
-                        <span className="text-sm text-[#636E72]">{plan.period}</span>
+                {proFixable.length > 0 && (
+                  <div className="max-w-lg mx-auto mb-8 p-4 rounded-xl bg-[#FFF5F0] border border-[#FF6B35]/10">
+                    <h4 className="font-semibold text-[#1B2A4A] text-sm mb-3">What LocalBeacon Pro fixes for you:</h4>
+                    <ul className="space-y-2">
+                      {proFixable.map(check => (
+                        <li key={check.id} className="flex items-start gap-2 text-sm">
+                          <span className="text-[#FF6B35] mt-0.5 shrink-0 font-bold">\u2192</span>
+                          <div>
+                            <span className="font-medium text-[#1B2A4A]">{PLAN_FIX_MAP[check.id]?.fixLabel || check.label}</span>
+                            <span className="text-[#636E72]"> \u2014 {PLAN_FIX_MAP[check.id]?.autopilot}</span>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+                  <div className="rounded-xl relative" style={{ border: '2px solid #FF6B35', background: 'rgba(255,107,53,0.02)' }}>
+                    <div className="text-center -mt-3">
+                      <span className="inline-block text-xs font-bold text-white px-3 py-1 rounded-full" style={{ background: '#FF6B35' }}>
+                        Most Popular
+                      </span>
+                    </div>
+                    <div className="p-6">
+                      <h4 className="font-bold text-[#1B2A4A] text-lg">LocalBeacon Pro</h4>
+                      <p className="text-xs text-[#636E72] mb-3">AI-powered local marketing on autopilot</p>
+                      <div className="flex items-baseline gap-1 mb-1">
+                        <span className="text-3xl font-bold text-[#1B2A4A]">$99</span>
+                        <span className="text-sm text-[#636E72]">/month</span>
                       </div>
+                      <p className="text-xs text-[#636E72] mb-4">or $899/year (save $289)</p>
 
-                      {totalFailing > 0 && (
-                        <div className="mb-3 px-3 py-2 rounded-lg" style={{ background: plan.fixes > 0 ? 'rgba(34,197,94,0.08)' : 'rgba(0,0,0,0.02)' }}>
-                          <span className="text-sm font-semibold" style={{ color: plan.fixes > 0 ? '#16a34a' : '#636E72' }}>
-                            Fixes {plan.fixes} of {totalFailing} issue{totalFailing === 1 ? '' : 's'}
-                          </span>
-                        </div>
-                      )}
-
-                      <ul className="space-y-2.5 flex-1 mb-4">
-                        {plan.topFixes.map((fix, i) => {
-                          const modeBadge = fix.mode ? MODE_BADGE_CONFIG[fix.mode] : null
-                          return (
-                          <li key={i} className="text-sm text-[#1B2A4A]/70">
-                            <div className="flex items-start gap-1.5">
-                              <span className="text-green-500 mt-0.5 shrink-0">✓</span>
-                              <div className="min-w-0">
-                                <div className="flex items-center gap-1.5 flex-wrap">
-                                  <strong className="text-[#1B2A4A]">{fix.label}</strong>
-                                  {modeBadge && (
-                                    <span className="text-[0.6rem] font-semibold px-1.5 py-0.5 rounded-full whitespace-nowrap" style={{ background: modeBadge.bg, color: modeBadge.color }}>
-                                      {modeBadge.label}
-                                    </span>
-                                  )}
-                                </div>
-                                <span className="text-xs text-[#636E72]">{fix.how}</span>
-                              </div>
-                            </div>
+                      <ul className="space-y-2 mb-6">
+                        {[
+                          'Weekly Google posts \u2014 written & ready',
+                          '2 blog posts/month, locally optimized',
+                          '3 city pages/month for service areas',
+                          'Monthly Intelligence Report',
+                          'Schema & llms.txt auto-generated',
+                          'AI readiness monitoring',
+                        ].map(item => (
+                          <li key={item} className="flex items-start gap-2 text-sm text-[#1B2A4A]/80">
+                            <span className="text-[#FF6B35] mt-0.5 shrink-0">\u2713</span>
+                            {item}
                           </li>
-                          )
-                        })}
-                        {plan.fixes === 0 && totalFailing > 0 && (
-                          <li className="text-sm text-[#636E72] italic">
-                            Scan tools only — no automated fixes
-                          </li>
-                        )}
+                        ))}
                       </ul>
 
-                      {plan.planKey ? (
-                        <button
-                          onClick={() => handlePaidCheckout(plan.planKey!)}
-                          disabled={checkoutLoading !== null}
-                          className="block w-full text-center py-3 rounded-lg font-semibold text-sm transition-opacity hover:opacity-90 disabled:opacity-60"
-                          style={{
-                            background: typeof plan.bg === 'string' && plan.bg.startsWith('linear') ? plan.bg : plan.bg,
-                            color: plan.textColor,
-                            border: plan.highlight ? 'none' : `1px solid ${plan.border}`,
-                            boxShadow: plan.highlight ? '0 4px 14px rgba(255,107,53,0.3)' : 'none',
-                          }}
-                        >
-                          {checkoutLoading === plan.planKey ? 'Redirecting to checkout...' : plan.cta}
-                        </button>
-                      ) : (
-                        <a
-                          href={plan.href}
-                          onClick={() => saveScanData()}
-                          className="block w-full text-center py-3 rounded-lg font-semibold text-sm transition-opacity hover:opacity-90"
-                          style={{
-                            background: plan.bg,
-                            color: plan.textColor,
-                            border: `1px solid ${plan.border}`,
-                          }}
-                        >
-                          {plan.cta}
-                        </a>
-                      )}
-                      </div>
+                      <button
+                        onClick={() => handlePaidCheckout('SOLO')}
+                        disabled={checkoutLoading !== null}
+                        className="block w-full text-center py-3 rounded-lg font-semibold text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+                        style={{ background: '#FF6B35', boxShadow: '0 4px 14px rgba(255,107,53,0.3)' }}
+                      >
+                        {checkoutLoading === 'SOLO' ? 'Redirecting...' : 'Start Pro \u2014 $99/mo'}
+                      </button>
+                      <button
+                        onClick={() => handlePaidCheckout('SOLO_ANNUAL')}
+                        disabled={checkoutLoading !== null}
+                        className="block w-full text-center py-2.5 mt-2 rounded-lg font-medium text-sm transition-opacity hover:opacity-90 disabled:opacity-60"
+                        style={{ color: '#FF6B35', border: '1px solid #FF6B35' }}
+                      >
+                        {checkoutLoading === 'SOLO_ANNUAL' ? 'Redirecting...' : 'Or $899/year \u2014 save $289'}
+                      </button>
                     </div>
-                  ))}
+                  </div>
+
+                  <div className="rounded-xl relative" style={{ border: '2px solid #D4A017', background: 'linear-gradient(180deg, #FFFDF5, #FFF8E7)' }}>
+                    <div className="text-center -mt-3">
+                      <span className="inline-block text-xs font-bold px-3 py-1 rounded-full" style={{ background: 'linear-gradient(90deg, #B8860B, #FFD700)', color: '#000' }}>
+                        White Glove
+                      </span>
+                    </div>
+                    <div className="p-6">
+                      <h4 className="font-bold text-[#1B2A4A] text-lg">Beacon Launch</h4>
+                      <p className="text-xs text-[#636E72] mb-3">We set everything up for you</p>
+                      <div className="flex items-baseline gap-1 mb-1">
+                        <span className="text-3xl font-bold text-[#1B2A4A]">$499</span>
+                        <span className="text-sm text-[#636E72]">one-time</span>
+                      </div>
+                      <p className="text-xs text-[#636E72] mb-4">+ first month of Pro included</p>
+
+                      <ul className="space-y-2 mb-6">
+                        {[
+                          'Strategy call with our team',
+                          'GBP audit & optimization',
+                          'Competitor deep-dive report',
+                          'FAQs, schema, llms.txt installed',
+                          'Service area pages built',
+                          'Custom brand voice profile',
+                        ].map(item => (
+                          <li key={item} className="flex items-start gap-2 text-sm text-[#1B2A4A]/80">
+                            <span className="text-[#B8860B] mt-0.5 shrink-0">\u2713</span>
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+
+                      <button
+                        onClick={() => handlePaidCheckout('DFY')}
+                        disabled={checkoutLoading !== null}
+                        className="block w-full text-center py-3 rounded-lg font-semibold text-sm text-black transition-opacity hover:opacity-90 disabled:opacity-60"
+                        style={{ background: 'linear-gradient(90deg, #B8860B, #DAA520)' }}
+                      >
+                        {checkoutLoading === 'DFY' ? 'Redirecting...' : 'Get Beacon Launch \u2014 $499'}
+                      </button>
+                    </div>
+                  </div>
                 </div>
+
+                <p className="text-center text-xs text-[#636E72] mt-6">No contracts \u00b7 Cancel anytime \u00b7 26+ AI signals monitored</p>
               </div>
             )
           })()}
-
           {/* Scan another */}
           <div className="text-center mt-4">
             <button
