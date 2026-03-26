@@ -34,7 +34,10 @@
   {
     "keyword": "llms.txt file explained how AI assistants read your website",
     "category": "aeo",
-    "priority": 2
+    "priority": 2,
+    "processed": true,
+    "slug": "llms-txt-file-explained",
+    "generated_date": "2026-03-26"
   },
   {
     "keyword": "local SEO vs AEO which matters more in 2026",
